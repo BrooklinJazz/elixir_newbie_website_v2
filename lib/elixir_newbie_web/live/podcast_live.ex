@@ -1,9 +1,9 @@
-defmodule ElixirNewbieWeb.HomeLive do
+defmodule ElixirNewbieWeb.PodcastLive do
   use ElixirNewbieWeb, :live_view
 
   def render(assigns) do
     ~H"""
-    Home
+    Podcast
     """
   end
 
