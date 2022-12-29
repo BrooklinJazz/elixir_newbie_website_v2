@@ -17,7 +17,8 @@ defmodule ElixirNewbieWeb.Router do
   scope "/", ElixirNewbieWeb do
     pipe_through :browser
 
-    get "/", PageController, :home
+    # get "/", PageController, :home
+    live "/", HomeLive, :home
   end
 
   # Other scopes may use custom stacks.
