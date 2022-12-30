@@ -20,9 +20,7 @@ defmodule ElixirNewbieWeb.HomeLive do
         </.link>
       </article>
       <article class="h-100 flex w-full flex-col text-xl text-white 4k:text-4xl lg:text-2xl">
-        <p>
-        You walk through the woods and find a Wizard. “Hello, I’m Brooklin,” the Wizard says. “I’m here to teach you Elixir.” The Wizard takes you to a fork in the road. Many paths lie before you. What do you do?
-        </p>
+        <p>Greetings, traveler. My name is Brooklin, I am here to teach you Elixir. Where should we start?</p>
         <.rectangle_link class="bg-[url('/images/wavy_books.png')] bg-bottom" patch={~p"/blog"}>1. Read the Blog</.rectangle_link>
         <.rectangle_link class="bg-[url('/images/flower_background.png')] bg-center" patch={~p"/podcast"}>2. Listen to the Podcast</.rectangle_link>
         <.rectangle_link class="bg-[url('/images/dark_mushrooms.png')] bg-center" patch={~p"/resources"}>3. Learning Resources</.rectangle_link>
