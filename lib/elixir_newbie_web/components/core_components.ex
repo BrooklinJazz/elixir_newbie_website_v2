@@ -45,6 +45,8 @@ defmodule ElixirNewbieWeb.CoreComponents do
   slot :confirm
   slot :cancel
 
+
+
   def modal(assigns) do
     ~H"""
     <div id={@id} phx-mounted={@show && show_modal(@id)} class="relative z-50 hidden">
@@ -228,6 +230,32 @@ defmodule ElixirNewbieWeb.CoreComponents do
     >
       <%= render_slot(@inner_block) %>
     </button>
+    """
+  end
+
+  @doc """
+  Renders a rectangular button.
+
+  ## Examples
+
+      <.rectangle_link class="bg-[url('/images/dark_mushrooms.png')]" patch={~p"/resources"}>3. Learning Resources</.rectangle_link>
+  """
+  attr :class, :string, default: nil
+  attr :rest, :global, include: ~w(patch)
+
+  slot :inner_block, required: true
+
+  def rectangle_link(assigns) do
+    ~H"""
+    <.link
+      class={[
+        "border-4 border-white bg-cover mt-4 xl:mt-8 rounded-3xl p-6 lg:p-8 4k:p-12 pl-8 text-left",
+        @class
+      ]}
+      {@rest}
+    >
+      <%= render_slot(@inner_block) %>
+    </.link>
     """
   end
 
