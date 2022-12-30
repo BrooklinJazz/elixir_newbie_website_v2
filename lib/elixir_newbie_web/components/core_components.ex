@@ -232,32 +232,6 @@ defmodule ElixirNewbieWeb.CoreComponents do
   end
 
   @doc """
-  Renders a rectangular button.
-
-  ## Examples
-
-      <.rectangle_link class="bg-[url('/images/dark_mushrooms.png')]" patch={~p"/resources"}>3. Learning Resources</.rectangle_link>
-  """
-  attr :class, :string, default: nil
-  attr :rest, :global, include: ~w(patch)
-
-  slot :inner_block, required: true
-
-  def rectangle_link(assigns) do
-    ~H"""
-    <.link
-      class={[
-        "border-4 border-white bg-cover mt-4 xl:mt-8 rounded-3xl p-6 lg:p-8 4k:p-12 pl-8 text-left",
-        @class
-      ]}
-      {@rest}
-    >
-      <%= render_slot(@inner_block) %>
-    </.link>
-    """
-  end
-
-  @doc """
   Renders an input with label and error messages.
 
   A `%Phoenix.HTML.Form{}` and field name may be passed to the input
