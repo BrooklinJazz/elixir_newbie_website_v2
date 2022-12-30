@@ -25,7 +25,7 @@ defmodule ElixirNewbieWeb.HomeLive do
         “Hello, I’m Brooklin” the Wizard says.
         “I’m here to teach you Elixir”.
 
-        The wizard takes you to a fork in the road, many paths lie before you. What do you do?
+        The Wizard takes you to a fork in the road, many paths lie before you. What do you do?
         <.rectangle_link class="bg-[url('/images/wavy_books.png')] bg-bottom" patch={~p"/blog"}>1. Read the Blog</.rectangle_link>
         <.rectangle_link class="bg-[url('/images/flower_background.png')] bg-center" patch={~p"/podcast"}>2. Listen to the Podcast</.rectangle_link>
         <.rectangle_link class="bg-[url('/images/dark_mushrooms.png')] bg-center" patch={~p"/resources"}>3. Learning Resources</.rectangle_link>
