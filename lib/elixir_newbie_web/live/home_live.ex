@@ -6,10 +6,10 @@ defmodule ElixirNewbieWeb.HomeLive do
     <section class="flex h-fit w-full flex-col gap-12 xl:gap-24 4k:gap-36 lg:flex-row">
       <article class="grid h-fit w-full grid-cols-6 grid-rows-6">
         <div class="rounded-full row-start-1 row-end-6 col-start-1 aspect-square col-end-6 rounded-full bg-cover bg-[url('/images/wizard_home_page.png')]" />
-        <.link href="https://twitter.com/BrooklinJMyers" class="rounded-full border-2 border-white bg-[url('/images/twitter.png')] bg-cover row-start-3 col-start-5 relative left-1/2"></.link>
-        <.link href="https://github.com/BrooklinJazz" class="rounded-full border-2 border-white bg-[url('/images/github.png')] bg-cover relative col-start-5 row-start-4 bg-pink-300"></.link>
+        <.link href="https://twitter.com/BrooklinJMyers" class="rounded-full border-2 border-white bg-[url('/images/twitter.png')] bg-cover row-start-3 col-start-5 relative left-1/2 bottom-1/4"></.link>
+        <.link href="https://github.com/BrooklinJazz" class="rounded-full border-2 border-white bg-[url('/images/github.png')] bg-cover relative col-start-5 relative left-1/4 row-start-4 bg-pink-300"></.link>
         <.link href="https://www.linkedin.com/in/brooklinmyers/" class="rounded-full border-2 border-white bg-[url('/images/linkedin.png')] bg-cover row-start-5 col-start-4 relative left-1/2"></.link>
-        <.link href="https://github.com/DockYard-Academy/beta_curriculum" class="rounded-full border-2 border-white bg-[url('/images/dockyard_magic.png')] bg-cover  bg-pink-500 row-start-5 col-start-3 relative left-1/2 top-1/2"></.link>
+        <.link href="https://github.com/DockYard-Academy/beta_curriculum" class="rounded-full border-2 border-white bg-[url('/images/dockyard_magic.png')] bg-cover  bg-pink-500 row-start-5 col-start-3 relative left-1/4 top-1/2"></.link>
       </article>
       <article class="h-100 flex w-full flex-col text-xl lg:text-2xl text-white 4k:text-4xl">
         You walk through the woods and find a Wizard.
