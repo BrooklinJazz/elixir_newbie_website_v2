@@ -23,7 +23,7 @@ module.exports = {
       },
       backgroundImage: {
         'home-page-background': "url('https://cdn.midjourney.com/f1b780e6-5c1c-4f3e-9d4f-fe01f4a63884/grid_0.png')"
-      }
+      },
     },
   },
   plugins: [

@@ -8,10 +8,11 @@
       <%= assigns[:page_title] || "ElixirNewbie" %>
     </.live_title>
     <link phx-track-static rel="stylesheet" href={~p"/assets/app.css"} />
+
     <script defer phx-track-static type="text/javascript" src={~p"/assets/app.js"}>
     </script>
   </head>
-  <body class="bg-[url('https://cdn.midjourney.com/f1b780e6-5c1c-4f3e-9d4f-fe01f4a63884/grid_0.png')] bg-cover bg-top antialiased">
+  <body class="bg-[url('/images/background-smoke.png')] bg-black bg-cover bg-top antialiased font-serif">
     <%= @inner_content %>
   </body>
 </html>
