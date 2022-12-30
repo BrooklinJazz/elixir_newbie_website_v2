@@ -45,8 +45,6 @@ defmodule ElixirNewbieWeb.CoreComponents do
   slot :confirm
   slot :cancel
 
-
-
   def modal(assigns) do
     ~H"""
     <div id={@id} phx-mounted={@show && show_modal(@id)} class="relative z-50 hidden">
