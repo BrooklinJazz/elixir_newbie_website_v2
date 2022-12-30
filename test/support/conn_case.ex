@@ -28,6 +28,9 @@ defmodule ElixirNewbieWeb.ConnCase do
       import Plug.Conn
       import Phoenix.ConnTest
       import ElixirNewbieWeb.ConnCase
+
+      # Import conveniences for testing LiveView
+      import Phoenix.LiveViewTest
     end
   end
 
