@@ -19,6 +19,9 @@ defmodule ElixirNewbieWeb.Router do
 
     # get "/", PageController, :home
     live "/", HomeLive, :home
+    live "/blog", BlogLive, :blog
+    live "/podcast", PodcastLive, :podcast
+    live "/resources", ResourcesLive, :resources
   end
 
   # Other scopes may use custom stacks.
