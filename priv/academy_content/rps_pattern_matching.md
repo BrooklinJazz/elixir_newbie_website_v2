@@ -1,0 +1,142 @@
+%{
+  title: "Rock Paper Scissors Pattern Matching"
+}
+---
+# Rock Paper Scissors Pattern Matching
+
+```elixir
+Mix.install([
+  {:kino, "~> 0.7.0", override: true},
+  {:youtube, github: "brooklinjazz/youtube"},
+  {:hidden_cell, github: "brooklinjazz/hidden_cell"}
+])
+```
+
+## Navigation
+
+[Return Home](../start.livemd)<span style="padding: 0 30px"></span>
+[Report An Issue](https://github.com/DockYard-Academy/beta_curriculum/issues/new?assignees=&labels=&template=issue.md&title=)
+
+## Rock Paper Scissors Using Pattern Matching
+
+You're going to recreate your rock paper scissors game using pattern matching.
+
+<!-- livebook:{"force_markdown":true} -->
+
+```elixir
+RockPaperScissors.play(:rock, :paper)
+"paper beats rock!"
+
+RockPaperScissors.play(:rock, :rock)
+"draw!"
+```
+
+<details style="background-color: lightgreen; padding: 1rem; margin: 1rem 0;">
+<summary>Example Solution</summary>
+
+Using `case`.
+
+```elixir
+defmodule RockPaperScissorsPatternMatching do
+  def play(guess1, guess2) do
+    case {guess1, guess2} do
+      {:rock, :scissors} -> "rock beats scissors!"
+      {:paper, :rock} -> "paper beats rock!"
+      {:scissors, :paper} -> "scissors beats paper!"
+      {:rock, :paper} -> "paper beats rock!"
+      {:paper, :scissors} -> "scissors beats paper!"
+      {:scissors, :rock} -> "rock beats scissors!"
+      {_same, _same} -> "draw!"
+    end
+  end
+end
+```
+
+Using multiple function clauses.
+
+```elixir
+defmodule RockPaperScissorsPatternMatching do
+  def play(:rock, :scissors), do: "rock beats scissors!"
+  def play(:paper, :rock), do: "paper beats rock!"
+  def play(:scissors, :paper), do: "scissors beats paper!"
+  def play(:rock, :paper), do: "paper beats rock!"
+  def play(:paper, :scissors), do: "scissors beats paper!"
+  def play(:scissors, :rock), do: "rock beats scissors!"
+  def play(_same, _same), do: "draw!"
+end
+```
+
+</details>
+
+Implement the `RockPaperScissorsPatternMatching` module as documented below.
+
+```elixir
+defmodule RockPaperScissorsPatternMatching do
+  @moduledoc """
+  Documentation for `RockPaperScissorsPatternMatching`
+  """
+
+  @doc """
+  Play rock paper scissors. Returns a string to describe who won the game.
+
+  ## Examples
+
+    iex> RockPaperScissorsPatternMatching.play(:rock, :scissors)
+    "rock beats scissors!"
+
+    iex> RockPaperScissorsPatternMatching.play(:paper, :rock)
+    "paper beats rock!"
+
+    iex> RockPaperScissorsPatternMatching.play(:scissors, :paper)
+    "scissors beats paper!"
+
+    iex> RockPaperScissorsPatternMatching.play(:rock, :paper)
+    "paper beats rock!"
+
+    iex> RockPaperScissorsPatternMatching.play(:paper, :scissors)
+    "scissors beats paper!"
+
+    iex> RockPaperScissorsPatternMatching.play(:scissors, :rock)
+    "rock beats scissors!"
+
+    iex> RockPaperScissorsPatternMatching.play(:rock, :rock)
+    "draw!"
+
+    iex> RockPaperScissorsPatternMatching.play(:paper, :paper)
+    "draw!"
+
+    iex> RockPaperScissorsPatternMatching.play(:scissors, :scissors)
+    "draw!"
+  """
+  def play(guess1, guess2) do
+  end
+end
+```
+
+## Commit Your Progress
+
+Run the following in your command line from the curriculum folder to track and save your progress in a Git commit.
+Ensure that you do not already have undesired or unrelated changes by running `git status` or by checking the source control tab in Visual Studio Code.
+
+```
+$ git checkout main
+$ git checkout -b exercise-rps_pattern_matching
+$ git add .
+$ git commit -m "finish rps pattern matching exercise"
+$ git push origin exercise-rps_pattern_matching
+```
+
+Create a pull request to your forked `main` branch. Please do not create a pull request to the DockYard Academy repository as this will spam our PR tracker.
+
+**DockYard Academy Students Only:**
+
+Notify your teacher by including `@BrooklinJazz` in your PR description to get feedback.
+
+If you are interested in joining the next academy cohort, [sign up here](https://academy.dockyard.com/) to receive more news when it is available.
+
+## Up Next
+
+| Previous                                                   | Next                                                       |
+| ---------------------------------------------------------- | ---------------------------------------------------------: |
+| [Treasure Matching](../exercises/treasure_matching.livemd) | [Metric Conversion](../exercises/metric_conversion.livemd) |
+

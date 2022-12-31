@@ -1,0 +1,132 @@
+%{
+  title: "Time Converting"
+}
+---
+# Time Converting
+
+```elixir
+Mix.install([
+  {:kino, "~> 0.7.0", override: true},
+  {:youtube, github: "brooklinjazz/youtube"},
+  {:hidden_cell, github: "brooklinjazz/hidden_cell"}
+])
+```
+
+## Navigation
+
+[Return Home](../start.livemd)<span style="padding: 0 30px"></span>
+[Report An Issue](https://github.com/DockYard-Academy/beta_curriculum/issues/new?assignees=&labels=&template=issue.md&title=)
+
+## Time Converting
+
+Often we have to convert seconds, minutes, hours, and days. You're going to create a `TimeConverter` module which can handle all of this for us.
+
+We'll use the atoms `:days`, `:hours`, `:minutes`, or `:seconds` to represent days, hours, minutes, and seconds.
+
+<details style="background-color: lightgreen; padding: 1rem; margin: 1rem 0;">
+<summary>Example Solution</summary>
+
+```elixir
+defmodule TimeConverter do
+  def to_seconds(amount, unit) do
+    case unit do
+      :seconds -> amount
+      :minutes -> amount * 60
+      :hours -> amount * 60 * 60
+      :days -> amount * 60 * 60 * 24
+    end
+  end
+
+  def from_seconds(amount, unit) do
+    case unit do
+      :seconds -> amount * 1.0
+      :minutes -> amount / 60
+      :hours -> amount / 60 / 60
+      :days -> amount / 60 / 60 / 24
+    end
+  end
+end
+```
+
+</details>
+
+Implement the `TimeConverter.to_seconds/2` and `TimeConverter.from_seconds/2` functions as documented.
+
+```elixir
+defmodule TimeConverter do
+  @moduledoc """
+  Documentation for `TimeConverter`
+  """
+
+  @doc """
+  Convert a unit of time to a number of seconds.
+
+  ## Examples
+
+    iex> TimeConverter.to_seconds(1, :seconds)
+    1
+
+    iex> TimeConverter.to_seconds(1, :minutes)
+    60
+    
+    iex> TimeConverter.to_seconds(1, :hours)
+    3600
+
+    iex> TimeConverter.to_seconds(1, :days)
+    86400
+
+  """
+  def to_seconds(amount, unit) do
+  end
+
+  @doc """
+  Convert a number of seconds to a unit of time.
+  Return a float, as these values will require division using `/`.
+
+  ## Examples
+
+    iex> TimeConverter.from_seconds(1, :seconds)
+    1.0
+
+    iex> TimeConverter.from_seconds(60, :minutes)
+    1.0
+    
+    iex> TimeConverter.from_seconds(3600, :hours)
+    1.0
+
+    iex> TimeConverter.from_seconds(86400, :days)
+    1.0
+
+  """
+  def from_seconds(amount, unit) do
+  end
+end
+```
+
+## Commit Your Progress
+
+Run the following in your command line from the curriculum folder to track and save your progress in a Git commit.
+Ensure that you do not already have undesired or unrelated changes by running `git status` or by checking the source control tab in Visual Studio Code.
+
+```
+$ git checkout main
+$ git checkout -b exercise-time_converting
+$ git add .
+$ git commit -m "finish time converting exercise"
+$ git push origin exercise-time_converting
+```
+
+Create a pull request to your forked `main` branch. Please do not create a pull request to the DockYard Academy repository as this will spam our PR tracker.
+
+**DockYard Academy Students Only:**
+
+Notify your teacher by including `@BrooklinJazz` in your PR description to get feedback.
+
+If you are interested in joining the next academy cohort, [sign up here](https://academy.dockyard.com/) to receive more news when it is available.
+
+## Up Next
+
+| Previous                               | Next                                       |
+| -------------------------------------- | -----------------------------------------: |
+| [DateTime](../reading/datetime.livemd) | [Itinerary](../exercises/itinerary.livemd) |
+

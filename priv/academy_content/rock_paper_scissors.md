@@ -1,0 +1,142 @@
+%{
+  title: "Rock Paper Scissors"
+}
+---
+# Rock Paper Scissors
+
+```elixir
+Mix.install([
+  {:kino, "~> 0.7.0", override: true},
+  {:youtube, github: "brooklinjazz/youtube"},
+  {:hidden_cell, github: "brooklinjazz/hidden_cell"}
+])
+```
+
+## Navigation
+
+[Return Home](../start.livemd)<span style="padding: 0 30px"></span>
+[Report An Issue](https://github.com/DockYard-Academy/beta_curriculum/issues/new?assignees=&labels=&template=issue.md&title=)
+
+## Setup
+
+Ensure you type the `ea` keyboard shortcut to evaluate all Elixir cells before starting. Alternatively you can evaluate the Elixir cells as you read.
+
+## Create the Perfect AI
+
+You're going to create the perfect AI for rock paper scissors that will always win.
+
+```mermaid
+flowchart LR
+scissors --beats--> paper --beats--> rock --beats--> scissors
+```
+
+Generate a random player choice of `:rock` ,`:paper`, or `:scissors` or manually enter `:rock`, `:paper`, and `:scissors` to determine your program works correctly.
+
+<!-- livebook:{"force_markdown":true} -->
+
+```elixir
+player_choice = Enum.random([:rock, :paper, :scissors])
+```
+
+Then, return the winning choice of either `:rock`, `:paper`, or `:scissors` that beats the player's choice.
+
+<details style="background-color: lightgreen; padding: 1rem; margin: 1rem 0;">
+  <summary>Example solution</summary>
+
+  ```elixir
+  player_choice = :scissors
+  
+  case player_choice do
+    :rock -> :paper
+    :paper -> :scissors
+    :scissors -> :rock
+  end
+  ```
+</details>
+
+Enter your solution below.
+
+```elixir
+
+```
+
+## Create Two Player Rock Paper Scissors
+
+Now that you know how to create a rock paper scissors AI, you're going to create a two player game of rock paper scissors.
+
+Bind a `player1_choice` and `player2_choice` variable to `:rock`, `:paper`, or `:scissors`.
+
+* If `player1_choice` beats `player2_choice`, return `"Player 1 wins!"`.
+* If `player2_choice` beats `player1_choice`, return `"Player 2 wins!"`.
+* If both players have the same choice, then return `"Draw"`.
+
+<details style="background-color: lightgreen; padding: 1rem; margin: 1rem 0;">
+  <summary>Example solution</summary>
+
+  ```elixir
+  player1 = :rock
+  player2 = :scissors
+
+  case {player1, player2} do
+    {:rock, :scissors} -> "Player 1 Wins!"
+    {:paper, :rock} -> "Player 1 Wins!"
+    {:scissors, :paper} -> "Player 1 Wins!"
+    {:rock, :paper} -> "Player 2 Wins!"
+    {:paper, :scissors} -> "Player 2 Wins!"
+    {:scissors, :rock} -> "Player 2 Wins!"
+    {_same, _same} -> "Draw"
+  end
+  ```
+
+  You can also reduce code repetition using functions and the `in` keyword to check if the value exists in a list.
+
+  ```elixir
+  player1 = :rock
+  player2 = :scissors
+
+  beats? = fn choice1, choice2 ->
+    {choice1, choice2} in [{:rock, :scissors}, {:paper, :rock}, {:scissors, :paper}]
+  end
+
+  cond do
+    beats?(player1, player2) -> "Player1"
+    beats?(player2, player1) -> "Player2"
+    player1 == player2 -> "Draw"
+  end
+  ```
+
+</details>
+
+Enter your solution below.
+
+```elixir
+
+```
+
+## Commit Your Progress
+
+Run the following in your command line from the curriculum folder to track and save your progress in a Git commit.
+Ensure that you do not already have undesired or unrelated changes by running `git status` or by checking the source control tab in Visual Studio Code.
+
+```
+$ git checkout main
+$ git checkout -b exercise-rock_paper_scissors
+$ git add .
+$ git commit -m "finish rock paper scissors exercise"
+$ git push origin exercise-rock_paper_scissors
+```
+
+Create a pull request to your forked `main` branch. Please do not create a pull request to the DockYard Academy repository as this will spam our PR tracker.
+
+**DockYard Academy Students Only:**
+
+Notify your teacher by including `@BrooklinJazz` in your PR description to get feedback.
+
+If you are interested in joining the next academy cohort, [sign up here](https://academy.dockyard.com/) to receive more news when it is available.
+
+## Up Next
+
+| Previous                                             | Next                                 |
+| ---------------------------------------------------- | -----------------------------------: |
+| [Naming Numbers](../exercises/naming_numbers.livemd) | [Modules](../reading/modules.livemd) |
+

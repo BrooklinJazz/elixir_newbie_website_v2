@@ -1,0 +1,289 @@
+%{
+  title: "Match Operator"
+}
+---
+# Match Operator
+
+```elixir
+Mix.install([
+  {:kino, "~> 0.7.0", override: true},
+  {:youtube, github: "brooklinjazz/youtube"},
+  {:hidden_cell, github: "brooklinjazz/hidden_cell"}
+])
+```
+
+## Navigation
+
+[Return Home](../start.livemd)<span style="padding: 0 30px"></span>
+[Report An Issue](https://github.com/DockYard-Academy/beta_curriculum/issues/new?assignees=&labels=&template=issue.md&title=)
+
+## Setup
+
+Ensure you type the `ea` keyboard shortcut to evaluate all Elixir cells before starting. Alternatively, you can evaluate the Elixir cells as you read.
+
+## Variable Binding
+
+The match operator `=` is a way of binding some data to a named **variable** that we can
+use in place of that data throughout the rest of a program.
+
+For example, you can store the number `9` in a variable named `my_variable` and then
+use `my_variable` in place of 9.
+
+```elixir
+my_variable = 9
+
+my_variable + 1
+```
+
+You can name a variable almost anything and then use that name throughout the rest of your program. In the example above, we use `my_variable`, but you can name a variable almost anything
+as long as it doesn't break certain rules.
+
+```elixir
+a_different_variable_name = 9
+a_different_variable_name + 1
+```
+
+Why is storing a value in a variable useful? Imagine you have a program that runs several calculations on a number.
+Let's say the number 8.
+
+<!-- livebook:{"force_markdown":true} -->
+
+```elixir
+8 + 7 - 8 * 10 * 8 + 8
+```
+
+If we want to run these operations on the number 7 instead,
+that suddenly becomes tedious to write.
+
+A variable allows us to store a value and reuse it throughout the program.
+
+<!-- livebook:{"force_markdown":true} -->
+
+```elixir
+my_number = 8
+my_number + 7 - my_number * 10 * my_number + my_number
+```
+
+If the desired value changes, you only need to change the variable.
+
+<!-- livebook:{"force_markdown":true} -->
+
+```elixir
+my_number = 7
+my_number + 7 - my_number * 10 * my_number + my_number
+```
+
+Variables are also helpful for making programs more clear. There's an anti-pattern
+in programming called **magic values**. Magic values are values in a program that don't
+have a name but are important. You'll see **magic numbers** and **magic strings**
+as common **anti-patterns**. An anti-pattern means something you should generally avoid doing
+in your programs otherwise, they become less clear and difficult to work with.
+
+For example, imagine you're working on a program that accepts payments, and you find the following
+code
+
+```elixir
+100 * 1.12
+```
+
+What is 1.12? What is 100? These are examples of **magic values**. They might be important for the code to run properly, but the programmer has provided no context on what they are. This program would be a lot clearer if we used well-named variables.
+
+<!-- livebook:{"force_markdown":true} -->
+
+```elixir
+item_cost = 100
+tax_multiplier = 1.12
+item_cost * tax_multiplier
+```
+
+Oh! So this is a program that takes the cost of an item and adds tax to it.
+
+<!-- livebook:{"break_markdown":true} -->
+
+### Naming Variables
+
+Variable names must follow a few rules:
+
+* They must start with a letter.
+* They may contain valid alphanumeric characters.
+* They may end with predicates such as `!` or `?`.
+* They may not contain spaces.
+* They may not contain certain special characters such as `$`.
+
+In addition to those enforced rules, it's conventional to separate words in a variable with an underscore `_` and only use lowercase letters.
+
+If you break the rules for naming a variable, your program will crash with an error.
+Much like naming atoms, memorizing the rules of naming variables is unimportant.
+You will develop an intuition for if your variable name is valid or not through repeated exposure.
+In practice, most variable names are made of only lowercase letters, underscores, and
+sometimes numbers.
+
+In general, you should give your variables meaningful names That improve the clarity of your code.
+
+Short generic variable names are often difficult to decipher unless there's an established convention. For example, you'll often see the variable `i` to refer to an index.
+
+Here are some example variable names that do not convey meaning.
+
+<!-- livebook:{"force_markdown":true} -->
+
+```elixir
+t = "12:00"
+c = 10
+```
+
+Instead, prefer verbose variable names to improve the clarity of your programs.
+
+<!-- livebook:{"force_markdown":true} -->
+
+```elixir
+time = "12:00"
+cost = 10
+```
+
+<!-- livebook:{"break_markdown":true} -->
+
+### Unbound Variables
+
+Using an unbound variable will crash your program.
+
+```elixir
+a_variable_that_has_not_been_bound
+```
+
+If you look closely at the error, you'll see `undefined function a_variable_that_has_not_been_bound/0 (there is no such import)`
+
+When you use an unbound variable, Elixir assumes it's a function that has
+not been defined. You haven't covered functions yet, but you will learn more about them in future lessons.
+
+For now, it's enough to be familiar with this error so that if you see it, you'll know
+you're using an unbound variable.
+
+### Your Turn
+
+In the Elixir cell below, create a variable `hello` and bind it to the value `"world"`.
+
+<details style="background-color: lightgreen; padding: 1rem; margin: 1rem 0;">
+<summary>Example solution</summary>
+
+```elixir
+hello = "world".
+```
+
+</details>
+
+Enter your solution below.
+
+```elixir
+
+```
+
+### Mutation
+
+Under the hood, the values bound to variables are stored on the computer in memory.
+
+The variable is pointing to the value in that location.
+
+```mermaid
+flowchart LR
+    variable --> location
+```
+
+For example, a variable `hello` with the value `"world"` would store the string
+`"world"` somewhere in **memory**. **memory** is a hardware component on the computer.
+You may have heard of **RAM** (Random Access Memory).
+
+```mermaid
+flowchart LR
+    hello --> w["world"]
+```
+
+Object-Oriented Programming languages allow you to mutate the actual value in memory.
+So when we write `hello = 4`, the data `"world"` mutates into `4`.
+
+```mermaid
+flowchart LR
+    hello --> w["4"]
+```
+
+However, we do not allow mutation in a functional programming language like Elixir.
+So instead of mutating the data, we **rebind** the variable to new data.
+
+```mermaid
+flowchart
+    w["world"]
+    hello --> 4
+```
+
+That's why we call data in Elixir **immutable**.
+
+It may not be clear why this matters, and that's ok. For now, it's enough to
+be aware that data is immutable, as you will have more opportunities to see the impact of
+immutability in future lessons.
+
+However, we can rebind variables, so the following statement is valid.
+
+```elixir
+my_variable = 1
+
+my_variable = 2
+
+# Returns 2, because we rebound my_variable
+my_variable
+```
+
+## Debugging
+
+Often times it's useful to debug your code by knowing what the value of variables are.
+
+We can use `IO.inspect` to log values in our code. `IO.inspect` returns the value given to it.
+
+```elixir
+my_value = "hello"
+
+IO.inspect(my_value)
+```
+
+We can wrap a value in `IO.inspect`. So long as we do this correctly, `IO.inspect` will
+print the value in our code without affecting it's behavior.
+
+```elixir
+my_value = IO.inspect("hello")
+
+my_value
+```
+
+### Your Turn
+
+Use `IO.inspect` to print the `hello` variable.
+
+```elixir
+hello = "world!"
+```
+
+## Commit Your Progress
+
+Run the following in your command line from the curriculum folder to track and save your progress in a Git commit.
+Ensure that you do not already have undesired or unrelated changes by running `git status` or by checking the source control tab in Visual Studio Code.
+
+```
+$ git checkout main
+$ git checkout -b exercise-match_operator
+$ git add .
+$ git commit -m "finish match operator section"
+$ git push origin exercise-match_operator
+```
+
+Create a pull request to your forked `main` branch. Please do not create a pull request to the DockYard Academy repository as this will spam our PR tracker.
+
+**DockYard Academy Students Only:**
+
+Notify your teacher by including `@BrooklinJazz` in your PR description to get feedback.
+
+If you are interested in joining the next academy cohort, [sign up here](https://academy.dockyard.com/) to receive more news when it is available.
+
+## Up Next
+
+| Previous                                                       | Next                                             |
+| -------------------------------------------------------------- | -----------------------------------------------: |
+| [Comparison Operators](../reading/comparison_operators.livemd) | [Fun Formulas](../exercises/fun_formulas.livemd) |
+

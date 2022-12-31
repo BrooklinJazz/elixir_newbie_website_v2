@@ -1,0 +1,100 @@
+%{
+  title: "Mad Libs"
+}
+---
+# Mad Libs
+
+```elixir
+Mix.install([
+  {:kino, "~> 0.7.0", override: true},
+  {:youtube, github: "brooklinjazz/youtube"},
+  {:hidden_cell, github: "brooklinjazz/hidden_cell"}
+])
+```
+
+## Navigation
+
+[Return Home](../start.livemd)<span style="padding: 0 30px"></span>
+[Report An Issue](https://github.com/DockYard-Academy/beta_curriculum/issues/new?assignees=&labels=&template=issue.md&title=)
+
+## Madlibs
+
+You're going to create some mad lib games. A madlib is a game where the player can enter in a word or sentence to fill in the blanks.
+
+## String Concatenation Madlib
+
+In the Elixir cell below, bind each blank word to a variable. Then use **string concatenation** to combine these values into a single string madlib.
+
+> A programmer is a ____ that turns ____ into ____.
+
+<details style="background-color: lightgreen; padding: 1rem; margin: 1rem 0;">
+<summary>Example solution</summary>
+
+```elixir
+blank1 = "person"
+blank2 = "coffee"
+blank3 = "code"
+
+"A programmer is a " <> blank1 <> " that turns " <> blank2 <> " into " <> blank3
+```
+
+</details>
+
+Enter your solution below.
+
+```elixir
+
+```
+
+## String Interpolation Madlib
+
+In the Elixir cell below, bind each blank word to a variable. Then use **string interpolation** to combine these values into a single string madlib.
+
+> ____ and ____ combined makes ____.
+
+<details style="background-color: lightgreen; padding: 1rem; margin: 1rem 0;">
+<summary>Example solution</summary>
+
+```elixir
+blank1 = "foo"
+blank2 = "bar"
+blank3 = "foobar"
+
+"#{blank1} and #{blank2} combined makes #{blank3}."
+```
+
+</details>
+
+Enter your solution below.
+
+```elixir
+
+```
+
+## Commit Your Progress
+
+Run the following in your command line from the curriculum folder to track and save your progress in a Git commit.
+Ensure that you do not already have undesired or unrelated changes by running `git status` or by checking the source control tab in Visual Studio Code.
+
+```
+$ git checkout main
+$ git checkout -b exercise-mad_libs
+$ git add .
+$ git commit -m "finish mad libs exercise"
+$ git push origin exercise-mad_libs
+```
+
+Create a pull request to your forked `main` branch. Please do not create a pull request to the DockYard Academy repository as this will spam our PR tracker.
+
+**DockYard Academy Students Only:**
+
+Notify your teacher by including `@BrooklinJazz` in your PR description to get feedback.
+
+If you are interested in joining the next academy cohort, [sign up here](https://academy.dockyard.com/) to receive more news when it is available.
+
+## Up Next
+
+| Previous                                           | Next                                                 |
+| -------------------------------------------------- | ---------------------------------------------------: |
+| [Habit Tracker](../exercises/habit_tracker.livemd) | [Guessing Games](../exercises/guessing_games.livemd) |
+

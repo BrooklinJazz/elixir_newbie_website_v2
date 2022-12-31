@@ -1,0 +1,129 @@
+%{
+  title: "Rock Paper Scissors Guards"
+}
+---
+# Rock Paper Scissors Guards
+
+```elixir
+Mix.install([
+  {:kino, "~> 0.7.0", override: true},
+  {:youtube, github: "brooklinjazz/youtube"},
+  {:hidden_cell, github: "brooklinjazz/hidden_cell"}
+])
+```
+
+## Navigation
+
+[Return Home](../start.livemd)<span style="padding: 0 30px"></span>
+[Report An Issue](https://github.com/DockYard-Academy/beta_curriculum/issues/new?assignees=&labels=&template=issue.md&title=)
+
+## Rock Paper Scissors Guards
+
+You're going to recreate your rock paper scissors game using guards.
+
+<!-- livebook:{"force_markdown":true} -->
+
+```elixir
+RockPaperScissors.play(:rock, :paper)
+"paper beats rock!"
+
+RockPaperScissors.play(:rock, :rock)
+"draw!"
+```
+
+<details style="background-color: lightgreen; padding: 1rem; margin: 1rem 0;">
+<summary>Example Solution</summary>
+
+```elixir
+defmodule RockPaperScissorsGuards do
+  defguard is_winner(guess1, guess2)
+           when {guess1, guess2} in [{:rock, :scissors}, {:paper, :rock}, {:scissors, :paper}]
+
+  def play(guess1, guess2) when is_winner(guess1, guess2) do
+    "#{guess1} beats #{guess2}!"
+  end
+
+  def play(guess1, guess2) when is_winner(guess2, guess1) do
+    "#{guess2} beats #{guess1}!"
+  end
+
+  def play(guess1, guess2) when guess1 == guess2 do
+    "draw!"
+  end
+end
+```
+
+</details>
+
+Implement the `RockPaperScissorsGuards` module as documented below.
+
+```elixir
+defmodule RockPaperScissorsGuards do
+  @moduledoc """
+  Documentation for `RockPaperScissorsGuards`
+  """
+
+  @doc """
+  Play rock paper scissors. Returns a string to describe who won the game.
+
+  ## Examples
+
+    iex> RockPaperScissorsGuards.play(:rock, :scissors)
+    "rock beats scissors!"
+
+    iex> RockPaperScissorsGuards.play(:paper, :rock)
+    "paper beats rock!"
+
+    iex> RockPaperScissorsGuards.play(:scissors, :paper)
+    "scissors beats paper!"
+
+    iex> RockPaperScissorsGuards.play(:rock, :paper)
+    "paper beats rock!"
+
+    iex> RockPaperScissorsGuards.play(:paper, :scissors)
+    "scissors beats paper!"
+
+    iex> RockPaperScissorsGuards.play(:scissors, :rock)
+    "rock beats scissors!"
+
+    iex> RockPaperScissorsGuards.play(:rock, :rock)
+    "draw!"
+
+    iex> RockPaperScissorsGuards.play(:paper, :paper)
+    "draw!"
+
+    iex> RockPaperScissorsGuards.play(:scissors, :scissors)
+    "draw!"
+  """
+  def play(guess1, guess2) do
+  end
+end
+```
+
+## Commit Your Progress
+
+Run the following in your command line from the curriculum folder to track and save your progress in a Git commit.
+Ensure that you do not already have undesired or unrelated changes by running `git status` or by checking the source control tab in Visual Studio Code.
+
+```
+$ git checkout main
+$ git checkout -b exercise-rps_guards
+$ git add .
+$ git commit -m "finish rps guards exercise"
+$ git push origin exercise-rps_guards
+```
+
+Create a pull request to your forked `main` branch. Please do not create a pull request to the DockYard Academy repository as this will spam our PR tracker.
+
+**DockYard Academy Students Only:**
+
+Notify your teacher by including `@BrooklinJazz` in your PR description to get feedback.
+
+If you are interested in joining the next academy cohort, [sign up here](https://academy.dockyard.com/) to receive more news when it is available.
+
+## Up Next
+
+| Previous                                                 | Next                                                           |
+| -------------------------------------------------------- | -------------------------------------------------------------: |
+| [Math With Guards](../exercises/math_with_guards.livemd) | [Strings And Binaries](../reading/strings_and_binaries.livemd) |
+

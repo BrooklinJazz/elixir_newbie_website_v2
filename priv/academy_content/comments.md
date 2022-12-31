@@ -1,0 +1,101 @@
+%{
+  title: "Comments"
+}
+---
+# Comments
+
+```elixir
+Mix.install([
+  {:kino, "~> 0.7.0", override: true},
+  {:youtube, github: "brooklinjazz/youtube"},
+  {:hidden_cell, github: "brooklinjazz/hidden_cell"}
+])
+```
+
+## Navigation
+
+[Return Home](../start.livemd)<span style="padding: 0 30px"></span>
+[Report An Issue](https://github.com/DockYard-Academy/beta_curriculum/issues/new?assignees=&labels=&template=issue.md&title=)
+
+## Setup
+
+Ensure you type the `ea` keyboard shortcut to evaluate all Elixir cells before starting. Alternatively, you can evaluate the Elixir cells as you read.
+
+## Comments
+
+You can create inline comments in your code in Elixir using `#`. Anything after the `#` on the same line will be part of the comment
+
+```elixir
+# You can use comments to leave messages in your code.
+```
+
+It's sometimes handy for documenting what your code does. However, it's often better to use comments sparingly.
+Leaving a comment often means that there's something in your code that didn't explain itself.
+
+In these moments you might find it useful to consider how you can improve your code to be self documenting rather than leaving
+a comment in unclear code. There are better forms of documentation that you'll learn about in future lessons.
+
+Sometimes it's handy to use comments to temporarily remove pieces of code and save them for later.
+However, comments can be misused.
+You're also likely to
+encounter codebases that leave thousands of TODO comments everywhere. TODO comments can be useful, but when abused they
+can be worse than no comment at all!
+
+```elixir
+# Use comments to leave notes on your code.
+```
+
+Depending on your code editor, You can comment out many lines of code at once. Highlight the code you want to comment
+then press the correct keybinding. The binding will be different depending on your editor and if you are using GNU/Linux, macOS, or Windows.
+In Livebook, it's likely `CTRL-/` or `COMMAND-/` but you can double check in the keyboard shortcuts tab.
+
+Click on the keyboard icon <i class="ri-keyboard-box-fill"></i> in the left sidebar of this page to see all of the keyboard shortcuts.
+
+<!-- livebook:{"break_markdown":true} -->
+
+### Your Turn
+
+<!-- livebook:{"break_markdown":true} -->
+
+In the Elixir cell below, create a comment `# hello world`
+
+```elixir
+
+```
+
+In the Elixir cell below, comment all of the code out using the **Toggle lines comment** keyboard shortcut.
+
+```elixir
+1 + 1
+2 + 3
+3 + 1 + 2
+123 + 12 + 256
+```
+
+## Commit Your Progress
+
+Run the following in your command line from the curriculum folder to track and save your progress in a Git commit.
+Ensure that you do not already have undesired or unrelated changes by running `git status` or by checking the source control tab in Visual Studio Code.
+
+```
+$ git checkout main
+$ git checkout -b exercise-comments
+$ git add .
+$ git commit -m "finish comments section"
+$ git push origin exercise-comments
+```
+
+Create a pull request to your forked `main` branch. Please do not create a pull request to the DockYard Academy repository as this will spam our PR tracker.
+
+**DockYard Academy Students Only:**
+
+Notify your teacher by including `@BrooklinJazz` in your PR description to get feedback.
+
+If you are interested in joining the next academy cohort, [sign up here](https://academy.dockyard.com/) to receive more news when it is available.
+
+## Up Next
+
+| Previous                                           | Next                                       |
+| -------------------------------------------------- | -----------------------------------------: |
+| [Github Collab](../exercises/github_collab.livemd) | [Arithmetic](../reading/arithmetic.livemd) |
+

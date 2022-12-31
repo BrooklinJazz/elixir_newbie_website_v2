@@ -1,0 +1,171 @@
+%{
+  title: "Custom Enum With Reduce"
+}
+---
+# Custom Enum With Reduce
+
+```elixir
+Mix.install([
+  {:kino, "~> 0.7.0", override: true},
+  {:youtube, github: "brooklinjazz/youtube"},
+  {:hidden_cell, github: "brooklinjazz/hidden_cell"}
+])
+```
+
+## Navigation
+
+[Return Home](../start.livemd)<span style="padding: 0 30px"></span>
+[Report An Issue](https://github.com/DockYard-Academy/beta_curriculum/issues/new?assignees=&labels=&template=issue.md&title=)
+
+## Custom Enum With Reduce
+
+You're going to use [Enum.reduce/2](https://hexdocs.pm/elixir/Enum.html#reduce/2) and/or [Enum.reduce/3](https://hexdocs.pm/elixir/Enum.html#reduce/3) to re-implement several of the [Enum](https://hexdocs.pm/elixir/Enum.html) module's functions. Only implement these functions for **lists**.
+
+<details style="background-color: lightgreen; padding: 1rem;">
+<summary>Example Solution</summary>
+
+```elixir
+defmodule CustomEnum do
+  def reverse(list) do
+    Enum.reduce(list, [], fn each, acc -> [each | acc] end)
+  end
+
+  def map(list, callback_function) do
+    Enum.reduce(list, [], fn each, acc ->
+      [callback_function.(each) | acc]
+    end)
+    |> Enum.reverse()
+  end
+
+  def filter(list, callback_function) do
+    Enum.reduce(list, [], fn each, acc ->
+      if callback_function.(each) do
+        [each | acc]
+      else
+        acc
+      end
+    end)
+    |> Enum.reverse()
+  end
+
+  def sum(list) do
+    Enum.reduce(list, 0, fn each, acc -> acc + each end)
+  end
+
+  def join(list_of_strings) do
+    Enum.reduce(list_of_strings, "", fn str, acc -> acc <> str end)
+  end
+end
+```
+
+</details>
+
+Implement the `CustomEnum` module according to the documentation below.
+
+```elixir
+defmodule CustomEnum do
+  @moduledoc """
+  Documentation for `CustomEnum`.
+  Re-implement common [Enum](https://hexdocs.pm/elixir/Enum.html) functions using [Enum.reduce/2](https://hexdocs.pm/elixir/Enum.html#reduce/2) or [Enum.reduce/3](https://hexdocs.pm/elixir/Enum.html#reduce/3).
+  """
+
+  @doc """
+  Reverse a list
+
+  ## Examples
+
+    iex> CustomEnum.reverse([1, 2, 3])
+    [3, 2, 1]
+
+    iex> CustomEnum.reverse([4, 5, 6, 7])
+    [7, 6, 5, 4]
+  """
+  def reverse(list) do
+  end
+
+  @doc """
+  Map over a list
+
+  ## Examples
+
+    iex> CustomEnum.map([1, 2, 3], fn integer -> integer * 2 end)
+    [2, 4, 6]
+
+    iex> CustomEnum.map([5, 4, 3], fn integer -> is_integer(integer) end)
+    [true, true, true]
+  """
+  def map(list, callback_function) do
+  end
+
+  @doc """
+  Filter elements in a list. Keep elements that return `true` when called with the
+  provided callback function.
+
+  ## Examples
+
+    iex> CustomEnum.filter([1, 2, "3"], fn int -> is_integer(int) end)
+    [1, 2]
+
+    iex> CustomEnum.filter([1, "2", "3"], fn char -> is_bitstring(char) end)
+    ["2", "3"]
+  """
+  def filter(list, callback_function) do
+  end
+
+  @doc """
+  Sum a list of integers.
+
+  ## Examples
+
+    iex> CustomEnum.sum([1, 2, 3])
+    6
+
+    iex> CustomEnum.sum([1, 1, 1])
+    3
+  """
+  def sum(list_of_integers) do
+  end
+
+  @doc """
+  Join a list of strings together.
+
+  ## Examples
+
+    iex> CustomEnum.join(["A", "B", "C"])
+    "ABC"
+
+    iex> CustomEnum.join(["Hello", ",", " ", "World", "!"])
+    "Hello, World!"
+  """
+  def join(list_of_strings) do
+  end
+end
+```
+
+## Commit Your Progress
+
+Run the following in your command line from the curriculum folder to track and save your progress in a Git commit.
+Ensure that you do not already have undesired or unrelated changes by running `git status` or by checking the source control tab in Visual Studio Code.
+
+```
+$ git checkout main
+$ git checkout -b exercise-custom_enum_with_reduce
+$ git add .
+$ git commit -m "finish custom enum with reduce exercise"
+$ git push origin exercise-custom_enum_with_reduce
+```
+
+Create a pull request to your forked `main` branch. Please do not create a pull request to the DockYard Academy repository as this will spam our PR tracker.
+
+**DockYard Academy Students Only:**
+
+Notify your teacher by including `@BrooklinJazz` in your PR description to get feedback.
+
+If you are interested in joining the next academy cohort, [sign up here](https://academy.dockyard.com/) to receive more news when it is available.
+
+## Up Next
+
+| Previous                                               | Next                                   |
+| ------------------------------------------------------ | -------------------------------------: |
+| [Weighted Voting](../exercises/weighted_voting.livemd) | [DateTime](../reading/datetime.livemd) |
+

@@ -1,0 +1,170 @@
+%{
+  title: "Lucas Numbers"
+}
+---
+# Lucas Numbers
+
+```elixir
+Mix.install([
+  {:kino, "~> 0.7.0", override: true},
+  {:youtube, github: "brooklinjazz/youtube"},
+  {:hidden_cell, github: "brooklinjazz/hidden_cell"}
+])
+```
+
+## Navigation
+
+[Return Home](../start.livemd)<span style="padding: 0 30px"></span>
+[Report An Issue](https://github.com/DockYard-Academy/beta_curriculum/issues/new?assignees=&labels=&template=issue.md&title=)
+
+## Lucas Numbers
+
+This exercise was inspired by [Exercism.io](https://exercism.org/tracks/elixir/exercises/lucas-numbers). It's a fantastic platform for learning many languages including Elixir.
+
+Lucas numbers are much like the fibonacci sequence where $fib(n) = fib(n - 1) + fib(n - 2)$
+Numberphile has a great video that explains them in further detail,
+
+<!-- livebook:{"attrs":{"source":"YouTube.new(\"https://www.youtube.com/watch?v=PeUbRXnbmms\")","title":"Lucas Numbers"},"kind":"Elixir.HiddenCell","livebook_object":"smart_cell"} -->
+
+```elixir
+YouTube.new("https://www.youtube.com/watch?v=PeUbRXnbmms")
+```
+
+Unlike Fibonacci, they start with a different initial 2 numbers.
+
+| n              | 0   | 1   | 2   | 3   | 4   | 5   | 6   | 7   | 8   | 9   | 10  |
+| -------------- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| $Fibonacci(n)$ | 0   | 1   | 1   | 2   | 3   | 5   | 8   | 13  | 21  | 34  | 55  |
+| $Lucas(n)$     | 2   | 1   | 3   | 4   | 7   | 11  | 18  | 29  | 47  | 76  | 123 |
+
+Other than starting with two different numbers, the formula for a lucas number is still
+$L(n)=L(n-1)+L(n - 2)$.
+
+In addition to generating the $nth$ lucas number, you're also going to generate a sequence of lucas numbers.
+
+<details style="background-color: lightgreen; padding: 1rem; margin: 1rem 0;">
+<summary>Example Solution</summary>
+
+```elixir
+defmodule Lucas do
+
+  def number(0), do: 2
+  def number(1), do: 1
+
+  def number(n) do
+    number(n - 1) + number(n - 2)
+  end
+
+  def sequence(length) do
+    Enum.map(1..length, &number/1)
+  end
+end
+
+Lucas.sequence(10)
+```
+
+To avoid recomputing lucas numbers over and over, we can implement `sequence/1` using [Enum.reduce/3](https://hexdocs.pm/elixir/Enum.html#reduce/3) instead.
+
+```elixir
+def sequence(length) do
+  {_, _, list} =
+    Enum.reduce(2..length, {2, 1, [1, 2]}, fn each, {prev2, prev1, list} ->
+      current = prev2 + prev1
+      {prev1, current, [current | list]}
+    end)
+
+  Enum.reverse(list)
+end
+```
+
+</details>
+
+Implement the `Lucas` module as documented.
+
+```elixir
+defmodule Lucas do
+  @doc """
+  return the nth lucas number.
+
+  ## Examples
+
+    iex> Lucas.number(0)
+    2
+
+    iex> Lucas.number(1)
+    1
+
+    iex> Lucas.number(2)
+    3
+
+    iex> Lucas.number(3)
+    4
+
+    iex> Lucas.number(4)
+    7
+    
+    iex> Lucas.number(5)
+    11
+
+    iex> Lucas.number(6)
+    18
+
+    iex> Lucas.number(20)
+    15127
+  """
+  def number(n) do
+  end
+
+  @doc """
+  Generate a list of lucas numbers with the given length.
+
+  ## Examples
+
+    iex> Lucas.sequence(1)
+    [2]
+
+    iex> Lucas.sequence(2)
+    [2, 1]
+
+    iex> Lucas.sequence(3)
+    [2, 1, 3]
+
+    iex> Lucas.sequence(4)
+    [2, 1, 3, 4]
+
+    iex> Lucas.sequence(10)
+    [2, 1, 3, 4, 7, 11, 18, 29, 47, 76, 123]
+  """
+
+  def sequence(length) do
+  end
+end
+```
+
+## Commit Your Progress
+
+Run the following in your command line from the curriculum folder to track and save your progress in a Git commit.
+Ensure that you do not already have undesired or unrelated changes by running `git status` or by checking the source control tab in Visual Studio Code.
+
+```
+$ git checkout main
+$ git checkout -b exercise-lucas_numbers
+$ git add .
+$ git commit -m "finish lucas numbers exercise"
+$ git push origin exercise-lucas_numbers
+```
+
+Create a pull request to your forked `main` branch. Please do not create a pull request to the DockYard Academy repository as this will spam our PR tracker.
+
+**DockYard Academy Students Only:**
+
+Notify your teacher by including `@BrooklinJazz` in your PR description to get feedback.
+
+If you are interested in joining the next academy cohort, [sign up here](https://academy.dockyard.com/) to receive more news when it is available.
+
+## Up Next
+
+| Previous                                   | Next                                       |
+| ------------------------------------------ | -----------------------------------------: |
+| [Fibonacci](../exercises/fibonacci.livemd) | [Factorial](../exercises/factorial.livemd) |
+

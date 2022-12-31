@@ -1,0 +1,329 @@
+%{
+  title: "Product Filters"
+}
+---
+# Product Filters
+
+```elixir
+Mix.install([
+  {:kino, "~> 0.7.0", override: true},
+  {:youtube, github: "brooklinjazz/youtube"},
+  {:hidden_cell, github: "brooklinjazz/hidden_cell"}
+])
+```
+
+## Navigation
+
+[Return Home](../start.livemd)<span style="padding: 0 30px"></span>
+[Report An Issue](https://github.com/DockYard-Academy/beta_curriculum/issues/new?assignees=&labels=&template=issue.md&title=)
+
+## Product Filters
+
+You're going to build an application where users search for products based on certain filters.
+
+Each product is a map with a `:name`, `:category`, and `:price` (in cents).
+
+<!-- livebook:{"force_markdown":true} -->
+
+```elixir
+products = [
+  %{name: "Laptop", category: :tech, price: 100000},
+  %{name: "Phone", category: :tech, price: 50000},
+  %{name: "Chocolate", category: :snacks, price: 200},
+  %{name: "Shampoo", category: :health, price: 1000}
+]
+```
+
+Test and implement a `Products.filter/2` function which accepts a list of items
+and a keyword list of filters. Each filter is optional, and every item must have all of the included filters. This is called an **exclusive** search rather than an **inclusive** search.
+
+You should be able to filter by:
+
+1. a partial case-insensitive `:name` field.
+2. an inclusive `:min` and `:max` price.
+3. an exact `:category` field as an atom.
+
+<!-- livebook:{"break_markdown":true} -->
+
+<details style="background-color: lightgreen; padding: 1rem; margin: 1rem 0;">
+<summary>Example Test Cases</summary>
+
+```elixir
+ExUnit.start(auto_run: false)
+
+defmodule ProductsTest do
+  use ExUnit.Case
+
+  test "filter/2 empty filters" do
+    found = create_product(name: "Laptop")
+    assert Products.filter([found], []) == [found]
+  end
+
+  test "filter/2 by exact matching name" do
+    found = create_product(name: "Laptop")
+    not_found = create_product(name: "Shampoo")
+    products = [found, not_found]
+    assert Products.filter(products, name: "Laptop") == [found]
+  end
+
+  test "filter/2 by partial matching name" do
+    found = create_product(name: "Laptop")
+    not_found = create_product(name: "Shampoo")
+    products = [found, not_found]
+    assert Products.filter(products, name: "apt") == [found]
+  end
+
+  test "filter/2 by mixed case partial matching name" do
+    found = create_product(name: "Laptop")
+    not_found = create_product(name: "Shampoo")
+    products = [found, not_found]
+    assert Products.filter(products, name: "aPt") == [found]
+  end
+
+  test "filter/2 by category" do
+    found = create_product(category: :tech)
+    not_found = create_product(category: :snacks)
+    products = [found, not_found]
+    assert Products.filter(products, category: :tech) == [found]
+  end
+
+  test "filter/2 by min price" do
+    found1 = create_product(price: 101)
+    found2 = create_product(price: 100)
+    not_found = create_product(price: 99)
+    products = [found1, found2, not_found]
+    assert Products.filter(products, min: 100) == [found1, found2]
+  end
+
+  test "filter/2 by max price" do
+    found1 = create_product(price: 99)
+    found2 = create_product(price: 100)
+    not_found = create_product(price: 101)
+    products = [found1, found2, not_found]
+    assert Products.filter(products, max: 100) == [found1, found2]
+  end
+
+  test "filter/2 by max and min price" do
+    found1 = create_product(price: 100)
+    found2 = create_product(price: 150)
+    found3 = create_product(price: 200)
+    not_found1 = create_product(price: 99)
+    not_found2 = create_product(price: 201)
+    products = [found1, found2, found3, not_found1, not_found2]
+    assert Products.filter(products, min: 100, max: 200) == [found1, found2, found3]
+  end
+
+  test "filter/2 all filters" do
+    found = create_product(price: 150, name: "Laptop", category: :tech)
+    wrong_category = create_product(price: 150, name: "Laptop", category: :wrong)
+    wrong_name = create_product(price: 150, name: "Wrong", category: :wrong)
+    too_low_price = create_product(price: 99, name: "Laptop", category: :wrong)
+    too_high_price = create_product(price: 201, name: "Laptop", category: :wrong)
+
+    products = [found, wrong_category, wrong_name, too_low_price, too_high_price]
+
+    assert Products.filter(products, min: 100, max: 200, name: "Laptop", category: :tech) == [
+             found
+           ]
+  end
+
+  # simplifies creation of product test data
+  defp create_product(attrs \\ %{}) do
+    attrs
+    |> Enum.into(%{
+      name: Enum.random(["Laptop", "Shampoo", "Phone"]),
+      category: Enum.random([:tech, :snacks, :health]),
+      price: Enum.random(1..1000)
+    })
+  end
+end
+
+ExUnit.run()
+```
+
+</details>
+
+<!-- livebook:{"break_markdown":true} -->
+
+<details style="background-color: lightgreen; padding: 1rem; margin: 1rem 0;">
+<summary>Example Solution 1</summary>
+
+In this example, we solve the problem by enumerating over products and checking each filter.
+
+```elixir
+defmodule Products do
+  def filter(products, filters) do
+    name_filter = Keyword.get(filters, :name, "")
+    category_filter = Keyword.get(filters, :category)
+    min_filter = Keyword.get(filters, :min)
+    max_filter = Keyword.get(filters, :max)
+
+    products
+    |> Enum.filter(fn product ->
+      matches_name =
+        !name_filter or String.contains?(String.downcase(product.name), String.downcase(name))
+
+      matches_category = !category_filter or product.category == category_filter
+      above_min_price = !min_filter or min_filter <= product.price
+      below_max_price = !max_filter or product.price <= max_filter
+      matches_name and matches_category and above_min_price and below_max_price
+    end)
+  end
+end
+```
+
+</details>
+
+<!-- livebook:{"break_markdown":true} -->
+
+<details style="background-color: lightgreen; padding: 1rem; margin: 1rem 0;">
+<summary>Example Solution 2</summary>
+
+In this example, we solve the problem by enumerating over every filter.
+
+```elixir
+defmodule Products do
+  def check?({:min, min}, product), do: min <= product.price
+  def check?({:max, max}, product), do: product.price <= max
+
+  def check?({:name, name}, product),
+    do: String.contains?(String.downcase(product.name), String.downcase(name))
+
+  def check?({:category, category}, product), do: category == product.category
+
+  def filter(products, filters) do
+    Enum.filter(products, fn product ->
+      Enum.all?(filters, fn filter -> check?(filter, product) end)
+    end)
+  end
+end
+```
+
+</details>
+
+<!-- livebook:{"break_markdown":true} -->
+
+Implement and test the `Products` module based on the provided test cases and documentation.
+
+```elixir
+defmodule Products do
+  @moduledoc """
+  Documentation for `Products`
+  """
+
+  @doc """
+  Filter products by name, category, and price.
+
+  ## Examples
+
+  No filters returns all products.
+
+  iex> Products.filter([%{name: "Laptop", category: :tech, price: 100}], [])
+  [%{name: "Laptop", category: :tech, price: 100}]
+
+  Filter by name
+
+  iex> Products.filter([%{name: "Laptop", category: :tech, price: 100}], name: "Laptop")
+  [%{name: "Laptop", category: :tech, price: 100}]
+
+  iex> Products.filter([%{name: "Laptop", category: :tech, price: 100}], name: "apt")
+  [%{name: "Laptop", category: :tech, price: 100}]
+
+  iex> Products.filter([%{name: "Laptop", category: :tech, price: 100}], name: "APT")
+  [%{name: "Laptop", category: :tech, price: 100}]
+
+  iex> Products.filter([%{name: "Laptop", category: :tech, price: 100}], name: "Phone")
+  []
+
+  Filter by category
+
+  iex> Products.filter([%{name: "Laptop", category: :tech, price: 100}], category: :tech)
+  [%{name: "Laptop", category: :tech, price: 100}]
+
+  iex> Products.filter([%{name: "Laptop", category: :tech, price: 100}], category: :health)
+  []
+
+  Filter by min price.
+
+  iex> Products.filter([%{name: "Laptop", category: :tech, price: 100}], min: 100)
+  [%{name: "Laptop", category: :tech, price: 100}]
+
+  iex> Products.filter([%{name: "Laptop", category: :tech, price: 100}], min: 50)
+  [%{name: "Laptop", category: :tech, price: 100}]
+
+  iex> Products.filter([%{name: "Laptop", category: :tech, price: 100}], min: 200)
+  []
+
+  Filter by max price.
+
+  iex> Products.filter([%{name: "Laptop", category: :tech, price: 100}], max: 100)
+  [%{name: "Laptop", category: :tech, price: 100}]
+
+  iex> Products.filter([%{name: "Laptop", category: :tech, price: 100}], max: 200)
+  [%{name: "Laptop", category: :tech, price: 100}]
+
+  iex> Products.filter([%{name: "Laptop", category: :tech, price: 100}], max: 50)
+  []
+
+  Multiple filters.
+
+  Products.filter([%{name: "Laptop", category: :tech, price: 100}], min: 50, max: 200, name: "Laptop", category: :tech)
+  """
+  def filter(products, filters) do
+  end
+end
+
+ExUnit.start(auto_run: false)
+
+defmodule ProductsTest do
+  use ExUnit.Case
+
+  test "filter/2 empty filters"
+
+  test "filter/2 by exact matching name"
+
+  test "filter/2 by partial matching name"
+
+  test "filter/2 by mixed case partial matching name"
+
+  test "filter/2 by category"
+
+  test "filter/2 by min price"
+
+  test "filter/2 by max price"
+
+  test "filter/2 by max and min price"
+
+  test "filter/2 all filters"
+end
+
+ExUnit.run()
+```
+
+## Commit Your Progress
+
+Run the following in your command line from the curriculum folder to track and save your progress in a Git commit.
+Ensure that you do not already have undesired or unrelated changes by running `git status` or by checking the source control tab in Visual Studio Code.
+
+```
+$ git checkout main
+$ git checkout -b exercise-product_filters
+$ git add .
+$ git commit -m "finish product filters exercise"
+$ git push origin exercise-product_filters
+```
+
+Create a pull request to your forked `main` branch. Please do not create a pull request to the DockYard Academy repository as this will spam our PR tracker.
+
+**DockYard Academy Students Only:**
+
+Notify your teacher by including `@BrooklinJazz` in your PR description to get feedback.
+
+If you are interested in joining the next academy cohort, [sign up here](https://academy.dockyard.com/) to receive more news when it is available.
+
+## Up Next
+
+| Previous                                                       | Next                                                 |
+| -------------------------------------------------------------- | ---------------------------------------------------: |
+| [Math Module Testing](../exercises/math_module_testing.livemd) | [ExUnit With Mix](../reading/exunit_with_mix.livemd) |
+

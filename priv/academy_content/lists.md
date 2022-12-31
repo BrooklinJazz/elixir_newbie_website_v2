@@ -1,0 +1,348 @@
+%{
+  title: "Lists"
+}
+---
+# Lists
+
+```elixir
+Mix.install([
+  {:kino, "~> 0.7.0", override: true},
+  {:youtube, github: "brooklinjazz/youtube"},
+  {:hidden_cell, github: "brooklinjazz/hidden_cell"}
+])
+```
+
+## Navigation
+
+[Return Home](../start.livemd)<span style="padding: 0 30px"></span>
+[Report An Issue](https://github.com/DockYard-Academy/beta_curriculum/issues/new?assignees=&labels=&template=issue.md&title=)
+
+## Setup
+
+Ensure you type the `ea` keyboard shortcut to evaluate all Elixir cells before starting. Alternatively, you can evaluate the Elixir cells as you read.
+
+## Lists
+
+Lists store a list of other data types. Data types within a list are called **elements**.
+
+<!-- livebook:{"break_markdown":true} -->
+
+```mermaid
+flowchart
+  subgraph List
+    a[Element] --> b[Element] --> c[Element] --> d[Element]
+  end
+```
+
+<!-- livebook:{"break_markdown":true} -->
+
+Use square brackets `[]` to
+create a list, and then separate each value with a comma `,`.
+
+<!-- livebook:{"force_markdown":true} -->
+
+```elixir
+[1, 2, 3]
+```
+
+Lists can contain any data type in any combination, even other lists.
+
+<!-- livebook:{"force_markdown":true} -->
+
+```elixir
+["a", 2, "c", []]
+```
+
+Lists are used to represent a collection of information. For example, a shopping list, a to-do list,
+or a list of tags on an article.
+
+### Indexes
+
+An **index** is the position of an element in a list.
+
+In programming, we count indexes starting at 0. Why? The short answer is,
+it relates to how computer hardware works.
+
+So take this example list.
+
+<!-- livebook:{"force_markdown":true} -->
+
+```elixir
+["a", "b", "c"]
+```
+
+* `"a"` is at index `0`
+* `"b"` is at index `1`
+* `"c"` is at index `2`
+
+```mermaid
+flowchart
+  subgraph Index
+    0 --> 1 --> 2
+  end
+  subgraph Elements
+    a --> b --> c
+  end
+```
+
+### Your Turn
+
+In the Elixir cell below, Create a list of your favourite foods as strings.
+
+```elixir
+
+```
+
+## List Operators
+
+List operators are useful for manipulating lists.
+
+`++` allows you to add lists together.
+
+```elixir
+[1] ++ [2]
+```
+
+`--` allows you to subtract matching elements from a list.
+
+```elixir
+[1, 2, 3] -- [2, 3]
+```
+
+Unlike `Arithmetic Operators`, Lists do not follow the **BEDMAS** order of operations.
+
+For example, what do you think the result of `[1, 2] -- [1] -- [2]` should be?
+Intuitively, you might think it would be an empty list `[]`. Because
+
+<!-- livebook:{"force_markdown":true} -->
+
+```elixir
+[1, 2] -- [1] -- [2]
+```
+
+Becomes `[2]` when you subtract `[1]`
+
+```elixir
+[2] -- [2]
+```
+
+And then becomes `[]` when you subtract `[2]`
+
+```elixir
+[1, 2] -- [1] -- [2]
+```
+
+However, this is not the case. It's actually `[2]`. Why? because list operations evaluate from
+right to left.
+
+```elixir
+[1, 2] -- [1] -- [2]
+```
+
+To avoid writing unintuitive code, you can either use brackets or split values in to variables to
+break up the operations into steps using the match operator.
+
+```elixir
+([1, 2] -- [1]) -- [2]
+```
+
+```elixir
+step1 = [1, 2]
+step2 = step1 -- [1]
+step2 -- [2]
+```
+
+### Your Turn
+
+In the Elixir cell below, add `[1, 2, 3]` and `[4, 5, 6]` together to make `[1, 2, 3, 4, 5, 6].`
+
+```elixir
+
+```
+
+In the Elixir cell below, remove `[1]` from `[1, 1, 2, 3]` to make `[1, 2, 3]`
+
+```elixir
+
+```
+
+## Prepending
+
+We can prepend elements to a list using `[element | list]` syntax.
+
+For example, we can prepend `1` to the list `[2, 3]` to make `[1, 2, 3]`
+
+```mermaid
+flowchart
+  1 --> l[2, 3]
+```
+
+```elixir
+[1 | [2, 3]]
+```
+
+You can use a variable in place of a hard-coded list.
+
+```elixir
+list = [2, 3]
+[1 | list]
+```
+
+### Your Turn
+
+In the Elixir cell below, prepend `"hello"` to the list `["world"]` to make `["hello", "world"]`
+
+```elixir
+
+```
+
+## Pattern Matching Lists
+
+We can pattern match on lists to bind elements in the list to variables.
+
+```elixir
+[one, two] = [1, 2]
+```
+
+This poses an issue for lists though who seem to require a match for every element.
+
+```elixir
+[one] = [1, 2]
+```
+
+To get around this, you can use the `[head | tail]` syntax for prepending elements to a list.
+
+The **head** is the first element of the list.
+
+```elixir
+[head | _tail] = [1, 2, 3, 4, 5, 6, 7]
+head
+```
+
+The **tail** is rest of the elements in the list.
+
+```elixir
+[_head | tail] = [1, 2, 3, 4, 5, 6, 7]
+tail
+```
+
+You can access multiple elements at the start of the list separated by commas `,`.
+
+```elixir
+[one, two | _tail] = [1, 2, 3, 4, 5, 6, 7]
+{one, two}
+```
+
+Why head and tail? That's because under the hood lists in Elixir are a linked list.
+Essentially each element in the list knows the location of the next element in memory.
+
+Memory is a hardware component on computers responsible for storing short term data. Whenever we use data in an Elixir program and bind a variable, this is stored in memory.
+
+The **head** is the current element in the list, and the **tail** is the link to the remaining elements.
+
+<!-- livebook:{"break_markdown":true} -->
+
+```mermaid
+flowchart LR
+  subgraph Head
+  L
+  end
+  subgraph Tail
+  I
+  S
+  T
+  end
+  L -- tail --> I --> S --> T
+```
+
+<!-- livebook:{"break_markdown":true} -->
+
+### Your Turn
+
+Bind `1` in the following list to a variable `a` using pattern matching.
+
+<details style="background-color: lightgreen; padding: 1rem; margin: 1rem 0;">
+<summary>Example solution</summary>
+
+```elixir
+[a, _b, _c] = [1, 2, 3]
+```
+
+</details>
+
+Enter your solution below.
+
+```elixir
+[1, 2, 3]
+```
+
+Bind `1` in the following list to a variable `a` using pattern matching.
+
+<details style="background-color: lightgreen; padding: 1rem; margin: 1rem 0;">
+<summary>Example solution</summary>
+
+```elixir
+[a | _tail] = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
+```
+
+</details>
+
+Enter your solution below.
+
+```elixir
+[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
+```
+
+Bind `1` and `2`, and `3` in the following list to variables `a`, `b`, and `c` using pattern matching.
+
+<details style="background-color: lightgreen; padding: 1rem; margin: 1rem 0;">
+<summary>Example solution</summary>
+
+```elixir
+[a, b, c | _tail] = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
+```
+
+</details>
+
+Enter your solution below.
+
+```elixir
+[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
+```
+
+## Further Reading
+
+Consider the following resource(s) to deepen your understanding of the topic.
+
+* [Elixir Schools: Lists](https://elixirschool.com/en/lessons/basics/collections#lists-0)
+* [Exercism: Lists](https://exercism.org/tracks/elixir/concepts/lists)
+* [Elixir Lang: Lists](https://elixir-lang.org/getting-started/basic-types.html#linked-lists)
+* [HexDocs: List](https://hexdocs.pm/elixir/List.html)
+
+## Commit Your Progress
+
+Run the following in your command line from the curriculum folder to track and save your progress in a Git commit.
+Ensure that you do not already have undesired or unrelated changes by running `git status` or by checking the source control tab in Visual Studio Code.
+
+```
+$ git checkout main
+$ git checkout -b exercise-lists
+$ git add .
+$ git commit -m "finish lists section"
+$ git push origin exercise-lists
+```
+
+Create a pull request to your forked `main` branch. Please do not create a pull request to the DockYard Academy repository as this will spam our PR tracker.
+
+**DockYard Academy Students Only:**
+
+Notify your teacher by including `@BrooklinJazz` in your PR description to get feedback.
+
+If you are interested in joining the next academy cohort, [sign up here](https://academy.dockyard.com/) to receive more news when it is available.
+
+## Up Next
+
+| Previous                           | Next                                             |
+| ---------------------------------- | -----------------------------------------------: |
+| [Tuples](../reading/tuples.livemd) | [Keyword Lists](../reading/keyword_lists.livemd) |
+

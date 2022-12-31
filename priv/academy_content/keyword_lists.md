@@ -1,0 +1,233 @@
+%{
+  title: "Keyword Lists"
+}
+---
+# Keyword Lists
+
+```elixir
+Mix.install([
+  {:kino, "~> 0.7.0", override: true},
+  {:youtube, github: "brooklinjazz/youtube"},
+  {:hidden_cell, github: "brooklinjazz/hidden_cell"}
+])
+```
+
+## Navigation
+
+[Return Home](../start.livemd)<span style="padding: 0 30px"></span>
+[Report An Issue](https://github.com/DockYard-Academy/beta_curriculum/issues/new?assignees=&labels=&template=issue.md&title=)
+
+## Setup
+
+Ensure you type the `ea` keyboard shortcut to evaluate all Elixir cells before starting. Alternatively, you can evaluate the Elixir cells as you read.
+
+## Lesson
+
+Keyword lists are lists with keys. Each key associates with a value.
+
+```mermaid
+flowchart
+  key1: --> Value1
+  key2: --> Value2
+  key3: --> Value3
+```
+
+Keyword lists belong to a family of data types known as **associative data structures**.
+you'll also often hear it referred to as a **key-value data structure**.
+
+In Elixir, the key is an atom, and the value can be any data structure, even another keyword list.
+
+<!-- livebook:{"force_markdown":true} -->
+
+```elixir
+[key: "value"]
+[atom: "anything!"]
+["You can use quotes for the atom key!": ""]
+[snake_case_is_convention: ""]
+[ButThatIsNotEnforced: ""]
+```
+
+Keys in a keyword list do not have to be unique.
+
+<!-- livebook:{"force_markdown":true} -->
+
+```elixir
+[my_key: "value", my_key: "value"]
+```
+
+Elixir allows you to work with keyword lists in this nice `[key: "value"]` syntax. However,
+keyword lists are actually just a list of tuples where the first element is an atom.
+
+<!-- livebook:{"force_markdown":true} -->
+
+```elixir
+[{:key, "value"}]
+```
+
+In the Elixir cell below, you can see how Elixir converts lists of tuples matching the `{:atom, value}` syntax
+into a keyword list.
+
+```elixir
+[{:key, "value"}, {:key, "value"}]
+```
+
+If you break the convention in the keyword list, Elixir reverts to displaying
+the keyword list as a list of tuples.
+
+```elixir
+[{}, key: "value"]
+```
+
+The keyword list syntax must come at the end of a list, or we'll cause a [SyntaxError](https://hexdocs.pm/elixir/SyntaxError.html).
+
+```elixir
+[key: "value", ""]
+```
+
+List order is guaranteed, so the same is true for keyword lists.
+
+### Your Turn
+
+In the Elixir cell below, create a keyword list of your favourite super hero. Include their `:name` and `:secret_identity`.
+
+<details style="background-color: lightgreen; padding: 1rem; margin: 1rem 0;">
+<summary>Example solution</summary>
+
+```elixir
+[name: "Spiderman", secret_identity: "Peter Parker"]
+```
+
+</details>
+
+Enter your solution below.
+
+```elixir
+
+```
+
+## Keyword List Operators
+
+We can also use `--` and `++` list operators with keyword lists.
+
+```elixir
+[one: 1, two: 2] -- [one: 1]
+```
+
+If you add a list to a keyword list, you'll notice that the keyword list element will
+evaluate as a tuple again. Remember that keyword lists are simply lists of tuples with an atom and a value.
+
+```elixir
+[one: 1] ++ [1]
+```
+
+### Your Turn
+
+In the Elixir cell below, use `++` to add `[one: 1]` to `[two: 2]` to make `[one: 1, two: 2]`.
+
+```elixir
+
+```
+
+Remove `[two: 2]` from `[one: 1, two: 2]` to make `[one: 1]`.
+
+```elixir
+
+```
+
+## Pattern Matching
+
+Much like with lists, we can use pattern matching to bind values in a keyword list to variables.
+
+```elixir
+[hello: my_variable] = [hello: "world"]
+
+my_variable
+```
+
+Much like a list, we must match on the entire keyword list, otherwise we'll cause a [MatchError](https://hexdocs.pm/elixir/MatchError.html).
+
+```elixir
+[one: one] = [one: 1, two: 2]
+```
+
+So long as we have a match for every element in the keyword list, we can use pattern matching.
+
+```elixir
+[one: one, two: two] = [one: 1, two: 2]
+```
+
+We can use the `[head | tail]` syntax to pattern match on the tail of the keyword list to avoid this issue.
+
+```elixir
+[head | _tail] = [one: 1, two: 2]
+
+head
+```
+
+If we want to pattern match on the keys in the list, we need to use the tuple syntax on the left hand side of the `=` match operator.
+
+```elixir
+[{key, value}] = [key: "value"]
+```
+
+```elixir
+key
+```
+
+```elixir
+value
+```
+
+### Your Turn
+
+Bind `1` in the following keyword list to a variable `one`.
+
+<details style="background-color: lightgreen; padding: 1rem; margin: 1rem 0;">
+<summary>Example solution</summary>
+
+```elixir
+[{_, one} | _tail] = [one: 1, two: 2, three: 3, four: 4]
+```
+</details>
+
+Enter your solution below.
+
+```elixir
+[one: 1, two: 2, three: 3, four: 4]
+```
+
+## Further Reading
+
+Consider the following resource(s) to deepen your understanding of the topic.
+
+* [Elixir Lang: Keyword Lists](https://elixir-lang.org/getting-started/keywords-and-maps.html#keyword-lists)
+* [Elixir Schools: Keyword Lists](https://elixirschool.com/en/lessons/basics/collections#keyword-lists-5)
+* [HexDocs: Keyword](https://hexdocs.pm/elixir/Keyword.html)
+
+## Commit Your Progress
+
+Run the following in your command line from the curriculum folder to track and save your progress in a Git commit.
+Ensure that you do not already have undesired or unrelated changes by running `git status` or by checking the source control tab in Visual Studio Code.
+
+```
+$ git checkout main
+$ git checkout -b exercise-keyword_lists
+$ git add .
+$ git commit -m "finish keyword lists section"
+$ git push origin exercise-keyword_lists
+```
+
+Create a pull request to your forked `main` branch. Please do not create a pull request to the DockYard Academy repository as this will spam our PR tracker.
+
+**DockYard Academy Students Only:**
+
+Notify your teacher by including `@BrooklinJazz` in your PR description to get feedback.
+
+If you are interested in joining the next academy cohort, [sign up here](https://academy.dockyard.com/) to receive more news when it is available.
+
+## Up Next
+
+| Previous                         | Next                           |
+| -------------------------------- | -----------------------------: |
+| [Lists](../reading/lists.livemd) | [Maps](../reading/maps.livemd) |
+

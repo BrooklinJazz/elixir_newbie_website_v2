@@ -53,7 +53,8 @@ defmodule ElixirNewbie.MixProject do
       {:plug_cowboy, "~> 2.5"},
       {:tailwind_formatter, "~> 0.3.1", only: :dev, runtime: false},
       {:nimble_publisher, "~> 0.1.3"},
-      {:makeup_elixir, ">= 0.16.0"}
+      {:makeup_elixir, ">= 0.16.0"},
+      {:httpoison, "~> 1.8"}
     ]
   end
 

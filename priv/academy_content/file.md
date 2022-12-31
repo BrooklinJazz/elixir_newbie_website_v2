@@ -1,0 +1,370 @@
+%{
+  title: "File"
+}
+---
+# File
+
+```elixir
+Mix.install([
+  {:kino, "~> 0.7.0", override: true},
+  {:youtube, github: "brooklinjazz/youtube"},
+  {:hidden_cell, github: "brooklinjazz/hidden_cell"}
+])
+```
+
+## Navigation
+
+[Return Home](../start.livemd)<span style="padding: 0 30px"></span>
+[Report An Issue](https://github.com/DockYard-Academy/beta_curriculum/issues/new?assignees=&labels=&template=issue.md&title=)
+
+## Setup
+
+Ensure you type the `ea` keyboard shortcut to evaluate all Elixir cells before starting. Alternatively you can evaluate the Elixir cells as you read.
+
+## Persistence
+
+So far, we've only been able to persist values during the **runtime** of our application. This is a form of **short-term** persistence that ends the moment we stop our application.
+
+Alternatively, we can have **long-term** persistence mechanisms that persist after we stop our application and will be unchanged the next time we start the application.
+
+Using the file system is one term of long-term persistence. When we save a file, we save it to a storage device on our computer, usually a [solid state drive](https://en.wikipedia.org/wiki/Solid-state_drive) or [hard disc drive](https://en.wikipedia.org/wiki/Hard_disk_drive).
+
+Short-term persistence is instead stored in [Random Access Memory (RAM)](https://en.wikipedia.org//wiki/Random-access_memory), usually referred to as simply "memory". See [Computer Hardware](computer_hardware.livemd) for a further breakdown of how hardware and software relate to each other.
+
+## File
+
+We use the [File](https://hexdocs.pm/elixir/File.html) module for working with the file system and the [Path](https://hexdocs.pm/elixir/Path.html) module for working with file paths.
+
+Many [File](https://hexdocs.pm/elixir/File.html) operations mimic terminal functionality and even use the same names in a Unix (MacOS or Linux) environment.
+
+For example, we have the [File.ls/1](https://hexdocs.pm/elixir/File.html#ls/1) function, which lists folders and files in the current path.
+
+```elixir
+File.ls!()
+```
+
+This mimics the `ls` command that also lists files in the current directory in Linux and macOS.
+
+```
+$ ls
+CONTRIBUTING.md  README.md  data  exercises   flake.nix  reading                      scripts       utils
+LICENSE          _build     deps  flake.lock  images     removed_content_tracking.md  start.livemd  v_graph.livemd
+```
+
+```elixir
+Path.absname("exercises")
+```
+
+## Absolute Path Vs Relative Path
+
+The **absolute path** is the absolute path to a file relative to the computer's root directory. For example, we can see the absolute path of the current file using [__DIR__](https://hexdocs.pm/elixir/1.13/Kernel.SpecialForms.html#__DIR__/0).
+
+```elixir
+__DIR__
+```
+
+The **relative path** is the relative path to a file relative to the current directory location. For example, if we have the following folder structure:
+
+```
+main_directory/
+  sub_directory_1/
+  sub_directory_2/
+```
+
+If we were in `sub_directory_2`, the relative path to `sub_directory_1` would be `"../sub_directory_1"`.
+
+<!-- livebook:{"break_markdown":true} -->
+
+### Current Directory
+
+<!-- livebook:{"break_markdown":true} -->
+
+The [File](https://hexdocs.pm/elixir/File.html) module uses relative paths based on the current directory. The current directory will depend on how you start livebook. We can see the current path using the [Path](https://hexdocs.pm/elixir/Path.html) module to get the absolute name of the current path.
+
+```elixir
+Path.absname("")
+```
+
+## File Module Functions
+
+The [File](https://hexdocs.pm/elixir/File.html) module has many useful functions for working with the file system.
+
+We'll have the opportunity to learn more about the [File](https://hexdocs.pm/elixir/File.html) module and the various functions during the [drills exercise](../exercises/file_drills.livemd). For now, here are some common functions to get you started.
+
+* [File.cd/1](https://hexdocs.pm/elixir/File.html#cd/1) change the current directory.
+* [File.dir?/2](https://hexdocs.pm/elixir/File.html#dir?/2) check if a given path is a directory.
+* [File.exists?/2](https://hexdocs.pm/elixir/File.html#exists?/2) check if a file exists.
+* [File.ls/1](https://hexdocs.pm/elixir/File.html#ls/1) list all files and folders in the current directory.
+* [File.read/1](https://hexdocs.pm/elixir/File.html#read/1) read content from a file.
+* [File.rm/1](https://hexdocs.pm/elixir/File.html#rm/1) remove a file.
+* [File.rm_rf/1](https://hexdocs.pm/elixir/File.html#rm_rf/1)remove files and directories in a given path.
+* [File.mkdir/1](https://hexdocs.pm/elixir/File.html#mkdir/1) create a directory given a path.
+* [File.mkdir_p/1](https://hexdocs.pm/elixir/File.html#mkdir_p/1) create a directory and any missing parent directories given a path.
+* [File.write/3](https://hexdocs.pm/elixir/File.html#write/3) write content to a given file path.
+
+<!-- livebook:{"break_markdown":true} -->
+
+We can create a file using [File.write/3](https://hexdocs.pm/elixir/File.html#write/3).
+
+```elixir
+File.write("file.txt", "file content")
+```
+
+To prove we created the file, we can read the content using [File.read/1](https://hexdocs.pm/elixir/File.html#read/1).
+
+```elixir
+File.read("file.txt")
+```
+
+The file is now in our list of files.
+
+```elixir
+File.ls()
+```
+
+To clean up the file, uncomment the following code which should remove it.
+
+```elixir
+# File.rm("file.txt")
+```
+
+Now the file should no longer exist. Let's check with [File.exists?/2](https://hexdocs.pm/elixir/File.html#exists?/2).
+
+```elixir
+File.exists?("file.txt")
+```
+
+### Your Turn
+
+Experiment with the functions above. Refer to the documentation for examples you can try.
+
+<div style="background-color: lightcoral; font-weight: bold; padding: 1rem; color: black; margin: 1rem 0;">
+DO NOT DELETE IMPORTANT FILES ON YOUR SYSTEM WHEN USING [File.rm/1](https://hexdocs.pm/elixir/File.html#rm/1) or [File.write/3](https://hexdocs.pm/elixir/File.html#write/3).
+</div>
+
+```elixir
+
+```
+
+## Path Module Functions
+
+The [Path](https://hexdocs.pm/elixir/Path.html) module contains many useful functions for working with the paths to files.
+
+We'll have the opportunity to learn more about the [Path](https://hexdocs.pm/elixir/Path.html) module and the various functions during the [drills exercise](../exercises/file_drills.livemd). For now, here are some common functions to get you started.
+
+* [Path.absname/1](https://hexdocs.pm/elixir/Path.html#absname/1) convert the given path into an absolute path.
+* [Path.dirname/1](https://hexdocs.pm/elixir/Path.html#dirname/1) return the directory portion of a given path.
+* [Path.join/2](https://hexdocs.pm/elixir/Path.html#join/2) join two paths. This is much more reliable than string concatenation.
+* [Path.split/1](https://hexdocs.pm/elixir/Path.html#split/1) split a path into a list on each directory separator `/`
+* [Path.wildcard/2](https://hexdocs.pm/elixir/Path.html#wildcard/2) return a list of files that match the provided expression.
+
+<!-- livebook:{"break_markdown":true} -->
+
+[Path.join/2](https://hexdocs.pm/elixir/Path.html#join/2) is especially useful, as it's easy to make mistakes using string concatenation. Notice below that we accidentally join `folder` and `more` together to make `foldermore`.
+
+```elixir
+path1 = "path/to/folder"
+path2 = "more/path/to/file.txt"
+
+path1 <> path2
+```
+
+[Path.join/2](https://hexdocs.pm/elixir/Path.html#join/2) is smart enough to treat these as separate folders to make the path.
+
+```elixir
+path1 = "path/to/folder"
+path2 = "more/path/to/file.txt"
+
+Path.join(path1, path2)
+```
+
+### Your Turn
+
+Experiment with the functions above. Refer to the documentation for examples you can try.
+
+```elixir
+
+```
+
+## Bang Functions
+
+Many functions in the [File](https://hexdocs.pm/elixir/File.html) module have a bang version ending in `!`.
+
+Bang functions raise an error if they fail.
+
+```elixir
+File.ls!("invalid")
+```
+
+Regular functions typically return an `{:ok, value}` or an `{:error, reason}` tuple.
+
+```elixir
+File.ls("invalid")
+```
+
+Use a bang function if you expect that the function should always succeed or if you want to raise an error. Use a regular function if you want specific error handling or don't care if the function fails.
+
+For example, if we're reading a file but not sure if it exists or not, we might use [File.read/1](https://hexdocs.pm/elixir/File.html#read/1). If we think the file should always exist (and want to crash our program if it doesn't), we use [File.read!/1](https://hexdocs.pm/elixir/File.html#read!/1).
+
+## Persisting Erlang Terms
+
+[File.write/2](https://hexdocs.pm/elixir/File.html#write/2) does not work with many non-string elixir terms. We'll get a `:badarg` (bad argument) error when we try.
+
+```elixir
+File.write("data/erlang_term", %{1 => 2})
+```
+
+To get around these issues we can use `:erlang.binary_to_term/1` and `:erlang.term_to_binary/1` which convert an elixir term to and from binary.
+
+When creating the file, we need to convert the Elixir term into binary using `:erlang.binary_to_term`
+
+<!-- livebook:{"break_markdown":true} -->
+
+```mermaid
+flowchart LR
+subgraph Writing
+  direction LR
+  1[Term] --> 2[Binary] --> 3[Write]
+end
+```
+
+```elixir
+:erlang.term_to_binary(%{key: "value"})
+```
+
+When reading the saved binary, we need to convert it back into an elixir term using `:erlang.term_to_binary/1`.
+
+<!-- livebook:{"break_markdown":true} -->
+
+```mermaid
+flowchart LR
+subgraph Reading
+  direction LR
+  A[Read] --> B[Binary] --> C[Term]
+end
+```
+
+```elixir
+binary =
+  <<131, 116, 0, 0, 0, 1, 100, 0, 3, 107, 101, 121, 109, 0, 0, 0, 5, 118, 97, 108, 117, 101>>
+
+:erlang.binary_to_term(binary)
+```
+
+Now we can write an Elixir term in it's binary format, then read the file.
+
+```elixir
+:ok = File.write("binary.txt", :erlang.term_to_binary([1, 2]))
+
+{:ok, binary} = File.read("binary.txt")
+
+[1, 2] = :erlang.binary_to_term(binary)
+
+# cleaning up the file to avoid saving a file on your computer.
+File.rm("binary.txt")
+```
+
+## Handling Large Files
+
+Using [File.read/1](https://hexdocs.pm/elixir/File.html#read/1) loads all of a file's contents into memory. This causes performance issues when dealing with large files, or when dealing with many files.
+
+To avoid performance issues we have two options. We can use [File.stream!/3](https://hexdocs.pm/elixir/File.html#stream!/3) to treat the file as a stream. Or we can use [File.open/3](https://hexdocs.pm/elixir/File.html#open/3) and [File.close/1](https://hexdocs.pm/elixir/File.html#close/1) with the [IO](https://hexdocs.pm/elixir/IO.html) module to open a file, and read/write it's contents more selectively.
+
+<!-- livebook:{"break_markdown":true} -->
+
+### Streams
+
+<!-- livebook:{"break_markdown":true} -->
+
+To stream a file, use [File.stream!/3](https://hexdocs.pm/elixir/File.html#stream!/3). By default, each element in the stream will be one line of the file. See [Streams](./streams.livemd) if you need a refresher on working with streams.
+
+```elixir
+content = """
+line 1
+line 2
+line 3
+"""
+
+File.write!("stream.txt", content)
+
+stream = File.stream!("stream.txt") |> IO.inspect(label: "Stream")
+
+Enum.to_list(stream) |> IO.inspect(label: "Lines")
+
+# cleaning up File
+File.rm("stream.txt")
+```
+
+### IO and the File System
+
+<!-- livebook:{"break_markdown":true} -->
+
+We use [File.open/2](https://hexdocs.pm/elixir/File.html#open/2) and [File.close/1](https://hexdocs.pm/elixir/File.html#close/1) to open a file and perform some operations, then close it when we're finished.
+
+While the file is open, we use [IO.read/2](https://hexdocs.pm/elixir/IO.html#read/2) and [IO.write/2](https://hexdocs.pm/elixir/IO.html#write/2) to read and write to the file. The [IO.read/2](https://hexdocs.pm/elixir/IO.html#read/2) function can read a new line each time we call it.
+
+```elixir
+File.write!("open_close.txt", content)
+
+{:ok, file} = File.open("open_close.txt")
+
+IO.read(file, :line) |> IO.inspect()
+IO.read(file, :line) |> IO.inspect()
+IO.read(file, :line) |> IO.inspect()
+IO.read(file, :line) |> IO.inspect()
+
+File.close(file)
+
+# cleaning up file.
+
+File.rm!("open_close.txt")
+```
+
+[IO.read/2](https://hexdocs.pm/elixir/IO.html#read/2) writes over the entire content of the file. We need to open the file with the `:write` option to enable write permission.
+
+```elixir
+File.write!("open_close.txt", content)
+
+{:ok, file} = File.open("open_close.txt", [:write])
+
+IO.write(file, "written content")
+
+File.close(file)
+
+File.read("open_close.txt") |> IO.inspect(label: "Updated File")
+
+# cleaning up file.
+File.rm!("open_close.txt")
+```
+
+## Further Reading
+
+* [Exercism: File](https://exercism.org/tracks/elixir/concepts/file)
+
+## Commit Your Progress
+
+Run the following in your command line from the curriculum folder to track and save your progress in a Git commit.
+Ensure that you do not already have undesired or unrelated changes by running `git status` or by checking the source control tab in Visual Studio Code.
+
+```
+$ git checkout main
+$ git checkout -b exercise-file
+$ git add .
+$ git commit -m "finish file section"
+$ git push origin exercise-file
+```
+
+Create a pull request to your forked `main` branch. Please do not create a pull request to the DockYard Academy repository as this will spam our PR tracker.
+
+**DockYard Academy Students Only:**
+
+Notify your teacher by including `@BrooklinJazz` in your PR description to get feedback.
+
+If you are interested in joining the next academy cohort, [sign up here](https://academy.dockyard.com/) to receive more news when it is available.
+
+## Up Next
+
+| Previous                                                       | Next                                           |
+| -------------------------------------------------------------- | ---------------------------------------------: |
+| [Fibonacci Challenge](../exercises/fibonacci_challenge.livemd) | [File Drills](../exercises/file_drills.livemd) |
+
