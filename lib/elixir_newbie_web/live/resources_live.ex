@@ -3,11 +3,16 @@ defmodule ElixirNewbieWeb.ResourcesLive do
 
   def render(assigns) do
     ~H"""
-    Resources
+    <section class="text-white">
+      <p>Resources</p>
+      <%= for post <- @posts do %>
+        <%= raw post.body %>
+      <% end %>
+    </section>
     """
   end
 
   def mount(_params, _session, socket) do
-    {:ok, socket}
+    {:ok, assign(socket, [posts: ElixirNewbie.Blog.all_posts])}
   end
 end
