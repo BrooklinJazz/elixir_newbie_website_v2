@@ -28,7 +28,6 @@ jobs:
       with:
         elixir-version: ${{ matrix.elixir }} # Define the elixir version [required]
         otp-version: ${{ matrix.otp }} # Define the OTP version [required]
-    name: run tests
-    steps:
+    - name: run tests
       - run: mix deps.get
       - run: mix test
