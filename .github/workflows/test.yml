@@ -15,13 +15,29 @@ jobs:
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
-
+    strategy:
+      matrix:
+        elixir: [1.14.2]
+        otp: [25.2, 25.1.2]
+    name: Retrieve Mix Dependencies Cache
+          uses: actions/cache@v1
+          id: mix-cache # id to use in retrieve action
+          with:
+            path: deps
+            key: ${{ runner.os }}-${{ matrix.otp }}-${{ matrix.elixir }}-mix-${{ hashFiles(format('{0}{1}', github.workspace, '/mix.lock')) }}
+    name: Install Mix Dependencies
+          if: steps.mix-cache.outputs.cache-hit != 'true'
+          run: |
+            mix local.rebar --force
+            mix local.hex --force
+            mix deps.get
+    name: Check Formatting
+      run: mix format --check-formatted
     name: run tests
     steps:
-      - uses: actions/checkout@v3
-      - uses: erlef/setup-beam@v1
+      uses: actions/checkout@v3
+      uses: erlef/setup-beam@v1
         with:
-          otp-version: '25.2'
-          elixir-version: '1.14.2'
-      - run: mix deps.get
-      - run: mix test
+          otp-version: ${{ matrix.otp }}
+          elixir-version: ${{ matrix.elixir}}
+      run: mix test
