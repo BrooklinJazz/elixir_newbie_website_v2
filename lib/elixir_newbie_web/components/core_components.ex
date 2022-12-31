@@ -38,7 +38,7 @@ defmodule ElixirNewbieWeb.CoreComponents do
       ]}
       {@rest}
     >
-      <h2 class={"absolute h-full w-full flex items-center pl-16"} ><%= render_slot(@inner_block) %></h2>
+      <h2 class={"absolute flex h-full w-full items-center pl-16"} ><%= render_slot(@inner_block) %></h2>
       <img alt="Blog" src={@src} class="rounded-3xl"/>
     </.link>
     """
