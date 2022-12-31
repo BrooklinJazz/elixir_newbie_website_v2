@@ -46,7 +46,7 @@ defmodule ElixirNewbieWeb.HomeLive do
           <p class="absolute -bottom-12 w-full text-center text-sm text-white">DockYard Academy</p>
         </.link>
       </article>
-      <article class="flex w-full flex-col text-white text-2xl lg:text-2xl 4k:text-4xl">
+      <article class="flex w-full flex-col text-2xl text-white 4k:text-4xl lg:text-2xl">
         <h1>Greetings, traveler, My name is Brooklin. I am here to teach you Elixir. Where should we start?</h1>
           <.rectangle_link navigate={~p"/blog"} src="images/blog_button_reduced.webp">1. Read the Blog</.rectangle_link>
           <.rectangle_link navigate={~p"/podcast"} src="images/podcast_button_reduced.webp">2. Listen to the Podcast</.rectangle_link>
