@@ -15,14 +15,20 @@ jobs:
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
-    - name: run tests
+
+    strategy:
+      matrix:
+        elixir: [1.14.2]
+        otp: [25.2, 25.1.2]
+
     steps:
-      - uses: actions/checkout@v3
-      - uses: erlef/setup-beam@v1
-        with:
-          otp-version: '25.2'
-          elixir-version: '1.14.2'
+    - uses: actions/checkout@v3
+    - name: Setup elixir
+      uses: actions/setup-beam@v1
+      with:
+        elixir-version: ${{ matrix.elixir }} # Define the elixir version [required]
+        otp-version: ${{ matrix.otp }} # Define the OTP version [required]
+    name: run tests
+    steps:
       - run: mix deps.get
       - run: mix test
-    - name: Check Formatting
-      run: mix format --check-formatted
