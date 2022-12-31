@@ -5,7 +5,7 @@ defmodule ElixirNewbieWeb.HomeLive do
     ~H"""
     <section class="flex h-fit w-full flex-col gap-12 4k:gap-36 lg:flex-row xl:gap-24">
       <article class="grid h-fit w-full grid-cols-6 grid-rows-6">
-        <img alt="home page icon of a wizard" class="rounded-full border-t-4 border-l-4 border-white row-start-1 row-end-6 col-start-1 aspect-square col-end-6" src="images/home_page_icon.webp" />
+        <img alt="home page icon of a wizard" class="rounded-full border-t-4 border-l-4 border-white row-start-1 row-end-6 col-start-1 aspect-square col-end-6" src="images/home_page_icon_reduced.webp" />
         <.link href="https://twitter.com/BrooklinJMyers" class="row-start-3 col-start-5 relative left-1/2 bottom-1/4">
           <img alt="Twitter Icon Button" class="rounded-full border-2" src="images/twitter_icon.webp"/>
           <p class="absolute -bottom-6 w-full text-center text-sm text-white">Twitter</p>
