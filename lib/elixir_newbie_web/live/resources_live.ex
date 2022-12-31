@@ -13,6 +13,6 @@ defmodule ElixirNewbieWeb.ResourcesLive do
   end
 
   def mount(_params, _session, socket) do
-    {:ok, assign(socket, [posts: ElixirNewbie.Blog.all_posts])}
+    {:ok, assign(socket, posts: ElixirNewbie.Blog.all_posts())}
   end
 end
