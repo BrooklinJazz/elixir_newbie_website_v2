@@ -1,0 +1,174 @@
+%{
+  title: "Strings"
+}
+---
+# Strings
+
+```elixir
+Mix.install([
+  {:kino, "~> 0.7.0", override: true},
+  {:youtube, github: "brooklinjazz/youtube"},
+  {:hidden_cell, github: "brooklinjazz/hidden_cell"}
+])
+```
+
+## Navigation
+
+[Return Home](../start.livemd)<span style="padding: 0 30px"></span>
+[Report An Issue](https://github.com/DockYard-Academy/beta_curriculum/issues/new?assignees=&labels=&template=issue.md&title=)
+
+## Setup
+
+Ensure you type the `ea` keyboard shortcut to evaluate all Elixir cells before starting. Alternatively you can evaluate the Elixir cells as you read.
+
+## Strings
+
+A string is any sequence of characters contained within two double quotes `""`.
+A character is any single number, letter, or symbol.
+
+<!-- livebook:{"force_markdown":true} -->
+
+```elixir
+"T" # letters
+"t" # letters
+"1" # numbers
+"1.2" # numbers
+"&" # symbols
+"_" # symbols
+```
+
+You can visualize a string as characters joined together by strings.
+Strings can be a single character, no characters, or many characters!
+
+```mermaid
+flowchart LR
+  S --- T --- R --- I --- N --- G
+```
+
+Strings can contain single quotes and other symbols such as `!@#$%^&*()_+-=';:` and more.
+
+<!-- livebook:{"force_markdown":true} -->
+
+```elixir
+"!@#$%^&*()_+-=';:"
+```
+
+They are useful for representing all kinds of information as text.
+
+<!-- livebook:{"break_markdown":true} -->
+
+### Your Turn
+
+In the Elixir cell below, create a string `"Hello, world!"`. This is a rite of passage for every
+programmer.
+
+```elixir
+
+```
+
+## String Operators
+
+String operators allow us to manipulate strings.
+
+The `<>` operator joins two strings together. Joining strings together is called **string concatenation**.
+
+```elixir
+"hello, " <> "world."
+```
+
+Only strings can be concatenated together using the `<>` operator. You'll notice concatenating `1` causes an error `expected binary argument in <> operator but got 1`
+This error occurs because we're asking the computer to concatenate a string with an integer.
+
+```elixir
+"hello" <> 1
+```
+
+### Your Turn
+
+In the Elixir cell below, use string concatenation to join `"Hi "` and the name of one
+of your classmates.
+
+So `"Peter"` would be come `"Hi Peter."`.
+
+Replace `nil` with your answer.
+
+<details style="background-color: lightgreen; padding: 1rem; margin: 1rem 0;">
+<summary>Example solution</summary>
+
+```elixir
+"Hi " <> "Peter."
+```
+
+</details>
+
+```elixir
+
+```
+
+### String Interpolation
+
+<!-- livebook:{"break_markdown":true} -->
+
+Using `#{}`, We can also **interpolate** values in strings. Essentially, this means we can evaluate code inside of
+a string. The code you want to interpolate inside of the string
+goes between the curly braces `{}`.
+
+So we can evaluate `4 + 4`, which equals `8` inside a string.
+
+```elixir
+"I have #{4 + 4} apples."
+```
+
+String interpolation is often useful when your string has many computed values or tricky punctuation.
+Otherwise, it's easy to make mistakes.
+
+Notice that there's a grammar mistake below that could easily be missed when using string concatenation.
+
+```elixir
+"I have" <> "8" <> "apples"
+```
+
+### Your Turn
+
+In the Elixir cell below, use **string interpolation** to say `I have #{X - 1} classmates.`. Where X is the number of people in your cohort including yourself.
+
+<details style="background-color: lightgreen; padding: 1rem; margin: 1rem 0;">
+<summary>Example solution</summary>
+
+```elixir
+"I have #{1 - 1} classmates."
+```
+
+</details>
+
+```elixir
+answer = nil
+```
+
+## Commit Your Progress
+
+Run the following in your command line from the curriculum folder to track and save your progress in a Git commit.
+Ensure that you do not already have undesired or unrelated changes by running `git status` or by checking the source control tab in Visual Studio Code.
+
+```
+$ git checkout main
+$ git checkout -b exercise-strings
+$ git add .
+$ git commit -m "finish strings section"
+$ git push origin exercise-strings
+```
+
+Create a pull request to your forked `main` branch. Please do not create a pull request to the DockYard Academy repository as this will spam our PR tracker.
+
+**DockYard Academy Students Only:**
+
+Notify your teacher by including `@BrooklinJazz` in your PR description to get feedback.
+
+If you are interested in joining the next academy cohort, [sign up here](https://academy.dockyard.com/) to receive more news when it is available.
+
+## Up Next
+
+| Previous                                   | Next                                   |
+| ------------------------------------------ | -------------------------------------: |
+| [Arithmetic](../reading/arithmetic.livemd) | [Booleans](../reading/booleans.livemd) |
+

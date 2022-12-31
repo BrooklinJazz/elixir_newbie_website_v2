@@ -1,0 +1,63 @@
+%{
+  title: "Command Line Family Tree"
+}
+---
+# Command Line Family Tree
+
+```elixir
+Mix.install([
+  {:kino, "~> 0.7.0", override: true},
+  {:youtube, github: "brooklinjazz/youtube"},
+  {:hidden_cell, github: "brooklinjazz/hidden_cell"}
+])
+```
+
+## Navigation
+
+[Return Home](../start.livemd)<span style="padding: 0 30px"></span>
+[Report An Issue](https://github.com/DockYard-Academy/beta_curriculum/issues/new?assignees=&labels=&template=issue.md&title=)
+
+## Command Line Family Folders
+
+Use the command line to create a `family` folder with the following folder and file structure.
+
+```
+/family
+  /Saida
+    /Aelia
+      /Urbano
+      /Petal
+    /Hagir
+      /Leandro
+      /Helen
+```
+
+Next, create a file for each folder that represents that person's family status. It's better that you do
+this **after** creating the folder structure above to get more practice moving between folders.
+
+```
+/family
+  /Saida
+    child.txt
+    /Aelia
+      parent.txt
+      /Urbano
+        grandparent.txt
+      /Petal
+        grandparent.txt
+    /Hagir
+      parent.txt
+      /Leandro
+        grandparent.txt
+      /Helen
+        grandparent.txt
+```
+
+> Names were generated using [behindthename.com](https://www.behindthename.com/random/random.php?number=1&sets=1&gender=both&surname=&all=yes.)
+
+## Up Next
+
+| Previous                                       | Next                                                       |
+| ---------------------------------------------- | ---------------------------------------------------------: |
+| [Code Editors](../reading/code_editors.livemd) | [Livebook Recovery](../exercises/livebook_recovery.livemd) |
+

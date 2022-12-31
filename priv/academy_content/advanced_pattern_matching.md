@@ -1,0 +1,391 @@
+%{
+  title: "Advanced Pattern Matching"
+}
+---
+# Pattern Matching
+
+```elixir
+Mix.install([
+  {:kino, "~> 0.7.0", override: true},
+  {:youtube, github: "brooklinjazz/youtube"},
+  {:hidden_cell, github: "brooklinjazz/hidden_cell"}
+])
+```
+
+## Navigation
+
+[Return Home](../start.livemd)<span style="padding: 0 30px"></span>
+[Report An Issue](https://github.com/DockYard-Academy/beta_curriculum/issues/new?assignees=&labels=&template=issue.md&title=)
+
+## Setup
+
+Ensure you type the `ea` keyboard shortcut to evaluate all Elixir cells before starting. Alternatively you can evaluate the Elixir cells as you read.
+
+## Pattern Matching
+
+We've already used pattern matching for matching values in a data structure.
+
+```elixir
+[_, two, _] = [1, 2, 3]
+
+two
+```
+
+We can use pattern matching in a wide variety of other cases.
+
+## Pattern Matching With Case
+
+Previously, we talked about how the case statement checks for a match.
+
+```elixir
+case "same" do
+  "same" -> "this will return"
+end
+```
+
+We're also able to use pattern matching for case statements. The first valid match will execute,
+and you can use the variables you assign in the instruction.
+
+```elixir
+case [1, 2] do
+  [] -> nil
+  [one] -> one
+  [one, two] -> one + two
+end
+```
+
+### Your Turn
+
+Trigger the `"A"` case. Replace `nil` with your answer.
+
+```elixir
+case nil do
+  [_, _, 3] -> "A"
+  _ -> "default"
+end
+```
+
+## Pattern Matching Multi-Clause Functions
+
+You create multi-clause functions with pattern matching.
+
+```elixir
+defmodule Greeter do
+  def greet([name1, name2]) do
+    "Hello, #{name1} and #{name2}"
+  end
+
+  def greet(%{name: name, identity: identity}) do
+    "Hi #{identity} err..I mean #{name}"
+  end
+
+  def greet(name) do
+    "Hello, #{name}"
+  end
+end
+```
+
+The function that first pattern matches with the provided input will be executed.
+
+```elixir
+Greeter.greet("Peter")
+```
+
+```elixir
+Greeter.greet(["Peter", "Bruce"])
+```
+
+```elixir
+Greeter.greet(%{name: "Batman", identity: "Bruce Wayne"})
+```
+
+### Your Turn
+
+Use pattern matching to create a `Hello.everyone/1` function which only accepts a list with three or more elements.
+
+<details style="background-color: lightgreen; padding: 1rem; margin: 1rem 0;">
+<summary>Example solution</summary>
+<code>
+defmodule Hello do
+  def everyone([_, _, _ | _tail]) do
+    "Hello, everyone!"
+  end
+end
+</code>
+</details>
+
+Enter your solution below.
+
+```elixir
+defmodule Hello do
+  def everyone(list) do
+  end
+end
+```
+
+## Pattern Matching in Anonymous Functions
+
+We can use pattern matching in anonymous functions.
+
+```elixir
+hello = fn
+  "Peter" -> "Hey Spidey!"
+  name -> "Hello, #{name}."
+end
+
+hello.("Bruce")
+```
+
+```elixir
+hello.("Peter")
+```
+
+Pattern matching becomes seriously powerful when leveraged with the [Enum](https://hexdocs.pm/elixir/Enum.html) module.
+
+```elixir
+list = [1, 2, 3]
+
+Enum.map(list, fn
+  1 -> "one"
+  int -> int * 2
+end)
+```
+
+Now we can enumerate and handle different patterns of data separately.
+
+```elixir
+list = [{:add, 4}, {:subtract, 2}, {:multiply, 2}, 10, %{add: 2}]
+
+Enum.reduce(list, 0, fn
+  {:add, int}, acc -> acc + int
+  {:subtract, int}, acc -> acc - int
+  {:multiply, int}, acc -> acc * int
+  %{add: int}, acc -> acc + int
+  int, acc -> acc + int
+end)
+```
+
+### Your Turn
+
+Use [Enum.map/2](https://hexdocs.pm/elixir/Enum.html#map/2) with pattern matching and multi-clause functions to double `{:double, integer}` tuples and half `{:halve, integer}` tuples in the following list.
+
+<!-- livebook:{"force_markdown":true} -->
+
+```elixir
+[{:double, 2}, {:halve, 10}, {:double, 4}] -> [4, 5, 8]
+```
+
+<details style="background-color: lightgreen; padding: 1rem; margin: 1rem 0;">
+<summary>Example Solution</summary>
+
+```elixir
+Enum.map([{:double, 2}, {:halve, 10}, {:double, 4}], fn
+  {:double, integer} -> integer * 2
+  {:halve, integer} -> div(integer, 2)
+end)
+```
+
+</details>
+
+```elixir
+[{:double, 2}, {:halve, 10}, {:double, 4}]
+```
+
+## Pattern Matching Vs. If
+
+Often we have many tools to accomplish the same action.
+For example, let's say we're building an application where users send each other messages.
+However, only admin users are allowed to send messages.
+
+Using `if`, we could write the following.
+
+```elixir
+defmodule Message do
+  def send(user, message) do
+    if user.is_admin do
+      message
+    else
+      {:error, :not_authorized}
+    end
+  end
+end
+```
+
+Let's say we also need to handle empty messages.
+
+```elixir
+defmodule Message do
+  def send(user, message) do
+    if user.is_admin do
+      if message == "" do
+        {:error, :empty_message}
+      else
+        message
+      end
+    else
+      {:error, :not_authorized}
+    end
+  end
+end
+
+Message.send(%{is_admin: true}, "")
+```
+
+Nested `if` statements are generally a cue that we should consider an alternative implementation.
+
+Let's see how we could solve this problem with pattern matching.
+
+```elixir
+defmodule Message do
+  def send(%{is_admin: true}, "") do
+    {:error, :empty_message}
+  end
+
+  def send(%{is_admin: true}, message) do
+    {:ok, message}
+  end
+
+  def send(%{is_admin: false}, _) do
+    {:error, :not_authorized}
+  end
+end
+```
+
+```elixir
+Message.send(%{is_admin: true}, "")
+```
+
+```elixir
+Message.send(%{is_admin: false}, "Error!")
+```
+
+```elixir
+Message.send(%{is_admin: true}, "Successful!")
+```
+
+Pattern matching can help reduce the complexity of our control flow.
+
+Anytime that we can use multiple function clauses, we can also use a `case` statement.
+
+```elixir
+defmodule Message do
+  def send(user, message) do
+    case {user, message} do
+      {%{is_admin: true}, ""} -> {:error, :empty_message}
+      {%{is_admin: true}, message} -> message
+      {%{is_admin: false}, _} -> {:error, :not_authorized}
+    end
+  end
+end
+```
+
+## Pin Operator
+
+The **pin operator** allows us to use variables as hard-coded values,
+rather than rebinding a variable.
+
+Often we use the pin operator when testing our code to assert that the value is correct.
+
+For example, the following will rebind the **received** variable to `[1, 2, 3]`.
+
+```elixir
+received = [1, 2]
+expected = [1, 2, 3]
+
+received = expected
+```
+
+But instead, we might use the match operator to check that the received value matches the expected
+value.
+
+```elixir
+received = [1, 2]
+expected = [1, 2, 3]
+
+^received = expected
+```
+
+By using the pin operator above, we accomplish the same as if we had written:
+
+```elixir
+[1, 2] = [1, 2, 3]
+```
+
+We can also use this for internal values in a collection. The following is the same
+as `[1, 2, 3] = [2, 2, 3]`
+
+```elixir
+first = 1
+actual = [2, 2, 3]
+[^first, 2, 3] = actual
+```
+
+And the following is the same as `[1, 2, 3] = [1, 2, 3]`
+
+```elixir
+first = 1
+actual = [1, 2, 3]
+[^first, 2, 3] = actual
+```
+
+### Your Turn
+
+<!-- livebook:{"break_markdown":true} -->
+
+Use the pin operator to make the following code crash with a [MatchError](https://hexdocs.pm/elixir/MatchError.html) because `expected` does not match `actual`, rather than rebinding `expected` as it is currently doing.
+
+<details style="background-color: lightgreen; padding: 1rem; margin: 1rem 0;">
+<summary>Example Solution</summary>
+
+```elixir
+expected = {"hello"}
+actual = {"hello", "hi"}
+
+^expected = actual
+```
+
+</details>
+
+```elixir
+expected = {"hello"}
+actual = {"hello", "hi"}
+
+expected = actual
+```
+
+## Further Reading
+
+Consider the following resource(s) to deepen your understanding of the topic.
+
+* [Elixir Schools: Pattern Matching](https://elixirschool.com/en/lessons/basics/pattern_matching)
+* [Exercism.io: Pattern Matching](https://exercism.org/tracks/elixir/concepts/pattern-matching)
+* [elixir-lang.org: Pattern Matching](https://elixir-lang.org/getting-started/pattern-matching.html)
+* [HexDocs: Patterns and Guards](https://hexdocs.pm/elixir/master/patterns-and-guards.html)
+
+## Commit Your Progress
+
+Run the following in your command line from the curriculum folder to track and save your progress in a Git commit.
+Ensure that you do not already have undesired or unrelated changes by running `git status` or by checking the source control tab in Visual Studio Code.
+
+```
+$ git checkout main
+$ git checkout -b exercise-advanced_pattern_matching
+$ git add .
+$ git commit -m "finish advanced pattern matching section"
+$ git push origin exercise-advanced_pattern_matching
+```
+
+Create a pull request to your forked `main` branch. Please do not create a pull request to the DockYard Academy repository as this will spam our PR tracker.
+
+**DockYard Academy Students Only:**
+
+Notify your teacher by including `@BrooklinJazz` in your PR description to get feedback.
+
+If you are interested in joining the next academy cohort, [sign up here](https://academy.dockyard.com/) to receive more news when it is available.
+
+## Up Next
+
+| Previous                                       | Next                                                       |
+| ---------------------------------------------- | ---------------------------------------------------------: |
+| [Polymorphism](../reading/polymorphism.livemd) | [Treasure Matching](../exercises/treasure_matching.livemd) |
+

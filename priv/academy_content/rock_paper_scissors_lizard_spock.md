@@ -1,0 +1,134 @@
+%{
+  title: "Rock Paper Scissors Lizard Spock"
+}
+---
+# Rock Paper Scissors Lizard Spock
+
+```elixir
+Mix.install([
+  {:kino, "~> 0.7.0", override: true},
+  {:youtube, github: "brooklinjazz/youtube"},
+  {:hidden_cell, github: "brooklinjazz/hidden_cell"}
+])
+```
+
+## Navigation
+
+[Return Home](../start.livemd)<span style="padding: 0 30px"></span>
+[Report An Issue](https://github.com/DockYard-Academy/beta_curriculum/issues/new?assignees=&labels=&template=issue.md&title=)
+
+## Rock Paper Scissors Lizard Spock
+
+<!-- livebook:{"attrs":{"source":"YouTube.new(\"https://www.youtube.com/watch?v=_PUEoDYpUyQ\")","title":"Rock Paper Scissors Lizard Spock. A Brief Introduction."},"kind":"Elixir.HiddenCell","livebook_object":"smart_cell"} -->
+
+```elixir
+YouTube.new("https://www.youtube.com/watch?v=_PUEoDYpUyQ")
+```
+
+You're going to create a Rock Paper Scissors Lizard Spock game. Rock Paper Scissors Lizard Spock is a more complex adaptation of Rock Paper Scissors.
+
+The rules start the same as normal rock paper scissors.
+
+* Rock beats Scissors.
+* Paper beats Rock.
+* Scissors beats Paper.
+
+Then we add the following extra rules
+
+* Rock beats Lizard.
+* Lizard beats Spock.
+* Spock beats Scissors.
+* Scissors beats Lizard.
+* Lizard beats Paper.
+* Paper beats Spock.
+* Spock beats Rock.
+
+We'll represent these choices as atoms `:rock, :paper, :scissors, :lizard, :spock`.
+
+You're going to create a `RockPaperScissorsLizardSpock` module. Implement the functions as documented.
+
+```elixir
+defmodule RockPaperScissorsLizardSpock do
+  @moduledoc """
+  Rock Paper Scissors Lizard Spock Game
+  """
+
+  @doc """
+  Returns `true` if the first guess beats the second, and `false` otherwise.
+
+  ## Winning Examples
+
+    iex> RockPaperScissorsLizardSpock.beats?(:rock, :lizard)
+    true
+    iex> RockPaperScissorsLizardSpock.beats?(:spock, :scissors)
+    true
+    iex> RockPaperScissorsLizardSpock.beats?(:scissors, :lizard)
+    true
+    iex> RockPaperScissorsLizardSpock.beats?(:lizard, :paper)
+    true
+    iex> RockPaperScissorsLizardSpock.beats?(:paper, :spock)
+    true
+    iex> RockPaperScissorsLizardSpock.beats?(:spock, :rock)
+    true
+
+  ## Losing Examples
+
+    iex> RockPaperScissorsLizardSpock.beats?(:lizard, :rock)
+    false
+    iex> RockPaperScissorsLizardSpock.beats?(:scissors, :spock)
+    false
+    iex> RockPaperScissorsLizardSpock.beats?(:lizard, :scissors)
+    false
+    iex> RockPaperScissorsLizardSpock.beats?(:paper, :lizard)
+    false
+    iex> RockPaperScissorsLizardSpock.beats?(:spock, :paper)
+    false
+    iex> RockPaperScissorsLizardSpock.beats?(:rock, :spock)
+    false
+  """
+  def beats?(guess1, guess2) do
+  end
+
+  @doc """
+  Return "Player 1 Wins!", "Player 2 Wins!", or "Draw" depending on which player guess won.
+
+  ## Examples
+
+    iex> RockPaperScissorsLizardSpock.play(:lizard, :rock)
+    "Player 2 Wins!"
+
+    iex> RockPaperScissorsLizardSpock.play(:rock, :lizard)
+    "Player 1 Wins!"
+  """
+  def play(player1, player2) do
+  end
+end
+```
+
+## Commit Your Progress
+
+Run the following in your command line from the curriculum folder to track and save your progress in a Git commit.
+Ensure that you do not already have undesired or unrelated changes by running `git status` or by checking the source control tab in Visual Studio Code.
+
+```
+$ git checkout main
+$ git checkout -b exercise-rock_paper_scissors_lizard_spock
+$ git add .
+$ git commit -m "finish rock paper scissors lizard spock exercise"
+$ git push origin exercise-rock_paper_scissors_lizard_spock
+```
+
+Create a pull request to your forked `main` branch. Please do not create a pull request to the DockYard Academy repository as this will spam our PR tracker.
+
+**DockYard Academy Students Only:**
+
+Notify your teacher by including `@BrooklinJazz` in your PR description to get feedback.
+
+If you are interested in joining the next academy cohort, [sign up here](https://academy.dockyard.com/) to receive more news when it is available.
+
+## Up Next
+
+| Previous                             | Next                                             |
+| ------------------------------------ | -----------------------------------------------: |
+| [Structs](../reading/structs.livemd) | [RPG Dialogue](../exercises/rpg_dialogue.livemd) |
+

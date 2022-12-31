@@ -1,0 +1,231 @@
+%{
+  title: "RPG Dialogue"
+}
+---
+# RPG Dialogue
+
+```elixir
+Mix.install([
+  {:kino, "~> 0.7.0", override: true},
+  {:youtube, github: "brooklinjazz/youtube"},
+  {:hidden_cell, github: "brooklinjazz/hidden_cell"}
+])
+```
+
+## Navigation
+
+[Return Home](../start.livemd)<span style="padding: 0 30px"></span>
+[Report An Issue](https://github.com/DockYard-Academy/beta_curriculum/issues/new?assignees=&labels=&template=issue.md&title=)
+
+## Overview
+
+In this exercise, you will create dialogue for an RPG (Role Playing Game).
+
+To generate this dialogue define a `Character` struct with a `:name`, `:class`, and `:weapon` keys. Enforce that the `:name` key must have a value.
+
+<details style="background-color: lightgreen; padding: 1rem; margin: 1rem 0;">
+<summary>Example solution</summary>
+
+```elixir
+defmodule Character do
+  @enforce_keys [:name]
+  defstruct @enforce_keys ++ [:class, :weapon]
+  
+  def introduce(character) do
+    "My name is #{character.name}."
+  end
+
+  def attack(character) do
+    "I attack with my #{character.weapon}!"
+  end
+
+  def class(character) do
+    "I am a #{character.class}"
+  end
+
+  def war_cry(character) do
+    "My name is #{character.name} and I am a #{character.class}!"
+  end
+
+  def defeat(character1, character2) do
+    "My name is #{character1.name} and I have defeated the #{character2.class} #{character2.name}!"
+  end
+end
+```
+
+</details>
+
+Then implement the `Character` functions to generate dialogue according to the documented examples below.
+
+```elixir
+defmodule Character do
+  @moduledoc """
+  Character
+
+  Defines a character struct, and functions for creating character dialogue.
+  """
+
+  @doc """
+  Introduce the character by name.
+
+  ## Examples
+    
+    iex> Character.introduce(%Character{name: "Gimli"})
+    "My name is Gimli."
+
+    iex> Character.introduce(%Character{name: "Aragorn"})
+     "My name is Aragorn."
+  """
+  def introduce(character) do
+  end
+
+  @doc """
+  Declare a character attack.
+
+  ## Examples
+
+    iex> Character.attack(%Character{name: "Gimli", weapon: "axe"})
+    "I attack with my axe!"
+
+    iex> Character.attack(%Character{name: "Aragorn", weapon: "sword"})
+    "I attack with my sword!"
+  """
+  def attack(character) do
+  end
+
+  @doc """
+  Declare a character's class.
+
+  ## Examples
+
+    iex> Character.class(%Character{name: "Gimli", class: "warrior"})
+    "I am a warrior."
+
+    iex> Character.class(%Character{name: "Aragorn", class: "ranger"})
+    "I am a ranger."
+  """
+  def class(character) do
+  end
+
+  @doc """
+  Declare a character's name and class in a war cry.
+
+  ## Examples
+
+    iex> Character.war_cry(%Character{name: "Gimli", class: "warrior"})
+    "My name is Gimli and I am a warrior!"
+
+    iex> Character.war_cry(%Character{name: "Aragorn", class: "ranger"})
+    "My name is Aragorn and I am a ranger!"
+  """
+  def war_cry(character) do
+  end
+
+  @doc """
+  Declare that one character has defeated another.
+
+  ## Examples
+
+    iex> Character.defeat(%Character{name: "Gimli"}, %Character{name: "Aragorn", class: "ranger"})
+    "My name is Gimli and I have defeated the ranger Aragorn!"
+
+    iex> Character.defeat(%Character{name: "Aragorn"}, %Character{name: "Gimli", class: "warrior"})
+    "My name is Aragorn and I have defeated the warrior Gimli!"
+  """
+  def defeat(character1, character2) do
+  end
+end
+```
+
+### Bonus: Character Instances
+
+Bind three variables `aragorn`, `gandalf`, and `gimli` to an instance of a `Character` struct with the following information.
+
+```mermaid
+classDiagram
+  class aragorn {
+    name: "Aragorn"
+    class: "ranger"
+    weapon: "sword"
+  }
+  class gandalf {
+    name: "Gandalf"
+    class: "wizard"
+    weapon: "staff"
+  }
+  class gimli {
+    name: "Gimli"
+    class: "warrior"
+    weapon: "axe"
+  }
+```
+
+Use may these three structs to test your `Character` functions.
+
+<details style="background-color: lightgreen; padding: 1rem; margin: 1rem 0;">
+<summary>Example solution</summary>
+
+```elixir
+aragorn = %Character{name: "Aragorn", class: "ranger", weapon: "sword"}
+gandalf = %Character{name: "Gandalf", class: "wizard", weapon: "staff"}
+gimli = %Character{name: "Gimli", class: "warrior", weapon: "axe"}
+
+# Example Testing
+Character.introduce(aragorn)
+```
+
+</details>
+
+Enter your solution below.
+
+```elixir
+
+```
+
+### Bonus: Handle `nil` Fields.
+
+For each function in the `Character` module above, handle when `:class` or `:weapon` fields are `nil`.
+
+For example, you might have a default response.
+
+<!-- livebook:{"force_markdown":true} -->
+
+```elixir
+# normal
+Character.attack(%Character{name: "Gimli", weapon: "axe"})
+"I attack with my axe!"
+
+# handling nil value.
+Character.attack(%Character{name: "Gimli"})
+"I attack!"
+```
+
+You have complete creative control over how you would like to change the dialogue when fields used the the body of the functions above are `nil`.
+
+## Commit Your Progress
+
+Run the following in your command line from the curriculum folder to track and save your progress in a Git commit.
+Ensure that you do not already have undesired or unrelated changes by running `git status` or by checking the source control tab in Visual Studio Code.
+
+```
+$ git checkout main
+$ git checkout -b exercise-rpg_dialogue
+$ git add .
+$ git commit -m "finish rpg dialogue exercise"
+$ git push origin exercise-rpg_dialogue
+```
+
+Create a pull request to your forked `main` branch. Please do not create a pull request to the DockYard Academy repository as this will spam our PR tracker.
+
+**DockYard Academy Students Only:**
+
+Notify your teacher by including `@BrooklinJazz` in your PR description to get feedback.
+
+If you are interested in joining the next academy cohort, [sign up here](https://academy.dockyard.com/) to receive more news when it is available.
+
+## Up Next
+
+| Previous                                                                                 | Next                                                 |
+| ---------------------------------------------------------------------------------------- | ---------------------------------------------------: |
+| [Rock Paper Scissors Lizard Spock](../exercises/rock_paper_scissors_lizard_spock.livemd) | [Pokemon Battle](../exercises/pokemon_battle.livemd) |
+
