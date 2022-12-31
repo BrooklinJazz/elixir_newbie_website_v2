@@ -5,7 +5,7 @@ defmodule ElixirNewbie.Blog do
     build: Post,
     from: Application.app_dir(:elixir_newbie, "priv/posts/**/*.md"),
     as: :posts,
-    highlighters: [:makeup_elixir, :makeup_erlang]
+    highlighters: [:makeup_elixir]
 
   # And finally export them
   def all_posts, do: @posts
