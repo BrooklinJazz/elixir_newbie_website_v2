@@ -11,13 +11,6 @@ module.exports = {
   ],
   theme: {
     extend: {
-      screens: {
-        sm: '480px',
-        md: '768px',
-        lg: '976px',
-        xl: '1440px',
-        '4k': '2160px',
-      },
       colors: {
         brand: "#FD4F00",
       },

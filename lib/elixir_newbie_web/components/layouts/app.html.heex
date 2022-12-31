@@ -1,9 +1,10 @@
 <header class="px-4 sm:px-6 lg:px-8 text-white">
   <div class="flex items-center justify-between border-b border-zinc-100 py-3">
-    <div class="flex items-center gap-4">
+    <div class="flex items-center gap-4 hidden sm:block">
       <.link navigate={~p"/"}><img alt="Elixir Newbie Home Button" class="h-12" src="/images/elixir_newbie_logo_flat.webp" /></.link>
     </div>
-    <div class="flex items-center gap-12 text-2xl">
+    <div class="w-full sm:w-fit flex justify-between sm:gap-12 text-2xl">
+      <.link class="sm:hidden" navigate={~p"/"}>Home</.link>
       <.link navigate={~p"/blog"}>Blog</.link>
       <.link navigate={~p"/podcast"}>Podcast</.link>
       <.link navigate={~p"/resources"}>Resources</.link>
