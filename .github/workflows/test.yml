@@ -15,8 +15,7 @@ jobs:
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
-
-    name: run tests
+    - name: run tests
     steps:
       - uses: actions/checkout@v3
       - uses: erlef/setup-beam@v1
@@ -25,3 +24,5 @@ jobs:
           elixir-version: '1.14.2'
       - run: mix deps.get
       - run: mix test
+    - name: Check Formatting
+      run: mix format --check-formatted
