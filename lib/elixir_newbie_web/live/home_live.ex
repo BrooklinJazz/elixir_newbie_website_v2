@@ -1,6 +1,10 @@
 defmodule ElixirNewbieWeb.HomeLive do
   use ElixirNewbieWeb, :live_view
 
+  def mount(_params, _session, socket) do
+    {:ok, assign(socket, :page_title, "Home")}
+  end
+
   def render(assigns) do
     ~H"""
     <section class="flex h-fit w-full flex-col gap-12 4k:gap-36 lg:flex-row xl:gap-24">
@@ -63,7 +67,17 @@ defmodule ElixirNewbieWeb.HomeLive do
     """
   end
 
-  def mount(_params, _session, socket) do
-    {:ok, assign(socket, :page_title, "Home")}
+  def rectangle_link(assigns) do
+    ~H"""
+    <.link
+      class={[
+        "mt-4 xl:mt-8 text-left relative rounded-3xl aspect-[5/1]",
+        "transition duration-500 ease-in-out ring ring-white hover:ring-offset-2"
+      ]}
+    >
+      <h2 class={"absolute flex h-full w-full items-center pl-16"} ><%= render_slot(@inner_block) %></h2>
+      <img alt="Blog" src={@src} class="rounded-3xl"/>
+    </.link>
+    """
   end
 end

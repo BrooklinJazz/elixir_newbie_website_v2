@@ -15,36 +15,6 @@ defmodule ElixirNewbieWeb.CoreComponents do
   import ElixirNewbieWeb.Gettext
 
   @doc """
-  Renders a styled rectangular link with an image.
-
-  ## Examples
-
-      <.rectangle_link navigate={~p"/resources"} src="images/resources_button_reduced.webp">3. Explore Learning Resources</.rectangle_link>
-  """
-  attr :type, :string, default: nil
-  attr :class, :string, default: nil
-  attr :src, :string, required: true
-  attr :rest, :global, include: ~w(navigate)
-
-  slot :inner_block, required: true
-
-  def rectangle_link(assigns) do
-    ~H"""
-    <.link
-      class={[
-        "mt-4 xl:mt-8 text-left relative rounded-3xl aspect-[5/1]",
-        "transition duration-500 ease-in-out ring ring-white hover:ring-offset-2",
-        @class
-      ]}
-      {@rest}
-    >
-      <h2 class={"absolute flex h-full w-full items-center pl-16"} ><%= render_slot(@inner_block) %></h2>
-      <img alt="Blog" src={@src} class="rounded-3xl"/>
-    </.link>
-    """
-  end
-
-  @doc """
   Renders a modal.
 
   ## Examples

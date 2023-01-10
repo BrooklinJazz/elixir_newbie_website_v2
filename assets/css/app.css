@@ -3,6 +3,18 @@
 @import "tailwindcss/utilities";
 
 /* This file is for your main application CSS */
+html {
+    background: url(images/background-smoke_reduced.webp) no-repeat center center fixed;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+}
+
+.podcast-description>p>a {
+    color: lightblue;
+    text-decoration: underline;
+}
 
 .link-underline {
     border-bottom-width: 0;
