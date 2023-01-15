@@ -1,3 +1,49 @@
+
+
 .markdown h1 {
- font-size: 3rem;
+
+    @apply mb-3 text-4xl;
 }
+
+.markdown h2 {
+    @apply mb-3 text-3xl;
+}
+
+.markdown h3 {
+    @apply mb-3 text-2xl;
+   }
+   
+/* .mermaid {
+    border-style: solid
+}
+*/
+
+.markdown a {
+    @apply underline;
+    @apply mt-6; /* not working as expected */
+}
+
+.markdown li {
+    @apply list-disc;
+    @apply ml-8;
+    @apply mb-2;
+}
+
+.markdown p {
+    @apply mb-10;
+}
+/* 
+Inter - 600×
+Family
+Inter, system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+Style
+normal
+Weight
+600
+Size
+30px
+Line Height
+36px
+Color
+#1c2a3a
+*/
