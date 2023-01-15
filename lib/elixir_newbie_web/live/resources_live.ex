@@ -5,8 +5,11 @@ defmodule ElixirNewbieWeb.ResourcesLive do
     ~H"""
     <section class="text-white">
       <p>Resources</p>
+
       <%= for post <- @posts do %>
+        <div class="markdown">
         <%= raw post.body %>
+        </div>
       <% end %>
     </section>
     """
