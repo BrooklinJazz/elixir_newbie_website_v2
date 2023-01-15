@@ -52,10 +52,10 @@ defmodule ElixirNewbieWeb.PodcastLive do
         </article>
       </article>
     </section>
-    <section class="podcast-description text-white mt-12">
+    <section class="podcast-description mt-12 text-white">
         <%= raw @current_episode.description %>
     </section>
-    <section class="mt-10 grid grid-cols-4 text-white mt-12">
+    <section class="mt-10 mt-12 grid grid-cols-4 text-white">
       <.platform href={"https://podcasts.apple.com/us/podcast/elixir-newbie/id1587455457"} src="images/apple_podcasts_icon.webp" alt="Apple Podcasts"/>
       <.platform href={"https://podcasts.google.com/feed/aHR0cHM6Ly9mZWVkcy5idXp6c3Byb3V0LmNvbS8xODQwMzgxLnJzcw=="} src="images/google_podcasts_icon.webp" alt="Google Podcasts"/>
       <.platform href={"https://open.spotify.com/show/2VNf2tvHIjSxTXMY15qtdV"} src="images/spotify_icon.webp" alt="Spotify"/>
@@ -63,7 +63,7 @@ defmodule ElixirNewbieWeb.PodcastLive do
     </section>
     <%!-- hosts goes here --%>
     <section>
-      <h2 class="text-3xl text-white mt-12">Want more? Here's the ancient archives.</h2>
+      <h2 class="mt-12 text-3xl text-white">Want more? Here's the ancient archives.</h2>
       <%= for episode <- @episodes do %>
         <%!-- using navigate instead of page to send user to the top of the page --%>
         <%!-- it would be better to nicely send the user to the top of the page to avoid reloading data --%>
@@ -91,6 +91,7 @@ defmodule ElixirNewbieWeb.PodcastLive do
       </figure>
     """
   end
+
   # Examples for custom audio player buttons
   # <a href={@src} target="_blank" download>download audio</a>
   # <button onclick="document.getElementById('player').play()">Play</button>
