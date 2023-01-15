@@ -1,0 +1,253 @@
+%{
+  title: "Shopping List"
+}
+---
+# Shopping List
+
+```elixir
+Mix.install([
+  {:kino, "~> 0.7.0", override: true},
+  {:youtube, github: "brooklinjazz/youtube"},
+  {:hidden_cell, github: "brooklinjazz/hidden_cell"}
+])
+```
+
+## Navigation
+
+[Return Home](../start.livemd)<span style="padding: 0 30px"></span>
+[Report An Issue](https://github.com/DockYard-Academy/beta_curriculum/issues/new?assignees=&labels=&template=issue.md&title=)
+
+## Setup
+
+Ensure you type the `ea` keyboard shortcut to evaluate all Elixir cells before starting. Alternatively you can evaluate the Elixir cells as you read.
+
+## Text Shopping List
+
+You are creating a shopping list app. Users have the ability to add items into their `shopping_cart`.
+Each item is represented as a string.
+
+In the Elixir cells below, use `++` and `--` to add the items shown.
+
+* Add `"grapes"`, `"walnuts"`, and `"apples"` to the `shopping_cart`
+* Add `"blueberries"`, `"chocolate"`, and `"pizza"` to the `shopping_cart`.
+* Remove `"grapes"` and `"walnuts"` from the `shopping_cart`
+* Add three `"banana"`s to the `shopping_cart`
+
+<details style="background-color: lightgreen; padding: 1rem; margin: 1rem 0;">
+<summary>Example solution</summary>
+
+```elixir
+shopping_cart = []
+
+shopping_cart = shopping_cart ++ ["grapes", "walnuts", "apples"]
+shopping_cart = shopping_cart ++ ["blueberries", "chocolate", "pizza"]
+shopping_cart = shopping_cart -- ["grapes", "walnuts"]
+shopping_cart = shopping_cart ++ ["banana", "banana", "banana"]
+```
+
+</details>
+
+Enter your solution below.
+
+<!-- livebook:{"attrs":{"assertions":"list = [] ++ [\"grapes\", \"walnuts\", \"apples\"]\nlist = list ++ [\"blueberries\", \"chocolate\", \"pizza\"]\nlist = list -- [\"grapes\", \"walnuts\"]\nlist = list ++ [\"banana\", \"banana\", \"banana\"]\n\nassert is_list(shopping_cart), \"Ensure shopping_list is still a list.\"\n\nassert shopping_cart == list","attempts":3,"code":"shopping_cart = [1]","solution":"","title":"Shopping Cart"},"kind":"Elixir.TestedCell","livebook_object":"smart_cell"} -->
+
+```elixir
+ExUnit.start(auto_run: false)
+
+defmodule Assertion do
+  use ExUnit.Case
+
+  test "Shopping Cart" do
+    try do
+      Process.flag(:trap_exit, true)
+      shopping_cart = [1]
+      list = [] ++ ["grapes", "walnuts", "apples"]
+      list = list ++ ["blueberries", "chocolate", "pizza"]
+      list = list -- ["grapes", "walnuts"]
+      list = list ++ ["banana", "banana", "banana"]
+
+      assert is_list(shopping_cart), "Ensure shopping_list is still a list."
+
+      assert shopping_cart == list
+    catch
+      error ->
+        flunk("""
+          Your solution threw the following error:
+
+          #{inspect(error)}
+        """)
+
+      :exit, {error, {GenServer, message_type, [_pid, message, _timeout]}} ->
+        flunk("""
+            GenServer crashed with the following error:
+
+            #{inspect(error)}
+
+            When it received: #{inspect(message)} #{message_type}
+
+            Likely you need to define the corresponding handler for #{inspect(message)}.
+
+            Ensure you defined a handle_call/3, handle_info/2, or handle_cast/2 or appropriate handler function.
+
+              def handle_call(:message, _from, state) do
+                ...
+              end
+
+            Also ensure you call GenServer.call/2, GenServer.cast/2, or otherwise send the message correctly.
+
+              GenServer.call(pid, :message)
+        """)
+
+      :exit, error ->
+        flunk("""
+          Unhandled exit with the following error:
+
+          #{inspect(error)}
+        """)
+    after
+      # all warnings and errors are printed to the previous Kino Frame
+      # to avoid cluttering the test results display.
+      Process.sleep(10)
+      Kino.render(Kino.Markdown.new("### Test Results
+<hr/>"))
+    end
+  end
+end
+
+ExUnit.run()
+
+# Make variables and modules defined in the test available.
+# Also allows for exploration using the output of the cell.
+# Unfortunately, this results in duplication of warnings.
+shopping_cart = [1]
+```
+
+## Text Shopping List With Quantities
+
+Users of your shopping list app have asked that they be able to include the quantity of each item
+to make adding many items easier.
+
+In the Elixir cell below, use a keyword list in the format `[item: quantity]` to add or remove
+items from the `shopping_cart`
+
+* Add `1` `milk` and `12` `eggs`
+* Add `2` `bars_of_butter` and `10` `candies`
+* Remove `2` `bars_of_butter`
+* Remove `5` `candies` (Notice `5` and not `10`!).
+
+<details style="background-color: lightgreen; padding: 1rem; margin: 1rem 0;">
+<summary>Example solution</summary>
+
+```elixir
+shopping_cart = []
+
+shopping_cart = shopping_cart ++ [milk: 1, eggs: 12]
+shopping_cart = shopping_cart ++ [bars_of_butter: 2, candies: 10]
+shopping_cart = shopping_cart -- [bars_of_butter: 2]
+shopping_cart = shopping_cart -- [candies: 10]
+shopping_cart = shopping_cart ++ [candies: 5]
+```
+
+</details>
+
+<!-- livebook:{"attrs":{"assertions":"list = [] ++ [milk: 1, eggs: 12]\nlist = list ++ [bars_of_butter: 2, candies: 10]\nlist = list -- [bars_of_butter: 2]\nlist = list -- [candies: 10]\nlist = list ++ [candies: 5]\n\nassert is_list(shopping_cart), \"Ensure shopping_list is still a list.\"\n\nassert shopping_cart == list","attempts":3,"code":"shopping_cart = []","solution":"","title":"Shopping Cart With Quantities"},"kind":"Elixir.TestedCell","livebook_object":"smart_cell"} -->
+
+```elixir
+ExUnit.start(auto_run: false)
+
+defmodule Assertion do
+  use ExUnit.Case
+
+  test "Shopping Cart With Quantities" do
+    try do
+      Process.flag(:trap_exit, true)
+      shopping_cart = []
+      list = [] ++ [milk: 1, eggs: 12]
+      list = list ++ [bars_of_butter: 2, candies: 10]
+      list = list -- [bars_of_butter: 2]
+      list = list -- [candies: 10]
+      list = list ++ [candies: 5]
+
+      assert is_list(shopping_cart), "Ensure shopping_list is still a list."
+
+      assert shopping_cart == list
+    catch
+      error ->
+        flunk("""
+          Your solution threw the following error:
+
+          #{inspect(error)}
+        """)
+
+      :exit, {error, {GenServer, message_type, [_pid, message, _timeout]}} ->
+        flunk("""
+            GenServer crashed with the following error:
+
+            #{inspect(error)}
+
+            When it received: #{inspect(message)} #{message_type}
+
+            Likely you need to define the corresponding handler for #{inspect(message)}.
+
+            Ensure you defined a handle_call/3, handle_info/2, or handle_cast/2 or appropriate handler function.
+
+              def handle_call(:message, _from, state) do
+                ...
+              end
+
+            Also ensure you call GenServer.call/2, GenServer.cast/2, or otherwise send the message correctly.
+
+              GenServer.call(pid, :message)
+        """)
+
+      :exit, error ->
+        flunk("""
+          Unhandled exit with the following error:
+
+          #{inspect(error)}
+        """)
+    after
+      # all warnings and errors are printed to the previous Kino Frame
+      # to avoid cluttering the test results display.
+      Process.sleep(10)
+      Kino.render(Kino.Markdown.new("### Test Results
+<hr/>"))
+    end
+  end
+end
+
+ExUnit.run()
+
+# Make variables and modules defined in the test available.
+# Also allows for exploration using the output of the cell.
+# Unfortunately, this results in duplication of warnings.
+shopping_cart = []
+```
+
+## Commit Your Progress
+
+Run the following in your command line from the curriculum folder to track and save your progress in a Git commit.
+Ensure that you do not already have undesired or unrelated changes by running `git status` or by checking the source control tab in Visual Studio Code.
+
+```
+$ git checkout main
+$ git checkout -b exercise-shopping_list
+$ git add .
+$ git commit -m "finish shopping list exercise"
+$ git push origin exercise-shopping_list
+```
+
+Create a pull request to your forked `main` branch. Please do not create a pull request to the DockYard Academy repository as this will spam our PR tracker.
+
+**DockYard Academy Students Only:**
+
+Notify your teacher by including `@BrooklinJazz` in your PR description to get feedback.
+
+If you are interested in joining the next academy cohort, [sign up here](https://academy.dockyard.com/) to receive more news when it is available.
+
+## Up Next
+
+| Previous                       | Next                                           |
+| ------------------------------ | ---------------------------------------------: |
+| [Maps](../reading/maps.livemd) | [Family Tree](../exercises/family_tree.livemd) |
+

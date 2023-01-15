@@ -1,0 +1,83 @@
+%{
+  title: "GitHub Collab"
+}
+---
+# Github Collab
+
+```elixir
+Mix.install([
+  {:kino, "~> 0.7.0", override: true},
+  {:youtube, github: "brooklinjazz/youtube"},
+  {:hidden_cell, github: "brooklinjazz/hidden_cell"}
+])
+```
+
+## Navigation
+
+[Return Home](../start.livemd)<span style="padding: 0 30px"></span>
+[Report An Issue](https://github.com/DockYard-Academy/beta_curriculum/issues/new?assignees=&labels=&template=issue.md&title=)
+
+## Collab
+
+With a partner, you're going to create a collaborative GitHub project.
+
+One partner will be the **CREATOR** and one partner will be the **CONTRIBUTOR**.
+Decide on your role, complete the exercise, then swap roles and complete it again.
+
+* **CREATOR**: Setup a git project called `collab`.
+* **CREATOR**: Connect the git project to a public github repository.
+* **CREATOR**: [Add your partner as a contributor](https://docs.github.com/en/account-and-profile/setting-up-and-managing-your-github-user-account/managing-access-to-your-personal-repositories/inviting-collaborators-to-a-personal-repository)
+  to the GitHub project.
+* **CONTRIBUTOR**: Clone the github project onto your local machine.
+* **CONTRIBUTOR**: Create a new branch `bug-fix`
+* **CONTRIBUTOR**: Stage, commit, and push a new file `your_name.txt` (where your_name is your name).
+* **CONTRIBUTOR**: Create a pull request for the bug-fix branch.
+* **CREATOR**: Review the pull request and accept the changes.
+* **CREATOR**: pull the main branch and see the changes on your local git project.
+
+<!-- livebook:{"break_markdown":true} -->
+
+### BONUS CHALLENGE: Merge Conflicts!
+
+Sometimes when you create a pull request, other pull requests may be accepted which create
+merge conflicts.
+
+You and your partner are going to walk through the flow of resolving a merge conflict.
+Once again decide on the **CREATOR** and **CONTRIBUTOR** roles.
+
+Using your existing `collab` project:
+
+* **CONTRIBUTOR**: Create a new branch `conflict-your_name` where `your_name` is the **CONTRIBUTOR**'s name.
+* **CREATOR**: Create a new branch `conflict-your_name` where `your_name` is the **CREATOR**'s name.
+* **CONTRIBUTOR**: Stage, commit, and push a new file `conflict.txt`. Enter the **CONTRIBUTOR**'s name as the file's contents.
+* **CREATOR**: Stage, commit, and push a new file `conflict.txt`. Enter the **CREATOR**'s name as the file's contents.
+* **CONTRIBUTOR**: Create a pull request for the `conflict-your_name` branch.
+* **CREATOR**: Create a pull request for the `conflict-your_name` branch.
+* **CREATOR**: Review the **CONTRIBUTOR**'s pull request and accept the changes.
+* **CREATOR**: Notice that your `conflict-your_name` branch now has merge conflicts and cannot be merged.
+* **CREATOR**: Resolve the conflicts and merge your pull request
+
+## Bonus: Open Source
+
+Sometimes you want a project to be open to changes from other developers, not just the allowed contributors.
+We'll use your existing `collab` project to walk through the flow for contributing to an open source project.
+
+Find a different partner who is not a contributor on your `collab` project.
+
+One partner will be the **CREATOR** and on partner will be the **CONTRIBUTOR**.
+Decide on your role, complete the exercise, then swap roles and complete it again.
+
+* **CONTRIBUTOR**: Create a fork of the **CREATOR**'s project.
+* **CONTRIBUTOR**: Clone the fork onto your local machine.
+* **CONTRIBUTOR**: Create a new branch.
+* **CONTRIBUTOR**: Stage, commit, and push a new file `your_name.txt` (where `your_name` is your name.)
+* **CONTRIBUTOR**: Create a pull request from your fork to the **CREATOR**'s project.
+* **CREATOR**: Review and accept the pull request.
+* **CREATOR**: pull the main branch and see the changes on your local git project.
+
+## Up Next
+
+| Previous                                                                     | Next                                   |
+| ---------------------------------------------------------------------------- | -------------------------------------: |
+| [Github Engineering Journal](../exercises/github_engineering_journal.livemd) | [Comments](../reading/comments.livemd) |
+

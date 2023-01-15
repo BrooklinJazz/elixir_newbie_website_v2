@@ -1,0 +1,187 @@
+%{
+  title: "Atoms"
+}
+---
+# Atoms
+
+```elixir
+Mix.install([
+  {:kino, "~> 0.7.0", override: true},
+  {:youtube, github: "brooklinjazz/youtube"},
+  {:hidden_cell, github: "brooklinjazz/hidden_cell"}
+])
+```
+
+## Navigation
+
+[Return Home](../start.livemd)<span style="padding: 0 30px"></span>
+[Report An Issue](https://github.com/DockYard-Academy/beta_curriculum/issues/new?assignees=&labels=&template=issue.md&title=)
+
+## Setup
+
+Ensure you type the `ea` keyboard shortcut to evaluate all Elixir cells before starting. Alternatively, you can evaluate the Elixir cells as you read.
+
+## Atoms
+
+Atoms are named constants. In other words, their name is their value.
+
+Atoms are often used to represent common constants in your program.
+For example, they often represent the :success or :error of a program.
+
+<!-- livebook:{"force_markdown":true} -->
+
+```elixir
+:success
+:error
+```
+
+They might also be used to represent the state of some action. For example:
+
+<!-- livebook:{"force_markdown":true} -->
+
+```elixir
+:completed
+:in_progress
+:starting
+```
+
+You might wonder why we have both strings and atoms because they seem to do the same thing.
+One primary reason is performance. Atoms are stored in an **atom table** and can be referenced by an integer.
+This makes it way faster to check if two atoms are equal.
+
+What is an **atom table**? Imagine it like an excel spreadsheet.
+Each value has a numbered key, so checking `1 = 1` is a lot easier than checking.
+`"HeLloWorld = HeLloWorLd"`.
+
+Atoms are defined using a colon `:` and a series of letters, digits, and certain valid symbols.
+
+### Rules For Naming Atoms
+
+There are specific rules for naming atoms, but fortunately you don't need
+to memorize them! Instead, pay attention to the colors in your code.
+If you define an atom incorrectly, you'll notice that it's no longer blue.
+
+Here are some valid atoms:
+
+<!-- livebook:{"force_markdown":true} -->
+
+```elixir
+:hello
+:my_atom1
+```
+
+Here are some invalid atoms, notice they are mostly white:
+
+<!-- livebook:{"force_markdown":true} -->
+
+```elixir
+:$this_is_invalid
+:!this_is_invalid
+:2
+:@
+:$
+:?
+:invalid # spaces are not valid
+```
+
+Sometimes languages establish conventions. Conventions are common patterns of doing things which
+the community agrees upon.
+For example, In Elixir it's conventional for atoms to have lowercase names separated by underscores.
+
+While the following will work:
+
+<!-- livebook:{"force_markdown":true} -->
+
+```elixir
+:MY_ATOM!
+```
+
+It's usually unconventional to name an atom with capital letters except in specific circumstances.
+
+You can use quotes with atoms to avoid name rules.
+
+<!-- livebook:{"force_markdown":true} -->
+
+```elixir
+:"$Now we don't have to follow any rules. This is a valid atom (though unconventional)"
+```
+
+## Secret Atoms
+
+`nil`, `false`, and `true` are all actually atoms.
+
+We can use `===` to verify that `:nil` and `nil` are equivalent.
+
+<!-- livebook:{"force_markdown":true} -->
+
+```elixir
+nil === :nil
+```
+
+The same goes for `true`, and `false`. They are
+all atoms but omit the colon `:`.
+
+<!-- livebook:{"force_markdown":true} -->
+
+```elixir
+true === :true
+false === :false
+```
+
+### Your Turn
+
+In the Elixir cell below, use `===` to check if `nil` is equal to `:nil`.
+
+```elixir
+
+```
+
+Check if `true` is equal to `:true`.
+
+```elixir
+
+```
+
+Check if `false` is equal to `:false`.
+
+```elixir
+
+```
+
+## Further Reading
+
+Consider the following resource(s) to deepen your understanding of the topic.
+
+<!-- livebook:{"break_markdown":true} -->
+
+* [Elixir School: Atoms](https://elixirschool.com/en/lessons/basics/basics/#atoms-7)
+* [HexDocs: Atoms](https://hexdocs.pm/elixir/Atom.html#content)
+* [Exercism: Atoms](https://exercism.org/tracks/elixir/concepts/atoms)
+
+## Commit Your Progress
+
+Run the following in your command line from the curriculum folder to track and save your progress in a Git commit.
+Ensure that you do not already have undesired or unrelated changes by running `git status` or by checking the source control tab in Visual Studio Code.
+
+```
+$ git checkout main
+$ git checkout -b exercise-atoms
+$ git add .
+$ git commit -m "finish atoms section"
+$ git push origin exercise-atoms
+```
+
+Create a pull request to your forked `main` branch. Please do not create a pull request to the DockYard Academy repository as this will spam our PR tracker.
+
+**DockYard Academy Students Only:**
+
+Notify your teacher by including `@BrooklinJazz` in your PR description to get feedback.
+
+If you are interested in joining the next academy cohort, [sign up here](https://academy.dockyard.com/) to receive more news when it is available.
+
+## Up Next
+
+| Previous                                             | Next                               |
+| ---------------------------------------------------- | ---------------------------------: |
+| [Guessing Games](../exercises/guessing_games.livemd) | [Tuples](../reading/tuples.livemd) |
+

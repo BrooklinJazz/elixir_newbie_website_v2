@@ -1,0 +1,185 @@
+%{
+  title: "Filter Values By Type"
+}
+---
+# Filter Values By Type
+
+```elixir
+Mix.install([
+  {:kino, "~> 0.7.0", override: true},
+  {:youtube, github: "brooklinjazz/youtube"},
+  {:hidden_cell, github: "brooklinjazz/hidden_cell"}
+])
+```
+
+## Navigation
+
+[Return Home](../start.livemd)<span style="padding: 0 30px"></span>
+[Report An Issue](https://github.com/DockYard-Academy/beta_curriculum/issues/new?assignees=&labels=&template=issue.md&title=)
+
+## Filter Values By Type
+
+Given a list of random items that could be any type, you are going to find all of the items that match a particular type.
+
+<!-- livebook:{"force_markdown":true} -->
+
+```elixir
+Filter.floats([1, 2, 3, 4.0])
+[4.0]
+
+Filter.integers([1, 2, 3, 4.0])
+[1, 2, 3]
+
+Filter.maps(["hello", 4.0, %{key: "value"}, %{}])
+[%{key: "value"}, %{}]
+```
+
+Implement the `Filter` module as documented.
+
+<details style="background-color: lightgreen; padding: 1rem; margin: 1rem 0;">
+<summary>Example Solution</summary>
+
+```elixir
+defmodule Filter do
+  def integers(list) do
+    Enum.filter(list, &is_integer/1)
+  end
+
+  def floats(list) do
+    Enum.filter(list, &is_float/1)
+  end
+
+  def numbers(list) do
+    Enum.filter(list, fn number -> is_number(number) end)
+  end
+
+  def atoms(list) do
+    Enum.filter(list, &is_atom/1)
+  end
+
+  def lists(list) do
+    Enum.filter(list, fn item -> is_list(item) and item != [] end)
+  end
+
+  def maps(list) do
+    Enum.filter(list, &is_map/1)
+  end
+
+  def keyword_lists(list) do
+    Enum.filter(list, &Keyword.keyword?/1)
+  end
+end
+```
+
+</details>
+
+Enter your solution below.
+
+```elixir
+defmodule Filter do
+  @doc """
+  Filter in integers in list.
+
+  ## Examples
+
+    iex> Filter.integers([1, 2, %{}, {}, []])
+    [1, 2]
+  """
+  def integers(list) do
+  end
+
+  @doc """
+  Filter in floats in list.
+
+  ## Examples
+
+    iex> Filter.floats([1, 2, %{}, {}, [], 1.2, 3.2])
+    [1.2, 3.2]
+  """
+  def floats(list) do
+  end
+
+  @doc """
+  Filter in numbers and floats in list.
+
+  ## Examples
+
+    iex> Filter.numbers([1, 2, %{}, {}, [], 1.2, 3.2])
+    [1, 2, 1.2, 3.2]
+  """
+  def numbers(list) do
+  end
+
+  @doc """
+  Filter in atoms in list.
+
+  ## Examples
+
+    iex> Filter.atoms([1, 2, %{}, {}, [], :first_atom, 1.2, 3.2, :second_atom])
+    [:first_atom, :second_atom]
+  """
+  def atoms(list) do
+  end
+
+  @doc """
+  Filter in lists and keyword lists in list.
+
+  ## Examples
+
+    iex> Filter.lists([1, 2, %{}, {}, [], 1.2, 3.2, :atom, [1, 2], [4, 5, 6]])
+    [[1, 2], [4, 5, 6]]
+  """
+  def lists(list) do
+  end
+
+  @doc """
+  Filter in maps in list.
+
+  ## Examples
+
+    iex> Filter.maps([1, 2, %{}, {}, [], 1.2, 3.2, :atom, %{key: "value"}])
+    [%{}, %{key: "value"}]
+  """
+  def maps(list) do
+  end
+
+  @doc """
+  Filter in keyword lists and empty lists in list.
+
+  ## Examples
+
+    iex> Filter.keyword_lists([1, 2, %{}, {}, [], 1.2, 3.2, :atom, %{key: "value"}, [key: "value"]])
+    [[], [key: "value"]]
+  """
+  def keyword_lists(list) do
+  end
+end
+```
+
+## Commit Your Progress
+
+Run the following in your command line from the curriculum folder to track and save your progress in a Git commit.
+Ensure that you do not already have undesired or unrelated changes by running `git status` or by checking the source control tab in Visual Studio Code.
+
+```
+$ git checkout main
+$ git checkout -b exercise-filter_values_by_type
+$ git add .
+$ git commit -m "finish filter values by type exercise"
+$ git push origin exercise-filter_values_by_type
+```
+
+Create a pull request to your forked `main` branch. Please do not create a pull request to the DockYard Academy repository as this will spam our PR tracker.
+
+**DockYard Academy Students Only:**
+
+Notify your teacher by including `@BrooklinJazz` in your PR description to get feedback.
+
+If you are interested in joining the next academy cohort, [sign up here](https://academy.dockyard.com/) to receive more news when it is available.
+
+## Up Next
+
+| Previous                                       | Next                               |
+| ---------------------------------------------- | ---------------------------------: |
+| [Book Search](../exercises/book_search.livemd) | [Reduce](../reading/reduce.livemd) |
+

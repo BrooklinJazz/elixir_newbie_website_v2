@@ -1,0 +1,167 @@
+%{
+  title: "Weighted Voting"
+}
+---
+# Weighted Voting
+
+```elixir
+Mix.install([
+  {:kino, "~> 0.7.0", override: true},
+  {:youtube, github: "brooklinjazz/youtube"},
+  {:hidden_cell, github: "brooklinjazz/hidden_cell"}
+])
+```
+
+## Navigation
+
+[Return Home](../start.livemd)<span style="padding: 0 30px"></span>
+[Report An Issue](https://github.com/DockYard-Academy/beta_curriculum/issues/new?assignees=&labels=&template=issue.md&title=)
+
+## Weighted Voting
+
+In the previous [Counting Votes](./counting_votes.livemd) exercise, we created a module to count a list of votes. For example, users would vote for their favorite animal to decide if `:birds`, `:dogs`, or `:cats` were more popular.
+
+Now, you're going to create a `WeightedVoting.count/2` that can count the number of votes for a single value such as `:dogs` or `:cats`. provided in a keyword list.
+
+<!-- livebook:{"force_markdown":true} -->
+
+```elixir
+WeightedVoting.count([cats: 10, dogs: 20, dogs: 20], :dogs)
+40
+```
+
+You're also going to create a `WeightedVoting.tally/1` function that will count the votes provided in a keyword list, and return the results as a keyword list like so.
+
+<!-- livebook:{"force_markdown":true} -->
+
+```elixir
+WeightedVoting.tally([cats: 10, dogs: 20, dogs: 20])
+[cats: 10, dogs: 40]
+```
+
+<details style="background-color: lightgreen; padding: 1rem; margin: 1rem 0;">
+<summary>Example Solution</summary>
+
+```elixir
+defmodule WeightedVoting do
+  def count(votes, vote_to_count) do
+    Enum.reduce(votes, 0, fn {key, value}, acc ->
+      if key == vote_to_count do
+        acc + value
+      else
+        acc
+      end
+    end)
+  end
+
+  def tally(votes) do
+    Enum.reduce(votes, [], fn {key, vote_count}, acc ->
+      Keyword.update(acc, key, vote_count, fn existing_value ->
+        existing_value + vote_count
+      end)
+    end)
+  end
+
+  def tally_map(votes) do
+    Enum.reduce(votes, %{}, fn {key, vote_count}, acc ->
+      Map.update(acc, key, vote_count, fn existing_value ->
+        existing_value + vote_count
+      end)
+    end)
+  end
+end
+```
+
+</details>
+
+Implement the `WeightedVoting` module as documented below.
+
+```elixir
+defmodule WeightedVoting do
+  @doc """
+  Count the total number of votes for some key in a keyword list.
+
+  ## Examples
+
+    iex> WeightedVoting.count([dogs: 20, dogs: 10], :dogs)
+    30
+    iex> WeightedVoting.count([cats: 10, dogs: 20, dogs: 30], :dogs)
+    50
+    iex> WeightedVoting.count([cats: 10, dogs: 20, dogs: 10, cats: 30], :cats)
+    40
+  """
+  def count(votes, vote_to_count) do
+  end
+
+  @doc """
+  Tally the total number of votes in a keyword list, and return
+  the results as a keyword list.
+
+  The keyword list should be sorted in alphabetical order.
+
+  ## Examples
+
+    iex> WeightedVoting.tally([dogs: 20, dogs: 10])
+    [dogs: 30]
+    iex> WeightedVoting.tally([cats: 10, dogs: 20, dogs: 10])
+    [cats: 10, dogs: 30]
+    iex> WeightedVoting.tally([cats: 10, dogs: 20, cats: 20, dogs: 10, birds: 20])
+    [birds: 20, cats: 30, dogs: 30]
+  """
+  def tally(votes) do
+  end
+end
+```
+
+### Bonus: Tally Map
+
+Create a `WeightedVoting.tally_map/1` function which returns a map instead of a keyword list.
+You may copy the following code into the `WeightedVoting` module above to get started.
+
+<!-- livebook:{"force_markdown":true} -->
+
+```elixir
+  @doc """
+  Tally the total number of votes in a keyword list, and return
+  the results as a map.
+
+  ## Examples
+
+    iex> WeightedVoting.tally_map([dogs: 20, dogs: 10])
+    %{dogs: 30}
+    iex> WeightedVoting.tally_map([cats: 10, dogs: 20, dogs: 10])
+    %{cats: 10, dogs: 30}
+    iex> WeightedVoting.tally_map([cats: 10, dogs: 20, cats: 20, dogs: 10, birds: 20])
+    %{birds: 20, cats: 30, dogs: 30}
+  """
+  def tally_map(votes) do
+  end
+```
+
+## Commit Your Progress
+
+Run the following in your command line from the curriculum folder to track and save your progress in a Git commit.
+Ensure that you do not already have undesired or unrelated changes by running `git status` or by checking the source control tab in Visual Studio Code.
+
+```
+$ git checkout main
+$ git checkout -b exercise-weighted_voting
+$ git add .
+$ git commit -m "finish weighted voting exercise"
+$ git push origin exercise-weighted_voting
+```
+
+Create a pull request to your forked `main` branch. Please do not create a pull request to the DockYard Academy repository as this will spam our PR tracker.
+
+**DockYard Academy Students Only:**
+
+Notify your teacher by including `@BrooklinJazz` in your PR description to get feedback.
+
+If you are interested in joining the next academy cohort, [sign up here](https://academy.dockyard.com/) to receive more news when it is available.
+
+## Up Next
+
+| Previous                                           | Next                                                                   |
+| -------------------------------------------------- | ---------------------------------------------------------------------: |
+| [Number Finder](../exercises/number_finder.livemd) | [Custom Enum With Reduce](../exercises/custom_enum_with_reduce.livemd) |
+

@@ -1,0 +1,242 @@
+%{
+  title: "Computer Hardware"
+}
+---
+# Computer Hardware
+
+```elixir
+Mix.install([
+  {:kino, "~> 0.7.0", override: true},
+  {:youtube, github: "brooklinjazz/youtube"},
+  {:hidden_cell, github: "brooklinjazz/hidden_cell"}
+])
+```
+
+## Navigation
+
+[Return Home](../start.livemd)<span style="padding: 0 30px"></span>
+[Report An Issue](https://github.com/DockYard-Academy/beta_curriculum/issues/new?assignees=&labels=&template=issue.md&title=)
+
+## Setup
+
+Ensure you type the `ea` keyboard shortcut to evaluate all Elixir cells before starting. Alternatively you can evaluate the Elixir cells as you read.
+
+<!-- livebook:{"branch_parent_index":0} -->
+
+## Overview
+
+Computers are composed of several parts. As programmers, we are primarily concerned about
+ the **processor**, and the **memory**.
+
+The processor determines the computer's speed when performing calculations.
+
+Memory or **RAM** (random access memory) determines the amount of data
+we can store during a calculation.
+
+In software terms, this translates to the **speed** and **memory consumption** of our program. Generally
+as you build software, those are your main performance concerns.
+
+It's not within the scope of the course to provide an indepth understanding of computers and computer hardware.
+Here's a great primer by Tom Scott to understand more about what your computer is doing under the hood.
+
+<!-- livebook:{"attrs":{"source":"YouTube.new(\"https://www.youtube.com/watch?v=Z5JC9Ve1sfI\")\n","title":"Tom Scott: The Fetch-Execute Cycle: What's Your Computer Actually Doing?"},"kind":"Elixir.HiddenCell","livebook_object":"smart_cell"} -->
+
+```elixir
+YouTube.new("https://www.youtube.com/watch?v=Z5JC9Ve1sfI")
+```
+
+## Memory
+
+We store information in memory. We can think of memory as a series of cells that
+can each store some value.
+
+![](images/memory_blank.png)
+
+<!-- livebook:{"break_markdown":true} -->
+
+The string "hello" might be stored in memory like so.
+
+![](images/hello_stored_in_memory.png)
+
+Under the hood, memory is stored in electrical signals called bits.
+
+Each bit represents `1` or `0` as an `on` or `off` value for an electrical signal.
+
+Eight bits are grouped together to make **bytes**. See [Strings and Binaries](strings_and_binaries.livemd) for more.
+
+Memory is generally measured in kilobytes (`1024` bytes) megabytes (`1024` kilobytes) and gigabytes (`1024` megabytes).
+
+Since they use the metric system, you might expect each to increase by `1000` instead of `1024`.
+However, computers use binary numbers, so hardware is built based on powers of `2`.
+
+### Stack Vs Heap
+
+Memory is divided into several parts.
+
+The **stack** holds functions and variables as they execute.
+
+The **heap** is a free memory resource where we can put pretty much any value that we want.
+
+![](images/stack_and_heap.png)
+
+<!-- livebook:{"break_markdown":true} -->
+
+For example, when you define the variable `hello` and bind it to `"world"`, hello is stored
+on the **stack** and it points to the location of memory in the heap.
+
+```elixir
+hello = "world"
+```
+
+![](images/hello_stack_heap.png)
+
+### Stack Frames
+
+The stack is a LIFO (last in first out) queue.
+Instructions stored on the stack create **stack frames**.
+
+As we execute functions, they are stored in a stack frame.
+
+<!-- livebook:{"break_markdown":true} -->
+
+![](images/stack_frame_steps123.png)
+
+<!-- livebook:{"break_markdown":true} -->
+
+The last function to be added onto the stack will be the first one executed and removed from the
+stack.
+
+![](images/stack_frame_steps4567.png)
+
+<!-- livebook:{"break_markdown":true} -->
+
+That's why in the code below, `three/0` executes, then `two/1`, then `one/1`.
+
+```elixir
+one = fn _ -> IO.inspect("one") end
+two = fn _ -> IO.inspect("two") end
+three = fn -> IO.inspect("three") end
+
+one.(two.(three.()))
+```
+
+### Stack Overflow
+
+The stack has a limited amount of memory allocated to it. When we over-allocate memory on the stack we get stack
+overflow. For example, if we continued executing functions in functions eventually the
+stack would (generally) run out of space.
+
+![Stack Overflow](images/stack-overflow-without-tail-recursion.png)
+
+<!-- livebook:{"break_markdown":true} -->
+
+### Memory Consumption
+
+Whenever we create a value it is stored in memory. If the value is too large, it can consume more
+memory than is available on the heap (or is allocated to the program).
+
+For example, loading a large file's contents into memory is a performance concern.
+
+You can see the memory this livebook consumes in the Runtime Settings panel. Press `s` then `r` to open
+the settings panel.
+
+![](images/memory_consumption_livebook_runtime.png)
+
+<!-- livebook:{"break_markdown":true} -->
+
+Uncomment the line below and evaluate the cell. You'll notice that the amount of memory consuption
+by **Processes** should increase. That's because the `list` must be stored in memory.
+
+Comment the line again and re-evaluate the cell and you'll notice that the memory consuption
+goes down because the `list` is no longer in memory.
+
+```elixir
+# list = Enum.to_list(1..1000000)
+```
+
+![](images/memory_consumption_filled_livebook_runtime.png)
+
+<!-- livebook:{"break_markdown":true} -->
+
+For more on Memory, there is a more indepth video by Crash Course Computer Science.
+
+```elixir
+YouTube.new("https://www.youtube.com/watch?v=fpnE6UAfbtU")
+```
+
+### Storage
+
+Generally, we are more concerned about the memory consumption of our program. However, if
+our application requires that users download large files onto their computer, it's useful
+to be aware of storage.
+
+Files can be saved to the hard drive of a computer. The hard drive is a slower (but generally larger)
+storage device. Unlike memory, it is often used for persistent values rather than values which only
+exist during the runtime of the program.
+
+For more on memory and storage, you can watch this video by Crash Course Computer Science.
+
+```elixir
+YouTube.new("https://www.youtube.com/watch?v=TQCr9RV7twk")
+```
+
+## CPU
+
+The CPU (Central Processing Unit) executes the instructions that you create in your program.
+
+When you perform any operation such as `2 + 2` it is handled by the CPU.
+
+The more instructions you provide to your program, the more work the CPU has to perform. If
+there are too many instructions, then the program will take longer to execute.
+
+For example, it's far faster to perform ten addition operations than it is to perform ten million.
+
+Try evaluating the two cells below and notice how the first is far faster (nearly instant).
+
+```elixir
+Enum.map(1..10, fn each -> each + 2 end)
+```
+
+```elixir
+Enum.map(1..10_000_000, fn each -> each + 2 end)
+```
+
+For more on the CPU there is an great video by Crash Course Computer Science.
+
+```elixir
+YouTube.new("https://www.youtube.com/watch?v=FZGugFqdr60")
+```
+
+## Conclusion
+
+Performance issues can significantly impact a program, leading to slowness or even crashing. Always consider your program's processing and memory constraints and how this might affect your users.
+
+In addition, performance issues generally have a more significant impact on lower-quality computers. Thus, your program may be performant on your personal computer but cause problems on lower-performance hardware.
+
+## Commit Your Progress
+
+Run the following in your command line from the curriculum folder to track and save your progress in a Git commit.
+Ensure that you do not already have undesired or unrelated changes by running `git status` or by checking the source control tab in Visual Studio Code.
+
+```
+$ git checkout main
+$ git checkout -b exercise-computer_hardware
+$ git add .
+$ git commit -m "finish computer hardware section"
+$ git push origin exercise-computer_hardware
+```
+
+Create a pull request to your forked `main` branch. Please do not create a pull request to the DockYard Academy repository as this will spam our PR tracker.
+
+**DockYard Academy Students Only:**
+
+Notify your teacher by including `@BrooklinJazz` in your PR description to get feedback.
+
+If you are interested in joining the next academy cohort, [sign up here](https://academy.dockyard.com/) to receive more news when it is available.
+
+## Up Next
+
+| Previous                                                 | Next                                               |
+| -------------------------------------------------------- | -------------------------------------------------: |
+| [Pascals Triangle](../exercises/pascals_triangle.livemd) | [Big O Notation](../reading/big_o_notation.livemd) |
+

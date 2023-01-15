@@ -1,0 +1,370 @@
+%{
+  title: "Traffic Light Server"
+}
+---
+# Traffic Light Server
+
+```elixir
+Mix.install([
+  {:kino, "~> 0.7.0", override: true},
+  {:youtube, github: "brooklinjazz/youtube"},
+  {:hidden_cell, github: "brooklinjazz/hidden_cell"}
+])
+```
+
+## Navigation
+
+[Return Home](../start.livemd)<span style="padding: 0 30px"></span>
+[Report An Issue](https://github.com/DockYard-Academy/beta_curriculum/issues/new?assignees=&labels=&template=issue.md&title=)
+
+## Traffic Light Server
+
+You're going to create a `TrafficLightServer` [GenServer](https://hexdocs.pm/elixir/GenServer.html) that mimics a traffic light.
+
+<!-- livebook:{"break_markdown":true} -->
+
+```mermaid
+flowchart LR
+  G((1))
+  Y((2))
+  R((3))
+  G --> Y --> R --> G
+  style G fill: lightgreen
+  style Y fill: lightyellow
+  style R fill: coral
+```
+
+<!-- livebook:{"break_markdown":true} -->
+
+### Server Callbacks
+
+The `TrafficLightServer` should define some [Server API](https://hexdocs.pm/elixir/1.12/GenServer.html#module-client-server-apis) callback functions using [GenServer.handle_call/3](https://hexdocs.pm/elixir/GenServer.html#handle_call/3) and [GenServer.init/1](https://hexdocs.pm/elixir/GenServer.html#init/1).
+
+The `TrafficLightServer`'s state should start as `:green`, then you should be able to send it a `:transition` message that will transition the state from `:green`, to `:yellow`, to `:red`.
+
+The `TrafficLightServer` should also be able to receive a `:current_light` message which returns the current light.
+
+<!-- livebook:{"force_markdown":true} -->
+
+```elixir
+{:ok, pid} = GenServer.start_link(TrafficLightServer, [])
+
+:green = GenServer.call(pid, :current_light)
+:yellow = GenServer.call(pid, :transition)
+:red = GenServer.call(pid, :transition)
+:green = GenServer.call(pid, :transition)
+```
+
+<!-- livebook:{"break_markdown":true} -->
+
+### Client API
+
+The `TrafficLightServer` should define some [Client API](https://hexdocs.pm/elixir/1.12/GenServer.html#module-client-server-apis) functions `transition/1`, `start_link/1` and `current_light/1` that abstract the underlying [GenServer](https://hexdocs.pm/elixir/GenServer.html) implementation details.
+
+<!-- livebook:{"force_markdown":true} -->
+
+```elixir
+{:ok, pid} = TrafficLightServer.start_link([])
+
+:green = TrafficLightServer.current_light(pid)
+:yellow = TrafficLightServer.transition(pid)
+:red = TrafficLightServer.transition(pid)
+:green = TrafficLightServer.transition(pid)
+```
+
+<details style="background-color: lightgreen; padding: 1rem; margin: 1rem 0;">
+<summary>Example Solution</summary>
+
+```elixir
+defmodule TrafficLightServer do
+  use GenServer
+
+  def start_link(_opts) do
+    GenServer.start_link(__MODULE__, [])
+  end
+
+  def transition(pid) do
+    GenServer.call(pid, :transition)
+  end
+
+  def current_light(pid) do
+    GenServer.call(pid, :current_light)
+  end
+
+  @impl true
+  def init(_opts) do
+    {:ok, :green}
+  end
+
+  @impl true
+  def handle_call(:transition, _from, state) do
+    next_state =
+      case state do
+        :green -> :yellow
+        :yellow -> :red
+        :red -> :green
+      end
+
+    {:reply, next_state, next_state}
+  end
+
+  @impl true
+  def handle_call(:current_light, _from, state) do
+    {:reply, state, state}
+  end
+end
+```
+
+</details>
+
+Implement the `TrafficLightServer` as documented below. You will also need to define the GenServer callback functions [GenServer.init/1](https://hexdocs.pm/elixir/GenServer.html#init/1) and [GenServer.handle_call/3](https://hexdocs.pm/elixir/GenServer.html#handle_call/3).
+
+```elixir
+defmodule TrafficLightServer do
+  @moduledoc """
+  Documentation for `TrafficLightServer`
+  """
+  use GenServer
+
+  @doc """
+  Start a TrafficLightServer linked to the current caller process.
+
+  ## Examples
+
+      iex> TrafficLightServer.start_link([])
+      {:ok, pid}
+  """
+  def start_link(opts) do
+  end
+
+  @doc """
+  Transition the `TrafficLightServer`'s state.
+
+  ## Examples
+
+      iex> {:ok, pid} = TrafficLightServer.start_link([])
+      iex> TrafficLightServer.transition(pid)
+      :yellow
+      iex> TrafficLightServer.transition(pid)
+      :red
+      iex> TrafficLightServer.transition(pid)
+      :green
+  """
+  def transition(pid) do
+  end
+
+  @doc """
+  Get the `TrafficLightServer`'s current state.
+
+  ## Examples
+
+      iex> {:ok, pid} = TrafficLightServer.start_link([])
+      iex> TrafficLightServer.current_light(pid)
+      :green
+  """
+  def current_light(pid) do
+  end
+end
+```
+
+## Bonus: TrafficGrid
+
+You're going to create a `TrafficGrid` [GenServer](https://hexdocs.pm/elixir/GenServer.html) that manages five `TrafficLightServers`.
+
+* Create a `TrafficGrid` which stores the pids of five `TrafficLightServers`.
+* Define a `current_lights/1` function that returns the current light of each `TrafficLightServer`.
+* Define a `transition/1` function that transitions one of the five lights (in order, from beginning to end).
+* Prefer `call` over `cast` to avoid concurrency issues.
+
+<!-- livebook:{"break_markdown":true} -->
+
+```mermaid
+flowchart
+TG[TrafficGrid]
+TLS1[TrafficLightServer]
+TLS2[TrafficLightServer]
+TLS3[TrafficLightServer]
+TLS4[TrafficLightServer]
+TLS5[TrafficLightServer]
+G1[Green]
+G2[Green]
+G3[Green]
+G4[Green]
+G5[Green]
+Y1[Yellow]
+Y2[Yellow]
+Y3[Yellow]
+Y4[Yellow]
+Y5[Yellow]
+R1[Red]
+R2[Red]
+R3[Red]
+R4[Red]
+R5[Red]
+
+TG --> TLS1
+TG --> TLS2
+TG --> TLS3
+TG --> TLS4
+TG --> TLS5
+
+TLS1 --> G1 --> Y1 --> R1 --> G1
+TLS2 --> G2 --> Y2 --> R2 --> G2
+TLS3 --> G3 --> Y3 --> R3 --> G3
+TLS4 --> G4 --> Y4 --> R4 --> G4
+TLS5 --> G5 --> Y5 --> R5 --> G5
+
+style G1 fill:lightgreen
+style G2 fill:lightgreen
+style G3 fill:lightgreen
+style G4 fill:lightgreen
+style G5 fill:lightgreen
+style Y1 fill:lightyellow
+style Y2 fill:lightyellow
+style Y3 fill:lightyellow
+style Y4 fill:lightyellow
+style Y5 fill:lightyellow
+style R1 fill:lightcoral
+style R2 fill:lightcoral
+style R3 fill:lightcoral
+style R4 fill:lightcoral
+style R5 fill:lightcoral
+```
+
+<!-- livebook:{"break_markdown":true} -->
+
+<details style="background-color: lightgreen; padding: 1rem; margin: 1rem 0;">
+<summary>Example Solution</summary>
+
+```elixir
+defmodule TrafficGridServer do
+  use GenServer
+
+  def start_link(_opts) do
+    GenServer.start_link(__MODULE__, [])
+  end
+
+  def transition(grid_pid) do
+    GenServer.call(grid_pid, :transition)
+  end
+
+  def current_lights(grid_pid) do
+    GenServer.call(grid_pid, :current_lights)
+  end
+
+  @impl true
+  def init(_opts) do
+    light_pids =
+      Enum.map(1..5, fn _ ->
+        {:ok, pid} = TrafficLightServer.start_link([])
+        pid
+      end)
+
+    {:ok, %{light_pids: light_pids, transition_index: 0}}
+  end
+
+  @impl true
+  def handle_call(:transition, _from, state) do
+    light_pid = Enum.at(state.light_pids, state.transition_index)
+    TrafficLightServer.transition(light_pid)
+
+    lights = Enum.map(state.light_pids, &TrafficLightServer.current_light/1)
+    next_transition_index = rem(state.transition_index + 1, length(state.light_pids))
+
+    {:reply, lights, %{state | transition_index: next_transition_index}}
+  end
+
+  @impl true
+  def handle_call(:current_lights, _from, state) do
+    lights =
+      Enum.map(state.light_pids, fn light_pid -> TrafficLightServer.current_light(light_pid) end)
+
+    {:reply, lights, state}
+  end
+end
+```
+
+</details>
+
+Implement the `TrafficGrid` module as documented below. You will also have to define callback functions for the [GenServer](https://hexdocs.pm/elixir/GenServer.html)'s Client API.
+
+```elixir
+defmodule TrafficGridServer do
+  use GenServer
+
+  @doc """
+  Start the `TrafficGridServer`.
+
+  ## Examples
+
+      iex> TraffigGridServer.start_link([])
+      {:ok, pid}
+  """
+  def start_link(_opts) do
+  end
+
+  @doc """
+  transition the current light state of the next light to transition.
+
+  ## Examples
+
+      iex> {:ok, pid} = TrafficGridServer.start_link([])
+      iex> TrafficGridServer.transition(pid)
+      [:yellow, :green, :green, :green, :green]
+      iex> TrafficGridServer.transition(pid)
+      [:yellow, :yellow, :green, :green, :green]
+      iex> TrafficGridServer.transition(pid)
+      [:yellow, :yellow, :yellow, :green, :green]
+      iex> TrafficGridServer.transition(pid)
+      [:yellow, :yellow, :yellow, :yellow, :green]
+      iex> TrafficGridServer.transition(pid)
+      [:yellow, :yellow, :yellow, :yellow, :yellow]
+      iex> TrafficGridServer.transition(pid)
+      [:red, :yellow, :yellow, :yellow, :yellow]
+      iex> TrafficGridServer.transition(pid)
+      [:red, :red, :yellow, :yellow, :yellow]
+  """
+  def transition(grid_pid) do
+  end
+
+  @doc """
+  Retrieve the current light state of each managed `TrafficLightServer`.
+
+  ## Examples
+
+      iex> {:ok, pid} = TrafficGridServer.start_link([])
+      iex> TrafficGridServer.current_lights(pid)
+      [:green, :green, :green, :green, :green]
+  """
+  def current_lights(grid_pid) do
+  end
+end
+```
+
+## Commit Your Progress
+
+Run the following in your command line from the curriculum folder to track and save your progress in a Git commit.
+Ensure that you do not already have undesired or unrelated changes by running `git status` or by checking the source control tab in Visual Studio Code.
+
+```
+$ git checkout main
+$ git checkout -b exercise-traffic_light_server
+$ git add .
+$ git commit -m "finish traffic light server exercise"
+$ git push origin exercise-traffic_light_server
+```
+
+Create a pull request to your forked `main` branch. Please do not create a pull request to the DockYard Academy repository as this will spam our PR tracker.
+
+**DockYard Academy Students Only:**
+
+Notify your teacher by including `@BrooklinJazz` in your PR description to get feedback.
+
+If you are interested in joining the next academy cohort, [sign up here](https://academy.dockyard.com/) to receive more news when it is available.
+
+## Up Next
+
+| Previous                                         | Next                                                 |
+| ------------------------------------------------ | ---------------------------------------------------: |
+| [Stack Server](../exercises/stack_server.livemd) | [Pokemon Server](../exercises/pokemon_server.livemd) |
+

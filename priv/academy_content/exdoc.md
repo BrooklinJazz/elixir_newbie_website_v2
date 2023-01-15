@@ -1,0 +1,95 @@
+%{
+  title: "ExDoc"
+}
+---
+# ExDoc
+
+```elixir
+Mix.install([
+  {:kino, "~> 0.7.0", override: true},
+  {:youtube, github: "brooklinjazz/youtube"},
+  {:hidden_cell, github: "brooklinjazz/hidden_cell"}
+])
+```
+
+## Navigation
+
+[Return Home](../start.livemd)<span style="padding: 0 30px"></span>
+[Report An Issue](https://github.com/DockYard-Academy/beta_curriculum/issues/new?assignees=&labels=&template=issue.md&title=)
+
+## Setup
+
+Ensure you type the `ea` keyboard shortcut to evaluate all Elixir cells before starting. Alternatively you can evaluate the Elixir cells as you read.
+
+## ExDoc
+
+[ExDoc](https://github.com/elixir-lang/ex_doc) takes the documentation we define in our project using `@moduledoc` and `@doc` and generates the same documentation we've see on [HexDocs](https://hexdocs.pm/ex_doc/readme.html).
+
+To add ExDoc to a mix project, we install it in our list of dependencies in `mix.exs`. The latest version is on [hex.pm](https://hex.pm/packages/ex_doc). We only need documentation for the `:dev` environment, and we do not need it during runtime.
+
+<!-- livebook:{"force_markdown":true} -->
+
+```elixir
+  defp deps do
+    [
+      {:ex_doc, "~> 0.28", only: :dev, runtime: false}
+    ]
+  end
+```
+
+Install dependencies.
+
+```
+$ mix deps.get
+```
+
+Then generate documentation for the project.
+
+```
+$ mix docs
+```
+
+This creates a `docs/` folder. Inside the docs folder is an `index.html` file.
+`HTML` stands for hyper-text-markup-language. It's the code used to structure a web page and its content.
+
+You can open the `docs/index.html` file in your browser to view the project documentation.
+
+<!-- livebook:{"break_markdown":true} -->
+
+### Your Turn
+
+Previously you converted a `Math` module into a mix project in the [ExUnit with Mix](./exunit_with_mix.livemd) section.
+
+Add [ExDoc](https://github.com/elixir-lang/ex_doc) to your `Math` project. When finished, Open the `index.html` file in your browser, and you should see a page similar to the following.
+
+<!-- livebook:{"break_markdown":true} -->
+
+![](images/mathdocs.png)
+
+## Commit Your Progress
+
+Run the following in your command line from the curriculum folder to track and save your progress in a Git commit.
+Ensure that you do not already have undesired or unrelated changes by running `git status` or by checking the source control tab in Visual Studio Code.
+
+```
+$ git checkout main
+$ git checkout -b exercise-exdoc
+$ git add .
+$ git commit -m "finish exdoc section"
+$ git push origin exercise-exdoc
+```
+
+Create a pull request to your forked `main` branch. Please do not create a pull request to the DockYard Academy repository as this will spam our PR tracker.
+
+**DockYard Academy Students Only:**
+
+Notify your teacher by including `@BrooklinJazz` in your PR description to get feedback.
+
+If you are interested in joining the next academy cohort, [sign up here](https://academy.dockyard.com/) to receive more news when it is available.
+
+## Up Next
+
+| Previous                                 | Next                             |
+| ---------------------------------------- | -------------------------------: |
+| [Typespecs](../reading/typespecs.livemd) | [Credo](../reading/credo.livemd) |
+

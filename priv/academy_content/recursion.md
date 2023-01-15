@@ -1,0 +1,411 @@
+%{
+  title: "Recursion"
+}
+---
+# Recursion
+
+```elixir
+Mix.install([
+  {:kino, "~> 0.7.0", override: true},
+  {:youtube, github: "brooklinjazz/youtube"},
+  {:hidden_cell, github: "brooklinjazz/hidden_cell"}
+])
+```
+
+## Navigation
+
+[Return Home](../start.livemd)<span style="padding: 0 30px"></span>
+[Report An Issue](https://github.com/DockYard-Academy/beta_curriculum/issues/new?assignees=&labels=&template=issue.md&title=)
+
+## Setup
+
+Ensure you type the `ea` keyboard shortcut to evaluate all Elixir cells before starting. Alternatively you can evaluate the Elixir cells as you read.
+
+## Recursion
+
+Recursion is a function that calls itself.
+
+```mermaid
+flowchart LR
+b[Function] --> a[Function]
+a --> b
+```
+
+Recursion creates a loop effect where the function calls itself over and over.
+
+```elixir
+defmodule Recursion do
+  def loop(n) do
+    if n > 0 do
+      IO.puts(n)
+      loop(n - 1)
+    end
+  end
+end
+
+Recursion.loop(5)
+```
+
+This calls the loop function 5 times. Under the hood, this places 5 stack frames on the stack.
+
+We trigger a call to [IO.puts/2](https://hexdocs.pm/elixir/IO.html#puts/2) to show that the loop function has been called 5 times with
+a different argument.
+
+```mermaid
+flowchart LR
+  a["loop(n)"]
+  b["loop(n - 1)"]
+  c["loop(n - 2)"]
+  d["loop(n - 3)"]
+  e["loop(n - 4)"]
+  f["loop(...)"]
+  5["loop(5)"]
+  4["loop(4)"]
+  3["loop(3)"]
+  2["loop(2)"]
+  1["loop(1)"]
+  5 --> 4 --> 3 --> 2 --> 1
+  a --> b --> c --> d --> e --> f
+```
+
+Computerphile explains recursion in excellent detail.
+
+```elixir
+YouTube.new("https://www.youtube.com/watch?v=Mv9NEXX1VHc")
+```
+
+<!-- livebook:{"branch_parent_index":1} -->
+
+## Endless Recursion
+
+We should have some end condition, otherwise, this would run forever. You'll notice that
+this Elixir cell never stops running. Under the hood it's calling `Forever.run/0` over and over.
+
+```elixir
+defmodule Forever do
+  def run do
+    run()
+  end
+end
+
+Forever.run()
+```
+
+## Stack Overflow
+
+Coming from another language, you might be surprised that the endless recursion function doesn't crash
+in Elixir. In most programming languages, calling a recursive function puts too many stack frames on
+the stack, and causes a stack overflow.
+
+<!-- livebook:{"break_markdown":true} -->
+
+![](images/stack-overflow-without-tail-recursion.png)
+
+<!-- livebook:{"break_markdown":true} -->
+
+That's because stack memory gets too full (overflowed) storing each stack frame of the recursive call.
+
+### Tail Recursion and Tail-Call Optimization
+
+Since functional programming languages rely so much on recursion, Elixir (and Erlang) implement tail-call
+optimization.
+
+Tail-call optimization circumvents adding new stack frames, instead, it reuses the current stack frame
+and jumps back to the top of the stack frame. This avoids additional memory consumption.
+
+<!-- livebook:{"break_markdown":true} -->
+
+![](images/tail-recursion-optimized-stack.png)
+
+<!-- livebook:{"break_markdown":true} -->
+
+### Body Recursion
+
+Keep in mind that Elixir can only tail-call optimize your recursive function if the last thing it does
+is call itself. That's why it's called **tail** recursion. Otherwise, if the function calls itself in the body,
+it's called **body-recursion** and is not optimized.
+
+### Your Turn
+
+Let's prove that **body-recursion** is not optimized. First, open the runtime panel in this livebook.
+Press `s` then `r` to open the settings panel. There you can see the current memory consumption.
+
+<!-- livebook:{"break_markdown":true} -->
+
+![](images/livebook_runtime.PNG)
+
+<!-- livebook:{"break_markdown":true} -->
+
+Next, uncomment and execute the following Elixir cell that uses body recursion. It's a nonsense function
+that doesn't do anything, however, it will infinitely call itself in the body of the function.
+
+You'll notice the **Process** memory consumption will increase, and eventually, the cell will abort.
+You may need to click the **Connect** button to reconnect the Elixir runtime.
+
+```elixir
+# defmodule Body do
+#   def recursion([head | tail]) do
+#     recursion(tail ++ tail) ++ [head]
+#   end
+# end
+
+# Body.recursion([1,2,3])
+```
+
+Make sure you comment out the code above, otherwise Livebook will keep disconnecting.
+
+<!-- livebook:{"break_markdown":true} -->
+
+![](images/body-recursion-process-full.PNG)
+
+## Using Recursion
+
+So why is recursion useful? Well, it's how we achieve a great deal of functionality in Elixir.
+For example, many functions in the [Enum](https://hexdocs.pm/elixir/Enum.html) module use recursion under the hood.
+
+Recursion allows us to accomplish enumeration.
+
+For example, we could use recursion to enumerate through and sum the elements in a list.
+
+```elixir
+defmodule Recursion do
+  def sum(list, accumulator \\ 0) do
+    case list do
+      [] -> accumulator
+      [head | tail] -> sum(tail, accumulator + head)
+    end
+  end
+end
+
+Recursion.sum([1, 2, 3], 0)
+```
+
+We enumerate through the list by recursively calling `sum/2` on the tail of the list and building
+an accumulator. In this case, the initial accumulator is `0`.
+
+Each element in the list adds to the accumulator. `1` + `2` + `3` = `6` so the function returns `6`.
+
+```mermaid
+flowchart LR
+sum1["sum([1, 2, 3], 0)"]
+sum2["sum([2, 3], 1)"]
+sum3["sum([3], 3)"]
+sum4["sum([], 6)"]
+
+sum1 --> sum2 --> sum3 --> sum4 --> 6
+```
+
+Walking through the function we bind `list` to `[1, 2, 3]` and accumulator to 0.
+
+<!-- livebook:{"force_markdown":true} -->
+
+```elixir
+  def sum(list, accumulator) do
+    case list do
+      # [] -> accumulator
+      [head | tail] -> sum(tail, accumulator + head)
+    end
+  end
+```
+
+`list` is not empty so the program recursively calls `sum([2, 3], 0 + 1)`.
+
+<!-- livebook:{"force_markdown":true} -->
+
+```elixir
+  def sum([1, 2, 3], 0) do
+    case [1, 2, 3] do
+      # [] -> accumulator
+      [1 | [2, 3]] -> sum([2, 3], 0 + 1)
+    end
+  end
+```
+
+`list` is still not empty, so the program recursively calls `sum([3], 1 + 2)`.
+
+<!-- livebook:{"force_markdown":true} -->
+
+```elixir
+  def sum([2, 3], 1) do
+    case [2, 3] do
+      # [] -> accumulator
+      [2 | [3]] -> sum([3], 1 + 2)
+    end
+  end
+```
+
+`list` is still not empty, so the program recursively calls `sum([], 3 + 3)`.
+
+<!-- livebook:{"force_markdown":true} -->
+
+```elixir
+  def sum([3], 3) do
+    case [3] do
+      # [] -> accumulator
+      [3 | []] -> sum([], 3 + 3)
+    end
+  end
+```
+
+`list` is empty, so the program returns the accumulator (`6`).
+
+<!-- livebook:{"force_markdown":true} -->
+
+```elixir
+  def sum([],  6) do
+    case [] do
+      [] -> 6
+      # [head | tail] -> sum(tail, accumulator + head)
+    end
+  end
+```
+
+<!-- livebook:{"break_markdown":true} -->
+
+### Base Cases
+
+Rather than using case statements, it's common to use different function clauses
+to handle the base case. The base case is when the function returns a value instead of making a recursive call.
+
+In the `Recursion` module, the base case is when the `list` is empty and `sum/2` returns the `accumulator`.
+
+With multiple function clauses, the `Recursion` module could instead be implemented like so:
+
+```elixir
+defmodule Recursion do
+  def sum([], accumulator), do: accumulator
+  def sum([head | tail], accumulator), do: sum(tail, accumulator + head)
+end
+
+Recursion.sum([1, 2, 3], 0)
+```
+
+### Your Turn
+
+Create a `CountDown` module which uses recursion to print all of the values between the provided integer and `0`.
+
+<!-- livebook:{"force_markdown":true} -->
+
+```elixir
+CountDown.count(5)
+```
+
+The above would print:
+
+```
+5
+4
+3
+2
+1
+0
+```
+
+<details style="background-color: lightgreen; padding: 1rem; margin: 1rem 0;">
+<summary>Example Solution</summary>
+
+```elixir
+defmodule CountDown do
+  def count(0), do: IO.puts(0)
+  def count(n) do
+    IO.puts(n)
+    count(n - 1)
+  end
+end
+```
+
+</details>
+
+```elixir
+
+```
+
+### Your Turn
+
+Create a `CountBetween` module which counts up between a starting integer and a finish integer.
+
+<!-- livebook:{"force_markdown":true} -->
+
+```elixir
+CountBetween.count(2, 5)
+```
+
+The above would print:
+
+```
+2
+3
+4
+5
+```
+
+The `CountBetween` module should handle when the start is greater than the finish.
+
+<!-- livebook:{"force_markdown":true} -->
+
+```elixir
+CountBetween.count(10, 5)
+```
+
+The above would print:
+
+```
+10
+9
+8
+7
+6
+5
+```
+
+<details style="background-color: lightgreen; padding: 1rem; margin: 1rem 0;">
+<summary>Example Solution</summary>
+
+```elixir
+defmodule CountBetween do
+  def count(finish, finish), do: IO.puts(finish)
+  def count(start, finish) when start < finish do
+    IO.puts(start)
+    count(start + 1, finish)
+  end
+
+    def count(start, finish) when start > finish do
+    IO.puts(start)
+    count(start - 1, finish)
+  end
+end
+```
+
+</details>
+
+```elixir
+
+```
+
+## Commit Your Progress
+
+Run the following in your command line from the curriculum folder to track and save your progress in a Git commit.
+Ensure that you do not already have undesired or unrelated changes by running `git status` or by checking the source control tab in Visual Studio Code.
+
+```
+$ git checkout main
+$ git checkout -b exercise-recursion
+$ git add .
+$ git commit -m "finish recursion section"
+$ git push origin exercise-recursion
+```
+
+Create a pull request to your forked `main` branch. Please do not create a pull request to the DockYard Academy repository as this will spam our PR tracker.
+
+**DockYard Academy Students Only:**
+
+Notify your teacher by including `@BrooklinJazz` in your PR description to get feedback.
+
+If you are interested in joining the next academy cohort, [sign up here](https://academy.dockyard.com/) to receive more news when it is available.
+
+## Up Next
+
+| Previous                                     | Next                                       |
+| -------------------------------------------- | -----------------------------------------: |
+| [Battle Map](../exercises/battle_map.livemd) | [Fibonacci](../exercises/fibonacci.livemd) |
+

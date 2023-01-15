@@ -23,10 +23,16 @@ module.exports = {
             "background-position": "right center",
           },
         },
+        keyframes: {
+          wiggle: {
+            '0%, 100%': { transform: 'rotate(-3deg)' },
+            '50%': { transform: 'rotate(3deg)' },
+          }
+        },
         "fade-in": {
           "0%": {
             opacity: "0",
-            transform: "scale(1.2)",
+            transform: "scale(1.1)",
           },
           "100%": {
             opacity: "1",
@@ -35,9 +41,10 @@ module.exports = {
         },
       },
       animation: {
-        'spin-slow': 'spin 100s linear infinite',
+        'spin-slow': 'spin 60s linear infinite',
         "gradient-x": "gradient-x 9s ease infinite",
-        "fade-in": "fade-in ease 1s",
+        "fade-in": "fade-in ease-in 0.5s",
+        "wiggle": "wiggle 0.5s",
       },
     },
   },

@@ -1,0 +1,84 @@
+%{
+  title: "Blog: Tags"
+}
+---
+# Blog: Tags
+
+```elixir
+Mix.install([
+  {:kino, "~> 0.7.0", override: true},
+  {:youtube, github: "brooklinjazz/youtube"},
+  {:hidden_cell, github: "brooklinjazz/hidden_cell"}
+])
+```
+
+## Navigation
+
+[Return Home](../start.livemd)<span style="padding: 0 30px"></span>
+[Report An Issue](https://github.com/DockYard-Academy/beta_curriculum/issues/new)
+
+## Blog Tags
+
+You're going to associate each blog post in a many-to-many association with tags.
+
+Tags should have `:name` field describing the type of tag such as `"tutorial"`, `"elixir"`, `"testing"`, etc.
+
+```mermaid
+classDiagram
+  class Tag {
+    name: :string
+  }
+```
+
+Blogs and tags should be associated through a **join** table `blog_tags`.
+
+```mermaid
+classDiagram
+  class BlogTag {
+    blog_id: :id
+    tag_id: :id
+  }
+```
+
+<!-- livebook:{"break_markdown":true} -->
+
+### Tag Requirements
+
+Ensure you:
+
+* Can perform standard CRUD operations for tags.
+* Can associate a blog with a tag using a multiple select when you create or update a blog.
+* Include a list of a blog's tags on the blog show page.
+* Include a show blogs by tag page which displays all blogs that belong to a specified tag. For example: `"/blogs/tags/:id` where `:id` is the id of a tag.
+
+## Bonus: Search By Tag
+
+Create a form on the book index page to search for blogs by tag.
+
+## Commit Your Progress
+
+Run the following in your command line from the curriculum folder to track and save your progress in a Git commit.
+Ensure that you do not already have undesired or unrelated changes by running `git status` or by checking the source control tab in Visual Studio Code.
+
+```
+$ git checkout main
+$ git checkout -b exercise-blog_tags
+$ git add .
+$ git commit -m "finish blog tags exercise"
+$ git push origin exercise-blog_tags
+```
+
+Create a pull request to your forked `main` branch. Please do not create a pull request to the DockYard Academy repository as this will spam our PR tracker.
+
+**DockYard Academy Students Only:**
+
+Notify your teacher by including `@BrooklinJazz` in your PR description to get feedback.
+
+If you are interested in joining the next academy cohort, [sign up here](https://academy.dockyard.com/) to receive more news when it is available.
+
+## Up Next
+
+| Previous                                               | Next                                                                   |
+| ------------------------------------------------------ | ---------------------------------------------------------------------: |
+| [Book Search Tags](../reading/book_search_tags.livemd) | [Book Search Book Content](../reading/book_search_book_content.livemd) |
+

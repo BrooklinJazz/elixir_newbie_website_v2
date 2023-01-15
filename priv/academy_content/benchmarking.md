@@ -1,0 +1,335 @@
+%{
+  title: "Benchmarking"
+}
+---
+# Benchmarking
+
+```elixir
+Mix.install([
+  {:kino, "~> 0.7.0", override: true},
+  {:youtube, github: "brooklinjazz/youtube"},
+  {:hidden_cell, github: "brooklinjazz/hidden_cell"},
+  {:benchee, "~> 1.1"}
+])
+```
+
+## Navigation
+
+[Return Home](../start.livemd)<span style="padding: 0 30px"></span>
+[Report An Issue](https://github.com/DockYard-Academy/beta_curriculum/issues/new?assignees=&labels=&template=issue.md&title=)
+
+## Setup
+
+Ensure you type the `ea` keyboard shortcut to evaluate all Elixir cells before starting. Alternatively you can evaluate the Elixir cells as you read.
+
+## :timer
+
+Out of the box, Erlang provides a `:timer` library which contains a `tc/1` function to measure the time it takes to run a function.
+It returns a `{time, result}` tuple.
+
+```mermaid
+flowchart LR
+Function --> timer[:timer.tc/1] --> return["{timer, result}"]
+```
+
+<!-- livebook:{"break_markdown":true} -->
+
+We'll use [Process.sleep/1](https://hexdocs.pm/elixir/Process.html#sleep/1) to simulate a slow function. [Process.sleep/1](https://hexdocs.pm/elixir/Process.html#sleep/1) pauses the program's execution
+for a number of milliseconds.
+
+```elixir
+:timer.tc(fn -> Process.sleep(1000) end)
+```
+
+The `time` returned is measured in microseconds.
+
+`1000` microseconds equals `1` millisecond.
+`1000` milliseconds equals `1` seconds.
+
+Therefore we can divide the number of microseconds by `1000` to get milliseconds,
+and the number of milliseconds by `1000` to get seconds.
+
+You'll notice that `:timer` is very close to accurate, but not perfectly accurate. This is
+to be expected with very small increments of time.
+
+```elixir
+{microseconds, _result} = :timer.tc(fn -> Process.sleep(1000) end)
+
+milliseconds = microseconds / 1000
+seconds = milliseconds / 1000
+IO.inspect(microseconds, label: "microseconds")
+IO.inspect(milliseconds, label: "milliseconds")
+IO.inspect(seconds, label: "seconds")
+```
+
+### Your Turn
+
+In the Elixir cell below, use `:timer.tc/1` to measure the following `slow_function`.
+
+<details style="background-color: lightgreen; padding: 1rem; margin: 1rem 0;">
+<summary>Example Solution</summary>
+
+Using anonymous function.
+
+```elixir
+:timer.tc(fn -> slow_function.() end)
+```
+
+Passing the function directly.
+
+```elixir
+:timer.tc(slow_function)
+```
+
+</details>
+
+```elixir
+slow_function = fn -> Process.sleep(1000) end
+```
+
+### Your Turn
+
+In the Elixir cell below, use `:timer.tc/1` to measure the following named function.
+
+<details style="background-color: lightgreen; padding: 1rem; margin: 1rem 0;">
+<summary>Example Solution</summary>
+
+Using anonymous function.
+
+```elixir
+:timer.tc(fn -> MyModule.slow_function() end)
+```
+
+Using capture operator.
+
+```elixir
+:timer.tc(&MyModule.slow_function/0)
+```
+
+</details>
+
+```elixir
+defmodule MyModule do
+  def slow_function do
+    Process.sleep(1000)
+  end
+end
+```
+
+## Benchee
+
+[Benchee](https://github.com/bencheeorg/benchee)
+is a popular library for measuring performance and memory consumption.
+
+<!-- livebook:{"break_markdown":true} -->
+
+### Installing Benchee
+
+External libraries need to be installed to use them.
+
+We use [Mix](https://hexdocs.pm/mix/1.13/Mix.html) to install Benchee.
+
+Mix is a build tool that provides tasks for creating, compiling, testing, and managing dependencies for Elixir projects.
+
+<!-- livebook:{"break_markdown":true} -->
+
+```mermaid
+flowchart LR
+Benchee
+D[Dependencies]
+I[install/2]
+Mix
+Mix --> I
+I --> D
+D --> Benchee
+```
+
+<!-- livebook:{"break_markdown":true} -->
+
+We've installed Benchee for you for this lesson, but be aware if you try to use Benchee in
+other projects it likely isn't installed.
+
+If you want [Benchee](https://hexdocs.pm/benchee/Benchee.html) in any Livebook, you have to add it to the setup section at the top of the Livebook if it is not already available. Include [Benchee](https://hexdocs.pm/benchee/Benchee.html) in the existing [Mix.install/2](https://hexdocs.pm/mix/Mix.html#install/2) call or add one. There should only ever be a single call to [Mix.install/2](https://hexdocs.pm/mix/Mix.html#install/2).
+
+Make sure to replace `1.1` with the latest version. You can find the latest version of Benchee on [Hex](https://hex.pm/packages/benchee).
+
+<!-- livebook:{"force_markdown":true} -->
+
+```elixir
+Mix.install([
+  {:kino, "~> 0.7.0", override: true},
+  {:benchee, "~> 1.1"},
+])
+```
+
+In a mix project, you'll add the latest [Benchee](https://hexdocs.pm/benchee/Benchee.html) in the existing `deps/0` function in `mix.exs`.
+
+<!-- livebook:{"force_markdown":true} -->
+
+```elixir
+defp deps do
+  [
+    {:benchee, "~> 1.1"}
+  ]
+end
+```
+
+<!-- livebook:{"break_markdown":true} -->
+
+### Usage
+
+We can use the [Benchee.run/2](https://hexdocs.pm/benchee/Benchee.html#run/2) function to measure the performance and memory consumption of some function.
+
+```elixir
+Benchee.run(%{
+  "example test" => fn -> 10000 ** 10000 end
+})
+```
+
+Above, the most important part of the output should look like the following, but with different numbers.
+
+```
+Name                   ips        average  deviation         median         99th %
+example test        154.65        6.47 ms    ±26.50%        6.13 ms       13.17 ms
+
+Memory usage statistics:
+
+Name            Memory usage
+example test           600 B
+```
+
+<!-- livebook:{"break_markdown":true} -->
+
+The Benchee documentation explains how to read the output:
+
+> * average - average execution time/memory usage (the lower the better)
+> * ips - iterations per second, aka how often can the given function be executed within one second (the higher the better - good for graphing), only for run times
+> * deviation - standard deviation (how much do the results vary), given as a percentage of the average (raw absolute values also available)
+> * median - when all measured values are sorted, this is the middle value. More stable than the average and somewhat more likely to be a typical value you see, for the most typical value see mode. (the lower the better)
+> * 99th % - 99th percentile, 99% of all measured values are less than this - worst case performance-ish
+
+<!-- livebook:{"break_markdown":true} -->
+
+### Using Benchee For Comparison
+
+Let's use Benchee to compare tuples and lists. Tuples are intended to be used as fixed-sized
+containers that are fast for accessing. Lists are collections intended for dynamic sized containers that get modified.
+
+Therefore, lists should be slow to access, and tuples should be fast to access. That's in theory, let's
+verify our assumption and prove it to be true.
+
+```elixir
+size = 10000
+large_list = Enum.to_list(0..size)
+large_tuple = List.to_tuple(large_list)
+
+Benchee.run(%{
+  "list" => fn -> Enum.at(large_list, size) end,
+  "tuple" => fn -> elem(large_tuple, size) end
+})
+```
+
+Upon running the above, you should see an output similar to the following. You'll notice that
+accessing a list was far slower!
+
+```
+Name            ips        average  deviation         median         99th %
+tuple        1.09 M        0.92 μs  ±2806.65%        0.80 μs           2 μs
+list       0.0324 M       30.89 μs    ±93.31%       28.90 μs       67.80 μs
+
+Comparison:
+tuple        1.09 M
+list       0.0324 M - 33.58x slower +29.97 μs
+```
+
+<!-- livebook:{"break_markdown":true} -->
+
+### Your Turn
+
+Use Benchee to compare accessing the **first** element instead of the last element as we already did above.
+You should notice the list is faster this time, or at least close to the same speed. You'll learn why in a future lesson.
+
+```elixir
+Benchee.run(%{
+  "access first element in list" => fn -> nil end,
+  "access first element in tuple" => fn -> nil end
+})
+```
+
+### Multiple Inputs
+
+We can use the `:inputs` option in [Benchee.run/2](https://hexdocs.pm/benchee/Benchee.html#run/2) to benchmark multiple inputs.
+
+```elixir
+Benchee.run(
+  %{
+    "Enum.count/1" => fn input -> Enum.count(input) end,
+    "Kernel.length/1" => fn input -> Kernel.length(input) end
+  },
+  inputs: [small: [1, 2, 3], medium: Enum.to_list(1..1000), large: Enum.to_list(1..100_000)]
+)
+```
+
+You should see a benchmark for each input.
+
+```
+##### With Input Small #####
+Name                      ips        average  deviation         median         99th %
+Kernel.length/1        1.34 M      745.94 ns  ±3912.97%         500 ns        1600 ns
+Enum.count/1           1.28 M      781.60 ns  ±3327.02%         500 ns        2000 ns
+
+Comparison: 
+Kernel.length/1        1.34 M
+Enum.count/1           1.28 M - 1.05x slower +35.66 ns
+
+##### With Input Medium #####
+Name                      ips        average  deviation         median         99th %
+Kernel.length/1      274.56 K        3.64 μs   ±627.53%        3.40 μs        6.30 μs
+Enum.count/1         265.48 K        3.77 μs  ±1277.99%        3.50 μs        8.20 μs
+
+Comparison: 
+Kernel.length/1      274.56 K
+Enum.count/1         265.48 K - 1.03x slower +0.124 μs
+
+##### With Input Large #####
+Name                      ips        average  deviation         median         99th %
+Kernel.length/1        5.30 K      188.70 μs    ±63.77%      157.70 μs      897.38 μs
+Enum.count/1           4.97 K      201.40 μs    ±75.41%      159.50 μs     1096.38 μs
+
+Comparison: 
+Kernel.length/1        5.30 K
+Enum.count/1           4.97 K - 1.07x slower +12.70 μs
+
+```
+
+<!-- livebook:{"break_markdown":true} -->
+
+This is especially useful for benchmarking how larger data affects our system. It's also useful for creating different situations (i.e. worst case and best case scenarios) that may cause our system to behave differently than expected.
+
+## Commit Your Progress
+
+Run the following in your command line from the curriculum folder to track and save your progress in a Git commit.
+Ensure that you do not already have undesired or unrelated changes by running `git status` or by checking the source control tab in Visual Studio Code.
+
+```
+$ git checkout main
+$ git checkout -b exercise-benchmarking
+$ git add .
+$ git commit -m "finish benchmarking section"
+$ git push origin exercise-benchmarking
+```
+
+Create a pull request to your forked `main` branch. Please do not create a pull request to the DockYard Academy repository as this will spam our PR tracker.
+
+**DockYard Academy Students Only:**
+
+Notify your teacher by including `@BrooklinJazz` in your PR description to get feedback.
+
+If you are interested in joining the next academy cohort, [sign up here](https://academy.dockyard.com/) to receive more news when it is available.
+
+## Up Next
+
+| Previous                                           | Next                                                         |
+| -------------------------------------------------- | -----------------------------------------------------------: |
+| [Big O Notation](../reading/big_o_notation.livemd) | [Games Benchmarking](../exercises/games_benchmarking.livemd) |
+

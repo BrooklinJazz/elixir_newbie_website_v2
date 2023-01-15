@@ -1,0 +1,706 @@
+%{
+  title: "Modules"
+}
+---
+# Modules
+
+```elixir
+Mix.install([
+  {:kino, "~> 0.7.0", override: true},
+  {:youtube, github: "brooklinjazz/youtube"},
+  {:hidden_cell, github: "brooklinjazz/hidden_cell"}
+])
+```
+
+## Navigation
+
+[Return Home](../start.livemd)<span style="padding: 0 30px"></span>
+[Report An Issue](https://github.com/DockYard-Academy/beta_curriculum/issues/new?assignees=&labels=&template=issue.md&title=)
+
+## Setup
+
+Ensure you type the `ea` keyboard shortcut to evaluate all Elixir cells before starting. Alternatively, you can evaluate the Elixir cells as you read.
+
+## Modules
+
+As you create more and more functions, it becomes necessary to organize them. That's just one of the many reasons to use a **module**. A module is more or less a "bag of functions". We use them to organize and group related functions together.
+
+We use the `defmodule` keyword to define a module like so.
+
+```elixir
+defmodule MyModule do
+end
+```
+
+Don't worry about the output `{:module, MyModule, <<70, 79, 82, 49, 0, 0, 4, ...>>, nil}`. That's just how Elixir represents modules internally, and it's not important for our understanding.
+
+Let's break down the code above.
+
+1. `defmodule` a keyword that means "define module".
+2. `MyModule` is the name of this module. It can be any valid name, and should be **CapitalCase** which is often called **PascalCase**.
+   you'll often hear the name of the module referred to as the **namespace** that functions are organized under.
+3. `do` a keyword that separates the module name and its internal implementation.
+4. `end` a keyword that finishes the module definition.
+
+Modules define functions inside of them. Each function has a name, so they are called **named functions**.
+You can define functions inside a module using the following syntax.
+
+```elixir
+defmodule Greeter do
+  def hello do
+    "hello world"
+  end
+end
+```
+
+Let's break down the named function above.
+
+1. `def` this means "define function"
+2. `do` a keyword that separates the function head and the function body.
+3. `"hello world"` this is the function body. This function returns the string "hello world".
+4. `end` is a keyword that ends the function definition.
+
+### Calling A Named Function
+
+To call a function inside a module, you use `Module.function(arguments)` syntax.
+
+```elixir
+Greeter.hello()
+```
+
+### Named Functions With Parameters
+
+You can create multiple functions in a module.
+
+Here's a new `hi/1` function that says hi to a person.
+
+```elixir
+defmodule Greeter do
+  def hello do
+    "Hello"
+  end
+
+  def hi(name) do
+    "Hi #{name}"
+  end
+end
+```
+
+You call the named function in the module by passing it an argument.
+
+```elixir
+Greeter.hi("Peter Parker")
+```
+
+### Your Turn
+
+Create a `Math` module with an `add/2` function that adds two numbers together.
+
+<details style="background-color: lightgreen; padding: 1rem; margin: 1rem 0;">
+<summary>Example solution</summary>
+
+```elixir
+defmodule Math do
+  def add(int1, int2) do
+    int1 + int2
+  end
+end
+```
+
+</details>
+
+```elixir
+
+```
+
+## Internal Module Functions
+
+A module can use its own functions.
+
+```elixir
+defmodule InspectorGadget do
+  def gogo(gadget) do
+    "Go go gadget #{gadget}!"
+  end
+
+  def necktie do
+    InspectorGadget.gogo("Necktie")
+  end
+end
+
+InspectorGadget.necktie()
+```
+
+The module can omit the module name when calling an internal function. Below, we call `gogo/1` instead of `InspectorGadget.gogo/1`
+
+```elixir
+defmodule InspectorGadget do
+  def gogo(gadget) do
+    "Go go gadget #{gadget}!"
+  end
+
+  def necktie do
+    gogo("necktie")
+  end
+end
+
+InspectorGadget.necktie()
+```
+
+However, we must include the module name when using the module's function outside of the module. For example, the following will raise an error.
+
+```elixir
+gogo("necktie")
+```
+
+### Your Turn
+
+Add an `arms/0` function to the `InspectorGadget` module above that calls `gogo("arms")`.
+
+<details style="background-color: lightgreen; padding: 1rem; margin: 1rem 0;">
+<summary>Example solution</summary>
+
+```elixir
+defmodule InspectorGadget do
+  def gogo(gadget) do
+    "Go go gadget #{gadget}!"
+  end
+
+  def necktie do
+    gogo("necktie")
+  end
+
+  def arms do
+    gogo("arms")
+  end
+end
+
+InspectorGadget.arms()
+```
+
+</details>
+
+## Private Functions
+
+Modules can access other module functions.
+
+```elixir
+defmodule Speaker do
+  def speak() do
+    "hi there"
+  end
+end
+
+defmodule Listener do
+  def listen() do
+    "I heard you say: " <> Speaker.speak()
+  end
+end
+
+Listener.listen()
+```
+
+However, sometimes a module must keep a function private for internal use only. It may be for security reasons or because you don't think the function should be used anywhere but internally.
+Often it communicates to other developers how to use your module.
+
+You can create a private module function with `defp` instead of `def`. You'll notice that below the `Speaker.think/0` function is undefined to the outside world.
+
+```elixir
+defmodule Speaker do
+  defp think() do
+    "hi there"
+  end
+end
+
+Speaker.think()
+```
+
+We use private functions internally in the module, which means that public functions could expose their values.
+
+```elixir
+defmodule Speaker do
+  defp think() do
+    "hi there"
+  end
+
+  def speak() do
+    think()
+  end
+end
+
+Speaker.speak()
+```
+
+## Callback Functions
+
+Similar to anonymous functions, we can pass named functions as callback functions, however we have to explicitly provide the functions arity using the capture operator `&`.
+
+```elixir
+defmodule HigherOrder do
+  def higher_order_function(callback) do
+    callback.()
+  end
+end
+
+defmodule Callback do
+  def callback_function do
+    "I was called!"
+  end
+end
+
+HigherOrder.higher_order_function(&Callback.callback_function/0)
+```
+
+Notice we cannot simply pass `Callback.callback_function` as an argument.
+
+```elixir
+HigherOrder.higher_order_function(Callback.callback_function())
+```
+
+Alternatively, we can wrap the callback function in an anonymous function.
+
+```elixir
+HigherOrder.higher_order_function(fn -> Callback.callback_function() end)
+```
+
+## Namespaces
+
+You can use modules to organize functions under a single **namespace**.
+This allows you to create many unique namespaces with their own functions to organize
+the functionality of your program.
+
+<!-- livebook:{"break_markdown":true} -->
+
+```mermaid
+flowchart
+  A[Namespace]
+  B[Namespace]
+  C[Namespace]
+  A1[Function]
+  A2[Function]
+  A3[Function]
+  B1[Function]
+  B2[Function]
+  B3[Function]
+  C1[Function]
+  C2[Function]
+  C3[Function]
+  A --> A1
+  A --> A2
+  A --> A3
+  B --> B1
+  B --> B2
+  B --> B3
+  C --> C1
+  C --> C2
+  C --> C3
+```
+
+<!-- livebook:{"break_markdown":true} -->
+
+### SubModules
+
+Sometimes you need to further split the functions in a module. This can be because the module is too large, or because the module has multiple separate responsibilities and it's more clear to separate them.
+
+```mermaid
+flowchart
+  Module --> SubModule
+  SubModule --> a[Function]
+  SubModule --> b[Function]
+  SubModule --> c[Function]
+```
+
+To create submodules, you can separate module names with a period `.`.
+
+```elixir
+defmodule Languages.English do
+  def greeting do
+    "Hello"
+  end
+end
+
+Languages.English.greeting()
+```
+
+### Your Turn
+
+Create a submodule under the `Languages` module with a `greeting/0` function that returns a greeting in another language. You may choose the language and the name of the submodule.
+
+<details style="background-color: lightgreen; padding: 1rem; margin: 1rem 0;">
+<summary>Example solution</summary>
+
+```elixir
+defmodule Languages.Spanish do
+  def greeting do
+    "Hola"
+  end
+end
+```
+
+</details>
+
+Enter your solution below.
+
+```elixir
+
+```
+
+### Nested Modules
+
+It's also possible, though not very common, to define a module inside another module. This will automatically nest the namespaces.
+
+```elixir
+defmodule Languages do
+  defmodule English do
+    def greeting do
+      "Hello"
+    end
+  end
+
+  defmodule Spanish do
+    def greeting do
+      "Hola"
+    end
+  end
+end
+```
+
+```elixir
+Languages.English.greeting()
+```
+
+```elixir
+Languages.Spanish.greeting()
+```
+
+## Module Attributes
+
+While modules are mostly used to group functions, we can also include **compile-time** data inside the module that our functions can all use.
+
+We use the `@` symbol to define a compile-time module attribute.
+
+```elixir
+defmodule Hero do
+  @name "Spider-Man"
+  @nemesis "Green Goblin"
+
+  def introduce do
+    "Hello, my name is #{@name}!"
+  end
+
+  def catchphrase do
+    "I'm your friendly neighborhood #{@name}!"
+  end
+
+  def defeat do
+    "I #{@name} will defeat you #{@nemesis}!"
+  end
+end
+```
+
+```elixir
+Hero.introduce()
+```
+
+```elixir
+Hero.catchphrase()
+```
+
+```elixir
+Hero.defeat()
+```
+
+We can use module attributes to avoid significant code repetition where many functions all need to use the same value.
+
+<!-- livebook:{"break_markdown":true} -->
+
+### Your Turn
+
+Change the module attributes for the `Hero` module above to match your favourite super hero. Re-evaluate the `Hero` functions to see the output change.
+
+You will have to re-evaluate the `Hero` module after changing it, to ensure it compiles with the latest version.
+
+## Module Scope
+
+Modules and functions close themselves to the outside world. We call this `scope`.
+Modules, functions, and many other similar constructs in Elixir are [lexically scoped](https://en.wikipedia.org/wiki/Scope_(computer_science)).
+
+That means that variables defined in one scope cannot be accessed in another scope.
+
+```mermaid
+  flowchart
+    subgraph Top Level Scope
+      A[top level variable]
+      subgraph Module Scope
+        B[module variable]
+        subgraph Function Scope
+          C[function variable]
+        end
+      end
+    end
+```
+
+Notice how the following example has an error because we cannot access the variable
+`top_level_scope`.
+
+```elixir
+top_level_scope = 1
+
+defmodule MyModule do
+  def my_function do
+    top_level_scope
+  end
+end
+```
+
+The same is true for the module scope.
+
+```elixir
+defmodule MyModule do
+  module_scope = 2
+
+  def my_function do
+    module_scope
+  end
+end
+```
+
+We've already seen we can share a value between functions in a module using module attributes. We can also use module attributes to provide access to outside variables. This isn't very common, and should not be overused, but it's a useful trick to be aware of.
+
+```elixir
+name = "Jon"
+
+defmodule Greeter do
+  @name name
+  def hello do
+    "Hello #{@name}!"
+  end
+end
+
+Greeter.hello()
+```
+
+## Multiple Function Clauses
+
+Elixir allows us to define multiple functions with the same name but that expect different parameters.
+
+```elixir
+defmodule Greeter do
+  def hi(name1, name2) do
+    "hi #{name1}, hi #{name2}"
+  end
+
+  def hi(name) do
+    "hi #{name}"
+  end
+end
+
+Greeter.hi("Peter Parker", "Mary Jane")
+```
+
+Each function clause has a different **arity**. We can treat each function with a different arity as a completely separate function.
+
+So above we have a `Greeter.hi/1` function, and a `Greeter.hi/2` function.
+
+<!-- livebook:{"break_markdown":true} -->
+
+### Your Turn
+
+Create a `Math` module with `add/2` and `add/3` functions. Each should add all of its parameters
+together.
+
+<!-- livebook:{"force_markdown":true} -->
+
+```elixir
+Math.add(2, 5) # 7
+Math.add(1, 2, 3) # 6
+```
+
+<details style="background-color: lightgreen; padding: 1rem; margin: 1rem 0;">
+<summary>Example solution</summary>
+
+```elixir
+defmodule Math do
+  def add(int1, int2, int3) do
+    int1 + int2 + int3
+  end
+
+  def add(int1, int2) do
+    int1 + int2
+  end
+end
+```
+
+</details>
+
+```elixir
+
+```
+
+## Default Arguments
+
+You can provide default arguments to functions using the `\\` syntax after the parameter
+ and then the default value.
+
+```elixir
+defmodule Greeter do
+  def greet(name, greeting \\ "Hello") do
+    "#{greeting} #{name}!"
+  end
+end
+
+Greeter.greet("Peter")
+```
+
+Then if desired, you can override the default value.
+
+```elixir
+defmodule Greeter do
+  def greet(name, greeting \\ "Hello") do
+    "#{greeting} #{name}!"
+  end
+end
+
+Greeter.greet("Peter", "Hi")
+```
+
+Multiple parameters can have default values.
+
+```elixir
+defmodule Greeter do
+  def greet(name \\ "Peter", greeting \\ "Hello") do
+    "#{greeting} #{name}!"
+  end
+end
+
+Greeter.greet()
+```
+
+You can even have a default for the first of multiple parameters. Elixir
+is smart enough to handle that!
+
+```elixir
+defmodule Greeter do
+  def greet(name \\ "Peter", greeting) do
+    "#{greeting} #{name}!"
+  end
+end
+
+Greeter.greet("HI")
+```
+
+This sometimes results in some confusion with the function's arity, and the number of arguments passed into the function. For example, the `Greeter.greet/2` function above has an arity of `2`, despite only being called with fewer than two arguments.
+
+<!-- livebook:{"break_markdown":true} -->
+
+### Your Turn
+
+In the Elixir cell below, define a module with a function that uses a default argument.
+
+```elixir
+
+```
+
+## Documentation
+
+We can document modules using `@doc` and `@moduledoc` module attributes with a multiline string.
+
+`@moduledoc` should describe the module at a high level. `@doc` should document a single function in the module.
+
+```elixir
+defmodule Greeter do
+  @moduledoc """
+  Greeter
+
+  Return common greetings.
+  """
+
+  @doc """
+  Returns a personalized greeting for one person.
+  """
+  def greet(name) do
+    "Hello #{name}!"
+  end
+
+  @doc """
+  Returns a personalized greeting for two people.
+  """
+  def greet(name1, name2) do
+    "Hello #{name1}! Hello #{name2}!"
+  end
+end
+```
+
+Sometimes documentation will include examples of how the code should behave. This is usually kept in an examples section.
+
+We use `iex>` to declare that the code example should be executable. This represents the [IEx Shell](./iex.livemd) which we will learn more about in a future lesson.
+
+```elixir
+defmodule Greeter do
+  @moduledoc """
+  Greeter
+
+  Return common greetings.
+  """
+
+  @doc """
+  Returns a personalized greeting for one person.
+
+  ## Examples
+
+    iex> Greeter.greet("Bill")
+    "Hello Bill!"
+  """
+  def greet(name) do
+    "Hello #{name}!"
+  end
+
+  @doc """
+  Returns a personalized greeting for two people.
+
+    ## Examples
+
+    iex> Greeter.greet("Bill", "Jon")
+    "Hello Bill! Hello Jon!"
+  """
+  def greet(name1, name2) do
+    "Hello #{name1}! Hello #{name2}!"
+  end
+end
+```
+
+Livebook automatically executes these examples to ensure they work as documented. You will start to see these used in course exercises.
+
+<!-- livebook:{"break_markdown":true} -->
+
+### Your Turn
+
+Use `@doc` and `@moduledoc` to document the `Math` module you previously created in this lesson.
+
+## Commit Your Progress
+
+Run the following in your command line from the curriculum folder to track and save your progress in a Git commit.
+Ensure that you do not already have undesired or unrelated changes by running `git status` or by checking the source control tab in Visual Studio Code.
+
+```
+$ git checkout main
+$ git checkout -b exercise-modules
+$ git add .
+$ git commit -m "finish modules section"
+$ git push origin exercise-modules
+```
+
+Create a pull request to your forked `main` branch. Please do not create a pull request to the DockYard Academy repository as this will spam our PR tracker.
+
+**DockYard Academy Students Only:**
+
+Notify your teacher by including `@BrooklinJazz` in your PR description to get feedback.
+
+If you are interested in joining the next academy cohort, [sign up here](https://academy.dockyard.com/) to receive more news when it is available.
+
+## Up Next
+
+| Previous                                                       | Next                                 |
+| -------------------------------------------------------------- | -----------------------------------: |
+| [Rock Paper Scissors](../exercises/rock_paper_scissors.livemd) | [Structs](../reading/structs.livemd) |
+

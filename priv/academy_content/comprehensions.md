@@ -1,0 +1,398 @@
+%{
+  title: "Comprehensions"
+}
+---
+# Comprehensions
+
+```elixir
+Mix.install([
+  {:kino, "~> 0.7.0", override: true},
+  {:youtube, github: "brooklinjazz/youtube"},
+  {:hidden_cell, github: "brooklinjazz/hidden_cell"}
+])
+```
+
+## Navigation
+
+[Return Home](../start.livemd)<span style="padding: 0 30px"></span>
+[Report An Issue](https://github.com/DockYard-Academy/beta_curriculum/issues/new?assignees=&labels=&template=issue.md&title=)
+
+## Setup
+
+Ensure you type the `ea` keyboard shortcut to evaluate all Elixir cells before starting. Alternatively you can evaluate the Elixir cells as you read.
+
+## Comprehensions
+
+Let's try to comprehend comprehensions..sorry 🤦‍♂️.
+
+But in all seriousness, you might mistake a comprehension for a **for loop** if you're coming from another programming language. This is not the case! Notice below that the comprehension returns a list.
+
+```elixir
+for each <- 1..100 do
+  each * 2
+end
+```
+
+Since the comprehension has a return value, it can be bound to a variable and used elsewhere.
+
+```elixir
+my_comprehension =
+  for each <- 1..10 do
+    each * 2
+  end
+
+List.to_tuple(my_comprehension)
+```
+
+A comprehension can even be piped into another function.
+
+```elixir
+for each <- 1..10 do
+  each * 2
+end
+|> List.to_tuple()
+```
+
+In an OOP language without immutability, it's common to use
+for loops to mutate some variable. We don't do that in Elixir! Notice below that `sum` is still 0.
+
+```elixir
+sum = 0
+
+for each <- 1..100 do
+  sum = sum + each
+  sum
+end
+
+sum
+```
+
+So what are comprehensions for? Currently, we can accomplish the same behavior with the [Enum](https://hexdocs.pm/elixir/Enum.html) module.
+
+```elixir
+Enum.map(1..100, fn each -> each * 2 end)
+```
+
+A comprehension is syntax sugar. That means that while it may look cleaner, it does not
+provide any additional behavior. The [Enum](https://hexdocs.pm/elixir/Enum.html) module and comprehensions can accomplish the same behavior.
+
+A comprehension is broken down into three parts: **generators**, **filters**, and **collectables**.
+
+## Generators
+
+In the following example, the generator is `n <- 1..100` which defines the collection to enumerate over.
+
+```elixir
+for n <- 1..100 do
+  n
+end
+```
+
+We can also use pattern matching in the generator to ignore non-matching values.
+
+```elixir
+for {:keep, value} <- [keep: 1, keep: 2, filter: 1, filter: 3] do
+  value
+end
+```
+
+Here's where comprehensions get cool and stop looking like loops. You can use multiple comma-separated
+generators in a single comprehension.
+
+The comprehension treats each additional generator like a nested loop. For each element in the first loop, it will enumerate through every element in the second loop.
+
+```elixir
+for a <- 1..3, b <- 4..6 do
+  {a, b}
+end
+```
+
+```mermaid
+flowchart
+  subgraph D[generator 2]
+    4a[4]
+    5a[5]
+    6a[6]
+  end
+  subgraph C[generator 2]
+    4b[4]
+    5b[5]
+    6b[6]
+  end
+  subgraph B[generator 2]
+    4c[4]
+    5c[5]
+    6c[6]
+  end
+  subgraph A[generator 1]
+    1 --> B
+    2 --> C
+    3 --> D
+  end
+
+```
+
+<!-- livebook:{"break_markdown":true} -->
+
+We can even use elements from one generator in the next generator.
+
+```elixir
+for a <- 1..3, b <- a..0 do
+  {a, b}
+end
+```
+
+```mermaid
+flowchart
+  subgraph D[generator 2]
+    1a[1]
+    0a[0]
+  end
+  subgraph C[generator 2]
+    2b[2]
+    1b[1]
+    0b[0]
+  end
+  subgraph B[generator 2]
+    3c[3]
+    2c[2]
+    1c[1]
+    0c[0]
+  end
+  subgraph A[generator 1]
+    1 --> D
+    2 --> C
+    3 --> B
+  end
+
+```
+
+<!-- livebook:{"break_markdown":true} -->
+
+There's no real limit to the number of generators that you can use, but
+each generator creates another nested loop and therefore has a significant performance impact.
+
+<!-- livebook:{"break_markdown":true} -->
+
+### Your Turn
+
+In the Elixir cell below, use a comprehension to create a list of even integers from `2` to `100`.
+
+```elixir
+
+```
+
+## Filters
+
+We can use **filters** in a comprehension to filter out elements from the generator.
+For example, we could omit all values not divisible by 3.
+
+The comprehension will filter out all values that do not return `true` for the filter function.
+
+```elixir
+for n <- 1..100, rem(n, 3) === 0 do
+  n
+end
+```
+
+We can use multiple comma-separated filters.
+
+```elixir
+for a <- 1..100, rem(a, 3) === 0, rem(a, 5) === 0 do
+  a
+end
+```
+
+We can also use multiple comma-separated filters and generators. Filters and generators can go in any order.
+However, it's likely more clear to group filters together after the generators.
+
+```elixir
+for a <- 1..45, b <- 1..5, rem(a, 5) === 0, rem(b, 5) === 0 do
+  [a, b]
+end
+```
+
+That said, you can put the generators and filters in alternating order.
+
+```elixir
+for a <- 1..45, rem(a, 5) === 0, b <- 1..5, rem(b, 5) === 0 do
+  [a, b]
+end
+```
+
+The generators must go in the order you want to nest them, otherwise, you change the behavior. The filters
+must also go after any generator whose variable they rely on. For example, `b` has not yet been
+defined here.
+
+```elixir
+for a <- 1..45, rem(a, 5) === 0, rem(b, 5) === 0, b <- 1..5 do
+  [a, b]
+end
+```
+
+### Your Turn
+
+In the Elixir cell below, create a comprehension with a filter that generates every combination
+of 2 numbers up to 6 that equal 7.
+
+```mermaid
+flowchart
+1 --- 6
+2 --- 5
+3 --- 4
+4b[4] --- 3b[3]
+5b[5] --- 2b[2]
+6b[6] --- 1b[1]
+```
+
+<!-- livebook:{"break_markdown":true} -->
+
+<!-- livebook:{"force_markdown":true} -->
+
+```elixir
+[{1, 6}, {2, 5}, {3, 4}, {4, 3}, {5, 2}, {6, 1}]
+```
+
+```elixir
+
+```
+
+## Collectables
+
+By default, the comprehension returns a list. However, we can accumulate the elements into any value
+with the `:into` option. Into works with any collection that you're used to using with the [Enum](https://hexdocs.pm/elixir/Enum.html)
+module.
+
+<!-- livebook:{"break_markdown":true} -->
+
+Even without the `:into` option, we can create a comprehension that returns a keyword list by
+using tuples with an atom as the first element and any value as the second element.
+
+```elixir
+for n <- 1..5 do
+  {:"key_#{n}", n}
+end
+```
+
+Now, since both maps and keyword lists are key-value tuples underneath, we can specify the `:into`
+option to instead return a map.
+
+```elixir
+for n <- 1..5, into: %{} do
+  {:"key_#{n}", n}
+end
+```
+
+This map could have default values.
+
+```elixir
+for n <- 1..5, into: %{default: "hello!"} do
+  {:"key_#{n}", n}
+end
+```
+
+And instead of a map, it can be any data type that implements the [Collectable](https://hexdocs.pm/elixir/Collectable.html)
+protocol.
+
+This includes strings!
+
+```elixir
+for n <- 1..10, do: "#{n}", into: ""
+```
+
+### Your Turn
+
+In the Elixir cell below, create a comprehension that returns a map of letters `abcd` and their
+code points.
+
+<!-- livebook:{"force_markdown":true} -->
+
+```elixir
+%{"a" => 97, "b" => 98, "c" => 99, "d" => 100}
+```
+
+<details style="background-color: burlywood; padding: 1rem; margin: 1rem 0;">
+<summary>Hint</summary>
+You can use <code>:binary.first/1</code> to convert a variable bound to a string to a codepoint.
+</details>
+
+```elixir
+
+```
+
+## Why Use A Comprehension?
+
+[Enum.map/2](https://hexdocs.pm/elixir/Enum.html#map/2), [Enum.reduce/2](https://hexdocs.pm/elixir/Enum.html#reduce/2), and [Enum.filter/2](https://hexdocs.pm/elixir/Enum.html#filter/2) can accomplish all of the same functionality as a comprehension. In general, the [Enum](https://hexdocs.pm/elixir/Enum.html) is more broadly used than comprehensions.
+
+Consider using comprehensions as a refactoring tool to improve the clarity of your code. They are particularely useful for building and generating collections of data. It's typically non-idiomatic to use a comprehension when the [Enum](https://hexdocs.pm/elixir/Enum.html) module would work instead.
+
+Avoid over relying on comprehensions, especially if you're from an Object Oriented Programming background and feel tempted to use comprehensions because they feel like for loops. Comprehensions are not for loops! Instead, consider using comprehensions to refactor and improve your code after you've already written it.
+
+### Your Turn
+
+In the Elixir cell below, convert the following `Enum.map` into a comprehension.
+
+<!-- livebook:{"force_markdown":true} -->
+
+```elixir
+Enum.map(1..5, fn each -> each * 2 end)
+[2, 4, 6, 8, 10]
+```
+
+```elixir
+
+```
+
+In the Elixir cell below, convert the following `Enum.reduce` into a comprehension.
+
+<!-- livebook:{"force_markdown":true} -->
+
+```elixir
+Enum.reduce(["a", "b", "c"], fn each, acc -> acc <> each end)
+"abc"
+```
+
+```elixir
+
+```
+
+In the Elixir cell below, convert the following nested `Enum.map` into a comprehension.
+
+<!-- livebook:{"force_markdown":true} -->
+
+```elixir
+Enum.map(1..3, fn a -> Enum.map(1..3, fn b -> {a, b} end) end)
+[[{1, 1}, {1, 2}, {1, 3}], [{2, 1}, {2, 2}, {2, 3}], [{3, 1}, {3, 2}, {3, 3}]]
+```
+
+```elixir
+
+```
+
+## Commit Your Progress
+
+Run the following in your command line from the curriculum folder to track and save your progress in a Git commit.
+Ensure that you do not already have undesired or unrelated changes by running `git status` or by checking the source control tab in Visual Studio Code.
+
+```
+$ git checkout main
+$ git checkout -b exercise-comprehensions
+$ git add .
+$ git commit -m "finish comprehensions section"
+$ git push origin exercise-comprehensions
+```
+
+Create a pull request to your forked `main` branch. Please do not create a pull request to the DockYard Academy repository as this will spam our PR tracker.
+
+**DockYard Academy Students Only:**
+
+Notify your teacher by including `@BrooklinJazz` in your PR description to get feedback.
+
+If you are interested in joining the next academy cohort, [sign up here](https://academy.dockyard.com/) to receive more news when it is available.
+
+## Up Next
+
+| Previous                                             | Next                                         |
+| ---------------------------------------------------- | -------------------------------------------: |
+| [Non Enumerables](../reading/non_enumerables.livemd) | [Palindrome](../exercises/palindrome.livemd) |
+
