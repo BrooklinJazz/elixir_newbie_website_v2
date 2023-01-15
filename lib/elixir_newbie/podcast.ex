@@ -5,6 +5,7 @@ defmodule ElixirNewbie.Podcast do
 
   alias ElixirNewbie.Podcast.PodcastEpisode
   alias ElixirNewbie.Podcast.PodcastAPI
+  alias ElixirNewbie.Podcast.Formatter
 
   @doc """
   List all podcast episodes as PodcastEpisode structs.
@@ -14,6 +15,7 @@ defmodule ElixirNewbie.Podcast do
       [%ElixirNewbie.PodcastEpisode{}, ...]
   """
   defdelegate all_episodes, to: PodcastAPI
+  defdelegate to_hh_mm_ss(seconds), to: Formatter
 
   @spec latest_episode() :: PodcastEpisode.t()
   def latest_episode, do: hd(all_episodes())

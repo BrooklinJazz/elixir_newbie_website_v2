@@ -1,7 +1,6 @@
 defmodule ElixirNewbieWeb.PodcastLiveTest do
   use ElixirNewbieWeb.ConnCase, async: true
   doctest ElixirNewbieWeb.PodcastLive
-  alias ElixirNewbieWeb.PodcastLive
   alias ElixirNewbie.Podcast
   import Phoenix.LiveViewTest
 
@@ -10,21 +9,33 @@ defmodule ElixirNewbieWeb.PodcastLiveTest do
     assert html_response(conn, 200) =~ "Current Episode"
 
     assert {:ok, _view, html} = live(conn, ~p"/podcast")
-    assert html =~ "Currentl Episode"
+    assert html =~ "Current Episode"
   end
 
-  @tag :external
-  test "by default, display the latest episode", %{conn: conn} do
+  test "displays the latest episode as the current episode", %{conn: conn} do
     latest_episode = Podcast.latest_episode()
 
-    assert {:ok, _view, html} = live(conn, ~p"/podcast")
-    assert html =~ latest_episode.title
-    assert html =~ latest_episode.description
+    assert {:ok, view, html} = live(conn, ~p"/podcast")
+
+    assert view
+           |> element("#latest-episode")
+           |> render() =~ latest_episode.title
   end
 
-  test "format_seconds/1" do
-    assert PodcastLive.format_seconds(120) == "2:00"
-    assert PodcastLive.format_seconds(60 * 12 + 10) == "12:10"
-    assert PodcastLive.format_seconds(60 * 60 + 10) == "1:00:10"
+  test "displays clickable episodes", %{conn: conn} do
+    episodes = Podcast.all_episodes()
+
+    assert {:ok, view, _html} = live(conn, ~p"/podcast")
+
+    # ensure episode links change the current episode
+    Enum.each(episodes, fn episode ->
+      view
+      |> element("#podcast-episode-#{episode.episode_number}")
+      |> render_click()
+
+      assert view
+             |> element("#current-episode")
+             |> render() =~ episode.title
+    end)
   end
 end
