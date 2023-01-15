@@ -42,7 +42,6 @@ defmodule ElixirNewbieWeb.PodcastLive do
         <h2 class="mt-2 text-xl"><%=@current_episode.title %></h2>
         <article class="mt-auto">
           <.audio_player src={@current_episode.audio_url} />
-
           <%= if @prev do %>
             <.link patch={~p"/podcast?episode=#{@prev}"}>Prev</.link>
           <% end %>
