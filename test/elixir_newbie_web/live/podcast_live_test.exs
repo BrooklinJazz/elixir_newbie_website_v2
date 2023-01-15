@@ -18,7 +18,7 @@ defmodule ElixirNewbieWeb.PodcastLiveTest do
     assert {:ok, view, html} = live(conn, ~p"/podcast")
 
     assert view
-           |> element("#latest-episode")
+           |> element("#current-episode")
            |> render() =~ latest_episode.title
   end
 
