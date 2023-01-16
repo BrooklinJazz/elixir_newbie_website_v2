@@ -5,17 +5,18 @@ defmodule ElixirNewbieWeb.ResourcesLive do
     ~H"""
     <section class="text-white">
       <p>Resources</p>
-
       <%= for post <- @posts do %>
         <div class="markdown">
         <%= raw post.body %>
         </div>
       <% end %>
+      </ul>
     </section>
     """
   end
 
   def mount(_params, _session, socket) do
-    {:ok, assign(socket, [posts: ElixirNewbie.Blog.all_posts])}
+    lessons = ElixirNewbie.AcademyContent.all_lessons()
+    {:ok, assign(socket, lessons: lessons)}
   end
 end

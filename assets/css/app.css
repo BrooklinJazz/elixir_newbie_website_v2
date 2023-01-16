@@ -7,8 +7,39 @@
 @import "./global.css";
 
 /* This file is for your main application CSS */
-/* Attempt to apply h1 & h2 styles to h1 & h2 elements 
+html {
+    background: url(images/background-smoke_reduced.webp) no-repeat center center fixed;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+}
 
-*/
-/* Attempt to use livebooks markdown.css file */
-/* Markdown rendered content */
+.podcast-description>p>a {
+    color: lightblue;
+    text-decoration: underline;
+}
+
+.link-underline {
+    border-bottom-width: 0;
+    background-image: linear-gradient(transparent, transparent),
+        linear-gradient(#fff, #fff);
+    background-size: 0 3px;
+    background-position: 0 100%;
+    background-repeat: no-repeat;
+    transition: background-size 0.3s ease-in-out;
+}
+
+.link-underline-black {
+    background-image: linear-gradient(transparent, transparent),
+        linear-gradient(black, black);
+}
+
+.link-underline:hover {
+    background-size: 100% 3px;
+    background-position: 0 100%;
+}
+
+.makeup .hll {
+    background-color: #ffffcc
+}

@@ -32,6 +32,7 @@ defmodule ElixirNewbie.MixProject do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
+      # Phoenix Deps
       {:phoenix, "~> 1.7.0-rc.0", override: true},
       {:phoenix_ecto, "~> 4.4"},
       {:ecto_sql, "~> 3.6"},
@@ -51,9 +52,14 @@ defmodule ElixirNewbie.MixProject do
       {:gettext, "~> 0.20"},
       {:jason, "~> 1.2"},
       {:plug_cowboy, "~> 2.5"},
+      # Project Deps
       {:tailwind_formatter, "~> 0.3.1", only: :dev, runtime: false},
       {:nimble_publisher, "~> 0.1.3"},
       {:makeup_elixir, ">= 0.16.0"},
+      {:elixir_feed_parser, "~> 2.1"},
+      {:httpoison, "~> 1.8"},
+      {:dialyxir, "~> 1.2", only: [:dev], runtime: false},
+      {:credo, "~> 1.6", only: [:dev, :test], runtime: false}
     ]
   end
 
