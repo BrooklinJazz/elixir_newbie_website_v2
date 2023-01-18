@@ -34,10 +34,10 @@ defmodule ElixirNewbieWeb.PodcastLiveTest do
     assert {:ok, view, _html} = live(conn, ~p"/podcast")
 
     assert view |> element("#player-forward") |> render_click()
-    assert assert_push_event view, "forward", %{}
+    assert assert_push_event(view, "forward", %{})
 
     assert view |> element("#player-backward") |> render_click()
-    assert assert_push_event view, "backward", %{}
+    assert assert_push_event(view, "backward", %{})
   end
 
   test "time-update", %{conn: conn} do
@@ -51,10 +51,13 @@ defmodule ElixirNewbieWeb.PodcastLiveTest do
     assert {:ok, view, _html} = live(conn, ~p"/podcast")
     assert view |> has_element?("#player-volume")
 
-    assert render_hook(view, "set-volume", %{volume: 1})
+    assert render_hook(view, "set-volume", %{volume: "1"})
     assert view |> has_element?("#player-speaker-wave")
 
-    assert render_hook(view, "set-volume", %{volume: 0})
+    assert render_hook(view, "set-volume", %{volume: "0.5"})
+    assert view |> has_element?("#player-speaker-wave")
+
+    assert render_hook(view, "set-volume", %{volume: "0"})
     assert view |> has_element?("#player-speaker-x-mark")
   end
 
