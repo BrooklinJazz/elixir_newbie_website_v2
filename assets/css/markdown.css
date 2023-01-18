@@ -1,5 +1,3 @@
-
-
 .markdown h1 {
     @apply mb-3 text-4xl;
 }
@@ -10,16 +8,20 @@
 
 .markdown h3 {
     @apply mb-3 text-2xl;
-   }
-   
-/* .mermaid {
-    border-style: solid
 }
-*/
+
+.markdown pre {
+    @apply flex overflow-hidden;
+}
+
+.markdown pre>code {
+    @apply text-4xl;
+    /* bg-editor text-editor font-editor; */
+}
 
 .markdown a {
     @apply underline;
-    @apply mt-6; /* not working as expected */
+    @apply mt-6;
 }
 
 .markdown li {
@@ -31,6 +33,7 @@
 .markdown p {
     @apply mb-10;
 }
+
 /* 
 Inter - 600×
 Family
