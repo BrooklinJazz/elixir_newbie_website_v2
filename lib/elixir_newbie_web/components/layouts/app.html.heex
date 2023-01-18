@@ -1,45 +1,16 @@
-<header class="px-4 sm:px-6 lg:px-8 text-white">
-  <div class="flex items-center justify-between py-3">
-    <div class={[
-      "flex items-center gap-4 hidden sm:block",
-      "transition duration-300 ease-in-out hover:scale-110"
-    ]}>
-      <.link navigate={~p"/"}>
-        <img
-          alt="Elixir Newbie Home Button"
-          class="h-12"
-          src="/images/elixir_newbie_logo_flat.webp"
-        />
-      </.link>
-    </div>
-    <div class="w-full sm:w-fit flex justify-between sm:gap-12 text-2xl">
-      <.link class="sm:hidden opacity-80 hover:opacity-100" navigate={~p"/"}>Home</.link>
-      <.link class="link-underline opacity-80 hover:opacity-100" navigate={~p"/blog"}>Blog</.link>
-      <.link class="link-underline opacity-80 hover:opacity-100" navigate={~p"/podcast"}>
-        Podcast
-      </.link>
-      <.link class="link-underline opacity-80 hover:opacity-100" navigate={~p"/resources"}>
-        Resources
-      </.link>
-    </div>
-  </div>
-  <hr class="h-1 w-full border-0 opacity-70 bg-gradient-to-r from-transparent via-orange-500  to-transparent animate-gradient-x" />
-</header>
-<main class="px-4 pt-12 sm:px-6 lg:px-8">
-  <div class="mx-auto sm:w-full md:w-3/4 lg:w-full xl:w-3/4">
-    <.flash kind={:info} title="Success!" flash={@flash} />
-    <.flash kind={:error} title="Error!" flash={@flash} />
-    <.flash
-      id="disconnected"
-      kind={:error}
-      title="We can't find the internet"
-      close={false}
-      autoshow={false}
-      phx-disconnected={show("#disconnected")}
-      phx-connected={hide("#disconnected")}
-    >
-      Attempting to reconnect <Heroicons.arrow_path class="ml-1 w-3 h-3 inline animate-spin" />
-    </.flash>
+<main class="min-h-screen">
+  <.flash kind={:info} title="Success!" flash={@flash} />
+  <.flash kind={:error} title="Error!" flash={@flash} />
+  <.flash
+    id="disconnected"
+    kind={:error}
+    title="We can't find the internet"
+    close={false}
+    autoshow={false}
+    phx-disconnected={show("#disconnected")}
+    phx-connected={hide("#disconnected")}
+  >
+    Attempting to reconnect <Heroicons.arrow_path class="ml-1 w-3 h-3 inline animate-spin" />
+  </.flash>
     <%= @inner_content %>
-  </div>
 </main>
