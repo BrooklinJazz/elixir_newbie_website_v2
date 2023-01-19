@@ -3,7 +3,9 @@ defmodule ElixirNewbieWeb.ResourcesLive do
 
   def render(assigns) do
     ~H"""
-    <section class="text-white">
+    <section class="text-white bg-[url('/images/background-smoke-transparent.webp')] min-h-screen bg-black bg-no-repeat">
+        <.navigation />
+        <section class="w-2/3 mx-auto">
         <div class="flex justify-center">
           <!-- Jumbotron -->
           <div class="mb-8 rounded-lg bg-gray-900 p-6 text-white opacity-80">
@@ -18,11 +20,12 @@ defmodule ElixirNewbieWeb.ResourcesLive do
           <!-- Jumbotron -->
         </div>
 
-      <%= for lesson <- @lessons do %>
-        <div class="markdown">
-          <%= raw lesson.body %>
-        </div>
-      <% end %>
+        <%= for lesson <- @lessons do %>
+          <div class="markdown">
+            <%= raw lesson.body %>
+          </div>
+        <% end %>
+      </section>
     </section>
     """
   end
