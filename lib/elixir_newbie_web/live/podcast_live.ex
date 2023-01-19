@@ -31,7 +31,7 @@ defmodule ElixirNewbieWeb.PodcastLive do
   end
 
   @impl true
-  def handle_params(params, _session, socket) do
+  def handle_params(_params, _session, socket) do
     episode = Podcast.latest_episode()
 
     {:noreply,
@@ -173,8 +173,8 @@ defmodule ElixirNewbieWeb.PodcastLive do
   def handle_event("set-volume", %{"volume" => volume}, socket) do
     volume =
       case Float.parse(volume) do
-        {volume, _} -> volume
         {:error, _} -> 0
+        {volume, _} -> volume
       end
 
     {:noreply, socket |> assign(:volume, volume) |> push_event("set-volume", %{volume: volume})}
