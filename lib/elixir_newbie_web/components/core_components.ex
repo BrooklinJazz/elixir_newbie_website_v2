@@ -19,7 +19,7 @@ defmodule ElixirNewbieWeb.CoreComponents do
   """
   def navigation(assigns) do
     ~H"""
-    <header class="px-4 sm:px-6 lg:px-8 text-white mb-6">
+    <header class="mb-6 px-4 text-white sm:px-6 lg:px-8">
       <div class="flex items-center justify-between py-3">
         <div class={[
           "flex items-center gap-4 hidden sm:block",
@@ -33,8 +33,8 @@ defmodule ElixirNewbieWeb.CoreComponents do
             />
           </.link>
         </div>
-        <div class="w-full sm:w-fit flex justify-between sm:gap-12 text-2xl">
-          <.link class="sm:hidden opacity-80 hover:opacity-100" navigate={"/"}>Home</.link>
+        <div class="flex w-full justify-between text-2xl sm:w-fit sm:gap-12">
+          <.link class="opacity-80 hover:opacity-100 sm:hidden" navigate={"/"}>Home</.link>
           <.link class="link-underline opacity-80 hover:opacity-100" navigate={"/blog"}>Blog</.link>
           <.link class="link-underline opacity-80 hover:opacity-100" navigate={"/podcast"}>
             Podcast
@@ -44,7 +44,7 @@ defmodule ElixirNewbieWeb.CoreComponents do
           </.link>
         </div>
       </div>
-      <hr class="h-1 w-full border-0 opacity-70 bg-gradient-to-r from-transparent via-orange-500  to-transparent animate-gradient-x" />
+      <hr class="animate-gradient-x h-1 w-full border-0 bg-gradient-to-r from-transparent via-orange-500 to-transparent opacity-70" />
     </header>
     """
   end
