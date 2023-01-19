@@ -47,68 +47,64 @@ defmodule ElixirNewbieWeb.PodcastLive do
   @impl true
   def render(assigns) do
     ~H"""
-    <section class="bg-[url('/images/podcast_background10.png')] bg-top min-h-screen bg-black bg-no-repeat bg-contain pb-96">
+    <section class="bg-[url('/images/podcast_background.webp')] bg-top min-h-screen bg-black bg-no-repeat bg-contain pb-96">
       <.navigation/>
       <section class="text-white w-full">
         <h1 class="text-center text-2xl mb-4"><%= @current_episode.title %></h1>
-        <article class="flex items-center justify-center space-x-12">
-          <figure class="aspect-square w-1/4">
-            <img class="rounded-full  border-t-4 border-l-4 border-white" src="images/podcast_brooklin.png"/>
+        <article class="flex items-center justify-center sm:space-x-12">
+          <figure class="aspect-square lg:w-1/4 sm:w-1/3  hidden sm:block">
+            <img class="rounded-full  border-t-4 border-l-4 border-white" src="images/podcast_brooklin.webp" alt="Picture resembling Brooklin Myers as a Wizard"/>
           </figure>
-          <figure class="w-1/4">
+          <figure class="lg:w-1/4 sm:w-2/5 w-3/4">
             <p>Elixir Newbie is a podcast dedicated to helping and encouraging new and transitioning developers to adopt Elixir.</p>
             <hr class="my-4"/>
             Brooklin Myers and Co-host Jon Valdivia speak with guests from the industry. You'll learn something new, and have fun too.
           </figure>
-          <%!-- <figure class="aspect-square w-1/4">
-            <img class="rounded-full -scale-x-100" src="images/podcast_brooklin.png"/>
-            <figcaption class="text-center">Jon Valdivia</figcaption>
-          </figure> --%>
         </article>
         <article class="flex justify-center m-6">
-          <div id="player-progress" phx-hook="Progress" class="h-3 w-1/2 bg-gray-100 rounded-xl hover:cursor-pointer">
+          <div id="player-progress" phx-hook="Progress" class="h-3 lg:w-1/2 w-3/4 bg-gray-100 rounded-xl hover:cursor-pointer">
             <div style={"width: #{progress_percent(@playing, @player_time, @current_episode.seconds)}%"} class="bg-gray-400 h-full rounded-l-full" />
           </div>
         </article>
-        <article class="grid grid-cols-12">
+        <article class="grid grid-cols-12 lg:grid-rows-1 md:grid-rows-2">
           <audio class="hidden" src={@current_episode.audio_url} id="player" phx-hook="AudioPlayer" controls>
             Your browser does not support the audio element.
           </audio>
-          <p id="player-time" class="col-start-3 h-12 flex items-center justify-center">
+          <p id="player-time" class="col-start-2 h-12 flex items-center justify-center hidden md:block">
             <%= Formatter.to_hh_mm_ss(@player_time) %>/<%= @current_episode.hh_mm_ss %>
           </p>
-          <a href={@current_episode.audio_url} target="_blank" download class="col-start-4 h-12 flex items-center justify-center"><Heroicons.arrow_down_tray class="h-6 w-6"/></a>
-          <.link class="col-start-5 flex items-center justify-center space-x-2" :if={@prev} patch={~p"/podcast?episode=#{@prev}"} >
-            <p>Ep. <%= @prev %></p>
+          <a href={@current_episode.audio_url} target="_blank" download class="col-start-4 h-12 flex items-center justify-center hidden lg:block" aria-label="Download Podcast Episode"><Heroicons.arrow_down_tray class="h-6 w-6"/></a>
+          <.link aria-label="previous episode" class="lg:col-start-5 md:col-start-4 col-start-2 md:col-span-1 col-span-2 flex items-center justify-center space-x-2" :if={@prev} patch={~p"/podcast?episode=#{@prev}"} >
+            <p class="whitespace-nowrap">Ep. <%= @prev %></p>
             <Heroicons.arrow_left_circle class="h-6" />
           </.link>
-          <article class="col-start-6 col-span-2 flex justify-around">
-            <button phx-click="backward" id="player-backward"><Heroicons.backward class="h-12 w-12"/></button>
-            <button phx-click="play" id="player-play" :if={!@playing}><Heroicons.play class="h-12 w-12" solid/></button>
-            <button phx-click="pause" id="player-pause" :if={@playing}><Heroicons.pause class="h-12 w-12"/></button>
-            <button phx-click="forward" id="player-forward"><Heroicons.forward class="h-12 w-12"/></button>
+          <article class="col-start-6 col-span-2 flex justify-around lg:space-x-0 space-x-4">
+            <button phx-click="backward" id="player-backward" aria-label="skip back 15 seconds" ><Heroicons.backward class="h-12 w-12"/></button>
+            <button phx-click="play" id="player-play" :if={!@playing} aria-label="play"><Heroicons.play class="h-12 w-12" solid/></button>
+            <button phx-click="pause" id="player-pause" :if={@playing} aria-label="pause"><Heroicons.pause class="h-12 w-12"/></button>
+            <button phx-click="forward" id="player-forward" aria-label="forward"><Heroicons.forward class="h-12 w-12"/></button>
           </article>
-          <.link class="col-start-8 flex items-center justify-center space-x-2" :if={@next} patch={~p"/podcast?episode=#{@next}"} >
+          <.link aria-label="next episode" class="lg:col-start-8 md:col-start-9 col-start-10 md:col-span-1 col-span-2 row-start-1 flex items-center justify-center space-x-2" :if={@next} patch={~p"/podcast?episode=#{@next}"} >
             <Heroicons.arrow_right_circle class="h-6" />
-            <p>Ep. <%= @next %></p>
+            <p class="whitespace-nowrap">Ep. <%= @next %></p>
           </.link>
-          <button id="player-playback-rate" phx-click="toggle-speed" class="col-start-9 row-start-1 row-end-1 text-center text-xl"><%= @play_speed %>x</button>
-          <div class="col-start-10 flex items-center justify-center space-x-2">
-            <.form class="flex items-center justify-center space-x-2" phx-change="set-volume" for={:volume}>
-              <Heroicons.speaker_x_mark id="player-speaker-x-mark" :if={@volume == 0} class="h-6 w-6" />
-              <Heroicons.speaker_wave id="player-speaker-wave" :if={@volume > 0} class="h-6 w-6" />
-              <input
-                id="player-volume"
-                phx-change="set-volume"
-                type="range"
-                name="volume"
-                min="0"
-                max="1"
-                step="0.1"
-                value={@volume}
-              />
-            </.form>
-          </div>
+          <button id="player-playback-rate" phx-click="toggle-speed" class="col-start-9 text-center text-xl hidden lg:block"><%= @play_speed %>x</button>
+          <.form class="lg:col-start-10 col-start-11 col-span-2 items-center justify-center space-x-2 hidden md:flex" phx-change="set-volume" for={:volume}>
+            <Heroicons.speaker_x_mark id="player-speaker-x-mark" :if={@volume == 0} class="h-6 w-6" />
+            <Heroicons.speaker_wave id="player-speaker-wave" :if={@volume > 0} class="h-6 w-6" />
+            <input
+              id="player-volume"
+              phx-change="set-volume"
+              type="range"
+              name="volume"
+              min="0"
+              max="1"
+              step="0.1"
+              value={@volume}
+              aria-label="podcast volume control"
+              class="w-2/3"
+            />
+          </.form>
         </article>
       </section>
       <section class="podcast-description mt-12 text-white m-auto w-3/4 bg-purple-500/50 text-white p-6 rounded-xl">
@@ -129,7 +125,7 @@ defmodule ElixirNewbieWeb.PodcastLive do
                 <p><%= episode.title %></p>
                 <p><%= episode.hh_mm_ss %></p>
               </figcaption>
-              <img class="w-full rounded-3xl" alt="Blog" src={"images/wavy_background_cropped_7-1.png"}/>
+              <img class="rounded-3xl aspect-1/5" alt="Blog" src={"images/podcast_episode_background.webp"}/>
             </figure>
           </.link>
         <% end %>
