@@ -3,7 +3,7 @@ defmodule ElixirNewbie.AcademyContent do
 
   use NimblePublisher,
     build: Lesson,
-    from: Application.app_dir(:elixir_newbie, "priv/academy_content/*.md"),
+    from: Application.app_dir(:elixir_newbie, "priv/posts/*.md"),
     as: :lessons,
     highlighters: [:makeup_elixir]
 
