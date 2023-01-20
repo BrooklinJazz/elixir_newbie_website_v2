@@ -11,13 +11,14 @@ defmodule Mix.Tasks.CourseOutline do
     {:ok, %HTTPoison.Response{body: body}} = HTTPoison.get(url)
 
     outline =
-    Regex.replace(~r/\[([^\]]+)\]\(([^\)]+\.livemd)\)/, body, fn _, file_name, file_path ->
-      academy_url = "https://github.com/DockYard-Academy/curriculum/blob/main/#{file_path}"
-      query = %{"url" => academy_url}
-      query_params = URI.encode_query(query)
-      result = "https://livebook.dev/run?" <> query_params
-      "[#{file_name}](#{result})"
-    end)
+      Regex.replace(~r/\[([^\]]+)\]\(([^\)]+\.livemd)\)/, body, fn _, file_name, file_path ->
+        academy_url = "https://github.com/DockYard-Academy/curriculum/blob/main/#{file_path}"
+        query = %{"url" => academy_url}
+        query_params = URI.encode_query(query)
+        result = "https://livebook.dev/run?" <> query_params
+        "[#{file_name}](#{result})"
+      end)
+
     content = """
     %{
       title: "Hello start table of contents",
@@ -25,6 +26,7 @@ defmodule Mix.Tasks.CourseOutline do
     ---
     #{outline}
     """
+
     File.write("priv/posts/course_outline.md", content)
   end
 end
