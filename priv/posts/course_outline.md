@@ -6,16 +6,7 @@
 
 ## Overview
 
-Use the following index to find reading material and exercises for this course.
-
-Some students experience issues displaying mermaid.js diagrams. Here's a sample diagram, which depicts the word "Welcome!" inside a box:
-
-```mermaid
-flowchart
-Welcome!
-```
-
-If you do not see the box above, or if you encounter any issues with this course, please ensure you have correctly followed the [Student Setup Guide](https://github.com/DockYard-Academy/beta_curriculum/wiki/Student-Setup-Guide) or [Report An Issue](https://github.com/DockYard-Academy/beta_curriculum/issues/new?assignees=&labels=&template=issue.md&title=) to receive help.
+Use the following index to find reading material and exercises for this course.  The links below will take you to the livebook site where you can install livebook and interact with the course material.
 
 ## Core Syntax
 
