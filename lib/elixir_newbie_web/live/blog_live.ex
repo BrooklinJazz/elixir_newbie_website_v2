@@ -23,6 +23,18 @@ defmodule ElixirNewbieWeb.BlogLive do
         </article>
         <article class="flex w-full flex-col text-2xl text-white 4k:text-4xl lg:text-2xl">
           <h1>Here, open my scroll. Don’t worry, it has a friendly and approachable tone. Plus it’s searchable...</h1>
+          <.responsive_layout class="mt-1" scroll_id="tags" cols={3} spacing="none" gap="tiny">
+            <%= for tag <- @tags do %>
+              <div phx-click="toggle-tag" phx-value-tag={tag} class={
+                "text-sm font-semibold text-center rounded-xl transition duration-500 ease-in-out ring-2 ring-white hover:ring-offset-2 flex justify-center items-center cursor-pointer
+                #{if tag in @selected_tags do 'ring-purple-600/50 bg-purple-800/70' end}
+                #{if tag not in @selected_tags do 'bg-secondary/[0.3] text-white hover:bg-secondary/[0.5]' end}"}>
+                <span class="inline-block align-middle">
+                  <%= String.replace(tag, "_", " ") %>
+                </span>
+              </div>
+            <% end %>
+          </.responsive_layout>
         </article>
       </section>
     <.responsive_layout class="mt-12" scroll_id="all_blogs" cols={3} spacing="full">
@@ -49,5 +61,24 @@ defmodule ElixirNewbieWeb.BlogLive do
        loading: !connected?(socket),
        search: ""
      )}
+  end
+
+  def handle_event("toggle-tag", %{"tag" => tag}, socket) do
+    %{selected_tags: selected_tags} = socket.assigns
+
+    selected_tags =
+      if tag in selected_tags,
+        do: Enum.reject(selected_tags, &(&1 === tag)),
+        else: [tag | selected_tags]
+
+    {:noreply,
+     socket
+     |> assign(:selected_tags, selected_tags)
+     |> load_blogs()}
+  end
+
+  def load_blogs(socket) do
+    %{search: search, selected_tags: selected_tags} = socket.assigns
+    socket |> assign(:blogs, Blog.all_posts(search: search, selected_tags: selected_tags))
   end
 end
