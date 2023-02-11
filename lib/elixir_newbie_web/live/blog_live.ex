@@ -27,8 +27,7 @@ defmodule ElixirNewbieWeb.BlogLive do
             <%= for tag <- @tags do %>
               <div phx-click="toggle-tag" phx-value-tag={tag} class={
                 "text-sm font-semibold text-center rounded-xl transition duration-500 ease-in-out ring-2 ring-white hover:ring-offset-2 flex justify-center items-center cursor-pointer
-                #{if tag in @selected_tags do 'ring-purple-600/50 bg-purple-800/70' end}
-                #{if tag not in @selected_tags do 'bg-secondary/[0.3] text-white hover:bg-secondary/[0.5]' end}"}>
+                #{if tag in @selected_tags do ' bg-purple-800/70' end}"}>
                 <span class="inline-block align-middle">
                   <%= String.replace(tag, "_", " ") %>
                 </span>
