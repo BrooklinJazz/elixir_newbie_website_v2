@@ -5,6 +5,7 @@ defmodule ElixirNewbieWeb.BlogLive do
   use ElixirNewbieWeb, :live_view
   import ElixirNewbieWeb.Components.BlogCard
   import ElixirNewbieWeb.Components.ResponsiveLayout
+  import ElixirNewbieWeb.Components.Tag
   alias ElixirNewbie.Blog
 
   def render(assigns) do
@@ -25,13 +26,7 @@ defmodule ElixirNewbieWeb.BlogLive do
           <h1>Here, open my scroll. Don’t worry, it has a friendly and approachable tone. Plus it’s searchable...</h1>
           <.responsive_layout class="mt-1" scroll_id="tags" cols={3} spacing="none" gap="tiny">
             <%= for tag <- @tags do %>
-              <div phx-click="toggle-tag" phx-value-tag={tag} class={
-                "text-sm font-semibold text-center rounded-xl transition duration-500 ease-in-out ring-2 ring-white hover:ring-offset-2 flex justify-center items-center cursor-pointer
-                #{if tag in @selected_tags do ' bg-purple-800/70' end}"}>
-                <span class="inline-block align-middle">
-                  <%= String.replace(tag, "_", " ") %>
-                </span>
-              </div>
+              <.tag text={tag} selected={Enum.member?(@selected_tags, tag)}/>
             <% end %>
           </.responsive_layout>
         </article>
