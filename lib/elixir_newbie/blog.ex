@@ -1,23 +1,13 @@
 defmodule ElixirNewbie.Blog do
-  alias ElixirNewbie.Blog.Post
-
-  use NimblePublisher,
-    build: Post,
-    from: Application.app_dir(:elixir_newbie, "priv/posts/blog/**/*.md"),
-    as: :posts,
-    highlighters: [:makeup_elixir, :makeup_erlang]
-
-  @posts Enum.sort_by(@posts, & &1.date, {:desc, Date})
-
-  @tags @posts |> Enum.flat_map(& &1.tags) |> Enum.uniq() |> Enum.sort()
+  alias ElixirNewbie.Blog.BlogParser
 
   defmodule NotFoundError do
     defexception [:message, plug_status: 404]
   end
 
-  def posts_and_drafts, do: @posts
+  def posts_and_drafts, do: BlogParser.posts_and_drafts()
 
-  def all_tags, do: @tags
+  def all_tags, do: BlogParser.all_tags()
 
   def filter_posts(posts, filters \\ []) do
     Enum.reduce(filters, posts, fn
@@ -37,7 +27,6 @@ defmodule ElixirNewbie.Blog do
     end)
     |> remove_drafts()
   end
-
 
   def get_post_by_id!(posts, id) do
     Enum.find(posts, &(&1.id == id)) ||
