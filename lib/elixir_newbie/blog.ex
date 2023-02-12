@@ -15,11 +15,13 @@ defmodule ElixirNewbie.Blog do
     defexception [:message, plug_status: 404]
   end
 
-  defp posts_and_drafts, do: @posts
+  def posts_and_drafts, do: @posts
 
-  def all_posts(filters \\ []) do
-    Enum.reduce(filters, posts_and_drafts(), fn
-      {:search, value}, acc ->
+  def all_tags, do: @tags
+
+  def filter_posts(posts, filters \\ []) do
+    Enum.reduce(filters, posts, fn
+      {:title, value}, acc ->
         Enum.filter(acc, fn post ->
           String.contains?(String.downcase(post.title), String.downcase(value))
         end)
@@ -33,30 +35,22 @@ defmodule ElixirNewbie.Blog do
       _, acc ->
         acc
     end)
-    |> Enum.filter(fn each ->
+    |> remove_drafts()
+  end
+
+
+  def get_post_by_id!(posts, id) do
+    Enum.find(posts, &(&1.id == id)) ||
+    raise NotFoundError, "post with id=#{id} not found"
+  end
+
+  defp remove_drafts(posts) do
+    Enum.filter(posts, fn each ->
       Date.compare(each.date, Date.utc_today()) in [:lt, :eq]
     end)
   end
 
-  def common_in_list?(list_a, list_b) do
+  defp common_in_list?(list_a, list_b) do
     Enum.any?(list_a, fn each -> each in list_b end)
-  end
-
-  def highlighted_posts(amount) do
-    all_posts()
-    |> Enum.take(amount)
-  end
-
-  def highlighted_posts(related_article_id, amount) do
-    all_posts()
-    |> Enum.reject(&(&1.id === related_article_id))
-    |> Enum.take(amount)
-  end
-
-  def all_tags, do: @tags
-
-  def get_post_by_id!(id) do
-    Enum.find(all_posts(), &(&1.id == id)) ||
-      raise NotFoundError, "post with id=#{id} not found"
   end
 end

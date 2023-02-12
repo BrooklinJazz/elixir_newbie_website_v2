@@ -41,7 +41,10 @@ defmodule ElixirNewbieWeb.BlogLive do
   end
 
   def mount(_params, _session, socket) do
-    blogs = Blog.all_posts()
+    blogs =
+      Blog.posts_and_drafts()
+      |> Blog.filter_posts()
+
     tags = Blog.all_tags()
 
     {:ok,
@@ -73,6 +76,9 @@ defmodule ElixirNewbieWeb.BlogLive do
 
   def load_blogs(socket) do
     %{search: search, selected_tags: selected_tags} = socket.assigns
-    socket |> assign(:blogs, Blog.all_posts(search: search, selected_tags: selected_tags))
+    socket |> assign(:blogs,
+      Blog.posts_and_drafts()
+      |> Blog.filter_posts(title: search, selected_tags: selected_tags)
+      )
   end
 end
