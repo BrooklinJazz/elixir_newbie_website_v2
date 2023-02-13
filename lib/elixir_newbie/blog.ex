@@ -30,7 +30,7 @@ defmodule ElixirNewbie.Blog do
 
   def get_post_by_id!(posts, id) do
     Enum.find(posts, &(&1.id == id)) ||
-    raise NotFoundError, "post with id=#{id} not found"
+      raise NotFoundError, "post with id=#{id} not found"
   end
 
   defp remove_drafts(posts) do

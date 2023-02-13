@@ -12,7 +12,7 @@ defmodule ElixirNewbie.BlogTest do
 
     test "filter_posts/1 do not return draft posts" do
       # a draft post is any post ahead the current date
-      draft = create_post([title: "Title", tags: ["tag"], date: ~D[9999-12-31]])
+      draft = create_post(title: "Title", tags: ["tag"], date: ~D[9999-12-31])
 
       posts = [post1, post2, post3] = get_posts()
       posts = [draft | posts]
@@ -41,9 +41,9 @@ defmodule ElixirNewbie.BlogTest do
 
   defp get_posts do
     [
-      create_post([title: "Title", tags: ["tag"], date: ~D[2023-01-10]]),
-      create_post([title: "Title2", tags: ["tag2"], date: ~D[2023-01-11]]),
-      create_post([title: "title2 and more", tags: ["tag2", "tag3"], date: ~D[2023-01-12]])
+      create_post(title: "Title", tags: ["tag"], date: ~D[2023-01-10]),
+      create_post(title: "Title2", tags: ["tag2"], date: ~D[2023-01-11]),
+      create_post(title: "title2 and more", tags: ["tag2", "tag3"], date: ~D[2023-01-12])
     ]
   end
 

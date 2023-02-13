@@ -14,7 +14,7 @@ defmodule ElixirNewbieWeb.BlogLive do
       <.navigation/>
       <section class="flex h-fit w-full flex-col gap-12 4k:gap-36 lg:flex-row xl:gap-24 mx-auto sm:w-full md:w-3/4 lg:w-full xl:w-3/4">
         <div>
-          <article class="grid h-fit w-full grid-cols-5 grid-rows-6 animate-fade-in">
+          <article class="animate-fade-in grid h-fit w-full grid-cols-5 grid-rows-6">
             <article class="aspect-square relative col-start-1 col-end-6 row-start-1 row-end-6 rounded-full border-4 border-white">
               <img
                 class="rounded-full"
@@ -24,19 +24,19 @@ defmodule ElixirNewbieWeb.BlogLive do
             </article>
           </article>
           <div class="grid grid-cols-5 gap-4 px-2">
-            <.form id="search" for={:filter} phx-change="filter" phx-submit="scroll" phx-hook="ScrollOnSubmit" phx-data-value="all_blogs" class="grid h-fit w-full col-span-4" autocomplete="off">
-                <div class="flex items-center px-8 rounded-full text-sm font-semibold text-center rounded-xl transition duration-500 ease-in-out ring-2 ring-white hover:ring-offset-2">
+            <.form id="search" for={:filter} phx-change="filter" phx-submit="scroll" phx-hook="ScrollOnSubmit" phx-data-value="all_blogs" class="col-span-4 grid h-fit w-full" autocomplete="off">
+                <div class="flex items-center rounded-xl rounded-full px-8 text-center text-sm font-semibold ring-2 ring-white transition duration-500 ease-in-out hover:ring-offset-2">
                   <Heroicons.magnifying_glass mini class="h-6 w-6 text-white"/>
-                  <input name="search" id="search-blogs" errors={[]} class="flex-grow w-0 h-8 p-4 py-8 text-white placeholder-gray-400 bg-transparent outline-none focus-within:text-secondary" value={@search}/>
+                  <input name="search" id="search-blogs" errors={[]} class="h-8 w-0 flex-grow bg-transparent p-4 py-8 text-white placeholder-gray-400 outline-none focus-within:text-secondary" value={@search}/>
                   <p class="text-white"><%= length(@blogs) %></p>
                 </div>
             </.form>
-            <.button id="see_results" phx-hook="ScrollOnClick" class="text-center rounded-full cursor-pointer rounded-full text-sm font-semibold text-center rounded-xl transition duration-500 ease-in-out ring-2 ring-white hover:ring-offset-2 bg-transparent hover:bg-transparent" phx-data-value="all_blogs" >
-              <Heroicons.arrow_down class="h-8 w-8 inline"/>
+            <.button id="see_results" phx-hook="ScrollOnClick" class="cursor-pointer rounded-xl rounded-full rounded-full bg-transparent text-center text-center text-sm font-semibold ring-2 ring-white transition duration-500 ease-in-out hover:bg-transparent hover:ring-offset-2" phx-data-value="all_blogs" >
+              <Heroicons.arrow_down class="inline h-8 w-8"/>
             </.button>
           </div>
         </div>
-        <article class="flex w-full flex-col text-2xl text-white 4k:text-4xl lg:text-2xl px-2">
+        <article class="flex w-full flex-col px-2 text-2xl text-white 4k:text-4xl lg:text-2xl">
           <h1>Here, open my scroll. Don’t worry, it has a friendly and approachable tone. Plus it’s searchable...</h1>
           <.responsive_layout class="mt-1" scroll_id="tags" cols={3} spacing="none" gap="tiny">
             <%= for tag <- @tags do %>
@@ -98,9 +98,12 @@ defmodule ElixirNewbieWeb.BlogLive do
 
   def load_blogs(socket) do
     %{search: search, selected_tags: selected_tags} = socket.assigns
-    socket |> assign(:blogs,
+
+    socket
+    |> assign(
+      :blogs,
       Blog.posts_and_drafts()
       |> Blog.filter_posts(title: search, selected_tags: selected_tags)
-      )
+    )
   end
 end
