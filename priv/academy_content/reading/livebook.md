@@ -1,0 +1,298 @@
+%{
+  title: "Livebook"
+}
+---
+# Livebook
+
+```elixir
+Mix.install([
+  {:jason, "~> 1.4"},
+  {:kino, "~> 0.8.0", override: true},
+  {:youtube, github: "brooklinjazz/youtube"},
+  {:hidden_cell, github: "brooklinjazz/hidden_cell"},
+  {:smart_animation, github: "brooklinjazz/smart_animation"}
+])
+```
+
+## Navigation
+
+[Return Home](../start.livemd)<span style="padding: 0 30px"></span>
+[Report An Issue](https://github.com/DockYard-Academy/beta_curriculum/issues/new?assignees=&labels=&template=issue.md&title=)
+
+## Setup
+
+Ensure you type the `ea` keyboard shortcut to evaluate all Elixir cells before starting. Alternatively, you can evaluate the Elixir cells as you read.
+
+## Review Questions
+
+Upon completing this lesson, a student should be able to answer the following questions.
+
+* How do you evaluate LiveBook Elixir cells?
+* How do you format LiveBook Elixir cells?
+* How do you manipulate LiveBook Markdown cells?
+
+## Overview
+
+### LiveBook
+
+Livebook is an interactive and collaborative code notebook for Elixir.
+It's commonly used as a documentation tool, and this is the first course to use it so extensively for teaching Elixir.
+
+Inside these interactive notebooks, we can write formatted content (like you're reading right now) and execute Elixir code.
+
+<!-- livebook:{"break_markdown":true} -->
+
+### Markdown
+
+Markdown is a lightweight markup language that allows you to write
+formatted content using only special symbols. It's like writing a formatted google document with only text.
+
+```markdown
+<!-- headings -->
+# Heading 1
+## Heading 2
+### Heading 3
+#### Heading 4
+
+<!-- font styles -->
+**bold**
+*italic*
+
+<!-- bullet points -->
+1. First item
+2. Second item
+3. Third item
+```
+
+You can view the [Markdown cheat-sheet](https://www.markdownguide.org/cheat-sheet/) for
+an overview of markdown syntax.
+
+Markdown is everywhere! It's even valid input for chat apps like Slack and Discord.
+
+<!-- livebook:{"break_markdown":true} -->
+
+### Cells
+
+Livebooks are split into **cells**. There are **markdown cells** for formatted text, and **elixir cells** for Elixir code. There are also more advanced cells that are beyond the scope of this course.
+
+<!-- livebook:{"break_markdown":true} -->
+
+### Markdown Cells
+
+As you hover and click your cursor <i class="ri-cursor-fill"></i> on a markdown cell. You'll notice each has a <span style="color: rgba(101,131,255,.5)">blue</span> highlight on the left
+and some controls.
+
+You can edit <i class="ri-pencil-line"></i>, move up<i class="ri-arrow-up-s-line"></i>,
+move down <i class="ri-arrow-down-s-line"></i>, and delete <i class="ri-delete-bin-line"></i> cells. You can also upload images <i class="ri-image-add-line"></i>.
+
+While completing interactive reading material and exercises, you generally do not need to use these controls. However, it's useful to be aware of them if you would like to use Livebook in your own time, or to resolve an issue if you accidentally manipulate a Livebook.
+
+Double click on any markdown cell and you'll see the markdown editor for that cell.
+
+<!-- livebook:{"break_markdown":true} -->
+
+### Elixir Cells
+
+Elixir Cells are interactive code blocks that run Elixir code. These cells can be used to test and experiment with Elixir code, and the results of the code execution are displayed directly in the notebook. We'll often use these cells to show examples, and have you complete exercises.
+
+Here you can see an Elixir cell that adds two integers.
+
+```elixir
+2 + 2
+```
+
+You can create an Elixir cell anywhere throughout this course if you want to experiment with some Elixir code. Just be careful not to break existing code examples or affect further examples be rebinding already bound variables.
+
+To create an Elixir cell, hover your cursor between two cells and press the `+Code` button.
+
+Livebook may change this UI, so if this is instruction is no longer accurate please speak to your instructor and/or [Report An Issue](https://github.com/DockYard-Academy/beta_curriculum/issues/new?assignees=&labels=&template=issue.md&title=)
+
+<!-- livebook:{"break_markdown":true} -->
+
+### Your Turn
+
+Create an Elixir code cell below. Run some Elixir code such as `1 + 2` in the cell.
+
+<!-- livebook:{"break_markdown":true} -->
+
+### Livebook Shortcuts
+
+Click on the keyboard shortcuts <i class="ri-keyboard-box-line"></i> icon on the sidebar to view
+available Livebook shortcuts depending on the current mode.
+
+<!-- livebook:{"break_markdown":true} -->
+
+### Navigation Mode Vs Insert Mode
+
+**Navigation mode** is the default mode. If you are editing a Markdown cell or Elixir cell, then you are in **insert mode**.
+
+For example, while in Navigation mode, you can evaluate every Elixir cell in a Livebook notebook by pressing <kbd>e</kbd> and then <kbd>a</kbd>.
+
+<!-- livebook:{"break_markdown":true} -->
+
+### LiveMarkdown
+
+Livebook allows us to create `.livemd` files that power the interactive notebooks that you've read so far! `.livemd` stands for **live markdown**. Livebook persists the notebook information in the `.livemd` file.
+
+You can see the changes made to these files in your git version control. This is often useful if you accidentally deleted part of a lesson or exercise and need to refer to the old version.
+
+## Edit A Markdown Cell
+
+Hover and click on this markdown cell to see the controls. Click the <i class="ri-pencil-line"></i> edit button
+to see the Markdown content inside.
+
+<!-- livebook:{"break_markdown":true} -->
+
+<div style="padding: 1rem;background-color:lightgray; text-align: center;">
+
+### Click Me
+
+</div>
+
+## Evaluate An Elixir Cell
+
+Elixir cells contain Elixir code. You can evaluate the cell to show the result of the code.
+
+Click on an Elixir cell and press the <i class="ri-play-circle-fill"></i> Evaluate button to see the cell's output.
+
+Alternatively, you can press <kbd>CTRL</kbd>+<kbd>Enter</kbd> (Windows & Linux) or <kbd>CMD</kbd>+<kbd>Enter</kbd> (MacOS) while focused on the cell to re-evaluate it.
+
+Evaluate the cell below. You should see `10` because `5 + 5` equals `10`.
+
+```elixir
+5 + 5
+```
+
+In Elixir, the last value will always be the return value
+
+For example, this cell returns `10`, not `5`.
+
+```elixir
+5
+10
+```
+
+As you complete reading material, you're expected to evaluate cells to see their output. Alternatively, you can press `ea` to evaluate every cell in a Livebook.
+
+## Evaluation Order
+
+By default, Elixir cells evaluate in order when you run the `ea` command. Cells above
+automatically evaluate when you evaluate a cell below.
+
+Here are two empty Elixir cells. By default, an empty cell returns `nil`.
+
+```elixir
+
+```
+
+```elixir
+
+```
+
+Evaluate the first cell and notice that the cell below becomes **Stale**.
+
+This means that if the second cell relies on any value in the first cell, it is now outdated.
+
+If you change a cell, **Evaluated** changes to *Evaluated\** to indicate that the cell has changed
+since the last time it was evaluated.
+
+Evaluate the Elixir cell below, then change `5` to `4` to see **Evaluated** change to *Evaluated\**.
+Re-evaluate the cell to see *Evaluated\** change to **Evaluated**.
+
+```elixir
+5
+```
+
+Sometimes order of evaluation can cause issues in Exercises by using a stale version of an Elixir cell. Make sure to evaluate a code cell whenever you make a change.
+
+## Formatting
+
+You can format Elixir code using the <kbd>ALT</kbd>+<kbd>SHIFT</kbd>+<kbd>F</kbd> (Windows & Linux) Keybinding or <kbd>SHIFT</kbd>+<kbd>OPTION</kbd>+<kbd>F</kbd> (MacOS).
+
+Try uncommenting the following code (Remove the `#` character) then press <kbd>ALT</kbd>+<kbd>SHIFT</kbd>+<kbd>F</kbd> (Windows & Linux) or <kbd>SHIFT</kbd>+<kbd>OPTION</kbd>+<kbd>F</kbd> (MacOS) to format the code.
+
+Notice that the `1 + 1` code moves to the left.
+
+```elixir
+#               1 + 1
+```
+
+If you have not evaluated any Elixir code cells, you may see a warning.
+
+> You need to start a runtime (or evaluate a cell) to enable code formatting.
+
+Ensure you evaluate any Elixir cell before attempting to use the code format command.
+
+If you cannot format an Elixir cell, you can use this as a clue that you have a syntax error in your code. For example, the following
+code is invalid. Notice that you cannot use <kbd>ALT</kbd>+<kbd>SHIFT</kbd>+<kbd>F</kbd> to format the code.
+
+```elixir
+          1 +
+```
+
+## Mark As Completed
+
+<!-- livebook:{"attrs":{"source":"file_name = Path.basename(Regex.replace(~r/#.+/, __ENV__.file, \"\"), \".livemd\")\n\nsave_name =\n  case Path.basename(__DIR__) do\n    \"reading\" -> \"livebook_reading\"\n    \"exercises\" -> \"livebook_exercise\"\n  end\n\nprogress_path = __DIR__ <> \"/../progress.json\"\nexisting_progress = File.read!(progress_path) |> Jason.decode!()\n\ndefault = Map.get(existing_progress, save_name, false)\n\nform =\n  Kino.Control.form(\n    [\n      completed: input = Kino.Input.checkbox(\"Mark As Completed\", default: default)\n    ],\n    report_changes: true\n  )\n\nTask.async(fn ->\n  for %{data: %{completed: completed}} <- Kino.Control.stream(form) do\n    File.write!(\n      progress_path,\n      Jason.encode!(Map.put(existing_progress, save_name, completed), pretty: true)\n    )\n  end\nend)\n\nform","title":"Track Your Progress"},"chunks":null,"kind":"Elixir.HiddenCell","livebook_object":"smart_cell"} -->
+
+```elixir
+file_name = Path.basename(Regex.replace(~r/#.+/, __ENV__.file, ""), ".livemd")
+
+save_name =
+  case Path.basename(__DIR__) do
+    "reading" -> "livebook_reading"
+    "exercises" -> "livebook_exercise"
+  end
+
+progress_path = __DIR__ <> "/../progress.json"
+existing_progress = File.read!(progress_path) |> Jason.decode!()
+
+default = Map.get(existing_progress, save_name, false)
+
+form =
+  Kino.Control.form(
+    [
+      completed: input = Kino.Input.checkbox("Mark As Completed", default: default)
+    ],
+    report_changes: true
+  )
+
+Task.async(fn ->
+  for %{data: %{completed: completed}} <- Kino.Control.stream(form) do
+    File.write!(
+      progress_path,
+      Jason.encode!(Map.put(existing_progress, save_name, completed), pretty: true)
+    )
+  end
+end)
+
+form
+```
+
+## Commit Your Progress
+
+Run the following in your command line from the curriculum folder to track and save your progress in a Git commit.
+Ensure that you do not already have undesired or unrelated changes by running `git status` or by checking the source control tab in Visual Studio Code.
+
+```
+$ git checkout -b livebook-reading
+$ git add .
+$ git commit -m "finish livebook reading"
+$ git push origin livebook-reading
+```
+
+Create a pull request from your `livebook-reading` branch to your `solutions` branch.
+Please do not create a pull request to the DockYard Academy repository as this will spam our PR tracker.
+
+**DockYard Academy Students Only:**
+
+Notify your instructor by including `@BrooklinJazz` in your PR description to get feedback.
+You (or your instructor) may merge your PR into your solutions branch after review.
+
+If you are interested in joining the next academy cohort, [sign up here](https://academy.dockyard.com/) to receive more news when it is available.
+
+## Up Next
+
+| Previous                     | Next                                           |
+| ---------------------------- | ---------------------------------------------: |
+| [Git](../reading/git.livemd) | [Code Editors](../reading/code_editors.livemd) |
+

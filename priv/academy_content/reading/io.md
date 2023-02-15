@@ -1,0 +1,128 @@
+%{
+  title: "IO"
+}
+---
+# IO
+
+```elixir
+Mix.install([
+  {:jason, "~> 1.4"},
+  {:kino, "~> 0.8.0", override: true},
+  {:youtube, github: "brooklinjazz/youtube"},
+  {:hidden_cell, github: "brooklinjazz/hidden_cell"}
+])
+```
+
+## Navigation
+
+[Return Home](../start.livemd)<span style="padding: 0 30px"></span>
+[Report An Issue](https://github.com/DockYard-Academy/beta_curriculum/issues/new?assignees=&labels=&template=issue.md&title=)
+
+## Setup
+
+Ensure you type the `ea` keyboard shortcut to evaluate all Elixir cells before starting. Alternatively you can evaluate the Elixir cells as you read.
+
+## IO
+
+We can use the [IO](https://hexdocs.pm/elixir/IO.html) module for retrieving user input and displaying output.
+
+We can use [IO.inspect/2](https://hexdocs.pm/elixir/IO.html#inspect/2) and [IO.puts/2](https://hexdocs.pm/elixir/IO.html#puts/2) print displaying information.
+
+We can also use [IO.gets/2](https://hexdocs.pm/elixir/IO.html#gets/2) to retrieve input from the user.
+
+<!-- livebook:{"force_markdown":true} -->
+
+```elixir
+iex> input = IO.gets("Give me some input: ")
+Give me some input: sure!
+"sure!\n"
+iex> input
+"sure!\n"
+```
+
+Keep in mind, this will work when running an Elixir project or in the [IEx](https://hexdocs.pm/iex/IEx.html) shell, but will fail with an `:enotsup` (error not supported) error when we run it from Livebook.
+
+```elixir
+IO.gets("I will fail!")
+```
+
+That's because there is no command line or other device to retrieve user input from.
+
+<!-- livebook:{"break_markdown":true} -->
+
+### Your Turn
+
+Run [IO.gets/2](https://hexdocs.pm/elixir/IO.html#gets/2) in the command line from the [IEx](https://hexdocs.pm/iex/IEx.html) shell and bind the return value to an `input` variable.
+
+<!-- livebook:{"force_markdown":true} -->
+
+```elixir
+iex> input = IO.gets("Give me some input: ")
+```
+
+## Mark As Completed
+
+<!-- livebook:{"attrs":{"source":"file_name = Path.basename(Regex.replace(~r/#.+/, __ENV__.file, \"\"), \".livemd\")\n\nsave_name =\n  case Path.basename(__DIR__) do\n    \"reading\" -> \"io_reading\"\n    \"exercises\" -> \"io_exercise\"\n  end\n\nprogress_path = __DIR__ <> \"/../progress.json\"\nexisting_progress = File.read!(progress_path) |> Jason.decode!()\n\ndefault = Map.get(existing_progress, save_name, false)\n\nform =\n  Kino.Control.form(\n    [\n      completed: input = Kino.Input.checkbox(\"Mark As Completed\", default: default)\n    ],\n    report_changes: true\n  )\n\nTask.async(fn ->\n  for %{data: %{completed: completed}} <- Kino.Control.stream(form) do\n    File.write!(\n      progress_path,\n      Jason.encode!(Map.put(existing_progress, save_name, completed), pretty: true)\n    )\n  end\nend)\n\nform","title":"Track Your Progress"},"chunks":null,"kind":"Elixir.HiddenCell","livebook_object":"smart_cell"} -->
+
+```elixir
+file_name = Path.basename(Regex.replace(~r/#.+/, __ENV__.file, ""), ".livemd")
+
+save_name =
+  case Path.basename(__DIR__) do
+    "reading" -> "io_reading"
+    "exercises" -> "io_exercise"
+  end
+
+progress_path = __DIR__ <> "/../progress.json"
+existing_progress = File.read!(progress_path) |> Jason.decode!()
+
+default = Map.get(existing_progress, save_name, false)
+
+form =
+  Kino.Control.form(
+    [
+      completed: input = Kino.Input.checkbox("Mark As Completed", default: default)
+    ],
+    report_changes: true
+  )
+
+Task.async(fn ->
+  for %{data: %{completed: completed}} <- Kino.Control.stream(form) do
+    File.write!(
+      progress_path,
+      Jason.encode!(Map.put(existing_progress, save_name, completed), pretty: true)
+    )
+  end
+end)
+
+form
+```
+
+## Commit Your Progress
+
+Run the following in your command line from the curriculum folder to track and save your progress in a Git commit.
+Ensure that you do not already have undesired or unrelated changes by running `git status` or by checking the source control tab in Visual Studio Code.
+
+```
+$ git checkout -b io-reading
+$ git add .
+$ git commit -m "finish io reading"
+$ git push origin io-reading
+```
+
+Create a pull request from your `io-reading` branch to your `solutions` branch.
+Please do not create a pull request to the DockYard Academy repository as this will spam our PR tracker.
+
+**DockYard Academy Students Only:**
+
+Notify your instructor by including `@BrooklinJazz` in your PR description to get feedback.
+You (or your instructor) may merge your PR into your solutions branch after review.
+
+If you are interested in joining the next academy cohort, [sign up here](https://academy.dockyard.com/) to receive more news when it is available.
+
+## Up Next
+
+| Previous                             | Next                                   |
+| ------------------------------------ | -------------------------------------: |
+| [Strings](../reading/strings.livemd) | [Booleans](../reading/booleans.livemd) |
+

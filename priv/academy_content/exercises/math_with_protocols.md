@@ -1,0 +1,236 @@
+%{
+  title: "Math With Protocols"
+}
+---
+# Math With Protocols
+
+```elixir
+Mix.install([
+  {:jason, "~> 1.4"},
+  {:kino, "~> 0.8.0", override: true},
+  {:youtube, github: "brooklinjazz/youtube"},
+  {:hidden_cell, github: "brooklinjazz/hidden_cell"}
+])
+```
+
+## Navigation
+
+[Return Home](../start.livemd)<span style="padding: 0 30px"></span>
+[Report An Issue](https://github.com/DockYard-Academy/beta_curriculum/issues/new?assignees=&labels=&template=issue.md&title=)
+
+## Math With Protocols
+
+In this exercise, you're going to create a `Math` protocol that handles adding and subtracting different data types.
+
+Create a `Math` protocol implementation for **integers**, **strings**, and **lists**. You do not need to handling adding or subtracting different data types.
+
+<!-- livebook:{"force_markdown":true} -->
+
+```elixir
+Math.add(1, 2)
+3
+
+Math.add("Hello, ", "World!")
+"Hello, World!"
+
+Math.add([1, 2], [3, 4])
+[1, 2, 3, 4]
+
+Math.subtract(10, 2)
+8
+
+Math.subtract("hello there", "hello ")
+"there"
+
+Math.subtract([1, 2, 3, 4], [1, 3])
+[2, 4]
+```
+
+<details style="background-color: burlywood; padding: 1rem; margin: 1rem 0;">
+<summary>Hint: Subtracting Strings</summary>
+
+Consider converting your strings to a list, then subtract the two lists together then join your result back into a string.
+
+</details>
+
+<details style="background-color: lightgreen; padding: 1rem; margin: 1rem 0;">
+<summary>Example Solution</summary>
+
+```elixir
+defprotocol Math do
+  def add(value1, value2)
+  def subtract(value1, value2)
+end
+
+defimpl Math, for: Integer do
+  def add(integer1, integer2) do
+    integer1 + integer2
+  end
+
+  def subtract(integer1, integer2) do
+    integer1 - integer2
+  end
+end
+
+defimpl Math, for: BitString do
+  def add(string1, string2) do
+    string1 <> string2
+  end
+
+  def subtract(string1, string2) do
+    (String.split(string1, "") -- String.split(string2, ""))
+    |> Enum.join()
+  end
+end
+
+defimpl Math, for: List do
+  def add(list1, list2) do
+    list1 ++ list2
+  end
+
+  def subtract(list1, list2) do
+    list1 -- list2
+  end
+end
+```
+
+</details>
+
+Define implementations for the `Math` protocol as documented below.
+
+```elixir
+defmodule MyStruct do
+  defstruct [:name]
+end
+```
+
+```elixir
+Map.replace!(%MyStruct{}, :name, "hello")
+```
+
+```elixir
+defprotocol Math do
+  @doc """
+  Add two integers, lists, or strings.
+
+  ## Examples
+
+    iex> Math.add(2, 2)
+    4
+    iex> Math.add(4, 4)
+    8
+
+    Math.add([1, 2], [3, 4])
+    [1, 2, 3, 4]
+    Math.add([1, 2, 3], [4, 5, 6])
+    [1, 2, 3, 4, 5, 6]
+
+    iex> Math.add("abc", "def")
+    "abcdef"
+    iex> Math.add("123", "456")
+    "123456"
+
+    iex> Math.add(%{}, %{})
+    ** (Protocol.UndefinedError) protocol Math not implemented for %{} of type Map
+
+    iex> Math.add({}, {})
+    ** (Protocol.UndefinedError) protocol Math not implemented for {} of type Tuple
+  """
+  def add(value1, value2)
+
+  @doc """
+  Subtract two integers, lists, or strings.
+
+  ## Examples
+    iex> Math.subtract(10, 2)
+    8
+    iex> Math.subtract(20, 2)
+    18
+
+    iex> Math.subtract([1, 2], [1])
+    [2]
+    iex> Math.subtract([1, 2, 3, 4], [1, 3])
+    [2, 4]
+
+    iex> Math.subtract("abcd", "abc")
+    "d"
+    iex> Math.subtract("cbad", "abc")
+    "d"
+    iex> Math.subtract("abc", "xyz")
+    "abc"
+    iex> Math.subtract("abc", "xyza")
+    "bc"
+
+    iex> Math.subtract(1.0, 2.0)
+    ** (Protocol.UndefinedError) protocol Math not implemented for 1.0 of type Float
+  """
+  def subtract(value1, value2)
+end
+```
+
+## Mark As Completed
+
+<!-- livebook:{"attrs":{"source":"file_name = Path.basename(Regex.replace(~r/#.+/, __ENV__.file, \"\"), \".livemd\")\n\nsave_name =\n  case Path.basename(__DIR__) do\n    \"reading\" -> \"math_with_protocols_reading\"\n    \"exercises\" -> \"math_with_protocols_exercise\"\n  end\n\nprogress_path = __DIR__ <> \"/../progress.json\"\nexisting_progress = File.read!(progress_path) |> Jason.decode!()\n\ndefault = Map.get(existing_progress, save_name, false)\n\nform =\n  Kino.Control.form(\n    [\n      completed: input = Kino.Input.checkbox(\"Mark As Completed\", default: default)\n    ],\n    report_changes: true\n  )\n\nTask.async(fn ->\n  for %{data: %{completed: completed}} <- Kino.Control.stream(form) do\n    File.write!(\n      progress_path,\n      Jason.encode!(Map.put(existing_progress, save_name, completed), pretty: true)\n    )\n  end\nend)\n\nform","title":"Track Your Progress"},"chunks":null,"kind":"Elixir.HiddenCell","livebook_object":"smart_cell"} -->
+
+```elixir
+file_name = Path.basename(Regex.replace(~r/#.+/, __ENV__.file, ""), ".livemd")
+
+save_name =
+  case Path.basename(__DIR__) do
+    "reading" -> "math_with_protocols_reading"
+    "exercises" -> "math_with_protocols_exercise"
+  end
+
+progress_path = __DIR__ <> "/../progress.json"
+existing_progress = File.read!(progress_path) |> Jason.decode!()
+
+default = Map.get(existing_progress, save_name, false)
+
+form =
+  Kino.Control.form(
+    [
+      completed: input = Kino.Input.checkbox("Mark As Completed", default: default)
+    ],
+    report_changes: true
+  )
+
+Task.async(fn ->
+  for %{data: %{completed: completed}} <- Kino.Control.stream(form) do
+    File.write!(
+      progress_path,
+      Jason.encode!(Map.put(existing_progress, save_name, completed), pretty: true)
+    )
+  end
+end)
+
+form
+```
+
+## Commit Your Progress
+
+Run the following in your command line from the curriculum folder to track and save your progress in a Git commit.
+Ensure that you do not already have undesired or unrelated changes by running `git status` or by checking the source control tab in Visual Studio Code.
+
+```
+$ git checkout -b math-with-protocols-exercise
+$ git add .
+$ git commit -m "finish math with protocols exercise"
+$ git push origin math-with-protocols-exercise
+```
+
+Create a pull request from your `math-with-protocols-exercise` branch to your `solutions` branch.
+Please do not create a pull request to the DockYard Academy repository as this will spam our PR tracker.
+
+**DockYard Academy Students Only:**
+
+Notify your instructor by including `@BrooklinJazz` in your PR description to get feedback.
+You (or your instructor) may merge your PR into your solutions branch after review.
+
+If you are interested in joining the next academy cohort, [sign up here](https://academy.dockyard.com/) to receive more news when it is available.
+
+## Up Next
+
+| Previous                                 | Next                                                           |
+| ---------------------------------------- | -------------------------------------------------------------: |
+| [Protocols](../reading/protocols.livemd) | [Consumable Protocol](../exercises/consumable_protocol.livemd) |
+

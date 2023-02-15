@@ -1,0 +1,191 @@
+%{
+  title: "Dominoes"
+}
+---
+# Dominoes
+
+```elixir
+Mix.install([
+  {:jason, "~> 1.4"},
+  {:kino, "~> 0.8.0", override: true},
+  {:youtube, github: "brooklinjazz/youtube"},
+  {:hidden_cell, github: "brooklinjazz/hidden_cell"}
+])
+```
+
+## Navigation
+
+[Return Home](../start.livemd)<span style="padding: 0 30px"></span>
+[Report An Issue](https://github.com/DockYard-Academy/beta_curriculum/issues/new?assignees=&labels=&template=issue.md&title=)
+
+## Dominoe
+
+[Dominoes](https://en.wikipedia.org/wiki/Dominoes) are square tiles often placed near each other to make satisfying effects when it falls and knocks each other over.
+
+We've created a named `Domino` process that can receive a generic `:fall` message to cause it to crash. It will also print a message every time it's started with the name of the process.
+
+```elixir
+defmodule Domino do
+  use GenServer
+
+  def start_link(opts) do
+    IO.inspect(opts, label: "STARTED DOMINO")
+    GenServer.start_link(__MODULE__, opts, name: opts[:name])
+  end
+
+  @impl true
+  def init(opts) do
+    {:ok, opts}
+  end
+
+  @impl true
+  def handle_info(:fall, _state) do
+    raise "error"
+  end
+end
+```
+
+You're going to start three `Domino` processes under a supervisor. When one crashes, they should restart sequentially in the order they are defined.
+
+<!-- livebook:{"break_markdown":true} -->
+
+```mermaid
+flowchart TD 
+    Supervisor
+    Supervisor --> Domino1
+    Supervisor --> Domino2
+    Supervisor --> Domino3
+
+    classDef crashed fill:#fe8888;
+    classDef terminated fill:#fbab04;
+    classDef restarted stroke:#0cac08,stroke-width:4px
+
+    class Domino2 crashed
+    class Domino3 terminated
+    class Domino2,Domino3 restarted
+```
+
+<!-- livebook:{"break_markdown":true} -->
+
+For example, if `Domino2` crashes, then `Domino3` should also be restarted. If `Domino3` crashes, no other processes are affected.
+
+<details style="background-color: burlywood; padding: 1rem; margin: 1rem 0;">
+<summary>Hint</summary>
+Use the <code>:rest_for_one</code> strategy for your supervisor.
+</details>
+
+<details style="background-color: lightgreen; padding: 1rem; margin: 1rem 0;">
+<summary>Example Solution</summary>
+
+```elixir
+children = [
+  %{
+    id: :domino1,
+    start: {Domino, :start_link, [[name: :domino1]]}
+  },
+  %{
+    id: :domino2,
+    start: {Domino, :start_link, [[name: :domino2]]}
+  },
+  %{
+    id: :domino3,
+    start: {Domino, :start_link, [[name: :domino3]]}
+  }
+]
+
+Supervisor.start_link(children, strategy: :rest_for_one)
+```
+
+</details>
+
+Keep in mind, if you have already started a named process, the supervisor might crash when you attempt to start it again. Re-evaluate the cell after the livebook crashes to resolve this issue.
+
+```elixir
+
+```
+
+Send your dominos messages to ensure they are crashing in the correct order. They will log a message that demonstrates the `Domino.start_link/1` function was called again.
+
+<details style="background-color: lightgreen; padding: 1rem; margin: 1rem 0;">
+<summary>Example Solution</summary>
+
+Replace `:domino_name` with the name of a domino process you started in the supervisor above.
+
+```elixir
+Process.send(:domino_name, :fall, [])
+```
+
+</details>
+
+Test sending each `Domino` process a message individually.
+
+```elixir
+
+```
+
+## Mark As Completed
+
+<!-- livebook:{"attrs":{"source":"file_name = Path.basename(Regex.replace(~r/#.+/, __ENV__.file, \"\"), \".livemd\")\n\nsave_name =\n  case Path.basename(__DIR__) do\n    \"reading\" -> \"dominoes_reading\"\n    \"exercises\" -> \"dominoes_exercise\"\n  end\n\nprogress_path = __DIR__ <> \"/../progress.json\"\nexisting_progress = File.read!(progress_path) |> Jason.decode!()\n\ndefault = Map.get(existing_progress, save_name, false)\n\nform =\n  Kino.Control.form(\n    [\n      completed: input = Kino.Input.checkbox(\"Mark As Completed\", default: default)\n    ],\n    report_changes: true\n  )\n\nTask.async(fn ->\n  for %{data: %{completed: completed}} <- Kino.Control.stream(form) do\n    File.write!(\n      progress_path,\n      Jason.encode!(Map.put(existing_progress, save_name, completed), pretty: true)\n    )\n  end\nend)\n\nform","title":"Track Your Progress"},"chunks":null,"kind":"Elixir.HiddenCell","livebook_object":"smart_cell"} -->
+
+```elixir
+file_name = Path.basename(Regex.replace(~r/#.+/, __ENV__.file, ""), ".livemd")
+
+save_name =
+  case Path.basename(__DIR__) do
+    "reading" -> "dominoes_reading"
+    "exercises" -> "dominoes_exercise"
+  end
+
+progress_path = __DIR__ <> "/../progress.json"
+existing_progress = File.read!(progress_path) |> Jason.decode!()
+
+default = Map.get(existing_progress, save_name, false)
+
+form =
+  Kino.Control.form(
+    [
+      completed: input = Kino.Input.checkbox("Mark As Completed", default: default)
+    ],
+    report_changes: true
+  )
+
+Task.async(fn ->
+  for %{data: %{completed: completed}} <- Kino.Control.stream(form) do
+    File.write!(
+      progress_path,
+      Jason.encode!(Map.put(existing_progress, save_name, completed), pretty: true)
+    )
+  end
+end)
+
+form
+```
+
+## Commit Your Progress
+
+Run the following in your command line from the curriculum folder to track and save your progress in a Git commit.
+Ensure that you do not already have undesired or unrelated changes by running `git status` or by checking the source control tab in Visual Studio Code.
+
+```
+$ git checkout -b dominoes-exercise
+$ git add .
+$ git commit -m "finish dominoes exercise"
+$ git push origin dominoes-exercise
+```
+
+Create a pull request from your `dominoes-exercise` branch to your `solutions` branch.
+Please do not create a pull request to the DockYard Academy repository as this will spam our PR tracker.
+
+**DockYard Academy Students Only:**
+
+Notify your instructor by including `@BrooklinJazz` in your PR description to get feedback.
+You (or your instructor) may merge your PR into your solutions branch after review.
+
+If you are interested in joining the next academy cohort, [sign up here](https://academy.dockyard.com/) to receive more news when it is available.
+
+## Up Next
+
+| Previous                                                 | Next                                                   |
+| -------------------------------------------------------- | -----------------------------------------------------: |
+| [Supervised Stack](../exercises/supervised_stack.livemd) | [Monster Spawner](../exercises/monster_spawner.livemd) |
+

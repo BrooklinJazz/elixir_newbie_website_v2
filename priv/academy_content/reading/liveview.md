@@ -1,0 +1,754 @@
+%{
+  title: "LiveView"
+}
+---
+# LiveView
+
+```elixir
+Mix.install([
+  {:jason, "~> 1.4"},
+  {:kino, "~> 0.8.0", override: true},
+  {:youtube, github: "brooklinjazz/youtube"},
+  {:hidden_cell, github: "brooklinjazz/hidden_cell"}
+])
+```
+
+## Navigation
+
+[Return Home](../start.livemd)<span style="padding: 0 30px"></span>
+[Report An Issue](https://github.com/DockYard-Academy/beta_curriculum/issues/new?assignees=&labels=&template=issue.md&title=)
+
+## Review Questions
+
+Upon completing this lesson, a student should be able to answer the following questions.
+
+* How do we mount a LiveView on a given route in the router?
+* What is the lifecycle of a LiveView?
+* How is information stored and set in the socket?
+* How do we send messages to a LiveView and handle them?
+
+## Setup
+
+Ensure you type the `ea` keyboard shortcut to evaluate all Elixir cells before starting. Alternatively you can evaluate the Elixir cells as you read.
+
+## Overview
+
+### Phoenix LiveView
+
+[Phoenix.LiveView](https://hexdocs.pm/phoenix_live_view/Phoenix.LiveView.html) is an alternative to the [Model-View-Controller](https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93controller) pattern (also sometimes called dead views) using [Views and Templates](https://hexdocs.pm/phoenix/views.html), [Controllers](https://hexdocs.pm/phoenix/controllers.html), and [Schemas](https://hexdocs.pm/phoenix/ecto.html#the-schema).
+
+LiveViews deviate from the typical request/response pattern where the client is responsible for initiating all interactions with a server.
+
+Instead, the establish a two-way [network socket](https://en.wikipedia.org/wiki/Network_socket) connection that allow the client and server to exchange information back and forth. This enables real-time "live" communication between the client and server and enables features that would be difficult to accomplish with the traditional request/response pattern.
+
+<!-- livebook:{"break_markdown":true} -->
+
+```mermaid
+flowchart
+C1[Client]
+C2[Client]
+S1[Server]
+S2[Server]
+
+subgraph LiveView
+  C2 <--socket--> S2
+end
+
+subgraph Request/Response
+  C1 --request--> S1
+  S1 --response--> C1
+end
+```
+
+<!-- livebook:{"break_markdown":true} -->
+
+[Chris McCord](http://chrismccord.com/), the creator of Phoenix, has an excellent video to demonstrate the power of Phoenix LiveView. You can optionally follow along and build a Twitter clone application in only 15 minutes.
+
+<!-- livebook:{"attrs":{"source":"YouTube.new(\"https://www.youtube.com/watch?v=MZvmYaFkNJI\")","title":"Build a real-time Twitter clone in 15 minutes with LiveView and Phoenix 1.5"},"chunks":null,"kind":"Elixir.HiddenCell","livebook_object":"smart_cell"} -->
+
+```elixir
+YouTube.new("https://www.youtube.com/watch?v=MZvmYaFkNJI")
+```
+
+### LiveView Processes
+
+LiveViews are processes implemented with [GenServer](https://hexdocs.pm/elixir/GenServer.html). For every client, the server spawns a LiveView process which maintains state and can send and receive messages. The LiveView stores the state in a [socket assigns](https://hexdocs.pm/phoenix_live_view/Phoenix.LiveView.Socket.html) struct.
+
+Phoenix starts each LiveView Process under the application's `Superisor`. The [Supervisor](https://hexdocs.pm/elixir/Supervisor.html) restarts the LiveView in the event of a crash.
+
+<!-- livebook:{"break_markdown":true} -->
+
+```mermaid
+flowchart
+Supervisor
+C1[Client]
+C2[Client]
+C3[Client]
+L1[LiveView]
+L2[LiveView]
+L3[LiveView]
+
+Supervisor --> L1
+Supervisor --> L2
+Supervisor --> L3
+L1 --socket.assigns--> C1
+L2 --socket.assigns--> C2
+L3 --socket.assigns--> C3
+```
+
+<!-- livebook:{"break_markdown":true} -->
+
+LiveViews are excellent for stateful interactions and real-time fault-taulerant systems.
+
+<!-- livebook:{"break_markdown":true} -->
+
+### LiveView Connection Life-Cycle
+
+There are five main steps to a LiveView connection life-cycle.
+
+1. a client makes an HTTP GET request to our server.
+2. The LiveView mounts and starts under our application's supervision tree.
+3. The LiveView sends the initial HTML response to the client.
+4. The client connects to the LiveView through a two-way socket connection.
+5. The LiveView establishes a stateful connection and re-mounts.
+
+<!-- livebook:{"break_markdown":true} -->
+
+```mermaid
+sequenceDiagram
+    Client->>LiveView: GET /page_url
+    LiveView-->>LiveView: mount/3
+    LiveView->>Client: render HTML
+    Client-->>LiveView: connect to socket
+    LiveView-->>LiveView: mount/3
+    LiveView-->>Client: establish stateful connection
+```
+
+<!-- livebook:{"break_markdown":true} -->
+
+### LiveView [mount/3](https://hexdocs.pm/phoenix_live_view/Phoenix.LiveView.html#c:mount/3) Callback
+
+Phoenix LiveViews define a `mount/3` callback that initializes the LiveView. `mount/3` is called once to do the initial page load, and again to establish the live socket.
+
+<!-- livebook:{"break_markdown":true} -->
+
+### LiveView [render/1](https://hexdocs.pm/phoenix_live_view/Phoenix.LiveView.html#c:render/1) Callback
+
+Phoenix LiveViews define a `render/1` callback that renders a template. The `render/1` callback is invoked whenever the LiveView detects new content to render and send to the client.
+
+<!-- livebook:{"break_markdown":true} -->
+
+### LiveView Events
+
+Once the client and LiveView establish a stateful connection they can send a receive messages.
+
+<!-- livebook:{"break_markdown":true} -->
+
+### [Bindings](https://hexdocs.pm/phoenix_live_view/bindings.html) and [Form Bindings](https://hexdocs.pm/phoenix_live_view/form-bindings.html)
+
+The client sends messages to the LiveView through `phx-` bindings on HTML elements such as `phx-click` that sends a message to the LiveView when an element is clicked.
+
+<!-- livebook:{"break_markdown":true} -->
+
+### [Event Callbacks](https://hexdocs.pm/phoenix_live_view/Phoenix.LiveView.html#callbacks)
+
+The LiveView then handles messages through event handlers such as the [handle_event/3](https://hexdocs.pm/phoenix_live_view/Phoenix.LiveView.html#c:handle_event/3) callback function. Typically, the callback function handles updating the LiveView's state, which triggers a re-render of the page.
+
+<!-- livebook:{"break_markdown":true} -->
+
+### Re-rendering Diffs
+
+When a LiveView's state changes, LiveView updates the page in real-time by only changing the parts that need to be changed. These changes are called **diffs** (differences) and significantly improve LiveView's performance.
+
+<!-- livebook:{"break_markdown":true} -->
+
+### [Sessions](https://en.wikipedia.org/wiki/Session_(computer_science))
+
+In a web application, a session is a way to store data that is specific to a particular user. This data is stored on the server and is associated with a unique session ID, which is typically stored in a cookie on the client side. The session ID is used to retrieve the data for the user when they make subsequent requests to the server.
+
+<!-- livebook:{"break_markdown":true} -->
+
+### [Cross-site Request Forgery (CSRF) Token](https://en.wikipedia.org/wiki/Cross-site_request_forgery)
+
+Cross-Site Request Forgery (CSRF) is an attack where a user is tricked into performing unwanted actions on a web application they are authenticated on. CSRF tokens protect web applications from CSRF attacks. These tokens are random, unique strings that are generated by the server and included in the HTML of web pages served to users. When a user submits a request to the server, the server checks for the presence of a CSRF token in the request. If the token is not present or is invalid, the request is rejected.
+
+<!-- livebook:{"force_markdown":true} -->
+
+```elixir
+%{"_csrf_token" => "cOO0xNX3-Ifc34aicN7UqAc5"}
+```
+
+In Phoenix, the Cross-site Request Forgery Token is set in `root.html.heex`.
+
+<!-- livebook:{"force_markdown":true} -->
+
+```elixir
+<meta name="csrf-token" content={csrf_token_value()}>
+```
+
+The token is then retrieved and stored in the LiveSocket in `assets/app.js`.
+
+```javascript
+let csrfToken = document.querySelector("meta[name='csrf-token']").getAttribute("content")
+let liveSocket = new LiveSocket("/live", Socket, {params: {_csrf_token: csrfToken}})
+```
+
+<!-- livebook:{"break_markdown":true} -->
+
+### JavaScript
+
+JavaScript is another programming language used in web development that we sometimes rely on as Elixir/Phoenix Developers.
+
+See [MDN: JavaScript Guide](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide) to learn more about JavaScript.
+
+## Follow Along: Counter
+
+We're going to build a `Counter` application to learn more about LiveView. You're going to display a count on the page and press a button to increment the count.
+
+You're also going to create a form with text input that can increment the count by a specific amount.
+
+See the completed [Counter Demonstration Project](https://github.com/DockYard/counter) if you would like to see the full project for reference.
+
+<!-- livebook:{"break_markdown":true} -->
+
+### Scaffold Application
+
+First, let's create a new `Counter` Phoenix application.
+
+```
+$ mix phx.new counter --no-ecto
+```
+
+<!-- livebook:{"break_markdown":true} -->
+
+### Start the Server
+
+We can start the server normally.
+
+```
+$ mix phx.server
+```
+
+The server should automatically reload every time we change our code. If you are a Linux user, you may have to install [inotify-tools](https://hexdocs.pm/phoenix/installation.html#inotify-tools-for-linux-users).
+
+## Define the LiveView Route
+
+The [Phoenix.Router](https://hexdocs.pm/phoenix/Phoenix.Router.html) uses the [Phoenix.LiveView.Router.live/4](https://hexdocs.pm/phoenix_live_view/Phoenix.LiveView.Router.html#live/4) macro to define the route handled by the [Phoenix.LiveView](https://hexdocs.pm/phoenix_live_view/Phoenix.LiveView.html).
+
+Let's replace the default index route with a LiveView. We haven't yet created the `CounterLive` LiveView, but we'll do that next.
+
+<!-- livebook:{"force_markdown":true} -->
+
+```elixir
+# counter_web/router.ex
+scope "/", CounterWeb do
+  pipe_through :browser
+
+  live "/", CounterLive
+end
+```
+
+## Create the CounterLive LiveView
+
+### CounterLive "Hello World"
+
+Now, create a new `counter_web/live` folder. This folder will store our LiveViews. In the folder, create a `counter_web/live/counter_live.ex` with the following content.
+
+The `~H` is a sigil used to define a HEEX (HTML + EEx) template. Remember that [sigils](https://elixir-lang.org/getting-started/sigils.html) are a textual way of working with data in Elixir.
+
+<!-- livebook:{"force_markdown":true} -->
+
+```elixir
+defmodule CounterWeb.CounterLive do
+  use CounterWeb, :live_view
+
+  def mount(_params, _session, socket) do
+    {:ok, socket}
+  end
+
+  def render(assigns) do
+    ~H"""
+    Hello World!
+    """
+  end
+end
+```
+
+Visit http://localhost:4000 and you will see the following page.
+
+<!-- livebook:{"break_markdown":true} -->
+
+![](images/mount%20hello%20world.png)
+
+<!-- livebook:{"break_markdown":true} -->
+
+### The mount/3 Callback
+
+The `mount/3` callback accepts three parameters
+
+1. `params` contains public information that can be set by the user such as query params and router path parameters.
+2. `session` contains session information specific to the current client. For example, this contains the [cross-site request forgery token](https://en.wikipedia.org/wiki/Cross-site_request_forgery).
+3. `socket` A [Phoenix.LiveView.Socket](https://hexdocs.pm/phoenix_live_view/Phoenix.LiveView.Socket.html) that contains the state of the LiveView and other socket information.
+
+The `mount/3` callback is called once to render the initial HTML, and once again when the socket is connected. This can sometimes cause unexpected issues by performing actions twice in the mount function.
+
+We can use the [connected?/1](https://hexdocs.pm/phoenix_live_view/Phoenix.LiveView.html#connected?/1) function to check if the socket is connected to avoid performing actions twice.
+
+Add the following IO messages and re-render the page to see this in action.
+
+<!-- livebook:{"force_markdown":true} -->
+
+```elixir
+defmodule CounterWeb.CounterLive do
+  use CounterWeb, :live_view
+
+  def mount(_params, _session, socket) do
+    if connected?(socket) do
+      IO.puts("CONNECTED")
+    else
+      IO.puts("INITIAL RENDER")
+    end
+    {:ok, socket}
+  end
+
+  def render(assigns) do
+    ~H"""
+    Hello World!
+    """
+  end
+end
+```
+
+You should observe two logs in your terminal:
+
+```
+[info] GET /
+"INITIAL RENDER"
+[info] CONNECTED TO Phoenix.LiveView.Socket in 116µs
+"CONNECTED"
+```
+
+<!-- livebook:{"break_markdown":true} -->
+
+### Counter
+
+We've seen a simple LiveView that displays `"Hello World!"`, now let's implement a counter.
+
+We want to store a `count` in the state of the LiveView starting at `0`, and allow the user to click a button that will increment the value by `1`.
+
+We can use the [Phoenix.LiveView.assign/2](https://hexdocs.pm/phoenix_live_view/Phoenix.LiveView.html#assign/2) or [Phoenix.LiveView.assign/3](https://hexdocs.pm/phoenix_live_view/Phoenix.LiveView.html#assign/3) functions to store some key and value on socket.
+
+We use the same `<%= elixir %>` syntax we've used in templates before to use Elixir code inside of our template.
+
+<!-- livebook:{"force_markdown":true} -->
+
+```elixir
+defmodule CounterWeb.CounterLive do
+  use CounterWeb, :live_view
+
+  def mount(_params, _session, socket) do
+    {:ok, assign(socket, :count, 0)}
+  end
+
+  def render(assigns) do
+    ~H"""
+    <%= assigns.count %>
+    """
+  end
+end
+```
+
+Instead of `assigns.count`, we can use `@` as syntax sugar to access values from the `assigns`.
+
+<!-- livebook:{"force_markdown":true} -->
+
+```elixir
+<%= @count %>
+```
+
+Now we'll see the count on the page.
+
+<!-- livebook:{"break_markdown":true} -->
+
+![](images/initial_count_liveview.png)
+
+<!-- livebook:{"break_markdown":true} -->
+
+To increment this count, we'll make a button the user can click. This button will trigger a `phx-click` event with the `"increment"` message.
+
+<!-- livebook:{"force_markdown":true} -->
+
+```elixir
+defmodule CounterWeb.CounterLive do
+  use CounterWeb, :live_view
+
+  def mount(_params, _session, socket) do
+    {:ok, assign(socket, :count, 0)}
+  end
+
+  def render(assigns) do
+    ~H"""
+    <%= assigns.count %>
+    <button phx-click="increment">+</button>
+    """
+  end
+end
+```
+
+If you try to visit http://localhost:4000 and click the button, you'll see the following error in your terminal. The most important part is `function CounterWeb.CounterLive.handle_event/3 is undefined or private`, which means we need to implement a [handle_event/3](https://hexdocs.pm/phoenix_live_view/Phoenix.LiveView.html#c:handle_event/3) handler for the click event.
+
+Also, you might not have noticed, but our page crashes when we press the button. It's hard to notice because the application's [Supervisor](https://hexdocs.pm/elixir/Supervisor.html) quickly restarts the page after it crashes, but you can see the error logs in the terminal.
+
+<!-- livebook:{"force_markdown":true} -->
+
+```elixir
+[error] GenServer #PID<0.1624.0> terminating
+** (UndefinedFunctionError) function CounterWeb.CounterLive.handle_event/3 is undefined or private
+```
+
+Let's implement the handler. This `"increment"` handler will increment the current `:count` in state.
+
+<!-- livebook:{"force_markdown":true} -->
+
+```elixir
+defmodule CounterWeb.CounterLive do
+  use CounterWeb, :live_view
+
+  def mount(_params, _session, socket) do
+    {:ok, assign(socket, :count, 0)}
+  end
+
+  def render(assigns) do
+    ~H"""
+    <%= assigns.count %>
+    <button phx-click="increment">+</button>
+    """
+  end
+
+  def handle_event("increment", _params, socket) do
+    {:noreply, assign(socket, :count, socket.assigns.count + 1)}
+  end
+end
+```
+
+Now we should have a working counter! Try clicking the `+` button and see the count grow.
+
+## Form Events
+
+We've seen the `phx-click` event which we can trigger on any valid html element on click. Now we're going to see how we can use form events by creating a number input to control the value to increment our counter by.
+
+<!-- livebook:{"break_markdown":true} -->
+
+### Form `phx-submit` Event
+
+To change the increment by value, we'll create a form with a number input. There are many ways to define a form in Phoenix, see [Phoenix.LiveView.Helpers.form/1](https://hexdocs.pm/phoenix_live_view/Phoenix.LiveView.Helpers.html#form/1) for more information.
+
+Place the following inside of the `~H` in the `render/2` function.
+
+<!-- livebook:{"force_markdown":true} -->
+
+```elixir
+<.form let={f} for={:increment_form} phx-submit="increment_by">
+  <%= number_input f, :increment_by %>
+  <%= submit "Increment" %>
+</.form>
+```
+
+The `phx-submit` form binding will trigger a [handle_event/3](https://hexdocs.pm/phoenix_live_view/Phoenix.LiveView.html#c:handle_event/3) callback function every time we submit the form.
+
+Let's define the handler. The `params` for the handler will be a string-key map matching the form's name and the input inside the form.
+
+<!-- livebook:{"force_markdown":true} -->
+
+```elixir
+def handle_event(
+      "increment_by",
+      %{"increment_form" => %{"increment_by" => increment_by}},
+      socket
+    ) do
+  {:noreply, assign(socket, :count, socket.assigns.count + increment_by)}
+end
+```
+
+You'll notice that the page crashes with the following error when we submit the form.
+
+<!-- livebook:{"force_markdown":true} -->
+
+```elixir
+[error] GenServer #PID<0.2675.0> terminating
+** (ArithmeticError) bad argument in arithmetic expression
+    :erlang.+(0, "2")
+    (counter 0.1.0) lib/counter_web/live/counter_live.ex:28: CounterWeb.CounterLive.handle_event/3
+    (phoenix_live_view 0.17.11) lib/phoenix_live_view/channel.ex:382: anonymous fn/3 in Phoenix.LiveView.Channel.view_handle_event/3
+    (telemetry 1.1.0) /home/brook/dockyard/counter/deps/telemetry/src/telemetry.erl:320: :telemetry.span/3
+    (phoenix_live_view 0.17.11) lib/phoenix_live_view/channel.ex:216: Phoenix.LiveView.Channel.handle_info/2
+    (stdlib 3.17.1) gen_server.erl:695: :gen_server.try_dispatch/4
+    (stdlib 3.17.1) gen_server.erl:771: :gen_server.handle_msg/6
+    (stdlib 3.17.1) proc_lib.erl:236: :proc_lib.wake_up/3
+Last message: %Phoenix.Socket.Message{event: "event", join_ref: "4", payload: %{"event" => "increment_by", "type" => "form", "value" => "increment_form%5Bincrement_by%5D=2"}, ref: "7", topic: "lv:phx-FxajEDjPmQC9Bw4k"}
+State: %{components: {%{}, %{}, 1}, join_ref: "4", serializer: Phoenix.Socket.V2.JSONSerializer, socket: #Phoenix.LiveView.Socket<assigns: %{__changed__: %{}, count: 0, flash: %{}, live_action: nil}, endpoint: CounterWeb.Endpoint, id: "phx-FxajEDjPmQC9Bw4k", parent_pid: nil, root_pid: #PID<0.2675.0>, router: CounterWeb.Router, transport_pid: #PID<0.2670.0>, view: CounterWeb.CounterLive, ...>, topic: "lv:phx-FxajEDjPmQC9Bw4k", upload_names: %{}, upload_pids: %{}}
+```
+
+The message `(ArithmeticError) bad argument in arithmetic expression :erlang.+(0, "2")` tells us we're attempting to add an integer and a string. That's because the `increment_by` is a string, not an integer.
+
+We need to convert the input into an integer in the event handle to add it to the current count. Since the input could be empty, we'll use [Integer.parse/2](https://hexdocs.pm/elixir/Integer.html#parse/2) to handle invalid input and have a default increment value of `1`.
+
+<!-- livebook:{"force_markdown":true} -->
+
+```elixir
+def handle_event(
+      "increment_by",
+      %{"increment_form" => %{"increment_by" => increment_by}},
+      socket
+    ) do
+  increment =
+    case Integer.parse(increment_by) do
+      {integer, _} -> integer
+      :error -> 1
+    end
+
+  {:noreply, assign(socket, :count, socket.assigns.count + increment)}
+end
+```
+
+Put that all together, and you should have the following `CounterLive` file.
+
+<!-- livebook:{"force_markdown":true} -->
+
+```elixir
+defmodule CounterWeb.CounterLive do
+  use CounterWeb, :live_view
+
+  def mount(_params, _session, socket) do
+    {:ok, assign(socket, count: 0)}
+  end
+
+  def render(assigns) do
+    ~H"""
+    <%= assigns.count %>
+    <button phx-click="increment">+</button>
+    <.form let={f} for={:increment_form} phx-submit="increment_by">
+      <%= number_input f, :increment_by %>
+      <%= submit "Increment" %>
+    </.form>
+    """
+  end
+
+  def handle_event("increment", _params, socket) do
+    {:noreply, assign(socket, :count, socket.assigns.count + 1)}
+  end
+
+  def handle_event(
+        "increment_by",
+        %{"increment_form" => %{"increment_by" => increment_by}},
+        socket
+      ) do
+    increment =
+      case Integer.parse(increment_by) do
+        {integer, _} -> integer
+        :error -> 1
+      end
+
+    {:noreply, assign(socket, :count, socket.assigns.count + increment)}
+  end
+end
+```
+
+You can visit http://localhost:4000, enter a number in the input, and the count should increment when you submit the form!
+
+## Controlled Inputs
+
+### Form `phx-change` Event
+
+Notice the form input clears after every form submission. That's because we re-render the page when the counter state changes.
+
+If we want to preserve the value of the form, we need to store its value in the LiveView state. By storing the value, we maintain control over the value of the form input. For that reason, this is sometimes called a **controlled input**.
+
+First, let's create an `:increment_by` value in the state of the LiveView. To store multiple values in the socket assigns, we can call [assign/2](https://hexdocs.pm/phoenix_live_view/Phoenix.LiveView.html#assign/2) with a keyword list of key/value pairs.
+
+<!-- livebook:{"force_markdown":true} -->
+
+```elixir
+def mount(_params, _session, socket) do
+  {:ok, assign(socket, count: 0, increment_by: 1)}
+end
+```
+
+Alternatively, we can call [assign/3](https://hexdocs.pm/phoenix_live_view/Phoenix.LiveView.html#assign/3) on each updated version of the socket, typically using the pipe operator `|>`.
+
+<!-- livebook:{"force_markdown":true} -->
+
+```elixir
+def mount(_params, _session, socket) do
+  {:ok, socket |> assign(:count, 0) |> assign(:increment_by, 1)}
+end
+```
+
+Both solutions are valid.
+
+Now, we want to use the `:increment_by` value to **control** the number input. We now **control** the component by setting its value every time the page renders.
+
+<!-- livebook:{"force_markdown":true} -->
+
+```elixir
+<%= number_input f, :increment_by, value: @increment_by %>
+```
+
+If you try to submit the form now, you'll notice the input reverts to `1`. That's because we haven't changed the `:increment_by` state value. So let's add a `phx-change` binding to the form.
+
+<!-- livebook:{"force_markdown":true} -->
+
+```elixir
+<.form let={f} for={:increment_form} phx-change="change_increment_by" phx-submit="increment_by">
+```
+
+The `phx-change` binding will trigger the `"change_increment_by"` event, so let's define the handler. This handler will change the `:increment_by` value in state. Storing the value as a string doesn't cause any issues, so we don't need to convert it into an integer.
+
+<!-- livebook:{"force_markdown":true} -->
+
+```elixir
+def handle_event(
+      "change_increment_by",
+      %{"increment_form" => %{"increment_by" => increment_by}},
+      socket
+    ) do
+  {:noreply, assign(socket, :increment_by, increment_by)}
+end
+```
+
+<!-- livebook:{"break_markdown":true} -->
+
+### Finished CounterLive Module
+
+The`CounterLive` module should contain the following contents.
+
+<!-- livebook:{"force_markdown":true} -->
+
+```elixir
+defmodule CounterWeb.CounterLive do
+  use CounterWeb, :live_view
+
+  def mount(_params, _session, socket) do
+    {:ok, assign(socket, count: 0, increment_by: 1)}
+  end
+
+  def render(assigns) do
+    ~H"""
+    <%= assigns.count %>
+    <button phx-click="increment">+</button>
+    <.form let={f} for={:increment_form} phx-change="change_increment_by" phx-submit="increment_by">
+      <%= number_input f, :increment_by, value: @increment_by %>
+      <%= submit "Increment" %>
+    </.form>
+    """
+  end
+
+  def handle_event("increment", _params, socket) do
+    {:noreply, assign(socket, :count, socket.assigns.count + 1)}
+  end
+
+  def handle_event(
+        "change_increment_by",
+        %{"increment_form" => %{"increment_by" => increment_by}},
+        socket
+      ) do
+    {:noreply, assign(socket, :increment_by, increment_by)}
+  end
+
+  def handle_event(
+        "increment_by",
+        %{"increment_form" => %{"increment_by" => increment_by}},
+        socket
+      ) do
+    increment =
+      case Integer.parse(increment_by) do
+        {integer, _} -> integer
+        :error -> 1
+      end
+
+    {:noreply, assign(socket, :count, socket.assigns.count + increment)}
+  end
+end
+```
+
+Now that we control the number input in the form, the number input should preserve its value every time we submit the form. Visit http://localhost:4000 and confirm you can enter an increment value in the number input, then submit the form by pressing the `Increment` button.
+
+<!-- livebook:{"break_markdown":true} -->
+
+![](images/increment_by_saved.png)
+
+## Further Reading
+
+Consider the following resource(s) to deepen your understanding of the topic.
+
+* [HexDocs: LiveView](https://hexdocs.pm/phoenix_live_view/Phoenix.LiveView.html)
+* [HexDocs: Phoenix.HTML](https://hexdocs.pm/phoenix_html/Phoenix.HTML.html)
+* [Elixir Schools: LiveView](https://elixirschool.com/blog/phoenix-live-view/)
+* [PragProg: Programming Phoenix LiveView](https://pragprog.com/titles/liveview/programming-phoenix-liveview/)
+
+## Mark As Completed
+
+<!-- livebook:{"attrs":{"source":"file_name = Path.basename(Regex.replace(~r/#.+/, __ENV__.file, \"\"), \".livemd\")\n\nsave_name =\n  case Path.basename(__DIR__) do\n    \"reading\" -> \"liveview_reading\"\n    \"exercises\" -> \"liveview_exercise\"\n  end\n\nprogress_path = __DIR__ <> \"/../progress.json\"\nexisting_progress = File.read!(progress_path) |> Jason.decode!()\n\ndefault = Map.get(existing_progress, save_name, false)\n\nform =\n  Kino.Control.form(\n    [\n      completed: input = Kino.Input.checkbox(\"Mark As Completed\", default: default)\n    ],\n    report_changes: true\n  )\n\nTask.async(fn ->\n  for %{data: %{completed: completed}} <- Kino.Control.stream(form) do\n    File.write!(\n      progress_path,\n      Jason.encode!(Map.put(existing_progress, save_name, completed), pretty: true)\n    )\n  end\nend)\n\nform","title":"Track Your Progress"},"chunks":null,"kind":"Elixir.HiddenCell","livebook_object":"smart_cell"} -->
+
+```elixir
+file_name = Path.basename(Regex.replace(~r/#.+/, __ENV__.file, ""), ".livemd")
+
+save_name =
+  case Path.basename(__DIR__) do
+    "reading" -> "liveview_reading"
+    "exercises" -> "liveview_exercise"
+  end
+
+progress_path = __DIR__ <> "/../progress.json"
+existing_progress = File.read!(progress_path) |> Jason.decode!()
+
+default = Map.get(existing_progress, save_name, false)
+
+form =
+  Kino.Control.form(
+    [
+      completed: input = Kino.Input.checkbox("Mark As Completed", default: default)
+    ],
+    report_changes: true
+  )
+
+Task.async(fn ->
+  for %{data: %{completed: completed}} <- Kino.Control.stream(form) do
+    File.write!(
+      progress_path,
+      Jason.encode!(Map.put(existing_progress, save_name, completed), pretty: true)
+    )
+  end
+end)
+
+form
+```
+
+## Commit Your Progress
+
+Run the following in your command line from the curriculum folder to track and save your progress in a Git commit.
+Ensure that you do not already have undesired or unrelated changes by running `git status` or by checking the source control tab in Visual Studio Code.
+
+```
+$ git checkout -b liveview-reading
+$ git add .
+$ git commit -m "finish liveview reading"
+$ git push origin liveview-reading
+```
+
+Create a pull request from your `liveview-reading` branch to your `solutions` branch.
+Please do not create a pull request to the DockYard Academy repository as this will spam our PR tracker.
+
+**DockYard Academy Students Only:**
+
+Notify your instructor by including `@BrooklinJazz` in your PR description to get feedback.
+You (or your instructor) may merge your PR into your solutions branch after review.
+
+If you are interested in joining the next academy cohort, [sign up here](https://academy.dockyard.com/) to receive more news when it is available.
+
+## Up Next
+
+| Previous                                                                           | Next                                       |
+| ---------------------------------------------------------------------------------- | -----------------------------------------: |
+| [Group Project: Presentation](../exercises/group_project_blog_presentation.livemd) | [Math Game](../exercises/math_game.livemd) |
+

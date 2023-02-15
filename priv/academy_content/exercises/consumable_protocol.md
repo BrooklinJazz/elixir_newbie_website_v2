@@ -1,0 +1,254 @@
+%{
+  title: "Consumable Protocol"
+}
+---
+# Consumable Protocol
+
+```elixir
+Mix.install([
+  {:jason, "~> 1.4"},
+  {:kino, "~> 0.8.0", override: true},
+  {:youtube, github: "brooklinjazz/youtube"},
+  {:hidden_cell, github: "brooklinjazz/hidden_cell"}
+])
+```
+
+## Navigation
+
+[Return Home](../start.livemd)<span style="padding: 0 30px"></span>
+[Report An Issue](https://github.com/DockYard-Academy/beta_curriculum/issues/new?assignees=&labels=&template=issue.md&title=)
+
+## Overview
+
+You're creating a (RPG) Role Playing Game where there are `Character` structs which store information about a character.
+
+Define a `Character` struct with the following keys and default values.
+
+```mermaid
+classDiagram
+    class Character {
+        strength: 10
+        dexterity: 10
+        constitution: 10
+        wisdom: 10
+        intelligence: 10
+        charisma: 10
+    }
+```
+
+<details style="background-color: lightgreen; padding: 1rem; margin: 1rem 0;">
+<summary>Example Solution</summary>
+
+```elixir
+defmodule Character do
+  defstruct [strength: 10, dexterity: 10, constitution: 10, wisdom: 10, intelligence: 10, charisma: 10]
+end
+```
+
+</details>
+
+Enter your solution below.
+
+```elixir
+
+```
+
+Our game has `Consumable` items when modify a character's base stats. For example, we'll have
+a `StrengthPotion` struct which will increase a `Character`'s strength based on the `:level` key.
+
+Define item structs with the following keys and default values.
+
+```mermaid
+classDiagram
+    class StrengthPotion {
+      level: 1
+    }
+    class DexterityPotion {
+      level: 1
+    }
+    class ConstitutionPotion {
+      level: 1
+    }
+    class WisdomPotion {
+      level: 1
+    }
+    class IntelligencePotion {
+      level: 1
+    }
+    class CharismaPotion {
+      level: 1
+    }
+```
+
+<details style="background-color: lightgreen; padding: 1rem; margin: 1rem 0;">
+<summary>Example Solution</summary>
+
+```elixir
+defmodule StrengthPotion do
+  defstruct [level: 1]
+end
+
+defmodule DexterityPotion do
+  defstruct [level: 1]
+end
+
+defmodule ConstitutionPotion do
+  defstruct [level: 1]
+end
+
+defmodule WisdomPotion do
+  defstruct [level: 1]
+end
+
+defmodule IntelligencePotion do
+  defstruct [level: 1]
+end
+
+defmodule CharismaPotion do
+  defstruct [level: 1]
+end
+```
+
+</details>
+
+Enter your solution below.
+
+```elixir
+Enum.map("abc", fn char -> char end)
+```
+
+To make our system extendable, we'll have a `Consumable` protocol, and separate implementations for structs such as the `StrengthPotion`.
+
+Create a `Consumable` protocol with a `consume/2` function which accepts an item and a `Character` struct. We'll apply the items affects and return a newly updated character.
+
+Also create `Consumable` implementations for the `StrengthPotion`, `DexterityPotion`, `ConstitutionPotion`, `WisdomPotion`, `IntelligencePotion`, and `CharismaPotion` structs.
+
+When consumed, the item should increase the associated `Character` struct key by the `:level` of the `Consumable` item.
+
+<!-- livebook:{"force_markdown":true} -->
+
+```elixir
+Consumable.consume(%StrengthPotion{level: 1}, %Character{})
+%Character{strength: 11, dexterity: 10, consititution: 10, wisdom: 10, intelligence: 10, charisma: 10}
+
+Consumable.consume(%DexterityPotion{level: 2}, %Character{})
+%Character{strength: 10, dexterity: 12, consititution: 10, wisdom: 10, intelligence: 10, charisma: 10}
+```
+
+<details style="background-color: lightgreen; padding: 1rem; margin: 1rem 0;">
+<summary>Example Solution</summary>
+
+```elixir
+defprotocol Consumable do
+  def consume(item, character)
+end
+
+defimpl Consumable, for: StrengthPotion do
+  def consume(potion, character) do
+    %{character | strength: character.strength + potion.level}
+  end
+end
+
+defimpl Consumable, for: DexterityPotion do
+  def consume(potion, character) do
+    %{character | dexterity: character.dexterity + potion.level}
+  end
+end
+
+defimpl Consumable, for: ConstitutionPotion do
+  def consume(potion, character) do
+    %{character | constitution: character.constitution + potion.level}
+  end
+end
+
+defimpl Consumable, for: WisdomPotion do
+  def consume(potion, character) do
+    %{character | wisdom: character.wisdom + potion.level}
+  end
+end
+
+defimpl Consumable, for: IntelligencePotion do
+  def consume(potion, character) do
+    %{character | intelligence: character.intelligence + potion.level}
+  end
+end
+
+defimpl Consumable, for: CharismaPotion do
+  def consume(potion, character) do
+    %{character | charisma: character.charisma + potion.level}
+  end
+end
+```
+
+</details>
+
+```elixir
+
+```
+
+## Mark As Completed
+
+<!-- livebook:{"attrs":{"source":"file_name = Path.basename(Regex.replace(~r/#.+/, __ENV__.file, \"\"), \".livemd\")\n\nsave_name =\n  case Path.basename(__DIR__) do\n    \"reading\" -> \"consumable_protocol_reading\"\n    \"exercises\" -> \"consumable_protocol_exercise\"\n  end\n\nprogress_path = __DIR__ <> \"/../progress.json\"\nexisting_progress = File.read!(progress_path) |> Jason.decode!()\n\ndefault = Map.get(existing_progress, save_name, false)\n\nform =\n  Kino.Control.form(\n    [\n      completed: input = Kino.Input.checkbox(\"Mark As Completed\", default: default)\n    ],\n    report_changes: true\n  )\n\nTask.async(fn ->\n  for %{data: %{completed: completed}} <- Kino.Control.stream(form) do\n    File.write!(\n      progress_path,\n      Jason.encode!(Map.put(existing_progress, save_name, completed), pretty: true)\n    )\n  end\nend)\n\nform","title":"Track Your Progress"},"chunks":null,"kind":"Elixir.HiddenCell","livebook_object":"smart_cell"} -->
+
+```elixir
+file_name = Path.basename(Regex.replace(~r/#.+/, __ENV__.file, ""), ".livemd")
+
+save_name =
+  case Path.basename(__DIR__) do
+    "reading" -> "consumable_protocol_reading"
+    "exercises" -> "consumable_protocol_exercise"
+  end
+
+progress_path = __DIR__ <> "/../progress.json"
+existing_progress = File.read!(progress_path) |> Jason.decode!()
+
+default = Map.get(existing_progress, save_name, false)
+
+form =
+  Kino.Control.form(
+    [
+      completed: input = Kino.Input.checkbox("Mark As Completed", default: default)
+    ],
+    report_changes: true
+  )
+
+Task.async(fn ->
+  for %{data: %{completed: completed}} <- Kino.Control.stream(form) do
+    File.write!(
+      progress_path,
+      Jason.encode!(Map.put(existing_progress, save_name, completed), pretty: true)
+    )
+  end
+end)
+
+form
+```
+
+## Commit Your Progress
+
+Run the following in your command line from the curriculum folder to track and save your progress in a Git commit.
+Ensure that you do not already have undesired or unrelated changes by running `git status` or by checking the source control tab in Visual Studio Code.
+
+```
+$ git checkout -b consumable-protocol-exercise
+$ git add .
+$ git commit -m "finish consumable protocol exercise"
+$ git push origin consumable-protocol-exercise
+```
+
+Create a pull request from your `consumable-protocol-exercise` branch to your `solutions` branch.
+Please do not create a pull request to the DockYard Academy repository as this will spam our PR tracker.
+
+**DockYard Academy Students Only:**
+
+Notify your instructor by including `@BrooklinJazz` in your PR description to get feedback.
+You (or your instructor) may merge your PR into your solutions branch after review.
+
+If you are interested in joining the next academy cohort, [sign up here](https://academy.dockyard.com/) to receive more news when it is available.
+
+## Up Next
+
+| Previous                                                       | Next                                         |
+| -------------------------------------------------------------- | -------------------------------------------: |
+| [Math With Protocols](../exercises/math_with_protocols.livemd) | [Battle Map](../exercises/battle_map.livemd) |
+

@@ -1,0 +1,448 @@
+%{
+  title: "Ecto Changeset"
+}
+---
+# Ecto Changesets
+
+```elixir
+Mix.install([
+  {:jason, "~> 1.4"},
+  {:kino, "~> 0.8.0", override: true},
+  {:youtube, github: "brooklinjazz/youtube"},
+  {:hidden_cell, github: "brooklinjazz/hidden_cell"},
+  {:ecto, "~> 3.9"}
+])
+```
+
+## Navigation
+
+[Return Home](../start.livemd)<span style="padding: 0 30px"></span>
+[Report An Issue](https://github.com/DockYard-Academy/beta_curriculum/issues/new?assignees=&labels=&template=issue.md&title=)
+
+## Setup
+
+Ensure you type the `ea` keyboard shortcut to evaluate all Elixir cells before starting. Alternatively you can evaluate the Elixir cells as you read.
+
+## Review Questions
+
+Upon completing this lesson, a student should be able to answer the following questions.
+
+* How do you validate complex structured data using Ecto?
+* Why use an Ecto.Changeset instead of writing your own validation logic?
+
+## Ecto Changesets
+
+[Ecto](https://hexdocs.pm/ecto/Ecto.html) is a library we typically use to communicate with a database. We'll learn more about databases in future lessons,
+but for now, we'll see how Ecto helps to interact with data.
+
+In addition to being the layer that we use to communicate with the database,
+Ecto is powerful for validating data. So far, you've created structs with their own (limited) data validation.
+
+Structs are not always ideal for validating, as they only allow us to enforce keys. We then have to write functions with data validation or guards.
+
+```elixir
+defmodule Person do
+  @enforce_keys [:name, :age]
+  defstruct @enforce_keys
+
+  def new(%{name: name, age: age}) when is_binary(name) and is_integer(age) do
+    {:ok,
+     %Person{
+       name: name,
+       age: age
+     }}
+  end
+
+  def new(_), do: {:error, :invalid_params}
+end
+```
+
+Struct creation functions typically returns an `{ok, struct}` tuple or an `{:error, message}` tuple.
+
+```elixir
+# Valid params
+{:ok, %Person{age: 20, name: "valid name"}} = Person.new(%{name: "valid name", age: 20})
+
+# Invalid params
+{:error, :invalid_params} = Person.new(%{name: ["invalid name"], age: 20})
+```
+
+As the struct grows in complexity, this solution does not always scale well. That's because structs don't have any built-in data validation other than enforcing keys.
+
+As an alternative, we can use [Ecto Changesets](https://hexdocs.pm/ecto/Ecto.Changeset.html) to validate data.
+
+## Changesets
+
+An [Ecto.Changeset](https://hexdocs.pm/ecto/Ecto.Changeset.html) struct allows us to validate data and return helpful error messages when something is invalid.
+
+A changeset describes the expected shape of your data and ensures that data conforms to the desired shape.
+
+<!-- livebook:{"break_markdown":true} -->
+
+```mermaid
+flowchart
+n[username]
+User --> n --> s1[string]
+n --> l[less than 40 characters]
+n --> gr[greater than 3 characters]
+User --> password --> s2[string]
+password --> g[greater than 10 characters]
+User --> a[accepted terms of service] --> true
+```
+
+<!-- livebook:{"break_markdown":true} -->
+
+To create a changeset, we need to know.
+
+* the `initial_data`.
+* the expected data validation as `types`.
+* the attempted change from `params`.
+* the keys of `params` to `cast/3` into data that conforms to the changeset.
+
+<!-- livebook:{"break_markdown":true} -->
+
+```mermaid
+flowchart
+  i[initial_data]
+  t[types]
+  p[params]
+  k[keys]
+  ca[cast/3]
+  c[Ecto.Changeset]
+  i --> ca
+  t --> ca
+  p --> ca
+  k --> ca
+  ca --> c
+```
+
+<!-- livebook:{"break_markdown":true} -->
+
+We use changesets to validate new data or validate a change to some already validated data.
+
+Here we use the primitive types `:string` and `:integer`. For a full list of
+the allowable types, see the [Primitive Types](https://hexdocs.pm/ecto/Ecto.Schema.html#module-primitive-types) table.
+
+```elixir
+initial_data = %{}
+params = %{name: "Peter", age: 22}
+types = %{name: :string, age: :integer}
+keys = [:name, :age]
+
+changeset = Ecto.Changeset.cast({initial_data, types}, params, keys)
+```
+
+We've now bound the `changeset` variable to an `Ecto.Changeset` struct.
+
+The changeset contains:
+
+* **changes**: the `params` we want to update the source data.
+* **data**: the source data for the changeset.
+* **valid?**: whether or not the desired change breaks any validation.
+* **errors**: a keyword list of errors for any changes.
+* **action**: We'll gnore this for now as it is more important when working with databases. See [Changeset Actions](https://hexdocs.pm/ecto/Ecto.Changeset.html#module-changeset-actions).
+
+<!-- livebook:{"break_markdown":true} -->
+
+```mermaid
+flowchart
+  e[Ecto.Changeset]
+  a[action]
+  d[data]
+  v[valid?]
+  c[changes]
+  er[errors]
+  e --> a
+  e --> d
+  e --> v
+  e --> c
+  e --> er
+```
+
+<!-- livebook:{"break_markdown":true} -->
+
+The changeset will store the errors as a keyword list, and `valid?` will be false when the parameters
+are invalid.
+
+```elixir
+invalid_params = %{name: 2, age: "hello"}
+invalid_changeset = Ecto.Changeset.cast({initial_data, types}, invalid_params, keys)
+```
+
+You'll notice that the changeset stores `errors` in a keyword list. Both the `name` and `age` are invalid, and each stores a different error message.
+
+## Ecto Validation Functions
+
+We can also add additional validations to the changeset. For a full list of functions, see the
+[Ecto Validation Functions](https://hexdocs.pm/ecto/Ecto.Changeset.html#validate_acceptance/3).
+
+These validation functions change the `errors` according to what they validate.
+
+```elixir
+initial_data = %{}
+
+# Notice we are missing age.
+params = %{name: "Peter"}
+types = %{name: :string, age: :integer}
+keys = [:name, :age]
+
+changeset =
+  Ecto.Changeset.cast({initial_data, types}, params, keys)
+  |> Ecto.Changeset.validate_required(:age)
+```
+
+Let's take the `User` example from above. A `User` should have a `username` between `3` and `40` characters,
+a password greater than `10` characters, and should accept our `:terms_and_conditions`.
+
+Here's an example with invalid data. Notice there is a list of `errors` on the returned changeset.
+
+```elixir
+initial_data = %{}
+
+# intentionally left empty to show errors
+params = %{}
+types = %{username: :string, password: :string, terms_and_conditions: :boolean}
+keys = [:username, :password, :terms_and_conditions]
+
+invalid_changeset =
+  {initial_data, types}
+  |> Ecto.Changeset.cast(params, keys)
+  |> Ecto.Changeset.validate_required([:username, :password])
+  |> Ecto.Changeset.validate_length(:username, min: 3, max: 40)
+  |> Ecto.Changeset.validate_length(:password, min: 10)
+  |> Ecto.Changeset.validate_acceptance(:terms_and_conditions)
+```
+
+Here's an example with valid params. Notice there are no `errors` on the changeset.
+
+```elixir
+initial_data = %{}
+
+params = %{username: "Peter", password: "secret_spider", terms_and_conditions: true}
+types = %{username: :string, password: :string, terms_and_conditions: :boolean}
+keys = [:username, :password, :terms_and_conditions]
+
+valid_changeset =
+  Ecto.Changeset.cast({initial_data, types}, params, keys)
+  |> Ecto.Changeset.validate_required([:username, :password])
+  |> Ecto.Changeset.validate_length(:username, min: 3, max: 40)
+  |> Ecto.Changeset.validate_length(:password, min: 10)
+  |> Ecto.Changeset.validate_acceptance(:terms_and_conditions)
+```
+
+To apply changes, we can use `Ecto.Changeset.apply_changes/1`, which will only apply the changes if the changes are valid. Because we aren't using a database, we have to manually set the action to `:update`.
+
+```elixir
+Ecto.Changeset.apply_action(valid_changeset, :update)
+```
+
+If the changes are not valid, we will receive an error and the changeset.
+
+```elixir
+Ecto.Changeset.apply_action(invalid_changeset, :update)
+```
+
+It's common to use this pattern to create validated data or handle the error.
+
+```elixir
+case Ecto.Changeset.apply_action(valid_changeset, :update) do
+  {:ok, data} -> data
+  {:error, message} -> message
+end
+```
+
+### Your Turn
+
+<!-- livebook:{"break_markdown":true} -->
+
+Use `Ecto.Changeset` to validate some parameters to create a book map.
+
+A book should have:
+
+* A required `:title` string field between `3` and `100` characters.
+* A required `:content` string field.
+
+<details style="background-color: lightgreen; padding: 1rem; margin: 1rem 0;">
+<summary>Example Solution</summary>
+
+```elixir
+initial_data = %{}
+types = %{title: :string, content: :string}
+params = %{title: "title", content: "content"}
+keys = [:title, :content]
+
+{initial_data, types}
+|> Ecto.Changeset.cast(params, keys)
+|> Ecto.Changeset.validate_required([:title, :content])
+|> Ecto.Changeset.validate_length(:title, min: 3, max: 100)
+|> Ecto.Changeset.apply_action(:update)
+```
+
+</details>
+
+```elixir
+
+```
+
+## Schemaless Changesets
+
+We often store the associated changeset and validations inside of a module that defines a struct. Conventionally, the module defines a `changeset/2` function
+to create the changeset and `new/1` function to create the struct instance.
+
+This module is called a [Schemaless Changeset](https://hexdocs.pm/ecto/Ecto.Changeset.html#module-schemaless-changesets). The Schema is a concept we'll return to when we cover Databases.
+
+For now, know that we can rely on the [Schemaless Changeset](https://hexdocs.pm/ecto/Ecto.Changeset.html#module-schemaless-changesets) to validate data before creating an instance of the struct.
+
+Here's an example, taken by converting the `User` struct above to use a schemaless changeset.
+
+```elixir
+defmodule User do
+  # Define the struct for User with fields :username, :password, and :terms_and_conditions
+  defstruct [:username, :password, :terms_and_conditions]
+
+  # Define the types for the fields in the struct
+  @types %{username: :string, password: :string, terms_and_conditions: :boolean}
+
+  # Define the changeset function for a User struct
+  def changeset(%User{} = user, params) do
+    # Cast the user struct and the types defined earlier with the keys from the params map
+    {user, @types}
+    |> Ecto.Changeset.cast(params, Map.keys(@types))
+    # Validate that the username and password fields are present
+    |> Ecto.Changeset.validate_required([:username, :password])
+    # Validate that the password field is at least 10 characters long
+    |> Ecto.Changeset.validate_length(:password, min: 10)
+    # Validate that the username field is between 3 and 40 characters long
+    |> Ecto.Changeset.validate_length(:username, min: 3, max: 40)
+    # Validate that the terms_and_conditions field is accepted
+    |> Ecto.Changeset.validate_acceptance(:terms_and_conditions)
+  end
+
+  # Define a new function for creating a new user
+  def new(params) do
+    # Start with an empty User struct
+    %User{}
+    # Pass the struct and the params to the changeset function
+    |> changeset(params)
+    # Apply the update action to the changeset
+    |> Ecto.Changeset.apply_action(:update)
+  end
+end
+
+# Create a new user with the provided parameters
+User.new(%{username: "Peter Parker", password: "secret_spider", terms_and_conditions: true})
+```
+
+### Your Turn
+
+Create a `Book` schemaless changeset struct. A book should have:
+
+* A required `:title` string field between `3` and `100` characters.
+* A required `:content` string field.
+* An `:author` string field.
+* An `:is_licenced` field which must always be true.
+* An `:is_published` boolean field.
+
+<details style="background-color: lightgreen; padding: 1rem; margin: 1rem 0;">
+<summary>Example Solution</summary>
+
+```elixir
+defmodule Book do
+  defstruct [:title, :content]
+
+  @types %{
+    title: :string,
+    content: :string,
+    author: :string,
+    is_licenced: :boolean,
+    is_published: :boolean
+  }
+
+  def changeset(%Book{} = book, params) do
+    {book, @types}
+    |> Ecto.Changeset.cast(params, Map.keys(@types))
+    |> Ecto.Changeset.validate_required([:title, :content])
+    |> Ecto.Changeset.validate_length(:title, min: 3, max: 100)
+    |> Ecto.Changeset.validate_acceptance(:is_licenced)
+  end
+
+  def new(params) do
+    %Book{}
+    |> changeset(params)
+    |> Ecto.Changeset.apply_action(:update)
+  end
+end
+```
+
+</details>
+
+```elixir
+
+```
+
+## Mark As Completed
+
+<!-- livebook:{"attrs":{"source":"file_name = Path.basename(Regex.replace(~r/#.+/, __ENV__.file, \"\"), \".livemd\")\n\nsave_name =\n  case Path.basename(__DIR__) do\n    \"reading\" -> \"ecto_changeset_reading\"\n    \"exercises\" -> \"ecto_changeset_exercise\"\n  end\n\nprogress_path = __DIR__ <> \"/../progress.json\"\nexisting_progress = File.read!(progress_path) |> Jason.decode!()\n\ndefault = Map.get(existing_progress, save_name, false)\n\nform =\n  Kino.Control.form(\n    [\n      completed: input = Kino.Input.checkbox(\"Mark As Completed\", default: default)\n    ],\n    report_changes: true\n  )\n\nTask.async(fn ->\n  for %{data: %{completed: completed}} <- Kino.Control.stream(form) do\n    File.write!(\n      progress_path,\n      Jason.encode!(Map.put(existing_progress, save_name, completed), pretty: true)\n    )\n  end\nend)\n\nform","title":"Track Your Progress"},"chunks":null,"kind":"Elixir.HiddenCell","livebook_object":"smart_cell"} -->
+
+```elixir
+file_name = Path.basename(Regex.replace(~r/#.+/, __ENV__.file, ""), ".livemd")
+
+save_name =
+  case Path.basename(__DIR__) do
+    "reading" -> "ecto_changeset_reading"
+    "exercises" -> "ecto_changeset_exercise"
+  end
+
+progress_path = __DIR__ <> "/../progress.json"
+existing_progress = File.read!(progress_path) |> Jason.decode!()
+
+default = Map.get(existing_progress, save_name, false)
+
+form =
+  Kino.Control.form(
+    [
+      completed: input = Kino.Input.checkbox("Mark As Completed", default: default)
+    ],
+    report_changes: true
+  )
+
+Task.async(fn ->
+  for %{data: %{completed: completed}} <- Kino.Control.stream(form) do
+    File.write!(
+      progress_path,
+      Jason.encode!(Map.put(existing_progress, save_name, completed), pretty: true)
+    )
+  end
+end)
+
+form
+```
+
+## Commit Your Progress
+
+Run the following in your command line from the curriculum folder to track and save your progress in a Git commit.
+Ensure that you do not already have undesired or unrelated changes by running `git status` or by checking the source control tab in Visual Studio Code.
+
+```
+$ git checkout -b ecto-changeset-reading
+$ git add .
+$ git commit -m "finish ecto changeset reading"
+$ git push origin ecto-changeset-reading
+```
+
+Create a pull request from your `ecto-changeset-reading` branch to your `solutions` branch.
+Please do not create a pull request to the DockYard Academy repository as this will spam our PR tracker.
+
+**DockYard Academy Students Only:**
+
+Notify your instructor by including `@BrooklinJazz` in your PR description to get feedback.
+You (or your instructor) may merge your PR into your solutions branch after review.
+
+If you are interested in joining the next academy cohort, [sign up here](https://academy.dockyard.com/) to receive more news when it is available.
+
+## Up Next
+
+| Previous                                   | Next                                             |
+| ------------------------------------------ | -----------------------------------------------: |
+| [Portfolio](../exercises/portfolio.livemd) | [Sign Up Form](../exercises/sign_up_form.livemd) |
+

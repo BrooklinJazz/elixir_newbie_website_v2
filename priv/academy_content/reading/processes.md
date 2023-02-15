@@ -1,0 +1,448 @@
+%{
+  title: "Processes"
+}
+---
+# Processes
+
+```elixir
+Mix.install([
+  {:jason, "~> 1.4"},
+  {:kino, "~> 0.8.0", override: true},
+  {:youtube, github: "brooklinjazz/youtube"},
+  {:hidden_cell, github: "brooklinjazz/hidden_cell"}
+])
+```
+
+## Navigation
+
+[Return Home](../start.livemd)<span style="padding: 0 30px"></span>
+[Report An Issue](https://github.com/DockYard-Academy/beta_curriculum/issues/new?assignees=&labels=&template=issue.md&title=)
+
+## Setup
+
+Ensure you type the `ea` keyboard shortcut to evaluate all Elixir cells before starting. Alternatively, you can evaluate the Elixir cells as you read.
+
+## Review Questions
+
+Upon completing this lesson, a student should be able to answer the following questions.
+
+* How do processes send and receive messages?
+* What is state and why might we use it in our programs?
+
+## Processes
+
+> In Elixir, all code runs inside processes.
+> Processes are isolated from each other, run concurrent to one another
+> and communicate via message passing. Processes are not only the basis for concurrency in Elixir,
+> but they also provide the means for building distributed and fault-tolerant programs.
+> 
+> * [Elixir Documentation](https://elixir-lang.org/getting-started/processes.html#:~:text=In%20Elixir%2C%20all%20code%20runs,distributed%20and%20fault%2Dtolerant%20programs.)
+
+For an introduction to processes, how they work under the hood, and why that matters, we recommend the exceptional talk by Sasa Juric: "The Soul of Erlang."
+
+<!-- livebook:{"attrs":{"source":"YouTube.new(\"https://www.youtube.com/watch?v=JvBT4XBdoUE\")","title":"The Soul of Erlang and Elixir • Sasa Juric • GOTO 2019"},"chunks":null,"kind":"Elixir.HiddenCell","livebook_object":"smart_cell"} -->
+
+```elixir
+YouTube.new("https://www.youtube.com/watch?v=JvBT4XBdoUE")
+```
+
+So all Elixir code runs inside of a process.
+
+<!-- livebook:{"break_markdown":true} -->
+
+```mermaid
+flowchart
+  subgraph Process
+    E[Elixir Code]
+  end
+```
+
+<!-- livebook:{"break_markdown":true} -->
+
+Processes are isolated from each other and communicate via message passing.
+
+<!-- livebook:{"break_markdown":true} -->
+
+```mermaid
+sequenceDiagram
+    Process1 ->> Process2: message
+```
+
+<!-- livebook:{"break_markdown":true} -->
+
+Processes can store state and allow us to have in-memory persistence.
+
+```mermaid
+flowchart
+  subgraph Process
+    State
+  end
+```
+
+Perhaps without realizing it, you've been using processes for some time now. Each Elixir cell in livebook is a process. It even has a **pid** (personal identifier) that we can see with `self()`.
+
+```elixir
+self()
+```
+
+We can `send/2` and `receive/1` messages between processes by using their **pid**. Likewise, a process can send its `self()` a message.
+
+```elixir
+send(self(), "message")
+
+receive do
+  "message" -> "received"
+end
+```
+
+The left-hand side of the receive expression can pattern match on any value.
+It's much like a `case` statement.
+
+```elixir
+send(self(), {:hello, "world"})
+
+receive do
+  {:hello, payload} -> payload
+end
+```
+
+We can `spawn/1` a new process and get its pid.
+
+```mermaid
+sequenceDiagram
+    Parent Process->>Child Process: spawns
+    activate Child Process
+    Child Process-->>Parent Process: pid
+    deactivate Child Process
+```
+
+```elixir
+spawn(fn -> nil end)
+```
+
+A process accepts a callback function and ends when that callback function completes.
+A process is **alive** and then it **dies**.
+
+```mermaid
+flowchart LR
+spawn --> Process --> Alive --> cn[Callback Function] --> Dead
+```
+
+We can use the [Process](https://hexdocs.pm/elixir/Process.html) module for functionality
+related to processes. We'll use the `alive?/1` function to show that the process is alive before executing its callback function. [Process.sleep/1](https://hexdocs.pm/elixir/Process.html#sleep/1) pauses the execution of the process that it is called in.
+
+```elixir
+pid = spawn(fn -> IO.puts("I was called") end)
+
+Process.alive?(pid) && IO.puts("I am alive!")
+```
+
+We can use [Process.sleep/1](https://hexdocs.pm/elixir/Process.html#sleep/1) to pause the execution and show that the spawned process dies
+after it is called.
+
+```elixir
+pid = spawn(fn -> IO.puts("I was called") end)
+
+Process.sleep(100)
+
+Process.alive?(pid) || IO.puts("I am dead :(")
+```
+
+Processes are isolated from each other. That means that when a child process raises an error, it will not crash the parent process. Instead, it will only log an error.
+
+<!-- livebook:{"break_markdown":true} -->
+
+```mermaid
+sequenceDiagram
+    Parent Process->>Child Process: spawns
+    activate Child Process
+    Child Process-->>Parent Process: pid
+    Child Process->>Child Process: raise
+    activate Child Process
+    Child Process->>Parent Process: logs termination
+    deactivate Child Process
+    Child Process->>Child Process: dies
+    deactivate Child Process
+```
+
+```elixir
+spawn(fn -> raise "oops" end)
+"the above crashes, but I will keep running."
+```
+
+If this is not desirable behavior, we can link processes together so that if one dies, the other will
+crash.
+
+<!-- livebook:{"break_markdown":true} -->
+
+```mermaid
+sequenceDiagram
+    Parent Process->>Child Process: spawns link
+    activate Child Process
+    Child Process-->>Parent Process: pid
+    Child Process->>Child Process: raise
+    activate Child Process
+    Child Process->>Parent Process: raise
+    deactivate Child Process
+    Child Process->>Child Process: dies
+    Parent Process->>Parent Process: raise
+    deactivate Child Process
+```
+
+<!-- livebook:{"break_markdown":true} -->
+
+We can either `spawn_link/1`.
+
+<!-- livebook:{"force_markdown":true} -->
+
+```elixir
+pid1 = spawn_link(fn -> raise "oops" end)
+"I will not run, because the above crashes"
+```
+
+Or manually link a process with [Process.link/1](https://hexdocs.pm/elixir/Process.html#link/1).
+
+<!-- livebook:{"force_markdown":true} -->
+
+```elixir
+pid1 = spawn(fn -> raise "oops" end)
+Process.link(pid1)
+"I will not run, because the above crashes"
+```
+
+### Your Turn
+
+Spawn a linked process and crash this Elixir cell below.
+Comment out your solution when complete to avoid continuously crashing the livebook!
+
+```elixir
+
+```
+
+## Message Passing
+
+By spawning two processes, they can communicate back and forth with `send/2` and `receive/1`.
+Let's spawn a process in one cell and send a message in another.
+
+```mermaid
+flowchart LR
+subgraph P1[Process 1]
+  pid -->
+  receive
+end
+
+subgraph Process 2
+  P2 --> send --> pid
+end
+```
+
+```elixir
+pid1 =
+  spawn(fn ->
+    receive do
+      "message" -> IO.puts("received!")
+    end
+  end)
+```
+
+Evaluate the cell above to create a process waiting to receive a message, then evaluate
+the cell below to send that process a message. You'll notice the [IO.puts/1](https://hexdocs.pm/elixir/IO.html#puts/1) logs in the cell below.
+
+As soon as the spawned process receives a message, it dies. You'll notice you can only send
+and receive a single message. You can re-evaluate the cell above and the cell below to
+repeat the example.
+
+```elixir
+send(pid1, "message")
+```
+
+### Your Turn
+
+In the Elixir cell below, spawn a new process and send it a message `{:hello, "world"}`.
+`IO.puts` the message's payload where `"world"` is the payload.
+
+```elixir
+
+```
+
+## State
+
+So far, we spawn a process that receives a single message and then dies.
+
+```mermaid
+flowchart LR
+  P1[Process] --send-->
+  P2[Process2] --> receive --dies--> P2
+```
+
+<!-- livebook:{"break_markdown":true} -->
+
+We can also create a process that can receive many messages by leveraging a recursive
+function.
+
+This recursive function will continue to call receive indefinitely, so the process should
+keep receiving messages and stay alive.
+
+<!-- livebook:{"break_markdown":true} -->
+
+```mermaid
+flowchart LR
+Process --> loop --> receive --> loop
+```
+
+```elixir
+defmodule ServerProcess do
+  def loop do
+    IO.puts("called #{Enum.random(1..10)}")
+
+    receive do
+      "message" -> loop()
+    end
+  end
+end
+
+server_process = spawn(fn -> ServerProcess.loop() end)
+```
+
+We've used [Enum.random/1](https://hexdocs.pm/elixir/Enum.html#random/1) to show that the process continues to loop and receive messages.
+
+```elixir
+send(server_process, "message")
+```
+
+With a slight modification of the `ServerProcess`, we can store state!
+
+<!-- livebook:{"break_markdown":true} -->
+
+```mermaid
+flowchart LR
+ServerProcess --initial state--> loop --state--> receive --new state--> loop
+```
+
+<!-- livebook:{"break_markdown":true} -->
+
+We'll store the state as an integer to create a counter.
+
+<!-- livebook:{"break_markdown":true} -->
+
+```mermaid
+flowchart LR
+CounterProcess --> loop --0--> receive --1--> loop
+```
+
+```elixir
+defmodule CounterProcess do
+  def loop(state \\ 0) do
+    IO.inspect(state, label: "counter")
+
+    receive do
+      :increment -> loop(state + 1)
+    end
+  end
+end
+
+counter_process = spawn(fn -> CounterProcess.loop() end)
+```
+
+Try evaluating the cell below over and over again. Notice that the counter value increments!
+We now have stateful processes!
+
+```elixir
+send(counter_process, :increment)
+```
+
+Stateful processes are short-term in-memory persistence. We can create a stateful process
+to store some value for the duration of the program.
+
+<!-- livebook:{"break_markdown":true} -->
+
+### Your Turn
+
+Modify the `Counter` module below so it can receive a `:decrement` message to decrement the current count.
+
+```elixir
+defmodule Counter do
+  def loop(state \\ 0) do
+    IO.inspect(state, label: "counter")
+
+    receive do
+      :increment -> loop(state + 1)
+    end
+  end
+end
+
+counter_process = spawn(fn -> Counter.loop() end)
+```
+
+You should be able to send a `:decrement` message to a spawned `Counter`. Uncomment and evaluate the code below to test your solution.
+
+```elixir
+# send(counter_process, :decrement)
+```
+
+## Mark As Completed
+
+<!-- livebook:{"attrs":{"source":"file_name = Path.basename(Regex.replace(~r/#.+/, __ENV__.file, \"\"), \".livemd\")\n\nsave_name =\n  case Path.basename(__DIR__) do\n    \"reading\" -> \"processes_reading\"\n    \"exercises\" -> \"processes_exercise\"\n  end\n\nprogress_path = __DIR__ <> \"/../progress.json\"\nexisting_progress = File.read!(progress_path) |> Jason.decode!()\n\ndefault = Map.get(existing_progress, save_name, false)\n\nform =\n  Kino.Control.form(\n    [\n      completed: input = Kino.Input.checkbox(\"Mark As Completed\", default: default)\n    ],\n    report_changes: true\n  )\n\nTask.async(fn ->\n  for %{data: %{completed: completed}} <- Kino.Control.stream(form) do\n    File.write!(\n      progress_path,\n      Jason.encode!(Map.put(existing_progress, save_name, completed), pretty: true)\n    )\n  end\nend)\n\nform","title":"Track Your Progress"},"chunks":null,"kind":"Elixir.HiddenCell","livebook_object":"smart_cell"} -->
+
+```elixir
+file_name = Path.basename(Regex.replace(~r/#.+/, __ENV__.file, ""), ".livemd")
+
+save_name =
+  case Path.basename(__DIR__) do
+    "reading" -> "processes_reading"
+    "exercises" -> "processes_exercise"
+  end
+
+progress_path = __DIR__ <> "/../progress.json"
+existing_progress = File.read!(progress_path) |> Jason.decode!()
+
+default = Map.get(existing_progress, save_name, false)
+
+form =
+  Kino.Control.form(
+    [
+      completed: input = Kino.Input.checkbox("Mark As Completed", default: default)
+    ],
+    report_changes: true
+  )
+
+Task.async(fn ->
+  for %{data: %{completed: completed}} <- Kino.Control.stream(form) do
+    File.write!(
+      progress_path,
+      Jason.encode!(Map.put(existing_progress, save_name, completed), pretty: true)
+    )
+  end
+end)
+
+form
+```
+
+## Commit Your Progress
+
+Run the following in your command line from the curriculum folder to track and save your progress in a Git commit.
+Ensure that you do not already have undesired or unrelated changes by running `git status` or by checking the source control tab in Visual Studio Code.
+
+```
+$ git checkout -b processes-reading
+$ git add .
+$ git commit -m "finish processes reading"
+$ git push origin processes-reading
+```
+
+Create a pull request from your `processes-reading` branch to your `solutions` branch.
+Please do not create a pull request to the DockYard Academy repository as this will spam our PR tracker.
+
+**DockYard Academy Students Only:**
+
+Notify your instructor by including `@BrooklinJazz` in your PR description to get feedback.
+You (or your instructor) may merge your PR into your solutions branch after review.
+
+If you are interested in joining the next academy cohort, [sign up here](https://academy.dockyard.com/) to receive more news when it is available.
+
+## Up Next
+
+| Previous                                       | Next                                          |
+| ---------------------------------------------- | --------------------------------------------: |
+| [File Search](../exercises/file_search.livemd) | [Process](../exercises/process_drills.livemd) |
+

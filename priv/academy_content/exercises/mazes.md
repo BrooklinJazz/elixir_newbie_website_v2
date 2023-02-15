@@ -1,0 +1,369 @@
+%{
+  title: "Mazes"
+}
+---
+# Mazes
+
+```elixir
+Mix.install([
+  {:jason, "~> 1.4"},
+  {:kino, "~> 0.8.0", override: true},
+  {:youtube, github: "brooklinjazz/youtube"},
+  {:hidden_cell, github: "brooklinjazz/hidden_cell"}
+])
+```
+
+## Navigation
+
+[Return Home](../start.livemd)<span style="padding: 0 30px"></span>
+[Report An Issue](https://github.com/DockYard-Academy/beta_curriculum/issues/new?assignees=&labels=&template=issue.md&title=)
+
+## Setup
+
+Ensure you type the `ea` keyboard shortcut to evaluate all Elixir cells before starting. Alternatively you can evaluate the Elixir cells as you read.
+
+## Overview
+
+In this exercise, you're going to navigate a maze game.
+
+Each maze is a deeply nested `map`.
+
+If you navigate successfully, your answer will return `"Exit!"`
+
+## The Atom Maze
+
+We've created a map that represents the following maze. Each cardinal direction (north, south, west, east) necessary to navigate the maze is stored as a key in the map.
+
+<!-- livebook:{"break_markdown":true} -->
+
+![](images/atom_key_maze.png)
+
+<!-- livebook:{"break_markdown":true} -->
+
+Use **map.key** notation to access the `"Exit!"` string.
+
+<details style="background-color: lightgreen; padding: 1rem; margin: 1rem 0;">
+<summary>Example solution</summary>
+
+```elixir
+maze = %{
+  south: %{
+    west: %{
+      south: %{
+        east: %{
+          south: %{
+            east: %{
+              south: "Exit!"
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+maze.south.west.south.east.south.east.south
+```
+
+</details>
+
+```elixir
+maze = %{
+  south: %{
+    west: %{
+      south: %{
+        east: %{
+          south: %{
+            east: %{
+              south: "Exit!"
+            }
+          }
+        }
+      }
+    }
+  }
+}
+```
+
+## The String Maze
+
+Use use **map[key]** notation to access the maze and retrieve the `"Exit!"` string.
+
+<!-- livebook:{"break_markdown":true} -->
+
+![](images/string_maze_small.png)
+
+<!-- livebook:{"break_markdown":true} -->
+
+<details style="background-color: lightgreen; padding: 1rem; margin: 1rem 0;">
+<summary>Example solution</summary>
+
+```elixir
+maze = %{
+  "south" => %{
+    "east" => %{
+      "south" => %{
+        "west" => %{
+          "south" => %{
+            "west" => %{
+              "south" => %{
+                "east" => %{
+                  "south" => "Exit!"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+maze["south"]["east"]["south"]["west"]["south"]["west"]["south"]["east"]["south"]
+```
+
+</details>
+
+```elixir
+maze = %{
+  "south" => %{
+    "east" => %{
+      "south" => %{
+        "west" => %{
+          "south" => %{
+            "west" => %{
+              "south" => %{
+                "east" => %{
+                  "south" => "Exit!"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+```
+
+## Bonus: Treasure Map
+
+You have been given a treasure map (pun intended). That will lead you to `"gold"`.
+
+Use **map[key]** and/or **map.key** notation to retrieve the `"gold"` value in the `treasure_map`.
+
+<details style="background-color: lightgreen; padding: 1rem; margin: 1rem 0;">
+<summary>Example solution</summary>
+
+```elixir
+treasure_map = %{
+  "south ten paces" => %{
+    10 => %{
+      :"east three paces" => %{
+        [1, 2, 3] => %{
+          {"turn", "right"} => %{
+            :dig => "gold"
+          }
+        }
+      }
+    }
+  }
+}
+
+treasure_map["south ten paces"][10][:"east three paces"][[1, 2, 3]][{"turn", "right"}][:dig]
+```
+
+</details>
+
+```elixir
+treasure_map = %{
+  "south ten paces" => %{
+    10 => %{
+      :"east three paces" => %{
+        [1, 2, 3] => %{
+          {"turn", "right"} => %{
+            :dig => "gold"
+          }
+        }
+      }
+    }
+  }
+}
+```
+
+### (Extra Bonus) Update the Treasure Map
+
+Use map update syntax to create a update the original `treasure_map` such that the `"gold"` is now `"taken"`.
+
+<details style="background-color: lightgreen; padding: 1rem; margin: 1rem 0;">
+<summary>Example solution</summary>
+
+```elixir
+treasure_map = %{
+  "south ten paces" => %{
+    10 => %{
+      :"east three paces" => %{
+        [1, 2, 3] => %{
+          {"turn", "right"} => %{
+            :dig => "gold"
+          }
+        }
+      }
+    }
+  }
+}
+```
+
+We can update the treasure map using map update syntax `%{old_map | updated_key}`.
+
+```elixir
+%{
+  treasure_map
+  | "south ten paces" => %{
+      10 => %{
+        :"east three paces" => %{
+          [1, 2, 3] => %{
+            {"turn", "right"} => %{:dig => "taken"}
+          }
+        }
+      }
+    }
+}
+```
+
+You might also have found the [Kernel.put_in](https://hexdocs.pm/elixir/1.12/Kernel.html#put_in/3) function for updating a deeply nested map.
+
+```elixir
+put_in(
+  treasure_map,
+  ["south ten paces", 10, :"east three paces", [1, 2, 3], {"turn", "right"}, :dig],
+  "taken"
+)
+```
+
+</details>
+
+Enter your solution below.
+
+```elixir
+treasure_map = %{
+  "south ten paces" => %{
+    10 => %{
+      :"east three paces" => %{
+        [1, 2, 3] => %{
+          {"turn", "right"} => %{
+            :dig => "gold"
+          }
+        }
+      }
+    }
+  }
+}
+```
+
+## Bonus: Pattern Matching
+
+Use pattern matching to bind the `"Exit!"` string to an `exit` variable.
+
+```elixir
+maze = %{
+  "south" => %{
+    "east" => %{
+      "south" => %{
+        "west" => %{
+          "south" => %{
+            "west" => %{
+              "south" => %{
+                "east" => %{
+                  "south" => "Exit!"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+```
+
+## BONUS: Create Your Own Maze
+
+Generate a maze using the [Online Maze Generator](https://www.mazegenerator.net/). It should be
+at least a 5 * 5 in width and height.
+
+* Create a deeply nested map to represent your `custom_maze`. It should have an `"Exit!"` value at the end.
+* Have a partner navigate your maze using either **map[key]** notation or **map.key** notation to retrieve the `"Exit!"` value.
+
+Enter your solution below.
+
+```elixir
+
+```
+
+## Mark As Completed
+
+<!-- livebook:{"attrs":{"source":"file_name = Path.basename(Regex.replace(~r/#.+/, __ENV__.file, \"\"), \".livemd\")\n\nsave_name =\n  case Path.basename(__DIR__) do\n    \"reading\" -> \"mazes_reading\"\n    \"exercises\" -> \"mazes_exercise\"\n  end\n\nprogress_path = __DIR__ <> \"/../progress.json\"\nexisting_progress = File.read!(progress_path) |> Jason.decode!()\n\ndefault = Map.get(existing_progress, save_name, false)\n\nform =\n  Kino.Control.form(\n    [\n      completed: input = Kino.Input.checkbox(\"Mark As Completed\", default: default)\n    ],\n    report_changes: true\n  )\n\nTask.async(fn ->\n  for %{data: %{completed: completed}} <- Kino.Control.stream(form) do\n    File.write!(\n      progress_path,\n      Jason.encode!(Map.put(existing_progress, save_name, completed), pretty: true)\n    )\n  end\nend)\n\nform","title":"Track Your Progress"},"chunks":null,"kind":"Elixir.HiddenCell","livebook_object":"smart_cell"} -->
+
+```elixir
+file_name = Path.basename(Regex.replace(~r/#.+/, __ENV__.file, ""), ".livemd")
+
+save_name =
+  case Path.basename(__DIR__) do
+    "reading" -> "mazes_reading"
+    "exercises" -> "mazes_exercise"
+  end
+
+progress_path = __DIR__ <> "/../progress.json"
+existing_progress = File.read!(progress_path) |> Jason.decode!()
+
+default = Map.get(existing_progress, save_name, false)
+
+form =
+  Kino.Control.form(
+    [
+      completed: input = Kino.Input.checkbox("Mark As Completed", default: default)
+    ],
+    report_changes: true
+  )
+
+Task.async(fn ->
+  for %{data: %{completed: completed}} <- Kino.Control.stream(form) do
+    File.write!(
+      progress_path,
+      Jason.encode!(Map.put(existing_progress, save_name, completed), pretty: true)
+    )
+  end
+end)
+
+form
+```
+
+## Commit Your Progress
+
+Run the following in your command line from the curriculum folder to track and save your progress in a Git commit.
+Ensure that you do not already have undesired or unrelated changes by running `git status` or by checking the source control tab in Visual Studio Code.
+
+```
+$ git checkout -b mazes-exercise
+$ git add .
+$ git commit -m "finish mazes exercise"
+$ git push origin mazes-exercise
+```
+
+Create a pull request from your `mazes-exercise` branch to your `solutions` branch.
+Please do not create a pull request to the DockYard Academy repository as this will spam our PR tracker.
+
+**DockYard Academy Students Only:**
+
+Notify your instructor by including `@BrooklinJazz` in your PR description to get feedback.
+You (or your instructor) may merge your PR into your solutions branch after review.
+
+If you are interested in joining the next academy cohort, [sign up here](https://academy.dockyard.com/) to receive more news when it is available.
+
+## Up Next
+
+| Previous                                       | Next                                     |
+| ---------------------------------------------- | ---------------------------------------: |
+| [Family Tree](../exercises/family_tree.livemd) | [Functions](../reading/functions.livemd) |
+
