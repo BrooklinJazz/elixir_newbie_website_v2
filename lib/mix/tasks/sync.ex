@@ -1,9 +1,11 @@
 defmodule Mix.Tasks.Sync do
   @moduledoc "Sync DockYard Academy Content With Nimble Publisher"
   use Mix.Task
+  @requirements ["course_outline"]
 
   @shortdoc @moduledoc
   def run(_) do
+    IO.puts("running: Sync")
     Mix.Task.run("app.start")
     url = "https://raw.githubusercontent.com/DockYard-Academy/beta_curriculum/main/start.livemd"
 
@@ -21,7 +23,6 @@ defmodule Mix.Tasks.Sync do
     |> Enum.each(fn [_full_match, title, file_name] ->
       page_url =
         "https://raw.githubusercontent.com/DockYard-Academy/beta_curriculum/main/#{file_name}"
-        IO.inspect(file_name)
       {:ok, %HTTPoison.Response{body: markdown}} = HTTPoison.get(page_url)
 
       File.write!("./priv/academy_content/#{Path.rootname(file_name)}.md", """

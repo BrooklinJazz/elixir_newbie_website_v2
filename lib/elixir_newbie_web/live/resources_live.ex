@@ -3,7 +3,7 @@ defmodule ElixirNewbieWeb.ResourcesLive do
 
   def render(assigns) do
     ~H"""
-    <section class="text-white bg-[url('/images/background-smoke-transparent.webp')] min-h-screen bg-black bg-no-repeat">
+    <section class="bg-[url('/images/background-smoke-transparent.webp')] min-h-screen bg-black bg-no-repeat bg-contain text-white">
       <.navigation />
       <section class="flex h-fit w-full flex-col gap-12 4k:gap-36 lg:flex-row xl:gap-24 mx-auto sm:w-full md:w-3/4 lg:w-full xl:w-3/4">
           <!-- Jumbotron -->
@@ -20,19 +20,17 @@ defmodule ElixirNewbieWeb.ResourcesLive do
           <!-- Jumbotron -->
       </section>
       <section class="w-2/3 mx-auto">
-        <%= for lesson <- @lessons do %>
-          <div class="markdown">
-            <%= raw lesson.body %>
-          </div>
-        <% end %>
+        <div class="markdown">
+          <%= raw @outline.body %>
+        </div>
       </section>
     </section>
     """
   end
 
   def mount(_params, _session, socket) do
-    lessons = ElixirNewbie.AcademyContent.all_lessons()
+    outline = ElixirNewbie.CourseOutline.outline()
 
-    {:ok, assign(socket, lessons: lessons)}
+    {:ok, assign(socket, outline: outline)}
   end
 end

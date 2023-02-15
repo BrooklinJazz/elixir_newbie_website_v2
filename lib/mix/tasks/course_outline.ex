@@ -4,6 +4,7 @@ defmodule Mix.Tasks.CourseOutline do
 
   # @shortdoc "Simply calls the Hello.say/0 function."
   def run(_) do
+    IO.puts("running: Course Outline")
     Mix.Task.run("app.start")
 
     url = "https://raw.githubusercontent.com/DockYard-Academy/beta_curriculum/main/start.livemd"
@@ -16,7 +17,7 @@ defmodule Mix.Tasks.CourseOutline do
         query = %{"url" => academy_url}
         query_params = URI.encode_query(query)
         result = "https://livebook.dev/run?" <> query_params
-        "[#{file_name}](#{result})"
+        "[#{file_name}](#{Path.rootname(file_path)})"
       end)
 
     content = """
@@ -27,6 +28,6 @@ defmodule Mix.Tasks.CourseOutline do
     #{outline}
     """
 
-    File.write("priv/posts/course_outline.md", content)
+    File.write("priv/course_outline.md", content)
   end
 end
