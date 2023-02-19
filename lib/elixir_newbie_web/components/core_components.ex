@@ -41,6 +41,9 @@ defmodule ElixirNewbieWeb.CoreComponents do
           <.link class="link-underline opacity-80 hover:opacity-100" navigate={"/resources"}>
             Resources
           </.link>
+          <.link class="link-underline opacity-80 hover:opacity-100" navigate={"/community"}>
+            Community
+          </.link>
         </div>
       </div>
       <hr class="animate-gradient-x h-1 w-full border-0 bg-gradient-to-r from-transparent via-orange-500 to-transparent opacity-70" />

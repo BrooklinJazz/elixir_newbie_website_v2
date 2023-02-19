@@ -66,7 +66,7 @@ defmodule ElixirNewbieWeb.HomeLive do
       <div class="transition duration-300 ease-in-out group-hover:scale-110">
         <div class="animate-spin-slow absolute h-full w-full rounded-full border-l-2 border-cyan-600"/>
         <img alt={render_slot(@inner_block)} class="rounded-full border-2" src={@logo}/>
-        <p class="absolute mt-1 w-full text-center text-sm text-white transition duration-300 ease-in-out group-hover:opacity-100"><%= render_slot(@inner_block) %></p>
+        <p class="absolute mt-1 w-full text-center text-sm text-white opacity-0 transition duration-300 ease-in-out group-hover:opacity-100"><%= render_slot(@inner_block) %></p>
         </div>
     </.link>
     """
