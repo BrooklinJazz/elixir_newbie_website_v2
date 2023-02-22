@@ -1,0 +1,259 @@
+%{
+  title: "Comparison Operators"
+}
+---
+# Comparison Operators
+
+```elixir
+Mix.install([
+  {:jason, "~> 1.4"},
+  {:kino, "~> 0.8.0", override: true},
+  {:youtube, github: "brooklinjazz/youtube"},
+  {:hidden_cell, github: "brooklinjazz/hidden_cell"}
+])
+```
+
+## Navigation
+
+[Return Home](../start.livemd)<span style="padding: 0 30px"></span>
+[Report An Issue](https://github.com/DockYard-Academy/beta_curriculum/issues/new?assignees=&labels=&template=issue.md&title=)
+
+## Setup
+
+Ensure you type the `ea` keyboard shortcut to evaluate all Elixir cells before starting. Alternatively you can evaluate the Elixir cells as you read.
+
+## Review Questions
+
+Upon completing this lesson, a student should be able to answer the following questions.
+
+* What are comparison operators, and what do they commonly compare?
+* How might we use comparison operators in our programs?
+
+## Comparison Operators
+
+Comparison operators allow us to compare values.
+
+Using comparison operators, we can check if values are equal <span style="background-color: rgb(225 232 240); padding: 0.1rem 0.5rem; border-radius: 0.5rem;">==</span>, greater than `>`, less than `<`,
+greater than or equal <span style="background-color: rgb(225 232 240); padding: 0.1rem 0.5rem; border-radius: 0.5rem;">>=</span>, and less than or equal <span style="background-color: rgb(225 232 240); padding: 0.1rem 0.5rem; border-radius: 0.5rem;"><=</span>.
+
+Comparison operators can be used on any value but are most commonly used to compare
+integers and floats.
+
+The result of a comparison is a boolean, either `true` or `false`.
+
+For example, if we check that `5` equals `5`, we return `true`.
+
+```elixir
+5 == 5
+```
+
+### Remembering Greater Than and Less Than
+
+`>` greater than
+
+`<` less than
+
+To help remember which symbol `<` or `>` means greater than or less than, you might find it helpful
+to remember that the statement is `true` if the larger number goes on the larger side.
+
+Some people find it helpful to visualize the statement as an alligator eating. And the alligator always wants
+the biggest meal.
+
+```elixir
+# aligator wants biggest meal. The biggest number is `10` so return true.
+10 > 2
+```
+
+```elixir
+# aligator wants biggest meal. The biggest number is `10`, but it eats `2` so return false.
+10 < 2
+```
+
+### Strictly Equals
+
+<!-- livebook:{"break_markdown":true} -->
+
+There are two operators for checking equality in Elixir. `===` will check if two values
+are strictly equal in both value and type. So despite having  the same numerical value,
+`1` does not equal `1.0` because integers and floats are not the same types.
+
+```elixir
+1 === 1.0
+```
+
+However, if you only care about the numerical value and not the data type, you can use only
+two equals signs instead of three `==`
+
+```elixir
+1.0 == 1
+```
+
+### Your Turn
+
+Using comparison operators, determine if `10 + 10 * 15` is greater than `(10 + 10) * 15`.
+
+<details style="background-color: lightgreen; padding: 1rem; margin: 1rem 0;">
+<summary>Example solution</summary>
+
+```elixir
+10 + 10 * 15 > (10 + 10) * 15
+```
+
+</details>
+
+```elixir
+
+```
+
+Using comparisons operators, determine if `4 ** 6` is equal to `4 * 4 * 4 * 4 * 4 * 4`.
+
+<details style="background-color: lightgreen; padding: 1rem; margin: 1rem 0;">
+<summary>Example solution</summary>
+
+```elixir
+4 ** 6 == 4 * 4 * 4 * 4 * 4 * 4
+```
+
+</details>
+
+```elixir
+
+```
+
+Using comparison operators, determine if `100 / 2` is strictly equal to `50`.
+
+<details style="background-color: lightgreen; padding: 1rem; margin: 1rem 0;">
+<summary>Example solution</summary>
+
+```elixir
+100 / 2 === 50
+```
+
+</details>
+
+```elixir
+
+```
+
+## Comparing Different Data Types
+
+You can compare different data types to each other in the following [Sorting Order](https://hexdocs.pm/elixir/master/operators.html#term-ordering).
+
+<!-- livebook:{"force_markdown":true} -->
+
+```elixir
+number < atom < reference < function < port < pid < tuple < map < list < bitstring
+```
+
+You'll notice several data types that you may not be familiar with above. Don't worry. There's no need to memorize this sorting order nor know all of these data types.
+
+<!-- livebook:{"break_markdown":true} -->
+
+### Comparisons Strings
+
+When comparing strings, they compare based on alphabetical order. Letters earlier
+in the alphabet are evaluated as smaller than letters later in the alphabet.
+
+```elixir
+"a" < "z"
+```
+
+Capital letters are always less than lowercase letters regardless of alphabetical order.
+
+<!-- livebook:{"force_markdown":true} -->
+
+```elixir
+"Z" < "a"
+```
+
+<!-- livebook:{"break_markdown":true} -->
+
+### Your Turn
+
+Use comparison operators to determine if `"hello"` is equal to `"hello"`.
+
+<details style="background-color: lightgreen; padding: 1rem; margin: 1rem 0;">
+<summary>Example solution</summary>
+
+```elixir
+"hello" == "hello"
+```
+
+</details>
+
+```elixir
+
+```
+
+## Further Reading
+
+Consider the following resource(s) to deepen your understanding of the topic.
+
+* [HexDocs: Operators](https://hexdocs.pm/elixir/operators.html)
+
+## Mark As Completed
+
+<!-- livebook:{"attrs":{"source":"file_name = Path.basename(Regex.replace(~r/#.+/, __ENV__.file, \"\"), \".livemd\")\n\nsave_name =\n  case Path.basename(__DIR__) do\n    \"reading\" -> \"comparison_operators_reading\"\n    \"exercises\" -> \"comparison_operators_exercise\"\n  end\n\nprogress_path = __DIR__ <> \"/../progress.json\"\nexisting_progress = File.read!(progress_path) |> Jason.decode!()\n\ndefault = Map.get(existing_progress, save_name, false)\n\nform =\n  Kino.Control.form(\n    [\n      completed: input = Kino.Input.checkbox(\"Mark As Completed\", default: default)\n    ],\n    report_changes: true\n  )\n\nTask.async(fn ->\n  for %{data: %{completed: completed}} <- Kino.Control.stream(form) do\n    File.write!(\n      progress_path,\n      Jason.encode!(Map.put(existing_progress, save_name, completed), pretty: true)\n    )\n  end\nend)\n\nform","title":"Track Your Progress"},"chunks":null,"kind":"Elixir.HiddenCell","livebook_object":"smart_cell"} -->
+
+```elixir
+file_name = Path.basename(Regex.replace(~r/#.+/, __ENV__.file, ""), ".livemd")
+
+save_name =
+  case Path.basename(__DIR__) do
+    "reading" -> "comparison_operators_reading"
+    "exercises" -> "comparison_operators_exercise"
+  end
+
+progress_path = __DIR__ <> "/../progress.json"
+existing_progress = File.read!(progress_path) |> Jason.decode!()
+
+default = Map.get(existing_progress, save_name, false)
+
+form =
+  Kino.Control.form(
+    [
+      completed: input = Kino.Input.checkbox("Mark As Completed", default: default)
+    ],
+    report_changes: true
+  )
+
+Task.async(fn ->
+  for %{data: %{completed: completed}} <- Kino.Control.stream(form) do
+    File.write!(
+      progress_path,
+      Jason.encode!(Map.put(existing_progress, save_name, completed), pretty: true)
+    )
+  end
+end)
+
+form
+```
+
+## Commit Your Progress
+
+Run the following in your command line from the curriculum folder to track and save your progress in a Git commit.
+Ensure that you do not already have undesired or unrelated changes by running `git status` or by checking the source control tab in Visual Studio Code.
+
+```
+$ git checkout -b comparison-operators-reading
+$ git add .
+$ git commit -m "finish comparison operators reading"
+$ git push origin comparison-operators-reading
+```
+
+Create a pull request from your `comparison-operators-reading` branch to your `solutions` branch.
+Please do not create a pull request to the DockYard Academy repository as this will spam our PR tracker.
+
+**DockYard Academy Students Only:**
+
+Notify your instructor by including `@BrooklinJazz` in your PR description to get feedback.
+You (or your instructor) may merge your PR into your solutions branch after review.
+
+If you are interested in joining the next academy cohort, [sign up here](https://academy.dockyard.com/) to receive more news when it is available.
+
+## Up Next
+
+| Previous                               | Next                                               |
+| -------------------------------------- | -------------------------------------------------: |
+| [Booleans](../reading/booleans.livemd) | [Match Operator](../reading/match_operator.livemd) |
+

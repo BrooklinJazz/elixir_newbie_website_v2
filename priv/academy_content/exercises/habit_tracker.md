@@ -1,0 +1,244 @@
+%{
+  title: "Habit Tracker"
+}
+---
+# Habit Tracker
+
+```elixir
+Mix.install([
+  {:jason, "~> 1.4"},
+  {:kino, "~> 0.8.0", override: true},
+  {:youtube, github: "brooklinjazz/youtube"},
+  {:hidden_cell, github: "brooklinjazz/hidden_cell"}
+])
+```
+
+## Navigation
+
+[Return Home](../start.livemd)<span style="padding: 0 30px"></span>
+[Report An Issue](https://github.com/DockYard-Academy/beta_curriculum/issues/new?assignees=&labels=&template=issue.md&title=)
+
+## Setup
+
+Ensure you type the `ea` keyboard shortcut to evaluate all Elixir cells before starting. Alternatively you can evaluate the Elixir cells as you read.
+
+## Habit Tracker
+
+You are going to build some logic for a habit tracking app. Habit tracking apps such as [Habitica](https://habitica.com/) help users develop healthy habits.
+
+Each habit is assigned a size such as small, medium, or large. Each size is assigned a different point value. Users earn points based on the habits they complete.
+
+* A large habit is worth 30 points
+* A medium habit is worth 20 points
+* A small habit is worth 5 points.
+
+```mermaid
+flowchart
+  A["Large (30 points)"]
+  B["Medium (20 points)"]
+  C["Small (5 points)"]
+```
+
+## Bind Habit Variables
+
+Bind a variable `small`, `medium`, and `large` to represent the point value as an integer (see above) for each habit. You will use these variables in further solutions.
+
+<details style="background-color: lightgreen; padding: 1rem; margin: 1rem 0;">
+<summary>Example solution</summary>
+
+```elixir
+large = 30
+medium = 20
+small = 5
+```
+
+</details>
+
+Enter your solution below.
+
+```elixir
+
+```
+
+## Small, Medium, Large
+
+Given a user has completed one small habit, one medium habit, and one large habit, use arithmetic operators and your previously bound variables `small`, `medium`, and `large` to determine how many points they have in total.
+
+```mermaid
+flowchart LR
+  A["Large (30 points)"]
+  B["Medium (20 points)"]
+  C["Small (5 points)"]
+  T[total?]
+  A --+--> B
+  B --+--> C
+  C --+--> T
+```
+
+<details style="background-color: lightgreen; padding: 1rem; margin: 1rem 0;">
+<summary>Example solution</summary>
+
+```elixir
+small + medium + large
+```
+
+</details>
+
+Enter your answer in the code cell below.
+
+```elixir
+
+```
+
+## Multiples
+
+Given a user has completed **ten small** habits, **five medium** habits, and **three large** habits, use arithmetic operators to determine how many points they have in total.
+
+<details style="background-color: lightgreen; padding: 1rem;">
+<summary>Example solution</summary>
+
+```elixir
+small * 10 + medium * 5 + large * 3
+```
+
+</details>
+
+Enter your answer below.
+
+```elixir
+
+```
+
+## Progress Bar
+
+Users define a a `goal` number of points to earn each day. Determine what percentage progress have they made if they would like to earn `40` points and have completed a `small` and a `medium` habit.
+
+Remember that you can calculate percentage with $\frac{points}{goal} * 100$
+
+<details style="background-color: lightgreen; padding: 1rem;">
+<summary>Example solution</summary>
+
+```elixir
+goal = 40
+(small + medium) / goal
+```
+
+Or you might consider binding `points` as a variable.
+
+
+```elixir
+goal = 40
+points = small + medium 
+points / goal
+```
+
+</details>
+
+Enter your answer below.
+
+```elixir
+
+```
+
+## Penalties and Rewards
+
+To motivate users to complete their habits quickly, we add a time-limit feature where users will receive a `60%` point bonus if they complete their habit early, and a `50%` point penalty if they complete their habit late.
+
+Determine the users total point score when they complete:
+
+* three early small habits
+* two normal medium habits
+* two late large habits
+
+<details style="background-color: lightgreen; padding: 1rem;">
+<summary>Example solution</summary>
+
+```elixir
+goal = 40
+
+small * 1.6 * 3 + medium * 2 + large * 2 * 0.5
+```
+
+</details>
+
+Enter your answer below.
+
+```elixir
+
+```
+
+## Bonus: Add Your Own Feature
+
+Add your own feature to the habit tracking app. Use comments to describe your feature and show
+how it would affect calculating the total score and/or the total percentage of completed habits.
+
+```elixir
+
+```
+
+## Mark As Completed
+
+<!-- livebook:{"attrs":{"source":"file_name = Path.basename(Regex.replace(~r/#.+/, __ENV__.file, \"\"), \".livemd\")\n\nsave_name =\n  case Path.basename(__DIR__) do\n    \"reading\" -> \"habit_tracker_reading\"\n    \"exercises\" -> \"habit_tracker_exercise\"\n  end\n\nprogress_path = __DIR__ <> \"/../progress.json\"\nexisting_progress = File.read!(progress_path) |> Jason.decode!()\n\ndefault = Map.get(existing_progress, save_name, false)\n\nform =\n  Kino.Control.form(\n    [\n      completed: input = Kino.Input.checkbox(\"Mark As Completed\", default: default)\n    ],\n    report_changes: true\n  )\n\nTask.async(fn ->\n  for %{data: %{completed: completed}} <- Kino.Control.stream(form) do\n    File.write!(\n      progress_path,\n      Jason.encode!(Map.put(existing_progress, save_name, completed), pretty: true)\n    )\n  end\nend)\n\nform","title":"Track Your Progress"},"chunks":null,"kind":"Elixir.HiddenCell","livebook_object":"smart_cell"} -->
+
+```elixir
+file_name = Path.basename(Regex.replace(~r/#.+/, __ENV__.file, ""), ".livemd")
+
+save_name =
+  case Path.basename(__DIR__) do
+    "reading" -> "habit_tracker_reading"
+    "exercises" -> "habit_tracker_exercise"
+  end
+
+progress_path = __DIR__ <> "/../progress.json"
+existing_progress = File.read!(progress_path) |> Jason.decode!()
+
+default = Map.get(existing_progress, save_name, false)
+
+form =
+  Kino.Control.form(
+    [
+      completed: input = Kino.Input.checkbox("Mark As Completed", default: default)
+    ],
+    report_changes: true
+  )
+
+Task.async(fn ->
+  for %{data: %{completed: completed}} <- Kino.Control.stream(form) do
+    File.write!(
+      progress_path,
+      Jason.encode!(Map.put(existing_progress, save_name, completed), pretty: true)
+    )
+  end
+end)
+
+form
+```
+
+## Commit Your Progress
+
+Run the following in your command line from the curriculum folder to track and save your progress in a Git commit.
+Ensure that you do not already have undesired or unrelated changes by running `git status` or by checking the source control tab in Visual Studio Code.
+
+```
+$ git checkout -b habit-tracker-exercise
+$ git add .
+$ git commit -m "finish habit tracker exercise"
+$ git push origin habit-tracker-exercise
+```
+
+Create a pull request from your `habit-tracker-exercise` branch to your `solutions` branch.
+Please do not create a pull request to the DockYard Academy repository as this will spam our PR tracker.
+
+**DockYard Academy Students Only:**
+
+Notify your instructor by including `@BrooklinJazz` in your PR description to get feedback.
+You (or your instructor) may merge your PR into your solutions branch after review.
+
+If you are interested in joining the next academy cohort, [sign up here](https://academy.dockyard.com/) to receive more news when it is available.
+
+## Up Next
+
+| Previous                                           | Next                                     |
+| -------------------------------------------------- | ---------------------------------------: |
+| [Card Counting](../exercises/card_counting.livemd) | [Mad Libs](../exercises/mad_libs.livemd) |
+

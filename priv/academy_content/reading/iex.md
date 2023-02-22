@@ -1,0 +1,408 @@
+%{
+  title: "IEx"
+}
+---
+# IEx
+
+```elixir
+Mix.install([
+  {:jason, "~> 1.4"},
+  {:kino, "~> 0.8.0", override: true},
+  {:youtube, github: "brooklinjazz/youtube"},
+  {:hidden_cell, github: "brooklinjazz/hidden_cell"}
+])
+```
+
+## Navigation
+
+[Return Home](../start.livemd)<span style="padding: 0 30px"></span>
+[Report An Issue](https://github.com/DockYard-Academy/beta_curriculum/issues/new?assignees=&labels=&template=issue.md&title=)
+
+## Setup
+
+Ensure you type the `ea` keyboard shortcut to evaluate all Elixir cells before starting. Alternatively you can evaluate the Elixir cells as you read.
+
+## IEx
+
+[IEx](https://hexdocs.pm/iex/IEx.html) is Elixir's interactive shell. If you [install Elixir](https://elixir-lang.org/install.html) on your computer, you can run `iex` in your command
+line to start the interactive shell. It will print information about your [IEx](https://hexdocs.pm/iex/IEx.html) environment, such as what Elixir and Erlang/OTP version
+you have installed.
+
+```
+$ iex
+Erlang/OTP 24 [erts-12.3] [source] [64-bit] [smp:8:8] [ds:8:8:10] [async-threads:1] [jit]
+
+Interactive Elixir (1.13.3) - press Ctrl+C to exit (type h() ENTER for help)
+iex(1)>
+```
+
+We can evaluate Elixir code inside of the [IEx](https://hexdocs.pm/iex/IEx.html) shell. [IEx](https://hexdocs.pm/iex/IEx.html) is often useful for small experiments,
+running Elixir scripts, and even as a playground environment building/running Elixir applications.
+
+### Your Turn
+
+Execute some simple arithmetic in the `iex` shell, like so.
+
+<!-- livebook:{"force_markdown":true} -->
+
+```elixir
+iex > 4 + 4
+8
+```
+
+## IO
+
+We can use the [IO](https://hexdocs.pm/elixir/IO.html) module for retrieving user input and displaying output. We'll learn more about modules in later lessons.
+
+Wrap any value in `IO.inspect()` to print it.
+
+```elixir
+IO.inspect(2 + 2)
+```
+
+We can also use [IO.gets/2](https://hexdocs.pm/elixir/IO.html#gets/2) to retrieve input from the user.
+
+<!-- livebook:{"force_markdown":true} -->
+
+<!-- livebook:{"force_markdown":true} -->
+
+```elixir
+iex> input = IO.gets("Give me some input: ")
+Give me some input: sure!
+"sure!\n"
+iex> input
+"sure!\n"
+```
+
+Keep in mind, this will work when running an Elixir project or in the [IEx](https://hexdocs.pm/iex/IEx.html) shell, but will fail with an `:enotsup` (error not supported) error when we run it from Livebook.
+
+```elixir
+IO.gets("I will fail!")
+```
+
+That's because in Livebook there is no command line or other device to retrieve the user input from.
+
+<!-- livebook:{"break_markdown":true} -->
+
+### Your Turn
+
+Run [IO.gets/2](https://hexdocs.pm/elixir/IO.html#gets/2) in the command line from the [IEx](https://hexdocs.pm/iex/IEx.html) shell and bind the return value to an `input` variable.
+
+<!-- livebook:{"force_markdown":true} -->
+
+```elixir
+iex> input = IO.gets("Give me some input: ")
+```
+
+## Multiline Expressions
+
+You can break your Elixir code into multiple lines in the [IEx](https://hexdocs.pm/iex/IEx.html) shell, which only evaluates when the expression is complete.
+
+<!-- livebook:{"break_markdown":true} -->
+
+### Your Turn
+
+Write `4 +` in the [IEx](https://hexdocs.pm/iex/IEx.html) shell, then press enter to break the expression into multiple lines. Then finish of the expression by writing another integer such as `5`.
+
+<!-- livebook:{"force_markdown":true} -->
+
+```elixir
+iex >
+  4 +
+    ... > 5
+
+9
+```
+
+<!-- livebook:{"break_markdown":true} -->
+
+### Your Turn
+
+Create a module `Greeting` in the [IEx](https://hexdocs.pm/iex/IEx.html) shell, then call the `hello/0` function.
+
+<!-- livebook:{"force_markdown":true} -->
+
+```elixir
+iex> defmodule Greeting do
+iex>  def hello do
+iex>   "Hello, world!"
+iex>  end
+iex> end
+{:module, Greeting,
+ <<70, 79, 82, 49, 0, 0, 4, 204, 66, 69, 65, 77, 65, 116, 85, 56, 0, 0, 0, 140,
+   0, 0, 0, 14, 15, 69, 108, 105, 120, 105, 114, 46, 71, 114, 101, 101, 116,
+   105, 110, 103, 8, 95, 95, 105, 110, 102, 111, ...>>, {:hello, 0}}
+iex> Greeting.hello()
+"Hello, world!"
+```
+
+We'll learn more about modules in future lessons.
+
+## Closing the IEx Shell
+
+Once we've started the [IEx](https://hexdocs.pm/iex/IEx.html) shell, you can close it by pressing <kbd>CTRL</kbd>+<kbd>\\</kbd>.
+
+### Your Turn
+
+First, define a variable in your current [IEx](https://hexdocs.pm/iex/IEx.html) shell.
+
+<!-- livebook:{"force_markdown":true} -->
+
+```elixir
+iex> hello = "world"
+```
+
+Close the current [IEx](https://hexdocs.pm/iex/IEx.html) shell, then reopen it with `iex` command.
+Notice that previously defined variables from the previous [IEx](https://hexdocs.pm/iex/IEx.html) shell do not exist.
+
+<!-- livebook:{"force_markdown":true} -->
+
+```elixir
+iex(1)> hello
+** (CompileError) iex:1: undefined function hello/0 (there is no such import)
+```
+
+## Autocomplete
+
+Much like in livebook, you can autocomplete Elixir expressions by pressing <kbd>Tab</kbd>.
+
+<!-- livebook:{"force_markdown":true} -->
+
+```elixir
+iex> Enum.a
+all?/1    all?/2    any?/1    any?/2    at/2      at/3
+```
+
+## IEx Helpers
+
+The built-in [IEx.Helpers](https://hexdocs.pm/iex/IEx.Helpers.html) module provides helpers to make it
+easier to work with the IEx shell.
+
+<!-- livebook:{"break_markdown":true} -->
+
+### Help (h)
+
+The `h` helper prints the documentation for any code.
+
+For example, execute the following in your [IEx](https://hexdocs.pm/iex/IEx.html) shell to view the [Enum](https://hexdocs.pm/elixir/Enum.html) documentation.
+
+```
+iex> h Enum
+```
+
+<!-- livebook:{"break_markdown":true} -->
+
+### Information (i)
+
+The `i` helper provides information about any Elixir term (data type).
+
+For example, execute the following in your [IEx](https://hexdocs.pm/iex/IEx.html) shell to view more information about the [Integer](https://hexdocs.pm/elixir/Integer.html) data type.
+
+<!-- livebook:{"force_markdown":true} -->
+
+```elixir
+iex> i 2
+Term
+  2
+Data type
+  Integer
+Reference modules
+  Integer
+Implemented protocols
+  IEx.Info, Inspect, List.Chars, String.Chars
+```
+
+<!-- livebook:{"break_markdown":true} -->
+
+### Compile (c)
+
+The [c](https://hexdocs.pm/iex/1.13/IEx.Helpers.html#c/2) helper can load an Elixir file into your [IEx](https://hexdocs.pm/iex/IEx.html) shell.
+
+For example, create a `hello.exs` file with your command line. Add the following contents to
+the file with your code editor.
+
+<!-- livebook:{"force_markdown":true} -->
+
+```elixir
+defmodule Greeting do
+  def hello do
+    "Hello, world!"
+  end
+end
+
+IO.puts("Executing hello.exs")
+```
+
+Then start an [IEx](https://hexdocs.pm/iex/IEx.html) session and load the file.
+Notice that `IO.puts("Executing hello.exs")` runs immediately.
+
+<!-- livebook:{"force_markdown":true} -->
+
+```elixir
+iex> c "hello.exs"
+Executing hello.exs
+[Greeting]
+```
+
+The `Greeting` module is now available in the current [IEx](https://hexdocs.pm/iex/IEx.html) session.
+
+<!-- livebook:{"force_markdown":true} -->
+
+```elixir
+iex> Greeting.hello()
+"Hello, world!"
+```
+
+The `iex` command also accepts a filename as an argument to load a file into the IEx shell.
+
+```
+$ iex hello.exs
+iex> Greeting.hello()
+```
+
+<!-- livebook:{"break_markdown":true} -->
+
+### Recompile (r)
+
+The [r](https://hexdocs.pm/iex/IEx.Helpers.html#r/1) helper recompiles a module in the current IEx shell.
+
+For example, change the `Greeting` module in `hello.exs` to return a different value.
+
+<!-- livebook:{"force_markdown":true} -->
+
+```elixir
+defmodule Greeting do
+  def hello do
+    "Hello!" # changed value
+  end
+end
+
+IO.puts("Executing hello.exs")
+```
+
+Now, recompile the module and execute the `hello/0` function.
+
+<!-- livebook:{"force_markdown":true} -->
+
+```elixir
+iex> r Greeting
+iex> Greeting.hello()
+"Hello!"
+```
+
+<!-- livebook:{"break_markdown":true} -->
+
+### Value (v)
+
+The [v](https://hexdocs.pm/iex/1.13/IEx.Helpers.html#v/1) helper returns the value on a given line.
+
+We've omitted the line numbers in the [IEx](https://hexdocs.pm/iex/IEx.html) shell in previous examples, but you'll notice each line has a corresponding number.
+
+<!-- livebook:{"force_markdown":true} -->
+
+```elixir
+iex(1)> 1 + 1
+2
+```
+
+To use the return value from a previous expression, use `v/1` with the desired line number.
+
+<!-- livebook:{"force_markdown":true} -->
+
+```elixir
+iex(2)> v(1) + 2
+4
+```
+
+Alternatively, we can pipe `(|>)` the previous return value into the current expression.
+
+<!-- livebook:{"force_markdown":true} -->
+
+```elixir
+iex(1)> %{}
+iex(2)> |> Map.put(:key, "value")
+%{key: "value"}
+```
+
+### `clear`
+
+if the IEx shell is getting messy, we can use the [clear](https://hexdocs.pm/iex/1.13/IEx.Helpers.html#clear/0)
+helper to clear the console screen.
+
+```
+iex> clear
+```
+
+## Further Reading
+
+IEx is generally helpful for experimenting with Elixir code and exploring an existing project or script. For more, consider reading the following:
+
+* [HexDocs: IEx.Helpers](https://hexdocs.pm/iex/IEx.Helpers.html#functions) includes a full list of helper functions and their usage beyond those covered above.
+* [Elixir Schools: IEx.Helpers](https://elixirschool.com/en/lessons/basics/iex_helpers) an Elixir schools lesson on `IEx.Helpers`.
+
+## Mark As Completed
+
+<!-- livebook:{"attrs":{"source":"file_name = Path.basename(Regex.replace(~r/#.+/, __ENV__.file, \"\"), \".livemd\")\n\nsave_name =\n  case Path.basename(__DIR__) do\n    \"reading\" -> \"iex_reading\"\n    \"exercises\" -> \"iex_exercise\"\n  end\n\nprogress_path = __DIR__ <> \"/../progress.json\"\nexisting_progress = File.read!(progress_path) |> Jason.decode!()\n\ndefault = Map.get(existing_progress, save_name, false)\n\nform =\n  Kino.Control.form(\n    [\n      completed: input = Kino.Input.checkbox(\"Mark As Completed\", default: default)\n    ],\n    report_changes: true\n  )\n\nTask.async(fn ->\n  for %{data: %{completed: completed}} <- Kino.Control.stream(form) do\n    File.write!(\n      progress_path,\n      Jason.encode!(Map.put(existing_progress, save_name, completed), pretty: true)\n    )\n  end\nend)\n\nform","title":"Track Your Progress"},"chunks":null,"kind":"Elixir.HiddenCell","livebook_object":"smart_cell"} -->
+
+```elixir
+file_name = Path.basename(Regex.replace(~r/#.+/, __ENV__.file, ""), ".livemd")
+
+save_name =
+  case Path.basename(__DIR__) do
+    "reading" -> "iex_reading"
+    "exercises" -> "iex_exercise"
+  end
+
+progress_path = __DIR__ <> "/../progress.json"
+existing_progress = File.read!(progress_path) |> Jason.decode!()
+
+default = Map.get(existing_progress, save_name, false)
+
+form =
+  Kino.Control.form(
+    [
+      completed: input = Kino.Input.checkbox("Mark As Completed", default: default)
+    ],
+    report_changes: true
+  )
+
+Task.async(fn ->
+  for %{data: %{completed: completed}} <- Kino.Control.stream(form) do
+    File.write!(
+      progress_path,
+      Jason.encode!(Map.put(existing_progress, save_name, completed), pretty: true)
+    )
+  end
+end)
+
+form
+```
+
+## Commit Your Progress
+
+Run the following in your command line from the curriculum folder to track and save your progress in a Git commit.
+Ensure that you do not already have undesired or unrelated changes by running `git status` or by checking the source control tab in Visual Studio Code.
+
+```
+$ git checkout -b iex-reading
+$ git add .
+$ git commit -m "finish iex reading"
+$ git push origin iex-reading
+```
+
+Create a pull request from your `iex-reading` branch to your `solutions` branch.
+Please do not create a pull request to the DockYard Academy repository as this will spam our PR tracker.
+
+**DockYard Academy Students Only:**
+
+Notify your instructor by including `@BrooklinJazz` in your PR description to get feedback.
+You (or your instructor) may merge your PR into your solutions branch after review.
+
+If you are interested in joining the next academy cohort, [sign up here](https://academy.dockyard.com/) to receive more news when it is available.
+
+## Up Next
+
+| Previous                                       | Next                                                                     |
+| ---------------------------------------------- | -----------------------------------------------------------------------: |
+| [Code Editors](../reading/code_editors.livemd) | [Command Line Family Tree](../exercises/command_line_family_tree.livemd) |
+

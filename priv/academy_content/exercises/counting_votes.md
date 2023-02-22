@@ -1,0 +1,196 @@
+%{
+  title: "Counting Votes"
+}
+---
+# Counting Votes
+
+```elixir
+Mix.install([
+  {:jason, "~> 1.4"},
+  {:kino, "~> 0.8.0", override: true},
+  {:youtube, github: "brooklinjazz/youtube"},
+  {:hidden_cell, github: "brooklinjazz/hidden_cell"}
+])
+```
+
+## Navigation
+
+[Return Home](../start.livemd)<span style="padding: 0 30px"></span>
+[Report An Issue](https://github.com/DockYard-Academy/beta_curriculum/issues/new?assignees=&labels=&template=issue.md&title=)
+
+## Counting Votes
+
+You're creating a voting system. Voters are entered in a list of votes. You will be given a specific vote to count.
+
+For example, you might take a class vote of cats vs dogs vs birds to decide which animal is most popular.
+
+<!-- livebook:{"break_markdown":true} -->
+
+```mermaid
+flowchart
+D1[dogs]
+D2[dogs]
+D3[dogs]
+C1[cats]
+C2[cats]
+B1[birds]
+```
+
+<!-- livebook:{"break_markdown":true} -->
+
+We'll determine the number of votes for a single value. For example, there are `3` dogs.
+
+<!-- livebook:{"break_markdown":true} -->
+
+```mermaid
+flowchart
+D1[dogs]
+D2[dogs]
+D3[dogs]
+C1[cats]
+C2[cats]
+B1[birds]
+
+style D1 fill:lightgreen
+style D2 fill:lightgreen
+style D3 fill:lightgreen
+```
+
+<!-- livebook:{"break_markdown":true} -->
+
+So we would return `3` votes for dogs.
+
+<!-- livebook:{"force_markdown":true} -->
+
+```elixir
+Votes.count([:dogs, :dogs, :dogs, :cats, :cats, :birds], :dogs)
+3
+```
+
+```elixir
+defmodule Votes do
+  @doc """
+  Count the number of votes.
+
+  ## Examples
+
+    iex> Votes.count([:dogs, :dogs, :dogs, :cats], :dogs)
+    3
+
+    iex> Votes.count([:dogs, :dogs, :dogs, :cats], :cats)
+    1
+
+    iex> Votes.count([:apples, :oranges, :apples, :cats], :birds)
+    0
+  """
+  def count(votes, vote) do
+  end
+end
+```
+
+## Bonus: Voter Tally
+
+Counting each vote for dogs, cats, and birds becomes tedius. So, we instead want to determine the number of votes for each all at once.
+
+```mermaid
+flowchart
+D1[dog]
+D2[dog]
+D3[dog]
+C1[cat]
+C2[cat]
+B1[bird]
+
+style D1 fill:lightgreen
+style D2 fill:lightgreen
+style D3 fill:lightgreen
+
+style C1 fill:orange
+style C2 fill:orange
+style B1 fill:lightblue
+
+```
+
+There are `3` dogs, `2` cats, and `1` bird.
+
+```elixir
+defmodule VoterTally do
+  @doc """
+  Determine the number of votes for each option received.
+
+  ## Examples
+
+    iex> VoterTally.tally([:dog, :dog, :cat, :cat, :cat, :bird])
+    %{dog: 2, cat: 3, bird: 1}
+  """
+  def tally(votes) do
+  end
+end
+```
+
+## Mark As Completed
+
+<!-- livebook:{"attrs":{"source":"file_name = Path.basename(Regex.replace(~r/#.+/, __ENV__.file, \"\"), \".livemd\")\n\nsave_name =\n  case Path.basename(__DIR__) do\n    \"reading\" -> \"counting_votes_reading\"\n    \"exercises\" -> \"counting_votes_exercise\"\n  end\n\nprogress_path = __DIR__ <> \"/../progress.json\"\nexisting_progress = File.read!(progress_path) |> Jason.decode!()\n\ndefault = Map.get(existing_progress, save_name, false)\n\nform =\n  Kino.Control.form(\n    [\n      completed: input = Kino.Input.checkbox(\"Mark As Completed\", default: default)\n    ],\n    report_changes: true\n  )\n\nTask.async(fn ->\n  for %{data: %{completed: completed}} <- Kino.Control.stream(form) do\n    File.write!(\n      progress_path,\n      Jason.encode!(Map.put(existing_progress, save_name, completed), pretty: true)\n    )\n  end\nend)\n\nform","title":"Track Your Progress"},"chunks":null,"kind":"Elixir.HiddenCell","livebook_object":"smart_cell"} -->
+
+```elixir
+file_name = Path.basename(Regex.replace(~r/#.+/, __ENV__.file, ""), ".livemd")
+
+save_name =
+  case Path.basename(__DIR__) do
+    "reading" -> "counting_votes_reading"
+    "exercises" -> "counting_votes_exercise"
+  end
+
+progress_path = __DIR__ <> "/../progress.json"
+existing_progress = File.read!(progress_path) |> Jason.decode!()
+
+default = Map.get(existing_progress, save_name, false)
+
+form =
+  Kino.Control.form(
+    [
+      completed: input = Kino.Input.checkbox("Mark As Completed", default: default)
+    ],
+    report_changes: true
+  )
+
+Task.async(fn ->
+  for %{data: %{completed: completed}} <- Kino.Control.stream(form) do
+    File.write!(
+      progress_path,
+      Jason.encode!(Map.put(existing_progress, save_name, completed), pretty: true)
+    )
+  end
+end)
+
+form
+```
+
+## Commit Your Progress
+
+Run the following in your command line from the curriculum folder to track and save your progress in a Git commit.
+Ensure that you do not already have undesired or unrelated changes by running `git status` or by checking the source control tab in Visual Studio Code.
+
+```
+$ git checkout -b counting-votes-exercise
+$ git add .
+$ git commit -m "finish counting votes exercise"
+$ git push origin counting-votes-exercise
+```
+
+Create a pull request from your `counting-votes-exercise` branch to your `solutions` branch.
+Please do not create a pull request to the DockYard Academy repository as this will spam our PR tracker.
+
+**DockYard Academy Students Only:**
+
+Notify your instructor by including `@BrooklinJazz` in your PR description to get feedback.
+You (or your instructor) may merge your PR into your solutions branch after review.
+
+If you are interested in joining the next academy cohort, [sign up here](https://academy.dockyard.com/) to receive more news when it is available.
+
+## Up Next
+
+| Previous                                                     | Next                                             |
+| ------------------------------------------------------------ | -----------------------------------------------: |
+| [Named Number Lists](../exercises/named_number_lists.livemd) | [Measurements](../exercises/measurements.livemd) |
+

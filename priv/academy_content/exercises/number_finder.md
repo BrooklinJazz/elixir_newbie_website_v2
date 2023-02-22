@@ -1,0 +1,134 @@
+%{
+  title: "Number Finder"
+}
+---
+# Number Finder
+
+```elixir
+Mix.install([
+  {:jason, "~> 1.4"},
+  {:kino, "~> 0.8.0", override: true},
+  {:youtube, github: "brooklinjazz/youtube"},
+  {:hidden_cell, github: "brooklinjazz/hidden_cell"}
+])
+```
+
+## Navigation
+
+[Return Home](../start.livemd)<span style="padding: 0 30px"></span>
+[Report An Issue](https://github.com/DockYard-Academy/beta_curriculum/issues/new?assignees=&labels=&template=issue.md&title=)
+
+## Number Finder
+
+Create a `NumberFinder` module which can find the `smallest/1` number in a list, and the `largest/1` number in a list.
+
+<!-- livebook:{"force_markdown":true} -->
+
+```elixir
+NumberFinder.smallest([2, 3, 1])
+1
+
+NumberFinder.largest([2, 3, 1])
+3
+```
+
+```elixir
+defmodule NumberFinder do
+  @doc """
+  Find the smallest number in a list
+
+  ## Examples
+
+    iex> NumberFinder.smallest([2, 3, 1])
+    1
+    iex> NumberFinder.smallest([2, 2, 3, 4])
+    2
+    iex> NumberFinder.smallest([2, 2, 3, 4, 10, 20, -3])
+    -3
+  """
+  def smallest(number_list) do
+  end
+
+  @doc """
+  Find the largest number in a list
+
+  ## Examples
+
+    iex> NumberFinder.largest([2, 3, 1])
+    3
+    iex> NumberFinder.largest([2, 2, 3, 4, 4])
+    4
+    iex> NumberFinder.largest([2, 2, 3, 4, 10, 20, -3])
+    20
+  """
+  def largest(number_list) do
+  end
+end
+```
+
+## Mark As Completed
+
+<!-- livebook:{"attrs":{"source":"file_name = Path.basename(Regex.replace(~r/#.+/, __ENV__.file, \"\"), \".livemd\")\n\nsave_name =\n  case Path.basename(__DIR__) do\n    \"reading\" -> \"number_finder_reading\"\n    \"exercises\" -> \"number_finder_exercise\"\n  end\n\nprogress_path = __DIR__ <> \"/../progress.json\"\nexisting_progress = File.read!(progress_path) |> Jason.decode!()\n\ndefault = Map.get(existing_progress, save_name, false)\n\nform =\n  Kino.Control.form(\n    [\n      completed: input = Kino.Input.checkbox(\"Mark As Completed\", default: default)\n    ],\n    report_changes: true\n  )\n\nTask.async(fn ->\n  for %{data: %{completed: completed}} <- Kino.Control.stream(form) do\n    File.write!(\n      progress_path,\n      Jason.encode!(Map.put(existing_progress, save_name, completed), pretty: true)\n    )\n  end\nend)\n\nform","title":"Track Your Progress"},"chunks":null,"kind":"Elixir.HiddenCell","livebook_object":"smart_cell"} -->
+
+```elixir
+file_name = Path.basename(Regex.replace(~r/#.+/, __ENV__.file, ""), ".livemd")
+
+save_name =
+  case Path.basename(__DIR__) do
+    "reading" -> "number_finder_reading"
+    "exercises" -> "number_finder_exercise"
+  end
+
+progress_path = __DIR__ <> "/../progress.json"
+existing_progress = File.read!(progress_path) |> Jason.decode!()
+
+default = Map.get(existing_progress, save_name, false)
+
+form =
+  Kino.Control.form(
+    [
+      completed: input = Kino.Input.checkbox("Mark As Completed", default: default)
+    ],
+    report_changes: true
+  )
+
+Task.async(fn ->
+  for %{data: %{completed: completed}} <- Kino.Control.stream(form) do
+    File.write!(
+      progress_path,
+      Jason.encode!(Map.put(existing_progress, save_name, completed), pretty: true)
+    )
+  end
+end)
+
+form
+```
+
+## Commit Your Progress
+
+Run the following in your command line from the curriculum folder to track and save your progress in a Git commit.
+Ensure that you do not already have undesired or unrelated changes by running `git status` or by checking the source control tab in Visual Studio Code.
+
+```
+$ git checkout -b number-finder-exercise
+$ git add .
+$ git commit -m "finish number finder exercise"
+$ git push origin number-finder-exercise
+```
+
+Create a pull request from your `number-finder-exercise` branch to your `solutions` branch.
+Please do not create a pull request to the DockYard Academy repository as this will spam our PR tracker.
+
+**DockYard Academy Students Only:**
+
+Notify your instructor by including `@BrooklinJazz` in your PR description to get feedback.
+You (or your instructor) may merge your PR into your solutions branch after review.
+
+If you are interested in joining the next academy cohort, [sign up here](https://academy.dockyard.com/) to receive more news when it is available.
+
+## Up Next
+
+| Previous                           | Next                                                   |
+| ---------------------------------- | -----------------------------------------------------: |
+| [Reduce](../reading/reduce.livemd) | [Weighted Voting](../exercises/weighted_voting.livemd) |
+

@@ -1,0 +1,135 @@
+%{
+  title: "ExDoc"
+}
+---
+# ExDoc
+
+```elixir
+Mix.install([
+  {:jason, "~> 1.4"},
+  {:kino, "~> 0.8.0", override: true},
+  {:youtube, github: "brooklinjazz/youtube"},
+  {:hidden_cell, github: "brooklinjazz/hidden_cell"}
+])
+```
+
+## Navigation
+
+[Return Home](../start.livemd)<span style="padding: 0 30px"></span>
+[Report An Issue](https://github.com/DockYard-Academy/beta_curriculum/issues/new?assignees=&labels=&template=issue.md&title=)
+
+## Setup
+
+Ensure you type the `ea` keyboard shortcut to evaluate all Elixir cells before starting. Alternatively you can evaluate the Elixir cells as you read.
+
+## ExDoc
+
+[ExDoc](https://github.com/elixir-lang/ex_doc) takes the documentation we define in our project using `@moduledoc` and `@doc` and generates the same documentation we've see on [HexDocs](https://hexdocs.pm/ex_doc/readme.html).
+
+To add ExDoc to a mix project, we install it in our list of dependencies in `mix.exs`. The latest version is on [hex.pm](https://hex.pm/packages/ex_doc). We only need documentation for the `:dev` environment, and we do not need it during runtime.
+
+<!-- livebook:{"force_markdown":true} -->
+
+```elixir
+  defp deps do
+    [
+      {:ex_doc, "~> 0.28", only: :dev, runtime: false}
+    ]
+  end
+```
+
+Install dependencies.
+
+```
+$ mix deps.get
+```
+
+Then generate documentation for the project.
+
+```
+$ mix docs
+```
+
+This creates a `docs/` folder. Inside the docs folder is an `index.html` file.
+`HTML` stands for hyper-text-markup-language. It's the code used to structure a web page and its content.
+
+You can open the `docs/index.html` file in your browser to view the project documentation.
+
+<!-- livebook:{"break_markdown":true} -->
+
+### Your Turn
+
+Previously you converted a `Math` module into a mix project in the [ExUnit with Mix](./exunit_with_mix.livemd) section.
+
+Add [ExDoc](https://github.com/elixir-lang/ex_doc) to your `Math` project. When finished, Open the `index.html` file in your browser, and you should see a page similar to the following.
+
+<!-- livebook:{"break_markdown":true} -->
+
+![](images/mathdocs.png)
+
+## Mark As Completed
+
+<!-- livebook:{"attrs":{"source":"file_name = Path.basename(Regex.replace(~r/#.+/, __ENV__.file, \"\"), \".livemd\")\n\nsave_name =\n  case Path.basename(__DIR__) do\n    \"reading\" -> \"exdoc_reading\"\n    \"exercises\" -> \"exdoc_exercise\"\n  end\n\nprogress_path = __DIR__ <> \"/../progress.json\"\nexisting_progress = File.read!(progress_path) |> Jason.decode!()\n\ndefault = Map.get(existing_progress, save_name, false)\n\nform =\n  Kino.Control.form(\n    [\n      completed: input = Kino.Input.checkbox(\"Mark As Completed\", default: default)\n    ],\n    report_changes: true\n  )\n\nTask.async(fn ->\n  for %{data: %{completed: completed}} <- Kino.Control.stream(form) do\n    File.write!(\n      progress_path,\n      Jason.encode!(Map.put(existing_progress, save_name, completed), pretty: true)\n    )\n  end\nend)\n\nform","title":"Track Your Progress"},"chunks":null,"kind":"Elixir.HiddenCell","livebook_object":"smart_cell"} -->
+
+```elixir
+file_name = Path.basename(Regex.replace(~r/#.+/, __ENV__.file, ""), ".livemd")
+
+save_name =
+  case Path.basename(__DIR__) do
+    "reading" -> "exdoc_reading"
+    "exercises" -> "exdoc_exercise"
+  end
+
+progress_path = __DIR__ <> "/../progress.json"
+existing_progress = File.read!(progress_path) |> Jason.decode!()
+
+default = Map.get(existing_progress, save_name, false)
+
+form =
+  Kino.Control.form(
+    [
+      completed: input = Kino.Input.checkbox("Mark As Completed", default: default)
+    ],
+    report_changes: true
+  )
+
+Task.async(fn ->
+  for %{data: %{completed: completed}} <- Kino.Control.stream(form) do
+    File.write!(
+      progress_path,
+      Jason.encode!(Map.put(existing_progress, save_name, completed), pretty: true)
+    )
+  end
+end)
+
+form
+```
+
+## Commit Your Progress
+
+Run the following in your command line from the curriculum folder to track and save your progress in a Git commit.
+Ensure that you do not already have undesired or unrelated changes by running `git status` or by checking the source control tab in Visual Studio Code.
+
+```
+$ git checkout -b exdoc-reading
+$ git add .
+$ git commit -m "finish exdoc reading"
+$ git push origin exdoc-reading
+```
+
+Create a pull request from your `exdoc-reading` branch to your `solutions` branch.
+Please do not create a pull request to the DockYard Academy repository as this will spam our PR tracker.
+
+**DockYard Academy Students Only:**
+
+Notify your instructor by including `@BrooklinJazz` in your PR description to get feedback.
+You (or your instructor) may merge your PR into your solutions branch after review.
+
+If you are interested in joining the next academy cohort, [sign up here](https://academy.dockyard.com/) to receive more news when it is available.
+
+## Up Next
+
+| Previous                                 | Next                             |
+| ---------------------------------------- | -------------------------------: |
+| [Typespecs](../reading/typespecs.livemd) | [Credo](../reading/credo.livemd) |
+

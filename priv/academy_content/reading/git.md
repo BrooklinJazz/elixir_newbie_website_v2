@@ -1,0 +1,675 @@
+%{
+  title: "Git"
+}
+---
+# Git
+
+```elixir
+Mix.install([
+  {:jason, "~> 1.4"},
+  {:kino, "~> 0.8.0", override: true},
+  {:youtube, github: "brooklinjazz/youtube"},
+  {:hidden_cell, github: "brooklinjazz/hidden_cell"}
+])
+```
+
+## Navigation
+
+[Return Home](../start.livemd)<span style="padding: 0 30px"></span>
+[Report An Issue](https://github.com/DockYard-Academy/beta_curriculum/issues/new?assignees=&labels=&template=issue.md&title=)
+
+## Setup
+
+Ensure you type the `ea` keyboard shortcut to evaluate all Elixir cells before starting. Alternatively,
+you can evaluate the Elixir cells as you read.
+
+## Overview
+
+### Version Control
+
+Version control is the management of changes to files, typically source code, configuration files and documentation, over time. The purpose of source control is to keep track of the changes made to the files, who made the changes, when the changes were made, and why the changes were made. This allows for easy collaboration, rollback of changes, and the ability to easily manage and maintain different versions of the codebase.
+
+<!-- livebook:{"break_markdown":true} -->
+
+### Git
+
+Git is a distributed version control system (VCS) used for tracking changes in source code during software development. It allows multiple developers to work on the same codebase simultaneously, and keeps track of the changes made by each developer.
+
+Git provides a number of features that make it a popular VCS, such as being able to roll back changes, view the history of the codebase, and merge different versions of the code together. It also allows for easy collaboration and sharing of code between developers.
+
+It's widely used for open-source and closed-source projects, and it's the default VCS for many platforms such as GitHub, GitLab, and Bitbucket.
+
+<!-- livebook:{"break_markdown":true} -->
+
+### Local and Remote
+
+With Git, developers can work on their own copies of the code, known as "local repositories", and then "commit" their changes to a "remote repository" which can be shared among the team members. It also allows for easy branching, which allows developers to work on new features or bug fixes without affecting the main codebase.
+
+<!-- livebook:{"break_markdown":true} -->
+
+### GitHub
+
+GitHub is a web-based platform that provides hosting for software development and a community of developers to collaborate and contribute to open-source and closed-source projects. It is built on top of Git and provides a user-friendly interface for developers to manage their code.
+
+GitHub provides several key features for developers, including:
+
+* **Repositories**: Developers can create and host their code in individual "repositories" on GitHub, which can be easily shared and collaborated on with other developers. These repositories can be **public** or **private**.
+* **Collaboration**: Developers can easily collaborate on code by "forking" a repository, making changes, and then submitting those changes back to the original repository through a "pull request".
+* **Issues**: Developers can track and manage bugs, feature requests, and other tasks by creating "issues" within a repository.
+* **Pull requests (PRs)**: Developers can submit changes to a repository by creating a "pull request", which can be reviewed and approved by other members of the development team.
+  Branching: Developers can create and work on multiple branches of a repository, allowing them to work on different features or bug fixes without affecting the main codebase.
+* **Wiki**: Developers can create a wiki for their repository to provide documentation and other information about the codebase.
+
+## Install Git
+
+Git is a locally installed program on your computer. Git comes pre-installed on macOS and Linux operating systems. If you use Windows, you'll have to [Install Git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git).
+
+Enter the following into the command line to confirm you have Git installed. You should see a similar output, but likely with a different git version.
+
+```sh
+$ git --version
+git version 2.25.1
+```
+
+You can use Github Desktop, the command line, or a source control extension in your code editor for interacting with Git.
+
+However, we generally provide instructions in this course using the command line and the code editor.
+
+## Create A GitHub Account
+
+You'll use [GitHub](https://github.com/) to store the source code for your git managed projects.
+You'll also use GitHub to collaborate on projects with others students, and receive feedback from your instructor.
+
+Since you already have this course running, you likely already have a GitHub Account. If not, you can [Create a GitHub Account](https://docs.github.com/en/get-started/signing-up-for-github/signing-up-for-a-new-github-account). Remember that your GitHub is your public face in the code community. You'll want to ensure you represent yourself well, as it may be seen by future employers and co-workers.
+
+Out of the box, GitHub may ask you to enter your user credentials when running common commands. This can become tedius, and if you experience this, we recommend you [Setup SSH](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent) or use an alternative method to avoid tediously r-entering your credentials.
+
+## Raising An Issue
+
+Anyone can raise an issue on a public GitHub project. For example, you can [raise an issue](https://github.com/DockYard-Academy/beta_curriculum/issues) by going to
+the issues tab on the [GitHub Page](https://github.com/DockYard-Academy/beta_curriculum) of this curriculum and clicking **New Issue**.
+
+Please raise an issue or speak with your instructor if you encounter a problem with the curriculum.
+
+## Initializing A Local Repository
+
+Git uses a `.git` folder that stores the necessary folders
+and files to manage the project's source control. We call this git-managed folder a **repository**.
+
+Using the command line, you can initialize Git in your current working directory by running:
+
+```sh
+$ git init
+```
+
+<p style="background-color: orangered; padding: 1rem; color: white; font-weight: bold;">
+CAUTION: DO NOT INITIALIZE GIT UNLESS YOU WANT THAT FOLDER TO BE A GIT REPOSITORY.
+</p>
+
+<p style="background-color: orange; padding: 1rem; font-weight: bold;">
+WARNING: USUALLY YOU SHOULD NOT NEST GIT REPOSITORIES.
+</p>
+
+<!-- livebook:{"break_markdown":true} -->
+
+### Your Turn
+
+Use the command line to create a new Git managed project called `git_example`.
+
+You can use `git status` from the command line from the `git_example` folder to verify that Git manages the folder. Like so:
+
+```sh
+$ git init
+Initialized empty Git repository in ~/github_example/.git/
+$ git status
+On branch master
+
+No commits yet
+
+nothing to commit (create/copy files and use "git add" to track)
+```
+
+## Saving Changes
+
+Git allows you to save your changes in a commit. Changes go from **untracked** to **staged** to **committed**.
+
+```mermaid
+flowchart LR
+  Untracked --git add--> Staged --git commit--> Committed
+```
+
+You'll use some common commands for saving changes in Git.
+
+* `git status`: Display Git information and see the untracked and staged changes.
+* `git add`: Stage current changes.
+* `git commit`: Save staged changes into a commit.
+
+We can use `git add` from the command line to stage changes. We can stage a single file
+with `git add <filename>`  or all of the files and folders in the current working directory
+with `git add .`.
+
+Then we can use `git commit` from the command line to commit all staged changes.
+
+<!-- livebook:{"break_markdown":true} -->
+
+### Your Turn
+
+In the `github_example` create an empty file named `finished.txt`.
+
+Use `git status` to see that the file is untracked.
+
+```sh
+$ git status
+On branch master
+
+No commits yet
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+        finished.txt
+
+nothing added to commit but untracked files present (use "git add" to track)
+```
+
+Now, stage `finished.txt` to prepare it to be committed.
+
+```sh
+$ git add finished.txt
+```
+
+Use `git status` again and see the file is staged.
+
+```sh
+$ git status
+On branch master
+
+No commits yet
+
+Changes to be committed:
+  (use "git rm --cached <file>..." to unstage)
+        new file:   finished.txt
+```
+
+Now we'll use `git commit` to commit the staged changes. We use the `-m` flag and provide
+a message in quotations. `"example commit message"` can be any description you want.
+
+```sh
+$ git commit -m "example commit message"
+```
+
+## Pushing Changes
+
+You've so far used Git locally. Now to share code and collaborate with other developers, we
+push code to a remote Git repository on **GitHub**.
+
+```mermaid
+flowchart LR
+  Local --git push--> Remote
+```
+
+We use `git push` to push changes to the remote repository.
+
+<!-- livebook:{"break_markdown":true} -->
+
+### Your Turn
+
+Run `git push` now, and you'll notice the following error:
+
+```sh
+$ git push
+fatal: No configured push destination.
+Either specify the URL from the command line or configure a remote repository using
+
+    git remote add <name> <url>
+
+and then push using the remote name
+
+    git push <name>
+```
+
+We need to tell our local git repository where the remote git repository is.
+First, let's create one on [GitHub](https://github.com/).
+
+![](images/github_create_repo.png)
+
+<!-- livebook:{"break_markdown":true} -->
+
+Provide a **Repository name** and an optional description. You can choose for this project
+to be **public** or **private**.
+
+Do not initialize the project with any of the optional files. Click **New repository** to create
+the remote repository.
+
+<!-- livebook:{"break_markdown":true} -->
+
+![](images/github_create_repo_form.png)
+
+<!-- livebook:{"break_markdown":true} -->
+
+Now the remote repository is created, we need to tell our local Git repository how to find it. Follow
+the instructions for **push an existing repository from the command line**.
+
+* `git remote add origin <github_url>` Tell your local Git project where to find the remote Git repository.
+* `git branch -M main` Rename the default branch to main.
+* `git push -u origin main` Push local commits to the remote repository. This command sets the default remote repository, so only `git push` is necessary for future commits.
+
+<!-- livebook:{"break_markdown":true} -->
+
+![](images/setup%20git%20remote.png)
+
+<!-- livebook:{"break_markdown":true} -->
+
+You are done! You can now add, commit, and push any further changes.
+This will be your typical developer process with Git.
+
+```sh
+$ git add .
+$ git commit -m "add example changes"
+$ git push
+```
+
+## Cloning Repositories
+
+You can clone remote repositories to create a local Git project on your computer.
+
+```mermaid
+flowchart LR
+Remote --git clone--> Local
+```
+
+There are many methods for cloning a remote repository onto your computer.
+
+<!-- livebook:{"break_markdown":true} -->
+
+### Cloning With the Command Line
+
+Many developers prefer using the command line using either HTTP, SSH, or the GitHub CLI.
+
+You can find instructions for each method on GitHub:
+
+* [HTTPS](https://docs.github.com/en/get-started/getting-started-with-git/about-remote-repositories#cloning-with-https-urls)
+* [SSH](https://docs.github.com/en/authentication/connecting-to-github-with-ssh)
+* [GitHub CLI](https://docs.github.com/en/repositories/creating-and-managing-repositories/cloning-a-repository)
+
+<!-- livebook:{"break_markdown":true} -->
+
+#### HTTPS
+
+HTTPS (Hypertext Transfer Protocol Secure) is a method of transferring data.
+In this case, we use it to copy files from the GitHub remote repository onto our local computer.
+
+More practically, it's the easiest method for the command line however the downside is it's less secure and requires
+you to enter your GitHub credentials every time you use a `git` command.
+
+We use `git clone` with the URL provided by GitHub to clone the repo with HTTPS.
+![](images/git_clone_https_github.png)
+
+```sh
+$ git clone https://github.com/BrooklinJazz/github_example.git
+```
+
+<!-- livebook:{"break_markdown":true} -->
+
+However, you'll need to enter credentials every time you use `git push` or any other `git` command that
+interacts with a remote repository.
+
+```sh
+$ git push
+Username for 'https://github.com':
+Password for 'https://a@github.com':
+```
+
+It's pretty tedious for projects that you use regularly.
+
+<!-- livebook:{"break_markdown":true} -->
+
+### SSH
+
+SSH is more secure than HTTPS and doesn't require a username or password for authentication. Instead
+it uses an SSH Key stored locally on your computer.
+
+However, it's more complex to setup. If you wish to use SSH, follow the instructions
+to [connect to github with ssh](https://docs.github.com/en/authentication/connecting-to-github-with-ssh).
+
+You'll want to follow the instructions for:
+
+* [About SSH](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/about-ssh) (optional)
+* [Checking for existing SSH keys](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/checking-for-existing-ssh-keys) (optional)
+* [Generating a new SSH key and adding it to the ssh-agent](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent)
+* [Adding a new SSH key to your GitHub account](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/adding-a-new-ssh-key-to-your-github-account)
+* [Testing your SSH connection](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/testing-your-ssh-connection)
+* [Working with SSH key passphrases](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/working-with-ssh-key-passphrases) (optional)
+
+Then you can use the `git clone` with the SSH URL provided.
+
+![](images/github_clone_ssh.png)
+
+```sh
+$ git clone git@github.com:BrooklinJazz/github_example.git
+```
+
+<!-- livebook:{"break_markdown":true} -->
+
+### GitHub CLI
+
+The GitHub CLI provides some conveniences for working with Git and GitHub.
+It allows you to use the command line
+to accomplish tasks that would normally require GitHub.
+
+It's beyond the scope of this course, but you can [learn more here](https://github.com/cli/cli).
+
+<!-- livebook:{"break_markdown":true} -->
+
+### Your Turn
+
+Clone your `github_example` project onto your computer under a new name `github_example2`.
+
+To clone a project under a new name provide a new name to the `git clone` command.
+
+```
+$ git clone <url> github_example2
+```
+
+## Trunk Based Development
+
+Source control allows us to store different versions of the project. Typically there is a main branch for the latest version of the project.
+
+The most straightforward source control strategy only uses a main branch. Developers can push and pull from the main branch to get
+the latest changes.
+
+<!-- livebook:{"break_markdown":true} -->
+
+```mermaid
+sequenceDiagram
+    actor D1 as Developer 1
+    participant R as Main
+    actor D2 as Developer 2
+    D1->> R: pushes changes
+    R->> D2: pull changes
+    D2->> R: push changes
+    R->> D1: pulls changes
+```
+
+<!-- livebook:{"break_markdown":true} -->
+
+It's convenient and fast. However, it lacks any review system for code changes. Therefore it's potentially
+excellent for small projects with highly trusted team members, but less effective for large projects requiring
+code review.
+
+## Pulling Changes
+
+The GitHub remote repository can get out of sync with a user's local repository. We have to
+manually pull changes from the remote repository onto our local repository.
+
+GitHub Desktop allows you to pull changes through the UI.
+
+![](images/github_desktop_pull.png)
+
+Alternatively, you can use the command line with `git pull` from the project folder.
+
+```sh
+$ git pull
+```
+
+<!-- livebook:{"break_markdown":true} -->
+
+### Your Turn
+
+We're going to simulate pulling changes on your `github_example` project.
+
+Create a new file called `pull.txt` in your `github_example2` project.
+**Not** your `github_example` project.
+
+Stage, commit and push the `pull.txt` file from `github_example2`.
+
+```sh
+$ git add pull.txt
+$ git commit -m "add pull.txt"
+$ git push
+```
+
+Now pull the change from your `github_example` project.
+
+```sh
+$ git pull
+```
+
+You should see `pull.txt` is now part of the `github_example` project.
+
+## Branching Strategies
+
+You can use branching strategies for your Git workflow as an alternative to trunk-based development.
+
+You create a branch for a feature from the main branch and then make a pull request which is
+reviewed and merged back into the main branch.
+
+These strategies vary in complexity. For example, you could simply make a pull request for a feature and then
+merge those changes directly into the main branch.
+
+<!-- livebook:{"break_markdown":true} -->
+
+```mermaid
+sequenceDiagram
+    actor D1 as Developer 1
+    participant B as Feature Branch
+    participant M as Main
+    actor D2 as Developer 2
+    D1 ->> D1: creates local branch
+    D1 ->> D1: commits changes on local branch
+    D1 ->> B: pushes new branch
+    B ->> M: create pull request to "main"
+    M ->> M: accept pull request
+    M ->> D2: pull changes
+    M ->> D1: pull changes
+```
+
+<!-- livebook:{"break_markdown":true} -->
+
+Alternatively, many Git branching strategies have a pipeline for changes to be reviewed and tested.
+
+There is no universal strategy. Each project may have a different pipeline.
+However, some common steps include:
+
+* **Feature Branch**: A branch containing one specific change.
+* **Development**: Developer testing and integration branch.
+* **Quality Assurance (QA)**: Quality Assurance testing branch.
+* **Staging**: Approved changes ready for production but not yet deployed.
+* **Main**: The latest available version of the project.
+
+```mermaid
+flowchart LR
+  F[Feature Branch]
+  D[Development]
+  Q[QA]
+  S[Staging]
+  M[Main]
+  F --> D --> Q --> S --> M
+```
+
+<!-- livebook:{"break_markdown":true} -->
+
+### Your Turn
+
+We will create a new branch on your `github_example` project.
+
+On the command line run:
+
+```sh
+$ git checkout -b <branchname>
+```
+
+Where `<branchname>` is the name of the branch with no spaces.
+Each branch must have a name with no spaces. For example, you could create a branch called `my-branch`.
+
+```sh
+$ git checkout -b my-branch
+```
+
+`git checkout` allows you to set the current branch. `git checkout -b` creates a new branch and sets it as the current branch.
+Any commits we make are saved on the current branch.
+
+Next, create, stage and commit a new file `branch.txt`.
+
+```sh
+$ git add branch.txt
+$ git commit -m "add branch.txt"
+```
+
+You'll need to create a remote `my-branch` and push the changes. You can visit the link provided
+to create a PR.
+
+```sh
+$ git push -u origin my-branch
+...
+remote: Create a pull request for 'my-branch' on GitHub by visiting:
+remote:      https://github.com/BrooklinJazz/github_example/pull/new/my-branch
+...
+```
+
+<!-- livebook:{"break_markdown":true} -->
+
+Now you can optionally provide a description of the PR and click the **Create pull request** button.
+
+<!-- livebook:{"break_markdown":true} -->
+
+![](images/create_pr_github.png)
+
+<!-- livebook:{"break_markdown":true} -->
+
+You can review a pull request's changes under the **Files changed** tab.
+
+Click the **Merge pull request** button to merge the changed files into main.
+
+<!-- livebook:{"break_markdown":true} -->
+
+![](images/merge_pull_request.png)
+
+<!-- livebook:{"break_markdown":true} -->
+
+Now the `main` branch of the remote repository has the changes from the pull request, however
+your local `main` branch needs to be updated.
+
+Use `git pull` while on the `main` branch of your local `github_example` project. You
+may need to use `git checkout main` if you are not already on the `main` branch.
+
+```sh
+$ git checkout main
+$ git pull
+```
+
+## Merge Conflicts
+
+Source control allows us to develop our own version of the project isolated to our local version.
+However, if two developers edit the same file, it's possible to have conflicts.
+
+These conflicts need to be manually resolved. It's often easiest to [resolve conflicts using GitHub Desktop](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/addressing-merge-conflicts/resolving-a-merge-conflict-on-github)
+or with Visual Studio Code.
+
+<!-- livebook:{"break_markdown":true} -->
+
+![](images/resolve_conflicts_vsc.png)
+
+<!-- livebook:{"break_markdown":true} -->
+
+### Your Turn
+
+You're going to create a merge conflict.
+
+On your `github_example` and `github_example2` projects, edit the `finished.txt` file.
+
+Both should have conflicting content. i.e.
+
+```sh
+github_example version of finished.txt
+```
+
+and for `github_example2`:
+
+```sh
+conflicting github_example2 version of finished.txt
+```
+
+Stage and commit both versions of the project. By having two versions, you are simulating two
+developers working on the same project.
+
+Push `github_example` and attempt to pull from `github_example2`.
+
+You should see that there are merge conflicts.
+
+Use Visual Studio Code to resolve the conflicts by accepting both changes.
+
+Stage, commit, and push your resolved changes.
+
+## Further Reading
+
+Consider the following resource(s) to deepen your understanding of the topic.
+
+* [Git Documentation and Guides](https://git-scm.com/)
+* [GitHub Documentation and Guides](https://docs.github.com/en)
+
+## Mark As Completed
+
+<!-- livebook:{"attrs":{"source":"file_name = Path.basename(Regex.replace(~r/#.+/, __ENV__.file, \"\"), \".livemd\")\n\nsave_name =\n  case Path.basename(__DIR__) do\n    \"reading\" -> \"git_reading\"\n    \"exercises\" -> \"git_exercise\"\n  end\n\nprogress_path = __DIR__ <> \"/../progress.json\"\nexisting_progress = File.read!(progress_path) |> Jason.decode!()\n\ndefault = Map.get(existing_progress, save_name, false)\n\nform =\n  Kino.Control.form(\n    [\n      completed: input = Kino.Input.checkbox(\"Mark As Completed\", default: default)\n    ],\n    report_changes: true\n  )\n\nTask.async(fn ->\n  for %{data: %{completed: completed}} <- Kino.Control.stream(form) do\n    File.write!(\n      progress_path,\n      Jason.encode!(Map.put(existing_progress, save_name, completed), pretty: true)\n    )\n  end\nend)\n\nform","title":"Track Your Progress"},"chunks":null,"kind":"Elixir.HiddenCell","livebook_object":"smart_cell"} -->
+
+```elixir
+file_name = Path.basename(Regex.replace(~r/#.+/, __ENV__.file, ""), ".livemd")
+
+save_name =
+  case Path.basename(__DIR__) do
+    "reading" -> "git_reading"
+    "exercises" -> "git_exercise"
+  end
+
+progress_path = __DIR__ <> "/../progress.json"
+existing_progress = File.read!(progress_path) |> Jason.decode!()
+
+default = Map.get(existing_progress, save_name, false)
+
+form =
+  Kino.Control.form(
+    [
+      completed: input = Kino.Input.checkbox("Mark As Completed", default: default)
+    ],
+    report_changes: true
+  )
+
+Task.async(fn ->
+  for %{data: %{completed: completed}} <- Kino.Control.stream(form) do
+    File.write!(
+      progress_path,
+      Jason.encode!(Map.put(existing_progress, save_name, completed), pretty: true)
+    )
+  end
+end)
+
+form
+```
+
+## Commit Your Progress
+
+Run the following in your command line from the curriculum folder to track and save your progress in a Git commit.
+Ensure that you do not already have undesired or unrelated changes by running `git status` or by checking the source control tab in Visual Studio Code.
+
+```
+$ git checkout -b git-reading
+$ git add .
+$ git commit -m "finish git reading"
+$ git push origin git-reading
+```
+
+Create a pull request from your `git-reading` branch to your `solutions` branch.
+Please do not create a pull request to the DockYard Academy repository as this will spam our PR tracker.
+
+**DockYard Academy Students Only:**
+
+Notify your instructor by including `@BrooklinJazz` in your PR description to get feedback.
+You (or your instructor) may merge your PR into your solutions branch after review.
+
+If you are interested in joining the next academy cohort, [sign up here](https://academy.dockyard.com/) to receive more news when it is available.
+
+## Up Next
+
+| Previous                                       | Next                                   |
+| ---------------------------------------------- | -------------------------------------: |
+| [Command Line](../reading/command_line.livemd) | [Livebook](../reading/livebook.livemd) |
+

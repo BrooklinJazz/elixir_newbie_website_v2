@@ -1,0 +1,519 @@
+%{
+  title: "Regex"
+}
+---
+# Regex
+
+```elixir
+Mix.install([
+  {:jason, "~> 1.4"},
+  {:kino, "~> 0.8.0", override: true},
+  {:youtube, github: "brooklinjazz/youtube"},
+  {:hidden_cell, github: "brooklinjazz/hidden_cell"}
+])
+```
+
+## Navigation
+
+[Return Home](../start.livemd)<span style="padding: 0 30px"></span>
+[Report An Issue](https://github.com/DockYard-Academy/beta_curriculum/issues/new?assignees=&labels=&template=issue.md&title=)
+
+## Setup
+
+Ensure you type the `ea` keyboard shortcut to evaluate all Elixir cells before starting. Alternatively you can evaluate the Elixir cells as you read.
+
+## Review Questions
+
+Upon completing this lesson, a student should be able to answer the following questions.
+
+<!-- livebook:{"break_markdown":true} -->
+
+* What are some common use cases for Regular Expressions?
+* How can we use Regular Expressions to manipulate strings?
+* How can we experiment and build Regular Expressions using [Regexr]([Regexr](https://regexr.com/))?
+
+## Overview
+
+Regex stands for Regular expressions. Regular expressions are a powerful way to match process strings based on patterns.
+
+We can create a regular expression with the `~r` sigil in Elixir.
+
+```elixir
+~r/hello/
+```
+
+We use regular expressions to find matching patterns in a string. We'll use [Regex.scan/3](https://hexdocs.pm/elixir/Regex.html#scan/3) to
+show all of the values the regular expression matches on.
+
+For example, the expression `~r/h/` will match the `"h"` character.
+
+```elixir
+Regex.scan(~r/h/, "hello")
+```
+
+[Regex.scan/3](https://hexdocs.pm/elixir/Regex.html#scan/3) will find all matches in a string.
+
+Below we see that `~r/l/` matches on `"l"` twice in the `"hello"` string.
+
+```elixir
+Regex.scan(~r/l/, "hello")
+```
+
+We can match exact characters or words.
+
+```elixir
+Regex.scan(~r/hello/, "hello, world!")
+```
+
+We can also match patterns using special characters. For example, `\d` will match any digit.
+
+```elixir
+Regex.scan(~r/\d/, "h3ll0")
+```
+
+## Building Regular Expressions
+
+Regex differs in implementation depending on the programming language. For example, Elixir
+uses the [PCRE](http://www.pcre.org/) standard (Perl Compatible Regular Expressions).
+
+Regular expressions use special symbols to represent different patterns. Unfortunately, these patterns can become very complex and difficult to read at a glance.
+
+However, regular expressions are also powerful and one of the best ways to process a string.
+
+You can experiment with regular expressions and see a regular expression reference guide on [Regexr](https://regexr.com/).
+
+Here are a few patterns to get you started.
+
+* Alphanumeric characters. i.e. `h` matches `"h"`, `-` matches `"-"`, and `1` matches `"1"`.
+* `\d` digit.
+* `\w` word character.
+* `.` non-newline character (essentially anything).
+* `\s` whitespace character.
+
+Often capitalizing backslash characters inverts their purpose.
+
+`\D` non-digit character.
+`W` non-word character.
+`\S` non-whitespace character.
+
+<!-- livebook:{"break_markdown":true} -->
+
+Regex can find exact matches using non-special characters.
+
+```elixir
+Regex.scan(~r/2/, "123")
+```
+
+`\d` matches any digit from `0-9`.
+
+```elixir
+Regex.scan(~r/\d/, "abcd123")
+```
+
+`\w` matches any single letter, number, or underscore.
+
+```elixir
+Regex.scan(~r/\w/, "abcd123")
+```
+
+`.` matches any non-newline` \n` character.
+
+```elixir
+Regex.scan(~r/./, "abcd\n123")
+```
+
+`\s` matches whitespaces `" "`.
+
+```elixir
+Regex.scan(~r/\s/, "a b c")
+```
+
+By combining these symbols, we can create more complex matches. For example, we
+can match on a phone number in the format `999-999-9999`.
+
+```elixir
+Regex.scan(~r/\d\d\d-\d\d\d-\d\d\d\d/, "111-111-1111 222-222-2222 123-123-1234")
+```
+
+### Frequency
+
+In addition to matching character patterns, we can match frequency using the following symbols.
+
+* `*` 0 or more times.
+* `+` one or more times.
+* `?` zero or one time.
+* `{}` specify the number of times
+
+<!-- livebook:{"break_markdown":true} -->
+
+We can find a match which repeats zero or more times with `*`.
+
+`*` uses the previous regular expression, so `1*` will match on all strings that contain `1` zero or more times. Similarly,
+`A*` would match all strings containing zero or more `A`s.
+
+```elixir
+Regex.scan(~r/1*/, "1121")
+```
+
+`+` will match on strings that match one or more of the previous regular expressions.
+
+```elixir
+Regex.scan(~r/1+/, "11211")
+```
+
+`?` functions like a conditional match, where the match may or may not exist.
+For example, we could match `a` and `ab` with `ab?`.
+
+```elixir
+Regex.scan(~r/ab?/, "a ab")
+```
+
+`{}` allows us to specify a specific range of matches. `{3}` is exactly three matches. `{3,}` is
+three or more matches. `{3,4}` is between three and four matches.
+
+For example, we could use this to create an alternative regular expression for phone numbers.
+
+```elixir
+Regex.scan(~r/\d{3}-\d{3}-\d{4}/, "111-111-1111")
+```
+
+Or match on all digits between 3 and 4 characters.
+
+```elixir
+Regex.scan(~r/\d{3,4}/, "111-111-1111")
+```
+
+### Conditions and Ranges
+
+We can also match on ranges of characters or use special conditions.
+
+Use `[1-9]` to match a range of digits or letters.
+
+```elixir
+Regex.scan(~r/[1-4]/, "1234567")
+```
+
+```elixir
+Regex.scan(~r/[a-c]/, "abcd")
+```
+
+* `|` match on one pattern or another.
+
+```elixir
+Regex.scan(~r/a|2/, "abc123")
+```
+
+* `[^a]` match on characters other than the one provided
+
+```elixir
+Regex.scan(~r/[^a]/, "abc123")
+```
+
+## Regex Module
+
+The [Regex](https://hexdocs.pm/elixir/Regex.html#functions) module provides functions for processing strings using regular expressions.
+
+* `run/3` Runs the regular expression against the given string until the first match.
+* `scan/3` Scans the string for all matches.
+* `replace/4` Replaces all matches.
+* `split/3` Split the string on matches.
+* `match?/2` Return a boolean if the string contains the regular expression.
+
+<!-- livebook:{"break_markdown":true} -->
+
+[Regex.run/3](https://hexdocs.pm/elixir/Regex.html#run/3) will run through a regular expression until the first match.
+
+```elixir
+Regex.run(~r/\d/, "aa1234")
+```
+
+As we've already seen, [Regex.scan/3](https://hexdocs.pm/elixir/Regex.html#scan/3) runs through a regular expression finding all matches.
+
+```elixir
+Regex.scan(~r/\d/, "aa1234")
+```
+
+[Regex.replace/4](https://hexdocs.pm/elixir/Regex.html#replace/4) replaces matches with a given string.
+
+```elixir
+Regex.replace(~r/Peter Parker/, "Peter Parker is spiderman", "--secret--")
+```
+
+[Regex.replace/3](https://hexdocs.pm/elixir/Regex.html#replace/3) can also accept an anonymous function to use the matched value to determine how
+to replace it.
+
+```elixir
+Regex.replace(~r/\d/, "12345", fn each ->
+  "#{String.to_integer(each) + 1}"
+end)
+```
+
+[Regex.split/3](https://hexdocs.pm/elixir/Regex.html#split/3) splits a string on all matches the same way that [String.split/3](https://hexdocs.pm/elixir/String.html#split/3) will split a string by a specific value.
+
+```elixir
+String.split("one,two,three", ",")
+```
+
+```elixir
+Regex.split(~r/\d/, "one1two2three")
+```
+
+[Regex.match/2](https://hexdocs.pm/elixir/Regex.html#match/2) checks if a string contains any match of the regular expression.
+
+```elixir
+Regex.match?(~r/\d/, "hello")
+```
+
+```elixir
+Regex.match?(~r/\d/, "h3ll0")
+```
+
+The [String](https://hexdocs.pm/elixir/String.html) module provides some functions for regular expressions.
+
+* `replace/3`
+* `match?/2`
+* `split?/3`
+
+These functions are the same as the [Regex](https://hexdocs.pm/elixir/Regex.html) module, except they take the string as the first argument to
+make it easier to pipe functions together.
+
+```elixir
+"1234"
+|> String.replace(~r/\d/, fn each -> "#{String.to_integer(each) + 1}" end)
+|> String.replace(~r/\d/, fn each -> each <> " " end)
+```
+
+## Capture Groups
+
+You can build capture groups with `()`. Capture groups allow you to treat multiple characters
+as a single unit.
+
+Matching on a capture group may feel unintuitive. For example, using `a(b)` instead of `ab`
+returns multiple matches rather than a single match.
+
+```elixir
+Regex.run(~r/ab/, "ab")
+```
+
+```elixir
+Regex.run(~r/a(b)/, "ab")
+```
+
+Capture groups match separately in regular expressions.
+So first, we capture `ab`. Then we capture `(b)`. Notice that if we create another capture group,
+we also return values that match that group. So `(a)(b)` matches on `ab`, then `a`, then `b`.
+
+```elixir
+Regex.run(~r/(a)(b)/, "ab")
+```
+
+This could be useful if you wanted to use a specific part of the regular expression when replacing
+it. For example, let's obfuscate phone numbers so that `111-111-1111` becomes `XXX-111-1111`.
+
+We can separate the match into multiple capture groups.
+
+```elixir
+Regex.run(~r/\d{3}-(\d{3}-\d{4})/, "111-111-1111")
+```
+
+Now we can use these capture groups in [Regex.replace/3](https://hexdocs.pm/elixir/Regex.html#replace/3).
+
+```elixir
+Regex.replace(~r/\d{3}-(\d{3}-\d{4})/, "111-111-1111", fn full_match, capture_group ->
+  IO.inspect(full_match, label: "match")
+  IO.inspect(capture_group, label: "capture group")
+  "XXX-" <> capture_group
+end)
+```
+
+Regular expressions handle an arbitrary number of capture groups. For example, let's obfuscate the phone number `111-111-1111` into `111-XXX-1111`.
+
+```elixir
+Regex.replace(~r/(\d{3}-)\d{3}(-\d{4})/, "111-111-1111", fn match, group1, group2 ->
+  IO.inspect(match, label: "match")
+  IO.inspect(group1, label: "group1")
+  IO.inspect(group2, label: "group2")
+  group1 <> "XXX" <> group2
+end)
+```
+
+### Your Turn
+
+Use [Regex.replace/3](https://hexdocs.pm/elixir/Regex.html#replace/3) to obfuscate (hide important information) in a phone number. Replace all but the first three digits with `X` so `999-999-9999` becomes `999-XXX-XXXX`.
+
+<details style="background-color: lightgreen; padding: 1rem; margin: 1rem 0;">
+<summary>Example Solution</summary>
+
+```elixir
+Regex.replace(~r/(\d{3}-)\d{3}-\d{4}/, "999-999-9999", fn _match, group1 ->
+  group1 <> "XXX-" <> "XXXX"
+end)
+```
+
+</details>
+
+```elixir
+
+```
+
+## Lookaround
+
+### Lookahead
+
+We can use positive lookahead `(?=)` to only match expressions followed by another.
+
+For example, we can match all `a` characters followed by a `u` character. Notice below that only
+`au` will match, and `a` is the matched value.
+
+```elixir
+Regex.scan(~r/a(?=u)/, "a au")
+```
+
+We can use negative lookahead `(?!)` to only match on expressions not followed by another.
+
+For example, we can match on `a` characters not followed by a `u` character. Notice that
+`at` and `a` match, but not `au`.
+
+```elixir
+Regex.scan(~r/a(?!u)/, "at a au")
+```
+
+### Lookbehind
+
+<!-- livebook:{"break_markdown":true} -->
+
+Positive and negative lookbehind (`(?<=)` and `(?<!)`) work similarly to lookahead, except they match expressions preceded by another.
+
+For example, we can use a positive lookbehind to find `a` characters preceded by a `u` character.
+Notice that `ua` matches but not `ta` or `a`.
+
+```elixir
+Regex.scan(~r/(?<=u)a/, "ua ta a")
+```
+
+Similarly, the negative lookbehind can find characters not preceded by another character.
+Notice that `a` and `ta` match, but not `ua`.
+
+```elixir
+Regex.scan(~r/(?<!u)a/, "ua ta a")
+```
+
+Lookahead and lookbehind work with any valid regular expression.
+
+For example, let's say we have some text
+with several numbered bullet points, but we only want to retrieve values after the number.
+
+`(?<=\d\. )` lets us find expressions preceded by any digit, a period, and a space.
+
+Then `\w+` matches one or more words on the current line.
+
+```elixir
+text = "
+1. one
+2. two
+3. three
+"
+
+Regex.scan(~r/(?<=\d\. )\w+/, text)
+```
+
+### Your Turn
+
+Use [Regex.replace/3](https://hexdocs.pm/elixir/Regex.html#replace/3) to convert a phone number in the format `#9999999999` into the format `999-999-9999`.
+
+<details style="background-color: lightgreen; padding: 1rem; margin: 1rem 0;">
+<summary>Example Solution</summary>
+
+```elixir
+Regex.replace(~r/\#(\d{3})(\d{3})(\d{4})/, "#9999999999", fn _full, group1, group2, group3 -> 
+  "#{group1}-#{group2}-#{group3}"
+end)
+```
+
+</details>
+
+```elixir
+
+```
+
+## Further Reading
+
+This lesson is a primer and dives into enough depth for many common use cases. However,
+Regex is a complex subject, and regular expressions can often be difficult to build and understand.
+
+We recommend you do further research and use the available tools to learn more about regular
+expressions as required.
+
+* [Regexr](https://regexr.com/) provides a regular expression reference guide and allows you to build and test regular expressions.
+* [Regex Module](https://hexdocs.pm/elixir/Regex.html) documentation for a full list of [Regex](https://hexdocs.pm/elixir/Regex.html) functions and advanced use.
+* [regexone.com](https://regexone.com/) for regex exercises.
+
+Not all languages use the same standard for regular expressions, so you may find information online that does not
+apply to Elixir.
+
+## Mark As Completed
+
+<!-- livebook:{"attrs":{"source":"file_name = Path.basename(Regex.replace(~r/#.+/, __ENV__.file, \"\"), \".livemd\")\n\nsave_name =\n  case Path.basename(__DIR__) do\n    \"reading\" -> \"regex_reading\"\n    \"exercises\" -> \"regex_exercise\"\n  end\n\nprogress_path = __DIR__ <> \"/../progress.json\"\nexisting_progress = File.read!(progress_path) |> Jason.decode!()\n\ndefault = Map.get(existing_progress, save_name, false)\n\nform =\n  Kino.Control.form(\n    [\n      completed: input = Kino.Input.checkbox(\"Mark As Completed\", default: default)\n    ],\n    report_changes: true\n  )\n\nTask.async(fn ->\n  for %{data: %{completed: completed}} <- Kino.Control.stream(form) do\n    File.write!(\n      progress_path,\n      Jason.encode!(Map.put(existing_progress, save_name, completed), pretty: true)\n    )\n  end\nend)\n\nform","title":"Track Your Progress"},"chunks":null,"kind":"Elixir.HiddenCell","livebook_object":"smart_cell"} -->
+
+```elixir
+file_name = Path.basename(Regex.replace(~r/#.+/, __ENV__.file, ""), ".livemd")
+
+save_name =
+  case Path.basename(__DIR__) do
+    "reading" -> "regex_reading"
+    "exercises" -> "regex_exercise"
+  end
+
+progress_path = __DIR__ <> "/../progress.json"
+existing_progress = File.read!(progress_path) |> Jason.decode!()
+
+default = Map.get(existing_progress, save_name, false)
+
+form =
+  Kino.Control.form(
+    [
+      completed: input = Kino.Input.checkbox("Mark As Completed", default: default)
+    ],
+    report_changes: true
+  )
+
+Task.async(fn ->
+  for %{data: %{completed: completed}} <- Kino.Control.stream(form) do
+    File.write!(
+      progress_path,
+      Jason.encode!(Map.put(existing_progress, save_name, completed), pretty: true)
+    )
+  end
+end)
+
+form
+```
+
+## Commit Your Progress
+
+Run the following in your command line from the curriculum folder to track and save your progress in a Git commit.
+Ensure that you do not already have undesired or unrelated changes by running `git status` or by checking the source control tab in Visual Studio Code.
+
+```
+$ git checkout -b regex-reading
+$ git add .
+$ git commit -m "finish regex reading"
+$ git push origin regex-reading
+```
+
+Create a pull request from your `regex-reading` branch to your `solutions` branch.
+Please do not create a pull request to the DockYard Academy repository as this will spam our PR tracker.
+
+**DockYard Academy Students Only:**
+
+Notify your instructor by including `@BrooklinJazz` in your PR description to get feedback.
+You (or your instructor) may merge your PR into your solutions branch after review.
+
+If you are interested in joining the next academy cohort, [sign up here](https://academy.dockyard.com/) to receive more news when it is available.
+
+## Up Next
+
+| Previous                                                       | Next                                                     |
+| -------------------------------------------------------------- | -------------------------------------------------------: |
+| [Strings and Binaries](../reading/strings_and_binaries.livemd) | [Email Validation](../exercises/email_validation.livemd) |
+

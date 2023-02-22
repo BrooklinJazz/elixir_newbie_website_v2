@@ -1,0 +1,214 @@
+%{
+  title: "Replacing nils"
+}
+---
+# Replacing Nils
+
+```elixir
+Mix.install([
+  {:jason, "~> 1.4"},
+  {:kino, "~> 0.8.0", override: true},
+  {:youtube, github: "brooklinjazz/youtube"},
+  {:hidden_cell, github: "brooklinjazz/hidden_cell"}
+])
+```
+
+## Navigation
+
+[Return Home](../start.livemd)<span style="padding: 0 30px"></span>
+[Report An Issue](https://github.com/DockYard-Academy/beta_curriculum/issues/new?assignees=&labels=&template=issue.md&title=)
+
+## Purpose
+
+This is a guest exercise written by Quentin Crain.
+
+This is a *drill* exercise:
+
+> *Drill* exercises are meant to provide practise of Elixir's
+> syntax and important language modules so developers can
+> type them out as fast as possible.
+> The problem should not be conceptually difficult to
+> facilitate this goal.
+> 
+> Developers need to commit both Elixir's syntax and core
+> modules/functions to (working) memory so that when writing
+> their code the developer is not slowed down having to
+> remember the syntax or which module function to use. This
+> is analogous to knowing how to spell and the grammar of
+> your (human) language.
+
+In this particular iteration of this problem, the goal is
+to practise writing/using functions with pattern matching
+in the functions' heads.
+
+To develop familiarity with functions and pattern matching,
+you will replace `nil` values in a list with values from a
+second list at the same index.
+
+For example:
+
+```elixir
+list1 = [0, nil, 2, 3, nil]
+list2 = [:a, :b, :c, :d, :e]
+
+ReplaceNils.replace(list1, list2)
+[0, :b, 2, 3, :e]
+```
+
+You can assume the lists are of the same length.
+
+Implement the `ReplaceNils` module as below:
+
+```elixir
+defmodule ReplaceNils do
+  @moduledoc """
+  Replace Nils
+  """
+
+  @doc """
+  replace nil values in the first list with values from the second list in the same position.
+  """
+  def replace(input1, input2) do
+    nil
+  end
+end
+```
+
+Here are some additional test data to think about:
+
+<!-- livebook:{"force_markdown":true} -->
+
+```elixir
+Testcase 1:
+  Input1:   [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+  Input2:   [nil, nil, nil, nil, nil, nil, nil, nil, nil, nil]
+  Expected: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+
+Testcase 2:
+  Input1:   [nil, nil, nil, nil, nil, nil, nil, nil, nil, nil]
+  Input2:   [:a, :b, :c, :d, :e, :f, :g, :h, :i, :j]
+  Expected: [:a, :b, :c, :d, :e, :f, :g, :h, :i, :j]
+
+Testcase 3:
+  Input1: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+  Input2: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+
+Testcase 4:
+  Input1: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+  Input2: [:a, :b, :c, :d, :e, :f, :g, :h, :i, :j]
+
+Testcase 5:
+  [1, 2, 3, nil, nil, 6, 7, nil, 9, 10]
+  [:a, :b, :c, :d, :e, :f, :g, :h, :i, :j]
+```
+
+Here are some example solutions:
+
+<details style="background-color: lightgreen; padding: 1rem; border-radius: 0.5rem; margin: 1rem 0;">
+<summary>Example Solution 1</summary>
+
+```elixir
+defmodule ReplaceNils do
+  def replace([i1|input1], [i2|input2]) do
+    if input1 == [] do
+      if i1 == nil, do: [i2], else: [i1]
+    else
+      [if i1 == nil, do: [i2], else: [i1]] ++ replace(input1, input2)
+    end
+  end
+end
+```
+
+</details>
+
+<details style="background-color: lightgreen; padding: 1rem; border-radius: 0.5rem; margin: 1rem 0;">
+<summary>Example Solution 2</summary>
+
+```elixir
+defmodule ReplaceNils do
+  def replace([a|as], [b|bs]) do
+    case as do
+      [] -> [a || b]
+      _  -> [a || b] ++ replace(as, bs)
+    end
+  end
+end
+```
+
+</details>
+
+<details style="background-color: lightgreen; padding: 1rem; border-radius: 0.5rem; margin: 1rem 0;">
+<summary>Example Solution 3</summary>
+
+```elixir
+defmodule ReplaceNils do
+  def replace(as, bs, acc \\ [])
+
+  def replace([], [], acc), do: Enum.reverse(acc)
+  def replace([nil|as], [b|bs], acc), do: replace(as, bs, [b|acc])
+  def replace([a|as], [_b|bs], acc), do: replace(as, bs, [a|acc])
+end
+```
+
+</details>
+
+## Mark As Completed
+
+<!-- livebook:{"attrs":{"source":"file_name = Path.basename(Regex.replace(~r/#.+/, __ENV__.file, \"\"), \".livemd\")\n\nsave_name =\n  case Path.basename(__DIR__) do\n    \"reading\" -> \"drill-patternmatching-replace-nils_reading\"\n    \"exercises\" -> \"drill-patternmatching-replace-nils_exercise\"\n  end\n\nprogress_path = __DIR__ <> \"/../progress.json\"\nexisting_progress = File.read!(progress_path) |> Jason.decode!()\n\ndefault = Map.get(existing_progress, save_name, false)\n\nform =\n  Kino.Control.form(\n    [\n      completed: input = Kino.Input.checkbox(\"Mark As Completed\", default: default)\n    ],\n    report_changes: true\n  )\n\nTask.async(fn ->\n  for %{data: %{completed: completed}} <- Kino.Control.stream(form) do\n    File.write!(\n      progress_path,\n      Jason.encode!(Map.put(existing_progress, save_name, completed), pretty: true)\n    )\n  end\nend)\n\nform","title":"Track Your Progress"},"chunks":null,"kind":"Elixir.HiddenCell","livebook_object":"smart_cell"} -->
+
+```elixir
+file_name = Path.basename(Regex.replace(~r/#.+/, __ENV__.file, ""), ".livemd")
+
+save_name =
+  case Path.basename(__DIR__) do
+    "reading" -> "drill-patternmatching-replace-nils_reading"
+    "exercises" -> "drill-patternmatching-replace-nils_exercise"
+  end
+
+progress_path = __DIR__ <> "/../progress.json"
+existing_progress = File.read!(progress_path) |> Jason.decode!()
+
+default = Map.get(existing_progress, save_name, false)
+
+form =
+  Kino.Control.form(
+    [
+      completed: input = Kino.Input.checkbox("Mark As Completed", default: default)
+    ],
+    report_changes: true
+  )
+
+Task.async(fn ->
+  for %{data: %{completed: completed}} <- Kino.Control.stream(form) do
+    File.write!(
+      progress_path,
+      Jason.encode!(Map.put(existing_progress, save_name, completed), pretty: true)
+    )
+  end
+end)
+
+form
+```
+
+## Commit Your Progress
+
+Run the following in your command line from the curriculum folder to track and save your progress in a Git commit.
+Ensure that you do not already have undesired or unrelated changes by running `git status` or by checking the source control tab in Visual Studio Code.
+
+```
+$ git checkout -b drill-patternmatching-replace-nils-exercise
+$ git add .
+$ git commit -m "finish drill-patternmatching-replace-nils exercise"
+$ git push origin drill-patternmatching-replace-nils-exercise
+```
+
+Create a pull request from your `drill-patternmatching-replace-nils-exercise` branch to your `solutions` branch.
+Please do not create a pull request to the DockYard Academy repository as this will spam our PR tracker.
+
+**DockYard Academy Students Only:**
+
+Notify your instructor by including `@BrooklinJazz` in your PR description to get feedback.
+You (or your instructor) may merge your PR into your solutions branch after review.
+
+If you are interested in joining the next academy cohort, [sign up here](https://academy.dockyard.com/) to receive more news when it is available.
+

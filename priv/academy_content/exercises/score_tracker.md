@@ -1,0 +1,327 @@
+%{
+  title: "Score Tracker"
+}
+---
+# Score Tracker
+
+```elixir
+Mix.install([
+  {:jason, "~> 1.4"},
+  {:kino, "~> 0.8.0", override: true},
+  {:youtube, github: "brooklinjazz/youtube"},
+  {:hidden_cell, github: "brooklinjazz/hidden_cell"}
+])
+```
+
+## Navigation
+
+[Return Home](../start.livemd)<span style="padding: 0 30px"></span>
+[Report An Issue](https://github.com/DockYard-Academy/beta_curriculum/issues/new?assignees=&labels=&template=issue.md&title=)
+
+## Score Tracker
+
+You're going to create a `ScoreTracker` [GenServer](https://hexdocs.pm/elixir/GenServer.html) which will will be a generic score tracker that could be used in any game system. When spawned, the `ScoreTracker` should store a score starting at `0` in it's state.
+
+The `ScoreTracker` module should **asynchronously** receive `{:score, amount}` messages where `amount` is an integer which
+increase the `ScoreTracker`'s state by the provided `amount`.
+
+The `ScoreTracker` module should **synchronously** receive `:get_score` messages to return the current score.
+
+<!-- livebook:{"force_markdown":true} -->
+
+```elixir
+{:ok, pid} = ScoreTracker.start_link([])
+ScoreTracker.score(pid, 10)
+10 = ScoreTracker.get_score(pid)
+ScoreTracker.score(pid, 20)
+30 = ScoreTracker.get_score(pid)
+```
+
+<details style="background-color: lightgreen; padding: 1rem; margin: 1rem 0;">
+<summary>Example Solution</summary>
+
+```elixir
+defmodule ScoreTracker do
+  use GenServer
+
+  def start_link(_opts) do
+    GenServer.start_link(__MODULE__, [])
+  end
+
+  def score(score_tracker_pid, amount) do
+    GenServer.cast(score_tracker_pid, {:score, amount})
+  end
+
+  def get_score(score_tracker_pid) do
+    GenServer.call(score_tracker_pid, :get_score)
+  end
+
+  @impl true
+  def init(_opts) do
+    {:ok, 0}
+  end
+
+  @impl true
+  def handle_cast({:score, amount}, state) do
+    {:noreply, state + amount}
+  end
+
+  @impl true
+  def handle_call(:get_score, _from, state) do
+    {:reply, state, state}
+  end
+end
+```
+
+</details>
+
+Implement the `ScoreTracker` module as documented below. You will also have to implement the necessary [GenServer](https://hexdocs.pm/elixir/GenServer.html) callback functions such as [GenServer.init/1](https://hexdocs.pm/elixir/GenServer.html#init/1), [GenServer.handle_cast/2](https://hexdocs.pm/elixir/GenServer.html#handle_cast/2), and [GenServer.handle_call/3](https://hexdocs.pm/elixir/GenServer.html#handle_call/3).
+
+```elixir
+defmodule ScoreTracker do
+  @moduledoc """
+  Documentation for `ScoreTracker`
+  """
+  use GenServer
+
+  @doc """
+  Start the `ScoreTracker` process.
+
+  ## Examples
+
+    iex> {:ok, pid} = ScoreTracker.start_link([])
+  """
+  def start_link(_opts) do
+  end
+
+  @doc """
+  Asynchronously increase the stored score by the specified amount.
+
+  ## Examples
+
+      iex> {:ok, pid} = ScoreTracker.start_link([])
+      iex> ScoreTracker.score(pid, 10)
+      :ok
+  """
+  def score(score_tracker_pid, amount) do
+  end
+
+  @doc """
+  Synchronously return the current score state.
+
+  ## Examples
+
+      iex> {:ok, pid} = ScoreTracker.start_link([])
+      iex> ScoreTracker.get_score(pid)
+      0
+  """
+  def get_score(score_tracker_pid) do
+  end
+end
+```
+
+## Bonus: Multiplayer Score Tracker
+
+Create a `MultiplayerScoreTracker` which can track scores for multiple named players.
+
+<details style="background-color: lightgreen; padding: 1rem; margin: 1rem 0;">
+<summary>Example Solution</summary>
+
+```elixir
+defmodule MultiplayerScoreTracker do
+  use GenServer
+
+  def start_link(_opts) do
+    GenServer.start_link(__MODULE__, [])
+  end
+
+  def score(multiplayer_score_tracker_pid, player_name, amount) do
+    GenServer.cast(multiplayer_score_tracker_pid, {:score, player_name, amount})
+  end
+
+  def all_scores(multiplayer_score_tracker_pid) do
+    GenServer.call(multiplayer_score_tracker_pid, :all_scores)
+  end
+
+  def get_score(multiplayer_score_tracker_pid, player_name) do
+    GenServer.call(multiplayer_score_tracker_pid, {:get_score, player_name})
+  end
+
+  @impl true
+  def init(_opts) do
+    {:ok, %{}}
+  end
+
+  @impl true
+  def handle_cast({:score, player_name, amount}, state) do
+    {:noreply, Map.update(state, player_name, amount, fn current -> current + amount end)}
+  end
+
+  @impl true
+  def handle_call(:all_scores, _from, state) do
+    {:reply, state, state}
+  end
+
+  @impl true
+  def handle_call({:get_score, player_name}, _from, state) do
+    {:reply, state[player_name], state}
+  end
+end
+```
+
+</details>
+
+Implement the `MultiplayerScoreTracker` as documented below. You will also have to implement the necessary [GenServer](https://hexdocs.pm/elixir/GenServer.html) callback functions such as [GenServer.init/1](https://hexdocs.pm/elixir/GenServer.html#init/1), [GenServer.handle_cast/2](https://hexdocs.pm/elixir/GenServer.html#handle_cast/2), and [GenServer.handle_call/3](https://hexdocs.pm/elixir/GenServer.html#handle_call/3).
+
+```elixir
+defmodule MultiplayerScoreTracker do
+  @moduledoc """
+  Documentation for `MultiplayerScoreTracker`
+  """
+  use GenServer
+
+  @doc """
+  Start the `MultyplayerScoreTracker` process.
+
+  ## Examples
+
+      iex> {:ok, pid} = MultiplayerScoreTracker.start_link([])
+  """
+  def start_link(_opts) do
+  end
+
+  @doc """
+  Asynchronously add to the score of a named player. Creates the player if they do not already exist.
+
+  ## Examples
+
+      iex> {:ok, pid} = MultiplayerScoreTracker.start_link([])
+      iex> MultiplayerScoreTracker.score(pid, :player1, 10)
+      :ok
+      iex> MultiplayerScoreTracker.score(pid, :player2, 10)
+      :ok
+      iex> MultiplayerScoreTracker.score(pid, :abc, 10)
+      :ok
+  """
+  def score(multiplayer_score_tracker_pid, player_name, amount) do
+  end
+
+  @doc """
+  Synchronously retrieve all of the player scores in a map.
+
+  ## Examples
+
+      Empty Scores.
+
+      iex> {:ok, pid} = MultiplayerScoreTracker.start_link([])
+      iex> MultiplayerScoreTracker.all_scores(pid)
+      %{}
+
+      Single Player Score.
+      
+      iex> {:ok, pid} = MultiplayerScoreTracker.start_link([])
+      iex> MultiplayerScoreTracker.score(pid, :player1, 10)
+      iex> MultiplayerScoreTracker.score(pid, :player1, 10)
+      iex> MultiplayerScoreTracker.all_scores(pid)
+      %{player1: 20}
+
+      Multiple Player Scores.
+
+      iex> {:ok, pid} = MultiplayerScoreTracker.start_link([])
+      iex> MultiplayerScoreTracker.score(pid, :player1, 10)
+      iex> MultiplayerScoreTracker.score(pid, :player2, 10)
+      iex> MultiplayerScoreTracker.all_scores(pid)
+      %{player1: 10, player2: 10}
+  """
+  def all_scores(multiplayer_score_tracker_pid) do
+  end
+
+  @doc """
+  Synchronously retrieve a single player's score. Return `nil` if the player does not exist.
+
+  ## Examples
+
+    Player does not exist.
+    
+    iex> {:ok, pid} = MultiplayerScoreTracker.start_link([])
+    iex> MultiplayerScoreTracker.get_score(pid, :player1)
+    nil
+
+    Player exists.
+
+    iex> {:ok, pid} = MultiplayerScoreTracker.start_link([])
+    iex> MultiplayerScoreTracker.score(pid, :abc, 10)
+    iex> MultiplayerScoreTracker.get_score(pid, :abc)
+    10
+  """
+  def get_score(multiplayer_score_tracker_pid, player_name) do
+  end
+end
+```
+
+## Mark As Completed
+
+<!-- livebook:{"attrs":{"source":"file_name = Path.basename(Regex.replace(~r/#.+/, __ENV__.file, \"\"), \".livemd\")\n\nsave_name =\n  case Path.basename(__DIR__) do\n    \"reading\" -> \"score_tracker_reading\"\n    \"exercises\" -> \"score_tracker_exercise\"\n  end\n\nprogress_path = __DIR__ <> \"/../progress.json\"\nexisting_progress = File.read!(progress_path) |> Jason.decode!()\n\ndefault = Map.get(existing_progress, save_name, false)\n\nform =\n  Kino.Control.form(\n    [\n      completed: input = Kino.Input.checkbox(\"Mark As Completed\", default: default)\n    ],\n    report_changes: true\n  )\n\nTask.async(fn ->\n  for %{data: %{completed: completed}} <- Kino.Control.stream(form) do\n    File.write!(\n      progress_path,\n      Jason.encode!(Map.put(existing_progress, save_name, completed), pretty: true)\n    )\n  end\nend)\n\nform","title":"Track Your Progress"},"chunks":null,"kind":"Elixir.HiddenCell","livebook_object":"smart_cell"} -->
+
+```elixir
+file_name = Path.basename(Regex.replace(~r/#.+/, __ENV__.file, ""), ".livemd")
+
+save_name =
+  case Path.basename(__DIR__) do
+    "reading" -> "score_tracker_reading"
+    "exercises" -> "score_tracker_exercise"
+  end
+
+progress_path = __DIR__ <> "/../progress.json"
+existing_progress = File.read!(progress_path) |> Jason.decode!()
+
+default = Map.get(existing_progress, save_name, false)
+
+form =
+  Kino.Control.form(
+    [
+      completed: input = Kino.Input.checkbox("Mark As Completed", default: default)
+    ],
+    report_changes: true
+  )
+
+Task.async(fn ->
+  for %{data: %{completed: completed}} <- Kino.Control.stream(form) do
+    File.write!(
+      progress_path,
+      Jason.encode!(Map.put(existing_progress, save_name, completed), pretty: true)
+    )
+  end
+end)
+
+form
+```
+
+## Commit Your Progress
+
+Run the following in your command line from the curriculum folder to track and save your progress in a Git commit.
+Ensure that you do not already have undesired or unrelated changes by running `git status` or by checking the source control tab in Visual Studio Code.
+
+```
+$ git checkout -b score-tracker-exercise
+$ git add .
+$ git commit -m "finish score tracker exercise"
+$ git push origin score-tracker-exercise
+```
+
+Create a pull request from your `score-tracker-exercise` branch to your `solutions` branch.
+Please do not create a pull request to the DockYard Academy repository as this will spam our PR tracker.
+
+**DockYard Academy Students Only:**
+
+Notify your instructor by including `@BrooklinJazz` in your PR description to get feedback.
+You (or your instructor) may merge your PR into your solutions branch after review.
+
+If you are interested in joining the next academy cohort, [sign up here](https://academy.dockyard.com/) to receive more news when it is available.
+
+## Up Next
+
+| Previous                                             | Next                               |
+| ---------------------------------------------------- | ---------------------------------: |
+| [Mailbox Server](../exercises/mailbox_server.livemd) | [Timer](../exercises/timer.livemd) |
+

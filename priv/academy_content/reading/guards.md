@@ -1,0 +1,363 @@
+%{
+  title: "Guards"
+}
+---
+# Guards
+
+```elixir
+Mix.install([
+  {:jason, "~> 1.4"},
+  {:kino, "~> 0.8.0", override: true},
+  {:youtube, github: "brooklinjazz/youtube"},
+  {:hidden_cell, github: "brooklinjazz/hidden_cell"}
+])
+```
+
+## Navigation
+
+[Return Home](../start.livemd)<span style="padding: 0 30px"></span>
+[Report An Issue](https://github.com/DockYard-Academy/beta_curriculum/issues/new?assignees=&labels=&template=issue.md&title=)
+
+## Setup
+
+Ensure you type the `ea` keyboard shortcut to evaluate all Elixir cells before starting. Alternatively, you can evaluate the Elixir cells as you read.
+
+## Review Questions
+
+Upon completing this lesson, a student should be able to answer the following questions.
+
+* How do you use guards to prevent invalid function input?
+* How do you use guards to trigger polymorphic behavior?
+
+## Guards
+
+Guards allow you to guard your functions to only accept certain input.
+
+```mermaid
+flowchart LR
+Input --> Guard --> Function
+Guard --> f[Invalid Input] --> fc[FunctionClauseError]
+```
+
+This prevents a function from being misused and
+provides clearer feedback.
+
+Guards start with a `when` keyword followed by a boolean expression. For example,
+
+```elixir
+defmodule IntegerGuardExample do
+  def double(int) when is_integer(int) do
+    int * 2
+  end
+end
+
+IntegerGuardExample.double(2)
+```
+
+The `IntegerGuardExample` module above will only accept integers, so it will crash with a [FunctionClauseError](https://hexdocs.pm/elixir/FunctionClauseError.html) if we
+provide it a float.
+
+```elixir
+IntegerGuardExample.double(1.5)
+```
+
+You can use multiple guards together in the same function head. For example, we could
+use both `is_integer/1` and `is_float/1` in the same `double/1` function.
+
+```elixir
+defmodule MutlipleGuardExample do
+  def double(value) when is_integer(value) or is_float(value) do
+    value * 2
+  end
+end
+
+MutlipleGuardExample.double(1.3)
+```
+
+While useful for demonstration, we should realistically use the `is_number/1` guard instead.
+
+```elixir
+defmodule NumberGuardExample do
+  def double(value) when is_number(value) do
+    value * 2
+  end
+end
+
+NumberGuardExample.double(1.3)
+```
+
+Guards must return `true` or `false` values and be pure input and output.
+
+You can reference the [Guard Documentation](https://hexdocs.pm/elixir/master/patterns-and-guards.html#guards) for a full list.
+
+* [Comparison Operators](./comparison_operators.livemd) (`==`, `!=`, `===`, `!==`, `<`, `<=`, `>`, `>=`)
+* [Boolean Operators](./boolean_operators.livemd) (`and`, `or`, `not`).
+* [Arithmetic Operators](./arithmetic_operators.livemd) (`+`, `-`, `*`, `/`)
+* Membership Operator `in`.
+* "type-check" functions (`is_list/1`, `is_number/1`, `is_map/1`, `is_binary/1`, `is_integer/1` etc)
+* functions that work on built-in datatypes (`hd/1`, `tail/1`, `length/1` and others)
+
+## Defguard
+
+You can define your own custom guard with `defguard`. For example, let's say
+we're building a rock paper scissors game which should only accept `:rock`, `:paper`, and `:scissors` as
+valid guesses.
+
+We could create a `is_guess/1` guard which checks that the guess is valid.
+
+```elixir
+defmodule RockPaperScissors do
+  defguard is_guess(guess) when guess in [:rock, :paper, :scissors]
+
+  def winner(guess) when is_guess(guess) do
+    case guess do
+      :rock -> :paper
+      :scissors -> :rock
+      :paper -> :rock
+    end
+  end
+end
+
+RockPaperScissors.winner(:rock)
+```
+
+Invalid guesses will now raise a [FunctionClauseError](https://hexdocs.pm/elixir/FunctionClauseError.html).
+
+```elixir
+RockPaperScissors.winner("invalid guess")
+```
+
+## Polymorphic Functions With Guards
+
+You can also use guards in combination with multi-clause functions to
+achieve polymorphism.
+
+For example, let's say we want the `double` function to handle strings.
+So `double` called with `"hello"` would return `"hellohello"`.
+
+```mermaid
+flowchart LR
+  2 --> a[double] --> 4
+  hello --> b[double] --> hellohello
+```
+
+We can use the built-in `is_binary` guard to check if the variable is a string.
+That's because internally strings in Elixir are represented as binaries.
+
+```elixir
+defmodule PolymorphicGuardExample do
+  def double(num) when is_number(num) do
+    num * 2
+  end
+
+  def double(string) when is_binary(string) do
+    string <> string
+  end
+end
+
+PolymorphicGuardExample.double("example")
+```
+
+There are many guards available in Elixir. If you ever need a specific guard, you can refer to the [Guards](https://hexdocs.pm/elixir/Kernel.html#guards) documentation.
+
+**Function order matters**.
+
+The first function who's guard returns true with the provided input will execute.
+
+For example. if you remove the `is_number/1` guard. Now the first function expects any type of input, so it will always execute instead of the `is_binary/1` version.
+
+```elixir
+defmodule OrderingIssueExample do
+  def double(num) do
+    num * 2
+  end
+
+  def double(string) when is_binary(string) do
+    string <> string
+  end
+end
+
+OrderingIssueExample.double("example")
+```
+
+You'll notice our program crashes with an error.
+Elixir also provides a handy warning to let us know that the first function clause always matches
+so the second will never execute.
+
+> **this clause for double/1 cannot match because a previous clause at line 2 always matches**.
+
+If you move the more generic function lower, then strings will match the
+`is_binary/1` version first and our `Multiplier.double/1` function works as expected.
+
+```elixir
+defmodule OrderFixedExample do
+  def double(string) when is_binary(string) do
+    string <> string
+  end
+
+  def double(num) do
+    num * 2
+  end
+end
+
+OrderFixedExample.double("example")
+```
+
+```elixir
+OrderFixedExample.double(1)
+```
+
+```elixir
+OrderFixedExample.double(2.5)
+```
+
+### Your Turn
+
+Create a `Say.hello/1` function which only accepts a string as it's input.
+
+<!-- livebook:{"force_markdown":true} -->
+
+```elixir
+Say.hello("Stephen")
+"Hello, Stephen!"
+```
+
+<details style="background-color: lightgreen; padding: 1rem; margin: 1rem 0;">
+<summary>Example Solution</summary>
+
+```elixir
+defmodule Say do
+  def hello(name) when is_bitstring(name) do
+    "Hello, #{name}!"
+  end
+end
+```
+
+</details>
+
+```elixir
+defmodule Say do
+  def hello(name) do
+  end
+end
+```
+
+### Your Turn
+
+Create a `Percent.display/1` function which accepts a number and returns a string with a percent.
+Use guards to ensure the percent is between 0 (exclusive) and 100 (inclusive)
+
+<!-- livebook:{"force_markdown":true} -->
+
+```elixir
+Percent.display(0.1)
+"0.1%"
+
+Percent.display(100)
+"100%"
+
+Percent.display(0)
+** (FunctionClauseError) no function clause matching in Percent.display/1
+
+
+Percent.display(101)
+** (FunctionClauseError) no function clause matching in Percent.display/1
+```
+
+<details style="background-color: lightgreen; padding: 1rem; margin: 1rem 0;">
+<summary>Example Solution</summary>
+
+```elixir
+defmodule Percent do
+  def display(percent) when 0 <= percent and percent <= 100 do
+    "#{percent}%"
+  end
+end
+```
+
+</details>
+
+Enter your solution below.
+
+```elixir
+defmodule Percent do
+  def display(percent) do
+  end
+end
+```
+
+## Further Reading
+
+Consider the following resource(s) to deepen your understanding of the topic.
+
+* [HexDocs: Guards](https://hexdocs.pm/elixir/guards.html)
+* [HexDocs: Where to use Guards](https://hexdocs.pm/elixir/guards.html#where-guards-can-be-used)
+* [Elixir Schools: Guards](https://elixirschool.com/en/lessons/basics/functions/#guards-6)
+* [Exercism.io: Guards](https://exercism.org/tracks/elixir/concepts/guards)
+
+## Mark As Completed
+
+<!-- livebook:{"attrs":{"source":"file_name = Path.basename(Regex.replace(~r/#.+/, __ENV__.file, \"\"), \".livemd\")\n\nsave_name =\n  case Path.basename(__DIR__) do\n    \"reading\" -> \"guards_reading\"\n    \"exercises\" -> \"guards_exercise\"\n  end\n\nprogress_path = __DIR__ <> \"/../progress.json\"\nexisting_progress = File.read!(progress_path) |> Jason.decode!()\n\ndefault = Map.get(existing_progress, save_name, false)\n\nform =\n  Kino.Control.form(\n    [\n      completed: input = Kino.Input.checkbox(\"Mark As Completed\", default: default)\n    ],\n    report_changes: true\n  )\n\nTask.async(fn ->\n  for %{data: %{completed: completed}} <- Kino.Control.stream(form) do\n    File.write!(\n      progress_path,\n      Jason.encode!(Map.put(existing_progress, save_name, completed), pretty: true)\n    )\n  end\nend)\n\nform","title":"Track Your Progress"},"chunks":null,"kind":"Elixir.HiddenCell","livebook_object":"smart_cell"} -->
+
+```elixir
+file_name = Path.basename(Regex.replace(~r/#.+/, __ENV__.file, ""), ".livemd")
+
+save_name =
+  case Path.basename(__DIR__) do
+    "reading" -> "guards_reading"
+    "exercises" -> "guards_exercise"
+  end
+
+progress_path = __DIR__ <> "/../progress.json"
+existing_progress = File.read!(progress_path) |> Jason.decode!()
+
+default = Map.get(existing_progress, save_name, false)
+
+form =
+  Kino.Control.form(
+    [
+      completed: input = Kino.Input.checkbox("Mark As Completed", default: default)
+    ],
+    report_changes: true
+  )
+
+Task.async(fn ->
+  for %{data: %{completed: completed}} <- Kino.Control.stream(form) do
+    File.write!(
+      progress_path,
+      Jason.encode!(Map.put(existing_progress, save_name, completed), pretty: true)
+    )
+  end
+end)
+
+form
+```
+
+## Commit Your Progress
+
+Run the following in your command line from the curriculum folder to track and save your progress in a Git commit.
+Ensure that you do not already have undesired or unrelated changes by running `git status` or by checking the source control tab in Visual Studio Code.
+
+```
+$ git checkout -b guards-reading
+$ git add .
+$ git commit -m "finish guards reading"
+$ git push origin guards-reading
+```
+
+Create a pull request from your `guards-reading` branch to your `solutions` branch.
+Please do not create a pull request to the DockYard Academy repository as this will spam our PR tracker.
+
+**DockYard Academy Students Only:**
+
+Notify your instructor by including `@BrooklinJazz` in your PR description to get feedback.
+You (or your instructor) may merge your PR into your solutions branch after review.
+
+If you are interested in joining the next academy cohort, [sign up here](https://academy.dockyard.com/) to receive more news when it is available.
+
+## Up Next
+
+| Previous                                                   | Next                           |
+| ---------------------------------------------------------- | -----------------------------: |
+| [Metric Conversion](../exercises/metric_conversion.livemd) | [with](../reading/with.livemd) |
+

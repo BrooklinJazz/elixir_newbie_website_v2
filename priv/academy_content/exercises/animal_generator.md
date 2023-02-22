@@ -1,0 +1,132 @@
+%{
+  title: "Animal Generator"
+}
+---
+# Animal Generator
+
+```elixir
+Mix.install([
+  {:jason, "~> 1.4"},
+  {:kino, "~> 0.8.0", override: true},
+  {:youtube, github: "brooklinjazz/youtube"},
+  {:hidden_cell, github: "brooklinjazz/hidden_cell"}
+])
+```
+
+## Navigation
+
+[Return Home](../start.livemd)<span style="padding: 0 30px"></span>
+[Report An Issue](https://github.com/DockYard-Academy/beta_curriculum/issues/new?assignees=&labels=&template=issue.md&title=)
+
+## Animal Generator
+
+Often we need to create large amounts of fake data in order to test our applications. To simulate this experience, you're going to build data for an animal simulator game.
+
+Each animal will be represented with a map. Each map should have the keys `name`, `animal_type`, and `age`.
+
+Use the following names, species, and age ranges to generate your animal data. You may alter this to suite your own creative preferences!
+
+<!-- livebook:{"force_markdown":true} -->
+
+```elixir
+names = ["Clifford", "Zoboomafoo", "Leonardo"]
+animal_types = ["dog", "lemur", "turtle"]
+ages = 1..14
+```
+
+Your list of animals should include every permutation of names, species, and ages. There are `126` permutations in the data examples above.
+
+<details style="background-color: burlywood; padding: 1rem; margin: 1rem 0;">
+<summary>Hint</summary>
+
+Consider using `names`, `animal_types`, and `ages` as generators for a comprehension.
+
+</details>
+
+<details style="background-color: lightgreen; padding: 1rem; margin: 1rem 0;">
+<summary>Example Solution</summary>
+
+```elixir
+names = ["Clifford", "Zoboomafoo", "Leonardo"]
+animal_types = ["dog", "lemur", "turtle"]
+ages = 1..14
+
+for name <- names, animal_type <- animal_types, age <- ages do
+  %{name: name, animal_type: animal_type, age: age}
+end 
+```
+
+</details>
+
+Enter your solution below.
+
+```elixir
+
+```
+
+## Mark As Completed
+
+<!-- livebook:{"attrs":{"source":"file_name = Path.basename(Regex.replace(~r/#.+/, __ENV__.file, \"\"), \".livemd\")\n\nsave_name =\n  case Path.basename(__DIR__) do\n    \"reading\" -> \"animal_generator_reading\"\n    \"exercises\" -> \"animal_generator_exercise\"\n  end\n\nprogress_path = __DIR__ <> \"/../progress.json\"\nexisting_progress = File.read!(progress_path) |> Jason.decode!()\n\ndefault = Map.get(existing_progress, save_name, false)\n\nform =\n  Kino.Control.form(\n    [\n      completed: input = Kino.Input.checkbox(\"Mark As Completed\", default: default)\n    ],\n    report_changes: true\n  )\n\nTask.async(fn ->\n  for %{data: %{completed: completed}} <- Kino.Control.stream(form) do\n    File.write!(\n      progress_path,\n      Jason.encode!(Map.put(existing_progress, save_name, completed), pretty: true)\n    )\n  end\nend)\n\nform","title":"Track Your Progress"},"chunks":null,"kind":"Elixir.HiddenCell","livebook_object":"smart_cell"} -->
+
+```elixir
+file_name = Path.basename(Regex.replace(~r/#.+/, __ENV__.file, ""), ".livemd")
+
+save_name =
+  case Path.basename(__DIR__) do
+    "reading" -> "animal_generator_reading"
+    "exercises" -> "animal_generator_exercise"
+  end
+
+progress_path = __DIR__ <> "/../progress.json"
+existing_progress = File.read!(progress_path) |> Jason.decode!()
+
+default = Map.get(existing_progress, save_name, false)
+
+form =
+  Kino.Control.form(
+    [
+      completed: input = Kino.Input.checkbox("Mark As Completed", default: default)
+    ],
+    report_changes: true
+  )
+
+Task.async(fn ->
+  for %{data: %{completed: completed}} <- Kino.Control.stream(form) do
+    File.write!(
+      progress_path,
+      Jason.encode!(Map.put(existing_progress, save_name, completed), pretty: true)
+    )
+  end
+end)
+
+form
+```
+
+## Commit Your Progress
+
+Run the following in your command line from the curriculum folder to track and save your progress in a Git commit.
+Ensure that you do not already have undesired or unrelated changes by running `git status` or by checking the source control tab in Visual Studio Code.
+
+```
+$ git checkout -b animal-generator-exercise
+$ git add .
+$ git commit -m "finish animal generator exercise"
+$ git push origin animal-generator-exercise
+```
+
+Create a pull request from your `animal-generator-exercise` branch to your `solutions` branch.
+Please do not create a pull request to the DockYard Academy repository as this will spam our PR tracker.
+
+**DockYard Academy Students Only:**
+
+Notify your instructor by including `@BrooklinJazz` in your PR description to get feedback.
+You (or your instructor) may merge your PR into your solutions branch after review.
+
+If you are interested in joining the next academy cohort, [sign up here](https://academy.dockyard.com/) to receive more news when it is available.
+
+## Up Next
+
+| Previous                               | Next                                           |
+| -------------------------------------- | ---------------------------------------------: |
+| [Anagram](../exercises/anagram.livemd) | [Book Search](../exercises/book_search.livemd) |
+

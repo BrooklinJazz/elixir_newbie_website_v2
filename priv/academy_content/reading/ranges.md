@@ -1,0 +1,238 @@
+%{
+  title: "Ranges"
+}
+---
+# Ranges
+
+```elixir
+Mix.install([
+  {:jason, "~> 1.4"},
+  {:kino, "~> 0.8.0", override: true},
+  {:youtube, github: "brooklinjazz/youtube"},
+  {:hidden_cell, github: "brooklinjazz/hidden_cell"}
+])
+```
+
+## Navigation
+
+[Return Home](../start.livemd)<span style="padding: 0 30px"></span>
+[Report An Issue](https://github.com/DockYard-Academy/beta_curriculum/issues/new?assignees=&labels=&template=issue.md&title=)
+
+## Setup
+
+Ensure you type the `ea` keyboard shortcut to evaluate all Elixir cells before starting. Alternatively, you can evaluate the Elixir cells as you read.
+
+## Review Questions
+
+Upon completing this lesson, a student should be able to answer the following questions.
+
+* How do we represent a range of numbers in Elixir?
+* What is the step of a range, and how do we change it?
+* How can we pattern match on a range?
+
+## Ranges
+
+**Ranges** are useful for representing an ascending or descending sequence of numbers, without needing
+to manually type each number in a list.
+
+For example, you could have a range from 1 to 10.
+
+<!-- livebook:{"force_markdown":true} -->
+
+```elixir
+1..10
+```
+
+<!-- livebook:{"break_markdown":true} -->
+
+```mermaid
+
+flowchart LR
+  1 --> 2 --> 3 --> 4 --> 5 --> 6 --> 7 --> 8 --> 9 --> 10
+```
+
+<!-- livebook:{"break_markdown":true} -->
+
+or 5 to -5.
+
+<!-- livebook:{"force_markdown":true} -->
+
+```elixir
+5..-5
+```
+
+<!-- livebook:{"break_markdown":true} -->
+
+```mermaid
+flowchart LR
+  5 --> 4 --> 3 --> 2 --> 1 --> 0 --> -1 --> -2 --> -3 --> -4 --> -5
+```
+
+<!-- livebook:{"break_markdown":true} -->
+
+You can visualize a range as representing an ascending or descending list of integers.
+
+On its own, it might not seem like much. But ranges will be incredibly useful with the [Enum](https://hexdocs.pm/elixir/Enum.html) module.
+You'll learn more about the [Enum](https://hexdocs.pm/elixir/Enum.html) module in a future lesson. For now, it's enough
+to understand the relationship between ranges and lists.
+
+For example the range `1..5` equates to `[1, 2, 3, 4, 5]` as a list.
+
+To establish that relationship, you can use [Enum.to_list/1](https://hexdocs.pm/elixir/Enum.html#to_list/1) to convert a range from the list.
+
+```elixir
+Enum.to_list(1..5)
+```
+
+Ranges can have a step. By default ranges have a step of `1`. That means that by default they
+include each whole number in the range.
+
+You can override the default step of the range using `//`:
+
+<!-- livebook:{"force_markdown":true} -->
+
+```elixir
+0..10//2
+```
+
+This creates a range from `0` to `10` with a step of `2`.
+
+<!-- livebook:{"force_markdown":true} -->
+
+```elixir
+0 --> 2 --> 4 --> 6 --> 8 --> 10
+```
+
+That means the range `0..10//2` correlates to the list `[0, 2, 4, 6, 8, 10]`
+
+Here's the same range converted into a list to help you visualize it. Once again, you will
+learn more about what `Enum.to_list` is in a future lesson.
+
+```elixir
+Enum.to_list(0..10//2)
+```
+
+### Your Turn
+
+In the Elixir cell below, use [Enum.to_list/1](https://hexdocs.pm/elixir/Enum.html#to_list/1) to convert a range from `3` to `9` with a step of `3` into a list.
+
+<details style="background-color: lightgreen; padding: 1rem; margin: 1rem 0;">
+  <summary>Example solution</summary>
+
+  ```elixir
+  Enum.to_list(3..9//3)
+  ```
+</details>
+
+```elixir
+
+```
+
+### Pattern Matching With Ranges
+
+We can pattern match on ranges just like any other data type.
+
+For the most strict match, the left and right side must be exactly equal.
+
+```elixir
+1..10 = 1..10
+```
+
+We can also bind the start and end of the range to a variable in our pattern match.
+
+```elixir
+start..finish = 1..10
+```
+
+```elixir
+start
+```
+
+```elixir
+finish
+```
+
+We can also bind the step.
+
+```elixir
+start..finish//step = 0..9//3
+```
+
+```elixir
+start
+```
+
+```elixir
+finish
+```
+
+```elixir
+step
+```
+
+## Mark As Completed
+
+<!-- livebook:{"attrs":{"source":"file_name = Path.basename(Regex.replace(~r/#.+/, __ENV__.file, \"\"), \".livemd\")\n\nsave_name =\n  case Path.basename(__DIR__) do\n    \"reading\" -> \"ranges_reading\"\n    \"exercises\" -> \"ranges_exercise\"\n  end\n\nprogress_path = __DIR__ <> \"/../progress.json\"\nexisting_progress = File.read!(progress_path) |> Jason.decode!()\n\ndefault = Map.get(existing_progress, save_name, false)\n\nform =\n  Kino.Control.form(\n    [\n      completed: input = Kino.Input.checkbox(\"Mark As Completed\", default: default)\n    ],\n    report_changes: true\n  )\n\nTask.async(fn ->\n  for %{data: %{completed: completed}} <- Kino.Control.stream(form) do\n    File.write!(\n      progress_path,\n      Jason.encode!(Map.put(existing_progress, save_name, completed), pretty: true)\n    )\n  end\nend)\n\nform","title":"Track Your Progress"},"chunks":null,"kind":"Elixir.HiddenCell","livebook_object":"smart_cell"} -->
+
+```elixir
+file_name = Path.basename(Regex.replace(~r/#.+/, __ENV__.file, ""), ".livemd")
+
+save_name =
+  case Path.basename(__DIR__) do
+    "reading" -> "ranges_reading"
+    "exercises" -> "ranges_exercise"
+  end
+
+progress_path = __DIR__ <> "/../progress.json"
+existing_progress = File.read!(progress_path) |> Jason.decode!()
+
+default = Map.get(existing_progress, save_name, false)
+
+form =
+  Kino.Control.form(
+    [
+      completed: input = Kino.Input.checkbox("Mark As Completed", default: default)
+    ],
+    report_changes: true
+  )
+
+Task.async(fn ->
+  for %{data: %{completed: completed}} <- Kino.Control.stream(form) do
+    File.write!(
+      progress_path,
+      Jason.encode!(Map.put(existing_progress, save_name, completed), pretty: true)
+    )
+  end
+end)
+
+form
+```
+
+## Commit Your Progress
+
+Run the following in your command line from the curriculum folder to track and save your progress in a Git commit.
+Ensure that you do not already have undesired or unrelated changes by running `git status` or by checking the source control tab in Visual Studio Code.
+
+```
+$ git checkout -b ranges-reading
+$ git add .
+$ git commit -m "finish ranges reading"
+$ git push origin ranges-reading
+```
+
+Create a pull request from your `ranges-reading` branch to your `solutions` branch.
+Please do not create a pull request to the DockYard Academy repository as this will spam our PR tracker.
+
+**DockYard Academy Students Only:**
+
+Notify your instructor by including `@BrooklinJazz` in your PR description to get feedback.
+You (or your instructor) may merge your PR into your solutions branch after review.
+
+If you are interested in joining the next academy cohort, [sign up here](https://academy.dockyard.com/) to receive more news when it is available.
+
+## Up Next
+
+| Previous                                             | Next                           |
+| ---------------------------------------------------- | -----------------------------: |
+| [Pokemon Battle](../exercises/pokemon_battle.livemd) | [Enum](../reading/enum.livemd) |
+

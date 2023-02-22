@@ -1,0 +1,172 @@
+%{
+  title: "Stack GenServer Testing"
+}
+---
+# Tested Stack
+
+```elixir
+Mix.install([
+  {:jason, "~> 1.4"},
+  {:kino, "~> 0.8.0", override: true},
+  {:youtube, github: "brooklinjazz/youtube"},
+  {:hidden_cell, github: "brooklinjazz/hidden_cell"}
+])
+```
+
+## Navigation
+
+[Return Home](../start.livemd)<span style="padding: 0 30px"></span>
+[Report An Issue](https://github.com/DockYard-Academy/beta_curriculum/issues/new?assignees=&labels=&template=issue.md&title=)
+
+## Tested Stack
+
+Previously you created a [Stack](./stack_server.livemd) [GenServer](https://hexdocs.pm/elixir/GenServer.html). Now you're going to re-create the `Stack` [GenServer](https://hexdocs.pm/elixir/GenServer.html) with a full test suite.
+
+The `Stack` process should store a list as state and `push/2` elements onto the stack, and `pop/2` elements off of the stack like so.
+
+<!-- livebook:{"force_markdown":true} -->
+
+```elixir
+{:ok, pid} = Stack.start_link([])
+[:one] = Stack.push(pid, :one)
+[:two, :one] = Stack.push(pid, :two)
+:two = Stack.pop(pid)
+:one = Stack.pop(pid)
+# return no value when the stack is empty
+nil = Stack.pop(pid)
+```
+
+<!-- livebook:{"break_markdown":true} -->
+
+### Pair Testing
+
+This will be a **pair testing** exercise. One student will be the **tester** and the other will be the **implementer**. The **tester** will write the test, and the **implementer** will implement the code for the test.
+
+As the **implementer** you may challenge your **tester** to improve their tests by writing only the code necessary to make the test pass (within reason) even if it is a false-positive. This will encourage your **tester** to write more comprehensive tests.
+
+Swap roles for each new test.
+
+<!-- livebook:{"break_markdown":true} -->
+
+### Create A Mix Project
+
+Create a new mix project and use LiveShare to make it simpler to collaborate with your pair partner.
+
+```
+mix new stack
+```
+
+Copy the code below into your `Stack` module.
+
+```elixir
+defmodule Stack do
+  use GenServer
+
+  def start_link(_opts) do
+  end
+
+  def push(pid, element) do
+  end
+
+  def pop(pid) do
+  end
+end
+```
+
+Then copy the following code into the associated test file for the `Stack` module.
+
+```elixir
+defmodule StackTest do
+  use ExUnit.Case
+
+  describe "start_link/1" do
+    test "with no configuration"
+    test "with a default state"
+  end
+
+  describe "push/2" do
+    test "an element onto an empty stack"
+    test "an element onto a stack with one element"
+    test "an element onto a stack with multiple elements"
+  end
+
+  describe "pop/1" do
+    test "an empty stack"
+    test "a stack with one element"
+    test "a stack with multiple elements"
+  end
+end
+```
+
+## Bonus: GitHub Repository
+
+Upload your stack project to GitHub. You may add your partner as a collaborator, or they can fork the project so that you both own a copy.
+
+Create a README that describes the purpose of the project and what you learned.
+
+## Mark As Completed
+
+<!-- livebook:{"attrs":{"source":"file_name = Path.basename(Regex.replace(~r/#.+/, __ENV__.file, \"\"), \".livemd\")\n\nsave_name =\n  case Path.basename(__DIR__) do\n    \"reading\" -> \"stack_reading\"\n    \"exercises\" -> \"stack_exercise\"\n  end\n\nprogress_path = __DIR__ <> \"/../progress.json\"\nexisting_progress = File.read!(progress_path) |> Jason.decode!()\n\ndefault = Map.get(existing_progress, save_name, false)\n\nform =\n  Kino.Control.form(\n    [\n      completed: input = Kino.Input.checkbox(\"Mark As Completed\", default: default)\n    ],\n    report_changes: true\n  )\n\nTask.async(fn ->\n  for %{data: %{completed: completed}} <- Kino.Control.stream(form) do\n    File.write!(\n      progress_path,\n      Jason.encode!(Map.put(existing_progress, save_name, completed), pretty: true)\n    )\n  end\nend)\n\nform","title":"Track Your Progress"},"chunks":null,"kind":"Elixir.HiddenCell","livebook_object":"smart_cell"} -->
+
+```elixir
+file_name = Path.basename(Regex.replace(~r/#.+/, __ENV__.file, ""), ".livemd")
+
+save_name =
+  case Path.basename(__DIR__) do
+    "reading" -> "stack_reading"
+    "exercises" -> "stack_exercise"
+  end
+
+progress_path = __DIR__ <> "/../progress.json"
+existing_progress = File.read!(progress_path) |> Jason.decode!()
+
+default = Map.get(existing_progress, save_name, false)
+
+form =
+  Kino.Control.form(
+    [
+      completed: input = Kino.Input.checkbox("Mark As Completed", default: default)
+    ],
+    report_changes: true
+  )
+
+Task.async(fn ->
+  for %{data: %{completed: completed}} <- Kino.Control.stream(form) do
+    File.write!(
+      progress_path,
+      Jason.encode!(Map.put(existing_progress, save_name, completed), pretty: true)
+    )
+  end
+end)
+
+form
+```
+
+## Commit Your Progress
+
+Run the following in your command line from the curriculum folder to track and save your progress in a Git commit.
+Ensure that you do not already have undesired or unrelated changes by running `git status` or by checking the source control tab in Visual Studio Code.
+
+```
+$ git checkout -b stack-exercise
+$ git add .
+$ git commit -m "finish stack exercise"
+$ git push origin stack-exercise
+```
+
+Create a pull request from your `stack-exercise` branch to your `solutions` branch.
+Please do not create a pull request to the DockYard Academy repository as this will spam our PR tracker.
+
+**DockYard Academy Students Only:**
+
+Notify your instructor by including `@BrooklinJazz` in your PR description to get feedback.
+You (or your instructor) may merge your PR into your solutions branch after review.
+
+If you are interested in joining the next academy cohort, [sign up here](https://academy.dockyard.com/) to receive more news when it is available.
+
+## Up Next
+
+| Previous                                                   | Next                                                            |
+| ---------------------------------------------------------- | --------------------------------------------------------------: |
+| [Testing GenServers](../reading/testing_genservers.livemd) | [Games: Score Tracker](../exercises/games_score_tracker.livemd) |
+

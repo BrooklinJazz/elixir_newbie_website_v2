@@ -1,0 +1,236 @@
+%{
+  title: "Atoms"
+}
+---
+# Atoms
+
+```elixir
+Mix.install([
+  {:jason, "~> 1.4"},
+  {:kino, "~> 0.8.0", override: true},
+  {:youtube, github: "brooklinjazz/youtube"},
+  {:hidden_cell, github: "brooklinjazz/hidden_cell"}
+])
+```
+
+## Navigation
+
+[Return Home](../start.livemd)<span style="padding: 0 30px"></span>
+[Report An Issue](https://github.com/DockYard-Academy/beta_curriculum/issues/new?assignees=&labels=&template=issue.md&title=)
+
+## Setup
+
+Ensure you type the `ea` keyboard shortcut to evaluate all Elixir cells before starting. Alternatively, you can evaluate the Elixir cells as you read.
+
+## Review Questions
+
+Upon completing this lesson, a student should be able to answer the following questions.
+
+* What is an atom and how might we use them in our programs?
+* Why might we use atoms for the sake of comparing constant values rather than strings?
+
+## Atoms
+
+Atoms are named constants. In other words, their name is their value.
+
+Atoms are often used to represent common constants in your program.
+For example, they often represent the :success or :error of a program.
+
+<!-- livebook:{"force_markdown":true} -->
+
+```elixir
+:success
+:error
+```
+
+They might also be used to represent the state of some action. For example:
+
+<!-- livebook:{"force_markdown":true} -->
+
+```elixir
+:completed
+:in_progress
+:starting
+```
+
+You might wonder why we have both strings and atoms because they seem to do the same thing.
+One primary reason is performance. Atoms are stored in an **atom table** and can be referenced by a key. This makes it way faster to check if two atoms are equal.
+
+What is an **atom table**? Imagine it like an excel spreadsheet.
+Each value has a key. For the computer, comparing these keys in the table is much more performance that checking if every character in a string is equal.
+
+It's kind of like checking if `1 == 2` instead of checking if`"HeLloWorld == HeLloWorLd"`.
+
+Atoms are defined using a colon `:` and a series of letters, digits, and certain valid symbols.
+
+<!-- livebook:{"break_markdown":true} -->
+
+### Rules For Naming Atoms
+
+There are specific rules for naming atoms, but fortunately you don't need
+to memorize them! Instead, pay attention to the colors in your code.
+If you define an atom incorrectly, you'll notice that it's no longer blue.
+
+Here are some valid atoms:
+
+<!-- livebook:{"force_markdown":true} -->
+
+```elixir
+:hello
+:my_atom1
+```
+
+Here are some invalid atoms, notice they are mostly white:
+
+<!-- livebook:{"force_markdown":true} -->
+
+```elixir
+:$this_is_invalid
+:!this_is_invalid
+:2
+:@
+:$
+:?
+:invalid # spaces are not valid
+```
+
+Sometimes languages establish conventions. Conventions are common patterns of doing things which
+the community agrees upon.
+For example, In Elixir it's conventional for atoms to have lowercase names separated by underscores.
+
+While the following will work:
+
+<!-- livebook:{"force_markdown":true} -->
+
+```elixir
+:MY_ATOM!
+```
+
+It's usually unconventional to name an atom with capital letters except in specific circumstances.
+
+You can use quotes with atoms to avoid name rules.
+
+<!-- livebook:{"force_markdown":true} -->
+
+```elixir
+:"$Now we don't have to follow any rules. This is a valid atom (though unconventional)"
+```
+
+## Secret Atoms
+
+`nil`, `false`, and `true` are all actually atoms.
+
+We can use `===` to verify that `:nil` and `nil` are equivalent.
+
+<!-- livebook:{"force_markdown":true} -->
+
+```elixir
+nil === :nil
+```
+
+The same goes for `true`, and `false`. They are
+all atoms but omit the colon `:`.
+
+<!-- livebook:{"force_markdown":true} -->
+
+```elixir
+true === :true
+false === :false
+```
+
+### Your Turn
+
+In the Elixir cell below, use `===` to check if `nil` is equal to `:nil`.
+
+```elixir
+
+```
+
+Check if `true` is equal to `:true`.
+
+```elixir
+
+```
+
+Check if `false` is equal to `:false`.
+
+```elixir
+
+```
+
+## Further Reading
+
+Consider the following resource(s) to deepen your understanding of the topic.
+
+<!-- livebook:{"break_markdown":true} -->
+
+* [Elixir School: Atoms](https://elixirschool.com/en/lessons/basics/basics/#atoms-7)
+* [HexDocs: Atoms](https://hexdocs.pm/elixir/Atom.html#content)
+* [Exercism: Atoms](https://exercism.org/tracks/elixir/concepts/atoms)
+
+## Mark As Completed
+
+<!-- livebook:{"attrs":{"source":"file_name = Path.basename(Regex.replace(~r/#.+/, __ENV__.file, \"\"), \".livemd\")\n\nsave_name =\n  case Path.basename(__DIR__) do\n    \"reading\" -> \"atoms_reading\"\n    \"exercises\" -> \"atoms_exercise\"\n  end\n\nprogress_path = __DIR__ <> \"/../progress.json\"\nexisting_progress = File.read!(progress_path) |> Jason.decode!()\n\ndefault = Map.get(existing_progress, save_name, false)\n\nform =\n  Kino.Control.form(\n    [\n      completed: input = Kino.Input.checkbox(\"Mark As Completed\", default: default)\n    ],\n    report_changes: true\n  )\n\nTask.async(fn ->\n  for %{data: %{completed: completed}} <- Kino.Control.stream(form) do\n    File.write!(\n      progress_path,\n      Jason.encode!(Map.put(existing_progress, save_name, completed), pretty: true)\n    )\n  end\nend)\n\nform","title":"Track Your Progress"},"chunks":null,"kind":"Elixir.HiddenCell","livebook_object":"smart_cell"} -->
+
+```elixir
+file_name = Path.basename(Regex.replace(~r/#.+/, __ENV__.file, ""), ".livemd")
+
+save_name =
+  case Path.basename(__DIR__) do
+    "reading" -> "atoms_reading"
+    "exercises" -> "atoms_exercise"
+  end
+
+progress_path = __DIR__ <> "/../progress.json"
+existing_progress = File.read!(progress_path) |> Jason.decode!()
+
+default = Map.get(existing_progress, save_name, false)
+
+form =
+  Kino.Control.form(
+    [
+      completed: input = Kino.Input.checkbox("Mark As Completed", default: default)
+    ],
+    report_changes: true
+  )
+
+Task.async(fn ->
+  for %{data: %{completed: completed}} <- Kino.Control.stream(form) do
+    File.write!(
+      progress_path,
+      Jason.encode!(Map.put(existing_progress, save_name, completed), pretty: true)
+    )
+  end
+end)
+
+form
+```
+
+## Commit Your Progress
+
+Run the following in your command line from the curriculum folder to track and save your progress in a Git commit.
+Ensure that you do not already have undesired or unrelated changes by running `git status` or by checking the source control tab in Visual Studio Code.
+
+```
+$ git checkout -b atoms-reading
+$ git add .
+$ git commit -m "finish atoms reading"
+$ git push origin atoms-reading
+```
+
+Create a pull request from your `atoms-reading` branch to your `solutions` branch.
+Please do not create a pull request to the DockYard Academy repository as this will spam our PR tracker.
+
+**DockYard Academy Students Only:**
+
+Notify your instructor by including `@BrooklinJazz` in your PR description to get feedback.
+You (or your instructor) may merge your PR into your solutions branch after review.
+
+If you are interested in joining the next academy cohort, [sign up here](https://academy.dockyard.com/) to receive more news when it is available.
+
+## Up Next
+
+| Previous                                             | Next                               |
+| ---------------------------------------------------- | ---------------------------------: |
+| [Guessing Games](../exercises/guessing_games.livemd) | [Tuples](../reading/tuples.livemd) |
+
