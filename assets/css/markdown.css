@@ -3,20 +3,32 @@
 }
 
 .markdown h2 {
-    @apply mb-3 text-3xl;
+    @apply mb-3 mt-10 text-3xl;
 }
 
 .markdown h3 {
-    @apply mb-3 text-2xl;
+    @apply mb-3 mt-8 text-2xl;
 }
 
 .markdown pre {
-    @apply flex overflow-hidden;
+    @apply flex overflow-auto;
 }
 
-.markdown pre>code {
-    @apply text-4xl;
-    /* bg-editor text-editor font-editor; */
+.markdown code.elixir {
+    @apply bg-gray-800 rounded-lg p-4 my-10 w-full;
+    @apply text-base lg:text-lg xl:text-xl;
+}
+
+.markdown code.mermaid {
+    @apply p-4 w-full;
+}
+
+/* .markdown code.mermaid svg {
+    max-width: 700px !important;
+} */
+
+.markdown code.inline {
+    @apply bg-gray-800 rounded-lg px-2;
 }
 
 .markdown a {
@@ -31,8 +43,11 @@
 }
 
 .markdown p {
-    @apply mb-10;
+    @apply text-base lg:text-lg xl:text-xl;
 }
+
+
+
 
 /* 
 Inter - 600×
