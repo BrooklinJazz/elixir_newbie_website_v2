@@ -67,7 +67,32 @@ let Hooks = {
                 window.scrollTo({ top: 0, behavior: 'smooth' });
             })
         }
-    }
+    },
+    ScrollOnClick: {
+        scroll_target() {
+        return this.el.dataset.value;
+        },
+        mounted() {
+        this.el.addEventListener("click", () => {
+            const element = document.querySelector(`[data-scroll-id=all_blogs]`);
+            element.scrollIntoView({ alignToTop: true, behavior: "smooth" });
+        });
+        },
+    },
+    ScrollOnSubmit: {
+        scroll_target() {
+        return this.el.dataset.value;
+        },
+        mounted() {
+        this.el.addEventListener("submit", (e) => {
+            e.preventDefault();
+            const element = document.querySelector(`[data-scroll-id=all_blogs]`);
+            setTimeout(() => {
+            element.scrollIntoView({ alignToTop: true, behavior: "smooth" });
+            }, 150);
+        });
+        },
+    }      
 }
 
 export default Hooks
