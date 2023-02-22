@@ -13,10 +13,6 @@ defmodule Mix.Tasks.CourseOutline do
 
     outline =
       Regex.replace(~r/\[([^\]]+)\]\(([^\)]+\.livemd)\)/, body, fn _, file_name, file_path ->
-        academy_url = "https://github.com/DockYard-Academy/curriculum/blob/main/#{file_path}"
-        query = %{"url" => academy_url}
-        query_params = URI.encode_query(query)
-        result = "https://livebook.dev/run?" <> query_params
         "[#{file_name}](#{Path.rootname(file_path)})"
       end)
 
