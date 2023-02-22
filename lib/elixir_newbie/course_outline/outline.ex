@@ -3,6 +3,6 @@ defmodule ElixirNewbie.CourseOutline.Outline do
   defstruct [:body]
 
   def build(_filename, _attrs, body) do
-    struct!(__MODULE__, [body: body])
+    struct!(__MODULE__, body: body)
   end
 end

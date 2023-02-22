@@ -15,14 +15,18 @@ defmodule Mix.Tasks.Sync do
     File.mkdir_p("./priv/academy_content/reading")
     File.mkdir_p("./priv/academy_content/exercises")
 
-    Regex.scan(~r/
+    Regex.scan(
+      ~r/
     \*\s          # Bullet point
     \[([^\]]+)\]  # Markdown link name
     \(([reading|exercises][^\)]+)\)  # Markdown link url
-    /x, body)
+    /x,
+      body
+    )
     |> Enum.each(fn [_full_match, title, file_name] ->
       page_url =
         "https://raw.githubusercontent.com/DockYard-Academy/beta_curriculum/main/#{file_name}"
+
       {:ok, %HTTPoison.Response{body: markdown}} = HTTPoison.get(page_url)
 
       File.write!("./priv/academy_content/#{Path.rootname(file_name)}.md", """
