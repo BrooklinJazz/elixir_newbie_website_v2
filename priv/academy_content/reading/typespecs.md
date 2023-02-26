@@ -1,0 +1,244 @@
+%{
+  title: "Typespecs"
+}
+---
+# Typespecs
+
+```elixir
+Mix.install([
+  {:jason, "~> 1.4"},
+  {:kino, "~> 0.8.0", override: true},
+  {:youtube, github: "brooklinjazz/youtube"},
+  {:hidden_cell, github: "brooklinjazz/hidden_cell"}
+])
+```
+
+## Navigation
+
+[Return Home](../start.livemd)<span style="padding: 0 30px"></span>
+[Report An Issue](https://github.com/DockYard-Academy/beta_curriculum/issues/new?assignees=&labels=&template=issue.md&title=)
+
+## Setup
+
+Ensure you type the `ea` keyboard shortcut to evaluate all Elixir cells before starting. Alternatively you can evaluate the Elixir cells as you read.
+
+## Typespecs
+
+Elixir comes with a notation for declaring types and specifications.
+
+We can use the `@spec` module attribute to define the signature of a function.
+
+For example, we could add a `@spec` for the `math` module's `add/2` function.
+
+`@spec` defines the function name, then the types for each argument, then the return value type separated
+by the `::` symbol.
+
+```elixir
+defmodule IntegerTypespecExample do
+  @spec double(integer()) :: integer()
+  def double(my_int) do
+    my_int * 2
+  end
+end
+```
+
+### Basic Types
+
+`number()` is a built-in type. Here are a few other common types you may find useful.
+
+```
+any()
+atom()
+map()
+tuple()
+list()
+list(type) # a list where the elements are particular type
+float()
+integer()
+number() # both integers and floats
+String.t() # the string type
+```
+
+For a full list of built in types you can see the [Basic Types](https://hexdocs.pm/elixir/typespecs.html#basic-types)
+section of the Elixir Typespecs documentation.
+
+<!-- livebook:{"break_markdown":true} -->
+
+### Your Turn
+
+In the `Adder` module below, create an `@spec` for integers with the `add/2` function.
+
+```elixir
+defmodule Adder do
+  def add(integer1, integer2) do
+    integer1 + integer2
+  end
+end
+```
+
+### Combing Types
+
+The `|` symbol allows us to combine multiple types. For example we can combine `integer()` and `float()` in our `Number` module
+
+```elixir
+defmodule NumberTypespecExample do
+  @spec double(integer() | float()) :: integer() | float()
+  def double(number) do
+    number * 2
+  end
+end
+```
+
+### Custom Types
+
+We can use `@type` to define custom types. We give our custom type a name then define it's value after the `::` symbol. Once we've defined a custom type, we can use it anywhere in our application. This way we don't have to repeatedly define the same types over and over.
+
+Below, we've defined a custom `my_number()` type for the sake of example. However, in the real-world we should use the built-in `number()` type instead.
+
+```elixir
+defmodule CustomTypeExample do
+  @type my_number() :: integer() | float()
+
+  @spec double(my_number()) :: my_number()
+  def double(number) do
+    number * 2
+  end
+end
+```
+
+### Your Turn
+
+In the `Math` module below, define a custom `@type` `input()` that can be a list, integer, or string.
+
+```elixir
+defmodule Math do
+end
+```
+
+## Dialyzer
+
+Dialyzer is a static analysis tool used to provide warnings about your code, such as mismatched types,
+unreachable code, and other common issues.
+
+To use Dialyzer, we install [Dialyxir](https://github.com/jeremyjh/dialyxir), which provides conveniences for working with Dialyzer in an Elixir project.
+
+We can add `:dialyxir` as a dependency in the `mix.exs` file in any mix project.
+
+<!-- livebook:{"force_markdown":true} -->
+
+```elixir
+ defp deps do
+    [
+      {:dialyxir, "~> 1.0", only: :dev, runtime: false}
+    ]
+  end
+```
+
+We can then run Dialyzer by running the following in the command line.
+
+```
+$ mix dialyzer
+...
+Total errors: 0, Skipped: 0, Unnecessary Skips: 0
+done in 0m0.82s
+```
+
+<!-- livebook:{"break_markdown":true} -->
+
+### Your Turn
+
+Previously you converted a `Math` module into a mix project in the [ExUnit with Mix](./exunit_with_mix.livemd) section.
+
+Add dialyxir as a dependency to your mix.exs file in the math project.
+
+<!-- livebook:{"force_markdown":true} -->
+
+```elixir
+defp deps do
+  [
+    {:dialyxir, "~> 1.0", only: :dev, runtime: false}
+  ]
+end
+```
+
+Add typespecs for `Math.add/2` and `Math.subtract/2` for lists, strings, and integers.
+Once complete, if you include a failing example in your `Math` module like so, you should see a warning in the Visual Studio Code editor.
+
+<!-- livebook:{"force_markdown":true} -->
+
+```elixir
+Math.add(%{}, %{})
+```
+
+Run dialyzer and you should see some errors because the typespec catches that `%{}` is an invalid input.
+
+```
+$ mix dialyzer
+```
+
+## Mark As Completed
+
+<!-- livebook:{"attrs":{"source":"file_name = Path.basename(Regex.replace(~r/#.+/, __ENV__.file, \"\"), \".livemd\")\n\nsave_name =\n  case Path.basename(__DIR__) do\n    \"reading\" -> \"typespecs_reading\"\n    \"exercises\" -> \"typespecs_exercise\"\n  end\n\nprogress_path = __DIR__ <> \"/../progress.json\"\nexisting_progress = File.read!(progress_path) |> Jason.decode!()\n\ndefault = Map.get(existing_progress, save_name, false)\n\nform =\n  Kino.Control.form(\n    [\n      completed: input = Kino.Input.checkbox(\"Mark As Completed\", default: default)\n    ],\n    report_changes: true\n  )\n\nTask.async(fn ->\n  for %{data: %{completed: completed}} <- Kino.Control.stream(form) do\n    File.write!(\n      progress_path,\n      Jason.encode!(Map.put(existing_progress, save_name, completed), pretty: true)\n    )\n  end\nend)\n\nform","title":"Track Your Progress"},"chunks":null,"kind":"Elixir.HiddenCell","livebook_object":"smart_cell"} -->
+
+```elixir
+file_name = Path.basename(Regex.replace(~r/#.+/, __ENV__.file, ""), ".livemd")
+
+save_name =
+  case Path.basename(__DIR__) do
+    "reading" -> "typespecs_reading"
+    "exercises" -> "typespecs_exercise"
+  end
+
+progress_path = __DIR__ <> "/../progress.json"
+existing_progress = File.read!(progress_path) |> Jason.decode!()
+
+default = Map.get(existing_progress, save_name, false)
+
+form =
+  Kino.Control.form(
+    [
+      completed: input = Kino.Input.checkbox("Mark As Completed", default: default)
+    ],
+    report_changes: true
+  )
+
+Task.async(fn ->
+  for %{data: %{completed: completed}} <- Kino.Control.stream(form) do
+    File.write!(
+      progress_path,
+      Jason.encode!(Map.put(existing_progress, save_name, completed), pretty: true)
+    )
+  end
+end)
+
+form
+```
+
+## Commit Your Progress
+
+Run the following in your command line from the curriculum folder to track and save your progress in a Git commit.
+Ensure that you do not already have undesired or unrelated changes by running `git status` or by checking the source control tab in Visual Studio Code.
+
+```
+$ git checkout -b typespecs-reading
+$ git add .
+$ git commit -m "finish typespecs reading"
+$ git push origin typespecs-reading
+```
+
+Create a pull request from your `typespecs-reading` branch to your `solutions` branch.
+Please do not create a pull request to the DockYard Academy repository as this will spam our PR tracker.
+
+**DockYard Academy Students Only:**
+
+Notify your instructor by including `@BrooklinJazz` in your PR description to get feedback.
+You (or your instructor) may merge your PR into your solutions branch after review.
+
+If you are interested in joining the next academy cohort, [sign up here](https://academy.dockyard.com/) to receive more news when it is available.
+
+## Up Next
+
+| Previous                               | Next                             |
+| -------------------------------------- | -------------------------------: |
+| [Doctests](../reading/doctests.livemd) | [ExDoc](../reading/exdoc.livemd) |
+

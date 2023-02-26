@@ -1,0 +1,398 @@
+%{
+  title: "APIs"
+}
+---
+# APIs
+
+```elixir
+Mix.install([
+  {:jason, "~> 1.4"},
+  {:kino, "~> 0.8.0", override: true},
+  {:youtube, github: "brooklinjazz/youtube"},
+  {:hidden_cell, github: "brooklinjazz/hidden_cell"},
+  {:httpoison, "~> 1.8"},
+  {:poison, "~> 5.0"}
+])
+```
+
+## Navigation
+
+[Return Home](../start.livemd)<span style="padding: 0 30px"></span>
+[Report An Issue](https://github.com/DockYard-Academy/beta_curriculum/issues/new?assignees=&labels=&template=issue.md&title=)
+
+## Review Questions
+
+Upon completing this lesson, a student should be able to answer the following questions.
+
+* What are the common HTTP request methods and what do they do?
+* What is a web API, and how can we communcate with one using [HTTPoison](https://hexdocs.pm/httpoison/HTTPoison.html)?
+* What is JSON, and how can we parse it from an API response using [Jason](https://hexdocs.pm/jason/Jason.html)?
+* How can we authorize requests for a private API?
+
+## Setup
+
+Ensure you type the `ea` keyboard shortcut to evaluate all Elixir cells before starting. Alternatively, you can evaluate the Elixir cells as you read.
+
+## What Is An API?
+
+API stands for Application Programming Interface. In broad terms,
+an API is a way to communicate between pieces of software.
+
+Generally, API refers to web APIs, which are programs that run on the internet. The internet is a network of interconnected machines that know how to communicate with each other.
+
+We won't go deep into networking or how the internet works, as that is beyond the scope of this course. However, Crash Course Computer Science provides an excellent overview.
+
+<!-- livebook:{"attrs":{"source":"YouTube.new(\"https://www.youtube.com/watch?v=AEaKrq3SpW8\")","title":"The Internet: Crash Course Computer Science"},"chunks":null,"kind":"Elixir.HiddenCell","livebook_object":"smart_cell"} -->
+
+```elixir
+YouTube.new("https://www.youtube.com/watch?v=AEaKrq3SpW8")
+```
+
+### Client-Server Model
+
+These APIs use a [client-server](https://en.wikipedia.org/wiki/Client%E2%80%93server_model) model. Servers provide a resource, and clients request a resource.
+
+![](https://upload.wikimedia.org/wikipedia/commons/thumb/c/c9/Client-server-model.svg/375px-Client-server-model.svg.png)
+
+You use APIs every time you open your browser (Chrome, Safari, Firefox, Edge, etc.). The browser is the client, and it requests information from a server. For example, when you search for a video on YouTube, your browser communicates with YouTube servers to retrieve the video file.
+
+<!-- livebook:{"break_markdown":true} -->
+
+### URL (Uniform Resource Locator)
+
+The client uses a [URL](https://en.wikipedia.org/wiki/URL) (Uniform Resource Locator) to locate the server on the internet.
+
+For example, you can visit the URL https://v2.jokeapi.dev/joke/Any?safe-mode&format=json. This URL locates the server(s) powering the Joke API that returns a random joke.
+
+The Joke API returns a JSON response. [JSON (JavaScript Object Notation)](https://en.wikipedia.org/wiki/Json) is a key-value format conceptually similar to a map in Elixir.
+
+```javascript
+{
+    "error": false,
+    "category": "Programming",
+    "type": "twopart",
+    "setup": "Why did the functional programmer get thrown out of school?",
+    "delivery": "Because he refused to take classes.",
+    "flags": {
+        "nsfw": false,
+        "religious": false,
+        "political": false,
+        "racist": false,
+        "sexist": false,
+        "explicit": false
+    },
+    "id": 48,
+    "safe": true,
+    "lang": "en"
+}
+```
+
+**A URL contains the following information**
+
+* The communication protocol: `https`
+* The domain name: `v2.jokeapi.dev`
+* Path (optional): `joke/Any`
+* Query parameters (optional): `?safe-mode&format=json`
+
+**The communication protocol** specifies how to communicate with the server. [HTTP (Hypertext Transfer Protocol)](https://en.wikipedia.org/wiki/Http) and [HTTPS (Hypertext Transfer Protocol Secure)](https://en.wikipedia.org/wiki/Https) are communication protocols used to send and receive data between the client and the server.
+
+**The domain name** is a convenient label that maps to the underlying IP (Internet Protocol) address. For example, you can use http://142.250.217.68 instead of https://www.google.com to request the Google home page from a Google server.
+
+**The path** specifies the resource we want from the server. In this case, we use the `/joke/Any` path to get a random joke.
+
+**Query parameters** contain additional options and information to send to the server. A URL may include many query parameters to send to the server. Query parameters start with a question mark `?` and are each split by an ampersand `&`. For example, `?safe-mode&format-json` specifies that we want to use safe-mode and return the joke in a JSON format.
+
+## Web APIs
+
+We use web APIs to communicate with servers on the internet. These APIs provide useful functionality that would otherwise be difficult to build on our own. Here are a few example APIs.
+
+* The [Stripe API](https://stripe.com/docs/api) handles Stripe payments.
+* The [OpenWeatherAPI](https://openweathermap.org/) provides live weather information.
+* The [JokeAPI](https://sv443.net/jokeapi/v2/#getting-started) returns a random joke.
+
+## HTTP Request Methods
+
+[HTTP (Hypertext Transfer Protocol)](https://developer.mozilla.org/en-US/docs/Web/HTTP) is the protocol used for transferring data on the web. [The HTTP request methods](https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods), also known as verbs, indicate the desired action to be performed on the identified resource.
+
+```mermaid
+flowchart LR
+Client --HTTP Method--> Server
+```
+
+* **GET:** The GET method requests a representation of the specified resource. GET is the most common HTTP method and is used to retrieve data. It is a safe method, which means that it should not have any side effects on the server or the resource, and it should only retrieve data.
+
+* **POST:** The POST method submits an entity to the specified resource, often causing a change in state or side effects on the server. It is used to create a new resource or to submit data to be processed by the resource identified by the URI.
+
+* **PUT:** The PUT method replaces all current representations of the target resource with the request payload. It is used to update a current resource with new data.
+
+* **PATCH:** The PATCH method applies partial modifications to a resource. It is used to update only a part of the current resource, rather than replacing the whole resource like PUT.
+
+* **DELETE:** The DELETE method deletes the specified resource. It is used to delete a resource identified by a URI.
+
+When you use a browser, you're actually using HTTP under the hood. The browser hides the details of how we use HTTP to communicate with these APIs.
+
+As developers, we want to interact with web APIs directly using the HTTP protocol to request and send information.
+
+## HTTPoison
+
+In Elixir, we use an HTTP client to make HTTP requests. There are many libraries, but for our purpose we've chosen install the popular [HTTPoison](https://github.com/edgurgel/httpoison) HTTP client library for you in this livebook.
+
+We're going to use [HTTPoison](https://github.com/edgurgel/httpoison) to demonstrate how to make HTTP requests.
+
+For a simple example, here's how we can request a joke from the same API you visited earlier in the browser.
+
+```elixir
+HTTPoison.get("https://v2.jokeapi.dev/joke/Any?safe-mode&format=json")
+```
+
+We use the [HTTPoison.get/3](https://hexdocs.pm/httpoison/HTTPoison.html#get/3) function to make a GET request. The response from the server includes the `:body`, `:headers`, `:status_code`, and `:request_url`.
+
+The `:body` is the JSON response you saw previously in the browser, and `:headers` provide additional context and meta-data about the response. The `:status_code` specifies the response's status, where `200` indicates a successful response. The `:request_url` is simply the URL.
+
+## Response Codes
+
+APIs use various response codes to communicate the status of a request. These are generally called [response codes](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status) and are grouped into five classes.
+
+1. Informational responses (100–199)
+2. Successful responses (200–299)
+3. Redirection messages (300–399)
+4. Client error responses (400–499)
+5. Server error responses (500–599)
+
+You've already seen that a successful request returns a `200` response. You might also be familiar with the `404` not found response code.
+
+```elixir
+{:ok, response} = HTTPoison.get("https://v2.jokeapi.dev/joke/Any?safe-mode&format=json")
+response.status_code
+```
+
+## JSON With Jason
+
+As mentioned, JSON is a format for storing information in a key-value structure.
+
+```javascript
+{
+  "key1": "value1",
+  "key2": "value2",
+}
+```
+
+Elixir represents JASON as a string, not a key-value structure. For example, the above in Elixir would be:
+
+<!-- livebook:{"force_markdown":true} -->
+
+```elixir
+"{\"key1\":\"value1\",\"key2\":\"value2\"}"
+```
+
+APIs commonly return a JSON response. For example, here's the JSON response in the body of the request we've made to the JOKE API.
+
+```elixir
+{:ok, request} = HTTPoison.get("https://v2.jokeapi.dev/joke/Any?safe-mode&format=json")
+
+request.body
+```
+
+When it's printed as a string, it has pretty formatting.
+
+```elixir
+IO.puts(request.body)
+```
+
+However, as a string, it's a difficult structure to work with if we want to access specific keys and values. There is no internal representation of JSON in Elixir, so to make it more convenient to work with, we need to **decode** it in to a key-value data structure such as a map.
+
+Similarly, if we need to send JSON to an API, then we need to **encode** a map into a JSON string.
+
+We can use the [Jason](https://hexdocs.pm/jason/Jason.html) library to make it easier to encode and decode JSON.
+
+```elixir
+Jason.encode!(%{key: "value"})
+```
+
+```elixir
+Jason.decode!("{\"key\"\: \"value\"}")
+```
+
+By combining [HTTPoison](https://hexdocs.pm/httpoison/HTTPoison.html) and [Jason](https://hexdocs.pm/jason/Jason.html) we can retrieve the JSON from the Joke API and return
+an Elixir map.
+
+```elixir
+response =
+  case HTTPoison.get("https://v2.jokeapi.dev/joke/Any?safe-mode&format=json") do
+    {:ok, %HTTPoison.Response{status_code: 200, body: body}} ->
+      Jason.decode!(body)
+  end
+```
+
+Now we could use this response in our program.
+
+```elixir
+IO.puts("""
+#{response["setup"]}
+
+#{response["delivery"]}
+""")
+```
+
+### Your Turn
+
+Use [Jason.decode!/2](https://hexdocs.pm/jason/Jason.html#encode!/2) to decode the following JSON string.
+
+```elixir
+json = "{\"hello\"\: \"world\"}"
+```
+
+## Poison
+
+One popular alternative to [Jason](https://hexdocs.pm/jason/Jason.html) is the [Poison](https://hexdocs.pm/poison/Poison.html) library.
+
+It comes with similar functionality. We've chosen to use Jason in Livebook lessons as it has a faster compilation time.
+
+[Jason](https://hexdocs.pm/jason/Jason.html) and [Poison](https://hexdocs.pm/poison/Poison.html) must be installed as a project dependency to use them. We've already installed [Jason](https://hexdocs.pm/jason/Jason.html) in all Livebooks, but not [Poison](https://hexdocs.pm/poison/Poison.html).
+
+```elixir
+Poison.decode!("{\"key\"\: \"value\"}")
+```
+
+```elixir
+Poison.encode!(%{key: "value"})
+```
+
+## HTTP POST
+
+HTTP GET requests retrieve data from a server and HTTP POST requests send data to a server.
+
+We've already seen how we can use [HTTPoison.get/3](https://hexdocs.pm/httpoison/HTTPoison.html#get/3) to make an HTTP GET request.
+We can also use the [HTTPoison.post/4](https://hexdocs.pm/httpoison/HTTPoison.html#post/4) function to make an HTTP POST request.
+
+POST requests include **body** and **headers**. The body contains the data to send to the server. The headers contain context and metadata about the body of data being sent, which is the data to send to the server. The POST request also includes **headers** which
+contain context and metadata about the data. For example, the `Content-Type` header tells the server the format of data being sent.
+
+Below we send a POST request to http://httparrot.herokuapp.com/post. The body is a JSON string `"{\"body\": \"test\"}"` and the
+`Content-Type` header specifies that the data being sent is JSON.
+
+```elixir
+HTTPoison.post("http://httparrot.herokuapp.com/post", Poison.encode!(%{body: "test"}), [
+  {"Content-Type", "application/json"}
+])
+```
+
+## Private APIs
+
+So far, we've seen how to use [HTTPoison](https://hexdocs.pm/httpoison/HTTPoison.html) and [Poison](https://hexdocs.pm/poison/Poison.html) to retrieve information from a public API. However, some APIs are private.
+
+Private APIs require an API key to communicate with them. This key is then included in the HTTP request to authenticate the request.
+
+For example, the [Open Weather API](https://openweathermap.org/) requires an API key when making a GET request. The server returns a `401` unauthorized response without the correct API key.
+
+```elixir
+api_key = ""
+
+HTTPoison.get("https://api.openweathermap.org/data/2.5/weather?lat=35&lon=139&appid=#{api_key}")
+```
+
+Generally, you want to keep your API key a secret because bad actors could use it to maliciously access private information or attack the server with too many requests.
+
+### Your Turn
+
+The [Open Weather API](https://openweathermap.org/) exposes the following URL to provide weather data.
+
+```
+https://api.openweathermap.org/data/2.5/weather?lat=LATITUDE&lon=LONGITUDE&appid=API_KEY
+```
+
+`lat`, `lon`, and `appid` are all query parameters, where we replace **LATITUDE**, **LONGITUDE**, and **API_KEY** with the correct values.
+
+Create a free account on the [Open Weather API](https://openweathermap.org/) and then get your API key from [Open Weather API Keys](https://home.openweathermap.org/api_keys) page.
+
+<!-- livebook:{"break_markdown":true} -->
+
+![](images/open%20weather%20api%20key.png)
+
+<!-- livebook:{"break_markdown":true} -->
+
+Use your API key and valid latitude/longitude coordinates to make a successful request to their API. Ensure the `:status_code` is `200` rather than `401`.
+
+```elixir
+lat = 35
+lon = 139
+api_key = ""
+
+{:ok, response} =
+  HTTPoison.get(
+    "https://api.openweathermap.org/data/2.5/weather?lat=#{lat}&lon=#{lon}&appid=#{api_key}"
+  )
+```
+
+Once you are sure the above works correctly, use [Poison.decode/2](https://hexdocs.pm/poison/Poison.html#decode/2) to decode the `response` into an Elixir map.
+
+```elixir
+response
+```
+
+## Mark As Completed
+
+<!-- livebook:{"attrs":{"source":"file_name = Path.basename(Regex.replace(~r/#.+/, __ENV__.file, \"\"), \".livemd\")\n\nsave_name =\n  case Path.basename(__DIR__) do\n    \"reading\" -> \"apis_reading\"\n    \"exercises\" -> \"apis_exercise\"\n  end\n\nprogress_path = __DIR__ <> \"/../progress.json\"\nexisting_progress = File.read!(progress_path) |> Jason.decode!()\n\ndefault = Map.get(existing_progress, save_name, false)\n\nform =\n  Kino.Control.form(\n    [\n      completed: input = Kino.Input.checkbox(\"Mark As Completed\", default: default)\n    ],\n    report_changes: true\n  )\n\nTask.async(fn ->\n  for %{data: %{completed: completed}} <- Kino.Control.stream(form) do\n    File.write!(\n      progress_path,\n      Jason.encode!(Map.put(existing_progress, save_name, completed), pretty: true)\n    )\n  end\nend)\n\nform","title":"Track Your Progress"},"chunks":null,"kind":"Elixir.HiddenCell","livebook_object":"smart_cell"} -->
+
+```elixir
+file_name = Path.basename(Regex.replace(~r/#.+/, __ENV__.file, ""), ".livemd")
+
+save_name =
+  case Path.basename(__DIR__) do
+    "reading" -> "apis_reading"
+    "exercises" -> "apis_exercise"
+  end
+
+progress_path = __DIR__ <> "/../progress.json"
+existing_progress = File.read!(progress_path) |> Jason.decode!()
+
+default = Map.get(existing_progress, save_name, false)
+
+form =
+  Kino.Control.form(
+    [
+      completed: input = Kino.Input.checkbox("Mark As Completed", default: default)
+    ],
+    report_changes: true
+  )
+
+Task.async(fn ->
+  for %{data: %{completed: completed}} <- Kino.Control.stream(form) do
+    File.write!(
+      progress_path,
+      Jason.encode!(Map.put(existing_progress, save_name, completed), pretty: true)
+    )
+  end
+end)
+
+form
+```
+
+## Commit Your Progress
+
+Run the following in your command line from the curriculum folder to track and save your progress in a Git commit.
+Ensure that you do not already have undesired or unrelated changes by running `git status` or by checking the source control tab in Visual Studio Code.
+
+```
+$ git checkout -b apis-reading
+$ git add .
+$ git commit -m "finish apis reading"
+$ git push origin apis-reading
+```
+
+Create a pull request from your `apis-reading` branch to your `solutions` branch.
+Please do not create a pull request to the DockYard Academy repository as this will spam our PR tracker.
+
+**DockYard Academy Students Only:**
+
+Notify your instructor by including `@BrooklinJazz` in your PR description to get feedback.
+You (or your instructor) may merge your PR into your solutions branch after review.
+
+If you are interested in joining the next academy cohort, [sign up here](https://academy.dockyard.com/) to receive more news when it is available.
+
+## Up Next
+
+| Previous                                   | Next                                                                 |
+| ------------------------------------------ | -------------------------------------------------------------------: |
+| [Home Page](../exercises/home_page.livemd) | [Spoonacular Recipe API](../exercises/spoonacular_recipe_api.livemd) |
+

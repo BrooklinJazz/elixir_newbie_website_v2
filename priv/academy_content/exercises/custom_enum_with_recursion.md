@@ -1,0 +1,209 @@
+%{
+  title: "Custom Enum"
+}
+---
+# Custom Enum With Recursion
+
+```elixir
+Mix.install([
+  {:jason, "~> 1.4"},
+  {:kino, "~> 0.8.0", override: true},
+  {:youtube, github: "brooklinjazz/youtube"},
+  {:hidden_cell, github: "brooklinjazz/hidden_cell"},
+  {:benchee, "~> 1.1"}
+])
+```
+
+## Navigation
+
+[Return Home](../start.livemd)<span style="padding: 0 30px"></span>
+[Report An Issue](https://github.com/DockYard-Academy/beta_curriculum/issues/new?assignees=&labels=&template=issue.md&title=)
+
+## Custom Enum With Recursion
+
+We're going to use recursion to re-implement several of the [Enum](https://hexdocs.pm/elixir/Enum.html) module's functions. For this exercise
+you are not allowed to use the [Enum](https://hexdocs.pm/elixir/Enum.html) module.
+
+Implement the following [Enum](https://hexdocs.pm/elixir/Enum.html) functions in this `CustomEnum` function. Each should use recursion
+to accomplish the same functionality as the [Enum](https://hexdocs.pm/elixir/Enum.html) module does.
+
+* [Enum.reverse/2](https://hexdocs.pm/elixir/Enum.html#reverse/2)
+* [Enum.map/2](https://hexdocs.pm/elixir/Enum.html#map/2)
+* [Enum.filter/2](https://hexdocs.pm/elixir/Enum.html#filter/2)
+* [Enum.sum/2](https://hexdocs.pm/elixir/Enum.html#sum/2)
+* [Enum.join/1](https://hexdocs.pm/elixir/Enum.html#join/1)
+
+Keep in mind you may need to delegate to another function if an accumulator is required.
+
+For example,
+
+<!-- livebook:{"force_markdown":true} -->
+
+```elixir
+defp recursive_map(list, function, acc) do
+  # ...
+end
+
+def map(list, function) do
+  recursive_map(list, function, [])
+end
+```
+
+You only need to handle lists, not all collections.
+
+```elixir
+defmodule CustomEnum do
+  @moduledoc """
+  Documentation for `CustomEnum`.
+  Re-implement common [Enum](https://hexdocs.pm/elixir/Enum.html) functions using recursion.
+  """
+
+  @doc """
+  Reverse a list
+
+  ## Examples
+
+    iex> CustomEnum.reverse([1, 2, 3])
+    [3, 2, 1]
+
+    iex> CustomEnum.reverse([4, 5, 6, 7])
+    [7, 6, 5, 4]
+  """
+  def reverse(list) do
+  end
+
+  @doc """
+  Map over a list
+
+  ## Examples
+
+    iex> CustomEnum.map([1, 2, 3], fn integer -> integer * 2 end)
+    [2, 4, 6]
+
+    iex> CustomEnum.map([5, 4, 3], fn integer -> is_integer(integer) end)
+    [true, true, true]
+  """
+  def map(list, callback_function) do
+  end
+
+  @doc """
+  Filter elements in a list. Keep elements that return `true` when called with the
+  provided callback function.
+
+  ## Examples
+
+    iex> CustomEnum.filter([1, 2, "3"], fn int -> is_integer(int) end)
+    [1, 2]
+
+    iex> CustomEnum.filter([1, "2", "3"], fn char -> is_bitstring(char) end)
+    ["2", "3"]
+  """
+  def filter(list, callback_function) do
+  end
+
+  @doc """
+  Sum a list of integers.
+
+  ## Examples
+
+    iex> CustomEnum.sum([1, 2, 3])
+    6
+
+    iex> CustomEnum.sum([1, 1, 1])
+    3
+  """
+  def sum(list_of_integers) do
+  end
+
+  @doc """
+  Join a list of strings together.
+
+  ## Examples
+
+    iex> CustomEnum.join(["A", "B", "C"])
+    "ABC"
+
+    iex> CustomEnum.join(["Hello", ",", " ", "World", "!"])
+    "Hello, World!"
+  """
+  def join(list_of_strings) do
+  end
+end
+```
+
+## Benchmarking
+
+We've installed the [Benchee](https://github.com/bencheeorg/benchee) project in this livebook.
+
+Benchmark your solution against the existing [Enum](https://hexdocs.pm/elixir/Enum.html) module. Is yours faster or slower? Keep in mind that the [Enum](https://hexdocs.pm/elixir/Enum.html) module contains implementations for all enumerables, not just lists.
+
+```elixir
+
+```
+
+## Mark As Completed
+
+<!-- livebook:{"attrs":{"source":"file_name = Path.basename(Regex.replace(~r/#.+/, __ENV__.file, \"\"), \".livemd\")\n\nsave_name =\n  case Path.basename(__DIR__) do\n    \"reading\" -> \"custom_enum_with_recursion_reading\"\n    \"exercises\" -> \"custom_enum_with_recursion_exercise\"\n  end\n\nprogress_path = __DIR__ <> \"/../progress.json\"\nexisting_progress = File.read!(progress_path) |> Jason.decode!()\n\ndefault = Map.get(existing_progress, save_name, false)\n\nform =\n  Kino.Control.form(\n    [\n      completed: input = Kino.Input.checkbox(\"Mark As Completed\", default: default)\n    ],\n    report_changes: true\n  )\n\nTask.async(fn ->\n  for %{data: %{completed: completed}} <- Kino.Control.stream(form) do\n    File.write!(\n      progress_path,\n      Jason.encode!(Map.put(existing_progress, save_name, completed), pretty: true)\n    )\n  end\nend)\n\nform","title":"Track Your Progress"},"chunks":null,"kind":"Elixir.HiddenCell","livebook_object":"smart_cell"} -->
+
+```elixir
+file_name = Path.basename(Regex.replace(~r/#.+/, __ENV__.file, ""), ".livemd")
+
+save_name =
+  case Path.basename(__DIR__) do
+    "reading" -> "custom_enum_with_recursion_reading"
+    "exercises" -> "custom_enum_with_recursion_exercise"
+  end
+
+progress_path = __DIR__ <> "/../progress.json"
+existing_progress = File.read!(progress_path) |> Jason.decode!()
+
+default = Map.get(existing_progress, save_name, false)
+
+form =
+  Kino.Control.form(
+    [
+      completed: input = Kino.Input.checkbox("Mark As Completed", default: default)
+    ],
+    report_changes: true
+  )
+
+Task.async(fn ->
+  for %{data: %{completed: completed}} <- Kino.Control.stream(form) do
+    File.write!(
+      progress_path,
+      Jason.encode!(Map.put(existing_progress, save_name, completed), pretty: true)
+    )
+  end
+end)
+
+form
+```
+
+## Commit Your Progress
+
+Run the following in your command line from the curriculum folder to track and save your progress in a Git commit.
+Ensure that you do not already have undesired or unrelated changes by running `git status` or by checking the source control tab in Visual Studio Code.
+
+```
+$ git checkout -b custom-enum-with-recursion-exercise
+$ git add .
+$ git commit -m "finish custom enum with recursion exercise"
+$ git push origin custom-enum-with-recursion-exercise
+```
+
+Create a pull request from your `custom-enum-with-recursion-exercise` branch to your `solutions` branch.
+Please do not create a pull request to the DockYard Academy repository as this will spam our PR tracker.
+
+**DockYard Academy Students Only:**
+
+Notify your instructor by including `@BrooklinJazz` in your PR description to get feedback.
+You (or your instructor) may merge your PR into your solutions branch after review.
+
+If you are interested in joining the next academy cohort, [sign up here](https://academy.dockyard.com/) to receive more news when it is available.
+
+## Up Next
+
+| Previous                                                      | Next                                 |
+| ------------------------------------------------------------- | -----------------------------------: |
+| [Games: Benchmarking](../exercises/games_benchmarking.livemd) | [Streams](../reading/streams.livemd) |
+

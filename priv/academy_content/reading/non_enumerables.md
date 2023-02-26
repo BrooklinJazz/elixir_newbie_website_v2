@@ -1,0 +1,300 @@
+%{
+  title: "Enumerating on Non-Enumerables"
+}
+---
+# Non-Enumerables
+
+```elixir
+Mix.install([
+  {:jason, "~> 1.4"},
+  {:kino, "~> 0.8.0", override: true},
+  {:youtube, github: "brooklinjazz/youtube"},
+  {:hidden_cell, github: "brooklinjazz/hidden_cell"}
+])
+```
+
+## Navigation
+
+[Return Home](../start.livemd)<span style="padding: 0 30px"></span>
+[Report An Issue](https://github.com/DockYard-Academy/beta_curriculum/issues/new?assignees=&labels=&template=issue.md&title=)
+
+## Setup
+
+Ensure you type the `ea` keyboard shortcut to evaluate all Elixir cells before starting. Alternatively you can evaluate the Elixir cells as you read.
+
+## Review Questions
+
+Upon completing this lesson, a student should be able to answer the following questions.
+
+* What are some examples of non-enumerable vs enumerable data structures?
+* How do you enumerate over non-enumerable data structures?
+* How do you convert non-enumerable data structures into enumerable data structures?
+
+## Overview
+
+### Non-Enumerables
+
+Non-enumerable data types are any data type that does not implement the [Enumerable](https://hexdocs.pm/elixir/Enumerable.html) protocol. For example, integers, floats, strings, atoms, and tuples are all not enumerable.
+
+<!-- livebook:{"break_markdown":true} -->
+
+### Enumeration With Non-Enumerables
+
+To use enumeration with a non-enumerable data type, we need to convert the data into an enumerable data type.
+
+For example, we could convert a string `"abc"` into a list of characters `["a", "b", "c"]` if we wanted to enumerate over each character.
+
+## Converting Non-Enumerables Into Enumerables
+
+While we can't enumerate over non-enumerable data types, Elixir provides many functions we can use to convert non-enumerable data types into enumerable data types.
+
+## Integers
+
+We can use the [Integer.digits/1](https://hexdocs.pm/elixir/Integer.html#digits/1) function to convert integers to a list of digits.
+
+```elixir
+Integer.digits(123)
+```
+
+### Your Turn
+
+In the Elixir cell below, convert the integer `4389` into a list of digits.
+
+```elixir
+
+```
+
+### Undigits
+
+We can convert a list of digits back into a single integer using [Integer.undigits/2](https://hexdocs.pm/elixir/Integer.html#undigits/2).
+
+```elixir
+Integer.undigits([1, 2, 3])
+```
+
+## Tuples
+
+Despite being so similar to lists, tuples are not considered enumerable.
+That's primarily because they are intended as fixed-sized containers, and any case that requires
+enumeration would likely be better served with lists.
+
+To get around this if needed, you can convert a tuple to a list with [Tuple.to_list/1](https://hexdocs.pm/elixir/Tuple.html#to_list/1).
+
+However, if you find yourself doing this often, it may be a better
+choice to start with a list instead of a tuple.
+
+```elixir
+Tuple.to_list({1, 2, 3})
+```
+
+We can then convert a list back into a tuple using [List.to_tuple/1](https://hexdocs.pm/elixir/List.html#to_tuple/1)
+
+```elixir
+List.to_tuple([1, 2, 3])
+```
+
+## Strings
+
+Strings are not enumerable.
+
+```elixir
+Enum.map("abc", fn char -> char end)
+```
+
+### [String.split/3](https://hexdocs.pm/elixir/String.html#split/3)
+
+<!-- livebook:{"break_markdown":true} -->
+
+However, strings can be converted into lists using [String.split/3](https://hexdocs.pm/elixir/String.html#split/3).
+
+[String.split/3](https://hexdocs.pm/elixir/String.html#split/3) splits a string based on some value.
+
+For example, we can split a string by every comma like so:
+
+```elixir
+String.split("a,b,c,d", ",")
+```
+
+We can split a string into a list of characters by splitting on every empty space `""` This does create an empty string becaused of the start and the end of the list.
+
+```elixir
+String.split("abcde", "")
+```
+
+You can trim whitespace using the `[trim: true]` option.
+
+```elixir
+String.split("abcde", "", trim: true)
+```
+
+By default, [String.split/1](https://hexdocs.pm/elixir/String.html#split/1) will split the string on every space.
+
+```elixir
+String.split("hello world")
+```
+
+Now your string is an enumerable list of characters.
+
+<!-- livebook:{"break_markdown":true} -->
+
+### Your Turn
+
+In the Elixir cell below, convert the string `"Hello, world!"` into a list of single characters.
+
+```elixir
+
+```
+
+### Joining Strings
+
+Once you've applied your transformation to the list of string characters, you can rejoin them using [Enum.join/2](https://hexdocs.pm/elixir/Enum.html#join/2)
+
+```elixir
+Enum.join(["a", "b", "c"], "")
+```
+
+The default joiner is a string, so you can omit the second argument.
+
+```elixir
+Enum.join(["a", "b", "c"])
+```
+
+Alternatively we can join the strings by some joining character.
+
+```elixir
+Enum.join(["a", "b", "c"], "_")
+```
+
+We can use [String.split/3](https://hexdocs.pm/elixir/String.html#split/3) and [Enum.join/2](https://hexdocs.pm/elixir/Enum.html#join/2) in combination with each other to split strings, enumerate over them applying some transformation, and then rejoining them.
+
+Here's a simple example of replacing all characters other than spaces with `"X"`.
+
+```elixir
+split_string = String.split("secret information", "")
+
+transformed_list =
+  Enum.map(split_string, fn char ->
+    case char do
+      " " -> " "
+      _ -> "X"
+    end
+  end)
+
+joined_string = Enum.join(transformed_list)
+```
+
+### Your Turn
+
+Create a `CharacterCount` module that can count the number of characters in a string.
+
+<details style="background-color: lightgreen; padding: 1rem; margin: 1rem 0;">
+<summary>Example Solution</summary>
+
+```elixir
+defmodule CharacterCount do
+  def count(string) do
+    string
+    |> String.split("", trim: true)
+    |> Enum.count()
+  end
+end
+```
+
+</details>
+
+```elixir
+defmodule CharacterCount do
+  @moduledoc """
+  Character Count
+  """
+
+  @doc """
+  Count the number of characters in a string
+
+  ## Examples
+
+      iex> CharacterCount.count("abc")
+      3
+
+      iex> CharacterCount.count("abcd")
+      4
+  """
+  def count(string) do
+  end
+end
+```
+
+## Further Reading
+
+Consider the following resource(s) to deepen your understanding of the topic.
+
+* [DockYard Academy: Enum](./enum.livemd)
+* [Elixir Schools: Enum](https://elixirschool.com/en/lessons/basics/enum)
+* [Elixir-lang: Enumerables](https://elixir-lang.org/getting-started/enumerables-and-streams.html#enumerables)
+
+## Mark As Completed
+
+<!-- livebook:{"attrs":{"source":"file_name = Path.basename(Regex.replace(~r/#.+/, __ENV__.file, \"\"), \".livemd\")\n\nsave_name =\n  case Path.basename(__DIR__) do\n    \"reading\" -> \"non_enumerables_reading\"\n    \"exercises\" -> \"non_enumerables_exercise\"\n  end\n\nprogress_path = __DIR__ <> \"/../progress.json\"\nexisting_progress = File.read!(progress_path) |> Jason.decode!()\n\ndefault = Map.get(existing_progress, save_name, false)\n\nform =\n  Kino.Control.form(\n    [\n      completed: input = Kino.Input.checkbox(\"Mark As Completed\", default: default)\n    ],\n    report_changes: true\n  )\n\nTask.async(fn ->\n  for %{data: %{completed: completed}} <- Kino.Control.stream(form) do\n    File.write!(\n      progress_path,\n      Jason.encode!(Map.put(existing_progress, save_name, completed), pretty: true)\n    )\n  end\nend)\n\nform","title":"Track Your Progress"},"chunks":null,"kind":"Elixir.HiddenCell","livebook_object":"smart_cell"} -->
+
+```elixir
+file_name = Path.basename(Regex.replace(~r/#.+/, __ENV__.file, ""), ".livemd")
+
+save_name =
+  case Path.basename(__DIR__) do
+    "reading" -> "non_enumerables_reading"
+    "exercises" -> "non_enumerables_exercise"
+  end
+
+progress_path = __DIR__ <> "/../progress.json"
+existing_progress = File.read!(progress_path) |> Jason.decode!()
+
+default = Map.get(existing_progress, save_name, false)
+
+form =
+  Kino.Control.form(
+    [
+      completed: input = Kino.Input.checkbox("Mark As Completed", default: default)
+    ],
+    report_changes: true
+  )
+
+Task.async(fn ->
+  for %{data: %{completed: completed}} <- Kino.Control.stream(form) do
+    File.write!(
+      progress_path,
+      Jason.encode!(Map.put(existing_progress, save_name, completed), pretty: true)
+    )
+  end
+end)
+
+form
+```
+
+## Commit Your Progress
+
+Run the following in your command line from the curriculum folder to track and save your progress in a Git commit.
+Ensure that you do not already have undesired or unrelated changes by running `git status` or by checking the source control tab in Visual Studio Code.
+
+```
+$ git checkout -b non-enumerables-reading
+$ git add .
+$ git commit -m "finish non enumerables reading"
+$ git push origin non-enumerables-reading
+```
+
+Create a pull request from your `non-enumerables-reading` branch to your `solutions` branch.
+Please do not create a pull request to the DockYard Academy repository as this will spam our PR tracker.
+
+**DockYard Academy Students Only:**
+
+Notify your instructor by including `@BrooklinJazz` in your PR description to get feedback.
+You (or your instructor) may merge your PR into your solutions branch after review.
+
+If you are interested in joining the next academy cohort, [sign up here](https://academy.dockyard.com/) to receive more news when it is available.
+
+## Up Next
+
+| Previous                                      | Next                                               |
+| --------------------------------------------- | -------------------------------------------------: |
+| [A Safe Range](../exercises/saferange.livemd) | [Comprehensions](../reading/comprehensions.livemd) |
+

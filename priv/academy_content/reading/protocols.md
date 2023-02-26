@@ -1,0 +1,348 @@
+%{
+  title: "Protocols"
+}
+---
+# Protocols
+
+```elixir
+Mix.install([
+  {:jason, "~> 1.4"},
+  {:kino, "~> 0.8.0", override: true},
+  {:youtube, github: "brooklinjazz/youtube"},
+  {:hidden_cell, github: "brooklinjazz/hidden_cell"}
+])
+```
+
+## Navigation
+
+[Return Home](../start.livemd)<span style="padding: 0 30px"></span>
+[Report An Issue](https://github.com/DockYard-Academy/beta_curriculum/issues/new?assignees=&labels=&template=issue.md&title=)
+
+## Setup
+
+Ensure you type the `ea` keyboard shortcut to evaluate all Elixir cells before starting. Alternatively, you can evaluate the Elixir cells as you read.
+
+## Review Questions
+
+Upon completing this lesson, a student should be able to answer the following questions.
+
+* How do you achieve data-based polymorphism using protocols?
+* Why might you use protocols instead of some control flow structure or some alternative means of achieving data-based polymorphism?
+
+## Protocols
+
+In English, a protocol means a set of rules or procedures. In Elixir, a protocol allows us to
+create a common functionality, with different implementations.
+
+Specifically, protocols enable polymorphic behavior based off of data.
+
+```mermaid
+flowchart
+  A -- data --> B
+  B --> C
+  B --> D
+  B --> E
+  B --> F
+
+  A[Caller]
+  B[Protocol]
+  C[Implementation]
+  D[Implementation]
+  E[Implementation]
+  F[Implementation]
+```
+
+<!-- livebook:{"break_markdown":true} -->
+
+For example, the [Enum](https://hexdocs.pm/elixir/Enum.html) module works with any collection data type. Under the hood, it uses the
+[Enumerable](https://hexdocs.pm/elixir/Enumerable.html) protocol.
+
+<!-- livebook:{"break_markdown":true} -->
+
+```mermaid
+flowchart
+  E[Enum]
+  EN[Enumerable]
+  E --> EN
+  EN --> Map
+  EN --> List
+  EN --> k[Keyword List]
+```
+
+<!-- livebook:{"break_markdown":true} -->
+
+It then executes the appropriate instructions depending on which data type the [Enum](https://hexdocs.pm/elixir/Enum.html) function
+is called with.
+
+```elixir
+Enum.random(%{one: 1, two: 2})
+```
+
+```elixir
+Enum.random(1..20)
+```
+
+```elixir
+Enum.random(one: 1, two: 2)
+```
+
+## Protocols On Simple Data Types
+
+Anytime you need a common function for multiple data types or structs, you
+can consider a protocol.
+
+For example, let's create an `Adder` protocol
+that's going to add two values together. It will accept integers, strings, and lists
+and hide the specifics of which operator is necessary to add different types.
+
+<!-- livebook:{"force_markdown":true} -->
+
+```elixir
+Adder.add(1, 2)
+3
+
+Adder.add("hello, ", "world")
+"hello, world"
+
+Adder.add([1], [2])
+[1, 2]
+```
+
+So if we give the protocol an integer, it will use the implementation for [Integer](https://hexdocs.pm/elixir/Integer.html).
+If we provide the protocol a string, it will use the implementation for `BitString`, and
+if we provide the protocol a list, it will use the implementation for [List](https://hexdocs.pm/elixir/List.html).
+
+<!-- livebook:{"break_markdown":true} -->
+
+```mermaid
+flowchart
+  A -- Integer --> B
+  B -- Integer --> C
+  B -- BitString --> D
+  B -- List --> E
+  style C color:green
+  style D color:red
+  style E color:red
+  A[Caller]
+  B[Adder Protocol]
+  C[Integer Implementation]
+  D[String Implementation]
+  E[List Implementation]
+```
+
+[List](https://hexdocs.pm/elixir/List.html), [Integer](https://hexdocs.pm/elixir/Integer.html), and `BitString` are all built-in Elixir modules used to define
+which data type the protocol implementation is for.
+
+We define a protocol using `defprotocol` and define a function clause. We only need the function
+head, not the function body.
+
+```elixir
+defprotocol Adder do
+  def add(value, value)
+end
+```
+
+We've defined a protocol above, but we haven't implemented it for any data type yet.
+
+Notice the error for `Adder.add/2` called with two integers says
+`protocol Adder not implemented for 1 of type Integer`
+
+```elixir
+Adder.add(1, 2)
+```
+
+To define an implementation for a protocol, we use `defimpl` and provide it the name of the protocol.
+We also declare what struct or data type the protocol is `for:`
+
+```elixir
+defimpl Adder, for: Integer do
+  def add(int1, int2) do
+    int1 + int2
+  end
+end
+
+Adder.add(1, 2)
+```
+
+We also want the `Adder` protocol to handle strings and lists. That means we need to create
+an implementation for List and String. In Elixir, the underlying type for strings is `BitString`.
+
+Why `BitString`? In Elixir, strings are stored as [bitstrings](https://elixir-lang.org/getting-started/binaries-strings-and-char-lists.html#bitstrings).
+
+```elixir
+defimpl Adder, for: BitString do
+  def add(string1, string2) do
+    string1 <> string2
+  end
+end
+
+Adder.add("hello, ", "world")
+```
+
+### Your Turn
+
+In the Elixir cell below, create an implementation of `Adder` for lists.
+
+<details style="background-color: lightgreen; padding: 1rem; margin: 1rem 0;">
+<summary>Example Solution</summary>
+
+```elixir
+defimpl Adder, for: List do
+  def add(list1, list2) do
+    list1 ++ list2
+  end
+end
+```
+
+</details>
+
+```elixir
+
+```
+
+## Protocols With Structs
+
+We can create implementations for a protocol based on simple data types such as `integer` and `string`.
+In addition to those simple data types, we can also create an implementation for specific structs.
+
+For example, let's say we're making an old school kids toy that says different animal noises.
+
+we'll create a `Sound` protocol that prints different sounds depending on
+the struct given to it.
+
+```elixir
+defprotocol Sound do
+  def say(struct)
+end
+```
+
+We'll create a `Cat` struct.
+
+```elixir
+defmodule Cat do
+  defstruct [:mood]
+end
+```
+
+Then a `Cat` implementation for the `Sound` protocol.
+
+```elixir
+defimpl Sound, for: Cat do
+  def say(cat) do
+    case cat.mood do
+      :happy -> "Purr"
+      :angry -> "Hiss!"
+    end
+  end
+end
+```
+
+```elixir
+Sound.say(%Cat{mood: :happy})
+```
+
+```elixir
+Sound.say(%Cat{mood: :angry})
+```
+
+### Your Turn
+
+```elixir
+defmodule Dog do
+  defstruct []
+end
+```
+
+Define a `Sound` implementation for the `Dog` struct above.
+When `Sound.say/1` is called with a `Dog` struct it should return `"Woof!"`
+
+<!-- livebook:{"force_markdown":true} -->
+
+```elixir
+Sound.say(%Dog{})
+"Woof!"
+```
+
+<details style="background-color: lightgreen; padding: 1rem; margin: 1rem 0;">
+<summary>Example Solution</summary>
+
+```elixir
+defimpl Sound, for: Dog do
+  def say(dog) do
+    "woof!"
+  end
+end
+```
+
+</details>
+
+```elixir
+
+```
+
+## Mark As Completed
+
+<!-- livebook:{"attrs":{"source":"file_name = Path.basename(Regex.replace(~r/#.+/, __ENV__.file, \"\"), \".livemd\")\n\nsave_name =\n  case Path.basename(__DIR__) do\n    \"reading\" -> \"protocols_reading\"\n    \"exercises\" -> \"protocols_exercise\"\n  end\n\nprogress_path = __DIR__ <> \"/../progress.json\"\nexisting_progress = File.read!(progress_path) |> Jason.decode!()\n\ndefault = Map.get(existing_progress, save_name, false)\n\nform =\n  Kino.Control.form(\n    [\n      completed: input = Kino.Input.checkbox(\"Mark As Completed\", default: default)\n    ],\n    report_changes: true\n  )\n\nTask.async(fn ->\n  for %{data: %{completed: completed}} <- Kino.Control.stream(form) do\n    File.write!(\n      progress_path,\n      Jason.encode!(Map.put(existing_progress, save_name, completed), pretty: true)\n    )\n  end\nend)\n\nform","title":"Track Your Progress"},"chunks":null,"kind":"Elixir.HiddenCell","livebook_object":"smart_cell"} -->
+
+```elixir
+file_name = Path.basename(Regex.replace(~r/#.+/, __ENV__.file, ""), ".livemd")
+
+save_name =
+  case Path.basename(__DIR__) do
+    "reading" -> "protocols_reading"
+    "exercises" -> "protocols_exercise"
+  end
+
+progress_path = __DIR__ <> "/../progress.json"
+existing_progress = File.read!(progress_path) |> Jason.decode!()
+
+default = Map.get(existing_progress, save_name, false)
+
+form =
+  Kino.Control.form(
+    [
+      completed: input = Kino.Input.checkbox("Mark As Completed", default: default)
+    ],
+    report_changes: true
+  )
+
+Task.async(fn ->
+  for %{data: %{completed: completed}} <- Kino.Control.stream(form) do
+    File.write!(
+      progress_path,
+      Jason.encode!(Map.put(existing_progress, save_name, completed), pretty: true)
+    )
+  end
+end)
+
+form
+```
+
+## Commit Your Progress
+
+Run the following in your command line from the curriculum folder to track and save your progress in a Git commit.
+Ensure that you do not already have undesired or unrelated changes by running `git status` or by checking the source control tab in Visual Studio Code.
+
+```
+$ git checkout -b protocols-reading
+$ git add .
+$ git commit -m "finish protocols reading"
+$ git push origin protocols-reading
+```
+
+Create a pull request from your `protocols-reading` branch to your `solutions` branch.
+Please do not create a pull request to the DockYard Academy repository as this will spam our PR tracker.
+
+**DockYard Academy Students Only:**
+
+Notify your instructor by including `@BrooklinJazz` in your PR description to get feedback.
+You (or your instructor) may merge your PR into your solutions branch after review.
+
+If you are interested in joining the next academy cohort, [sign up here](https://academy.dockyard.com/) to receive more news when it is available.
+
+## Up Next
+
+| Previous                                                     | Next                                                           |
+| ------------------------------------------------------------ | -------------------------------------------------------------: |
+| [Rock Paper Scissors Guards](../exercises/rps_guards.livemd) | [Math With Protocols](../exercises/math_with_protocols.livemd) |
+

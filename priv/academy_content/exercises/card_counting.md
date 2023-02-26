@@ -1,0 +1,251 @@
+%{
+  title: "Card Counting"
+}
+---
+# Card Counting
+
+```elixir
+Mix.install([
+  {:jason, "~> 1.4"},
+  {:kino, "~> 0.8.0", override: true},
+  {:youtube, github: "brooklinjazz/youtube"},
+  {:hidden_cell, github: "brooklinjazz/hidden_cell"}
+])
+```
+
+## Navigation
+
+[Return Home](../start.livemd)<span style="padding: 0 30px"></span>
+[Report An Issue](https://github.com/DockYard-Academy/beta_curriculum/issues/new?assignees=&labels=&template=issue.md&title=)
+
+## Setup
+
+Ensure you type the `ea` keyboard shortcut to evaluate all Elixir cells before starting. Alternatively you can evaluate the Elixir cells as you read.
+
+## Card Counting
+
+We're going to build some logic for a card counting application. Card counting is a strategy used in card games to determine if there are more high cards or low cards in the deck.
+
+There are **13** numbered cards in a common deck of playing cards.
+
+We'll use integers `1` to `13` to represent playing cards. Cards are either **low**, **normal**, or **high**.
+
+<!-- livebook:{"break_markdown":true} -->
+
+```mermaid
+flowchart LR
+subgraph low cards
+  direction LR
+  1 --- 2 --- 3 --- 4 --- 5 --- 6
+end
+
+subgraph Normal Cards
+  direction LR
+  7 --- 8 --- 9
+end
+
+subgraph High Cards
+  direction LR
+  10 --- 11 --- 12 --- 13
+end
+```
+
+<!-- livebook:{"break_markdown":true} -->
+
+In order to track if there are more high cards left in the deck, or low cards left in the deck, you'll track a running count starting at `0`.
+
+* When dealt a **low** card decrease the count by `1`.
+* When dealt a **high** card increase the count by `1`.
+* When dealt a **normal** card do nothing.
+
+## Bind Card Counts
+
+Bind integers `low`, `normal`, and `high` to track the amount to increase or decrease the current count by. You will use these variables in further exercises.
+
+<details style="background-color: lightgreen; padding: 1rem; margin: 1rem 0;">
+<summary>Example solution</summary>
+
+```elixir
+low = -1
+normal = 0
+high = 1
+```
+
+</details>
+
+Enter your solution below.
+
+```elixir
+
+```
+
+## High Card
+
+The initial count is `0`. You have been dealt one **high** card. Use arithmetic operators and the bound variables above to determine the new count.
+
+<details style="background-color: lightgreen; padding: 1rem; margin: 1rem 0;">
+<summary>Example solution</summary>
+
+```elixir
+initial_count = 0
+initial_count + high
+```
+
+</details>
+
+Enter your solution below.
+
+```elixir
+
+```
+
+## Low Card
+
+The initial count is `0`. You have been dealt one **low** card. Use arithmetic operators and the bound variables above to determine the new count.
+
+<details style="background-color: lightgreen; padding: 1rem; margin: 1rem 0;">
+<summary>Example solution</summary>
+
+```elixir
+initial_count = 0
+initial_count + low
+```
+
+</details>
+
+Enter your solution below.
+
+```elixir
+
+```
+
+## Multiple Cards
+
+The initial count is `5`. You have been dealt five **high** cards, two **low** cards, and two **normal** cards. Use arithmetic operators and the bound variables above to determine the new count.
+
+<details style="background-color: lightgreen; padding: 1rem; margin: 1rem 0;">
+<summary>Example solution</summary>
+
+```elixir
+initial_count = 5
+initial_count + high * 5 + low * 2 + normal * 2
+```
+
+You could omit the **normal** cards or allow **high** and **low** cards to balance each other, however if the increment/decrement value changes then your code would break.
+
+</details>
+
+Enter your solution below.
+
+```elixir
+
+```
+
+## Bonus: Determining Card Values
+
+You are dealt three cards of a random value between `1` and `13`. You can use [Enum.random/1](https://hexdocs.pm/elixir/Enum.html#random/1) to generate a random number.
+
+<!-- livebook:{"force_markdown":true} -->
+
+```elixir
+random_card = Enum.random(1..13)
+```
+
+Generate three random cards, use the values of the three randomly generated cards to determine the current count given the initial count is `0`.
+
+<details style="background-color: lightgreen; padding: 1rem; margin: 1rem 0;">
+<summary>Example solution</summary>
+
+```elixir
+random_card1 = Enum.random(1..13)
+random_card2 = Enum.random(1..13)
+random_card3 = Enum.random(1..13)
+
+cards =
+  Enum.map([random_card1, random_card2, random_card3], fn random_card ->
+    cond do
+      random_card <= 6 -> low
+      random_card >= 10 -> high
+      true -> normal
+    end
+  end)
+
+Enum.sum(cards)
+```
+
+You could omit the **normal** cards or allow **high** and **low** cards to balance each other, however if the increment/decrement value changes then your code would break.
+
+</details>
+
+Enter your solution below.
+
+```elixir
+
+```
+
+## Mark As Completed
+
+<!-- livebook:{"attrs":{"source":"file_name = Path.basename(Regex.replace(~r/#.+/, __ENV__.file, \"\"), \".livemd\")\n\nsave_name =\n  case Path.basename(__DIR__) do\n    \"reading\" -> \"card_counting_reading\"\n    \"exercises\" -> \"card_counting_exercise\"\n  end\n\nprogress_path = __DIR__ <> \"/../progress.json\"\nexisting_progress = File.read!(progress_path) |> Jason.decode!()\n\ndefault = Map.get(existing_progress, save_name, false)\n\nform =\n  Kino.Control.form(\n    [\n      completed: input = Kino.Input.checkbox(\"Mark As Completed\", default: default)\n    ],\n    report_changes: true\n  )\n\nTask.async(fn ->\n  for %{data: %{completed: completed}} <- Kino.Control.stream(form) do\n    File.write!(\n      progress_path,\n      Jason.encode!(Map.put(existing_progress, save_name, completed), pretty: true)\n    )\n  end\nend)\n\nform","title":"Track Your Progress"},"chunks":null,"kind":"Elixir.HiddenCell","livebook_object":"smart_cell"} -->
+
+```elixir
+file_name = Path.basename(Regex.replace(~r/#.+/, __ENV__.file, ""), ".livemd")
+
+save_name =
+  case Path.basename(__DIR__) do
+    "reading" -> "card_counting_reading"
+    "exercises" -> "card_counting_exercise"
+  end
+
+progress_path = __DIR__ <> "/../progress.json"
+existing_progress = File.read!(progress_path) |> Jason.decode!()
+
+default = Map.get(existing_progress, save_name, false)
+
+form =
+  Kino.Control.form(
+    [
+      completed: input = Kino.Input.checkbox("Mark As Completed", default: default)
+    ],
+    report_changes: true
+  )
+
+Task.async(fn ->
+  for %{data: %{completed: completed}} <- Kino.Control.stream(form) do
+    File.write!(
+      progress_path,
+      Jason.encode!(Map.put(existing_progress, save_name, completed), pretty: true)
+    )
+  end
+end)
+
+form
+```
+
+## Commit Your Progress
+
+Run the following in your command line from the curriculum folder to track and save your progress in a Git commit.
+Ensure that you do not already have undesired or unrelated changes by running `git status` or by checking the source control tab in Visual Studio Code.
+
+```
+$ git checkout -b card-counting-exercise
+$ git add .
+$ git commit -m "finish card counting exercise"
+$ git push origin card-counting-exercise
+```
+
+Create a pull request from your `card-counting-exercise` branch to your `solutions` branch.
+Please do not create a pull request to the DockYard Academy repository as this will spam our PR tracker.
+
+**DockYard Academy Students Only:**
+
+Notify your instructor by including `@BrooklinJazz` in your PR description to get feedback.
+You (or your instructor) may merge your PR into your solutions branch after review.
+
+If you are interested in joining the next academy cohort, [sign up here](https://academy.dockyard.com/) to receive more news when it is available.
+
+## Up Next
+
+| Previous                                         | Next                                               |
+| ------------------------------------------------ | -------------------------------------------------: |
+| [Fun Formulas](../exercises/fun_formulas.livemd) | [Habit Tracker](../exercises/habit_tracker.livemd) |
+

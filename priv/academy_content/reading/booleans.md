@@ -1,0 +1,383 @@
+%{
+  title: "Booleans"
+}
+---
+# Booleans
+
+```elixir
+Mix.install([
+  {:jason, "~> 1.4"},
+  {:kino, "~> 0.8.0", override: true},
+  {:youtube, github: "brooklinjazz/youtube"},
+  {:hidden_cell, github: "brooklinjazz/hidden_cell"},
+  {:visual, github: "brooklinjazz/visual"}
+])
+```
+
+## Navigation
+
+[Return Home](../start.livemd)<span style="padding: 0 30px"></span>
+[Report An Issue](https://github.com/DockYard-Academy/beta_curriculum/issues/new?assignees=&labels=&template=issue.md&title=)
+
+## Setup
+
+Ensure you type the `ea` keyboard shortcut to evaluate all Elixir cells before starting. Alternatively you can evaluate the Elixir cells as you read.
+
+## Review Questions
+
+Upon completing this lesson, a student should be able to answer the following questions.
+
+* What are booleans, and what information might they represent in a program?
+* What are the boolean operators, and what do they do?
+* What are strict vs non-strict boolean operators?
+* What are `if` statements, and how are they useful in our programs?
+
+## Booleans
+
+Booleans (BOO-LEE-ANS) are `true` and `false` values in your code. They are often useful for
+representing conditions and triggering actions in your program.
+
+<!-- livebook:{"force_markdown":true} -->
+
+```elixir
+true
+false
+```
+
+As part of programming, you'll often create branching paths. Essentially there are multiple things that could happen depending on certain conditions. We often call this **control flow**.
+
+Let's take an example and say we have a program that controls a light.
+Either we can tell the light to power `on` or power `off`. In this case, `on` would be `true` and `off` would be `false`.
+
+<!-- livebook:{"break_markdown":true} -->
+
+```mermaid
+flowchart LR
+  A[is_powered] --> true --> on
+  A[is_powered] --> false --> off
+```
+
+<!-- livebook:{"break_markdown":true} -->
+
+### Your Turn
+
+In the Elixir cell below, turn the power on in our light control program to see the light turn on! Replace `false` with `true`.
+
+<!-- livebook:{"attrs":{"code":"power = false","source":"content = if power, do: \"/images/on.png\", else: \"/images/off.png\"\nKino.Image.new(File.read!(__DIR__ <> content), :png)","title":"Power on!"},"chunks":null,"kind":"Elixir.Visual","livebook_object":"smart_cell"} -->
+
+```elixir
+power = false
+content = if power, do: "/images/on.png", else: "/images/off.png"
+Kino.Image.new(File.read!(__DIR__ <> content), :png)
+```
+
+For more on booleans consider this video by Crash Course Computer Science.
+
+<!-- livebook:{"attrs":{"source":"YouTube.new(\"https://www.youtube.com/watch?v=gI-qXk7XojA\")","title":"Boolean Logic & Logic Gates"},"chunks":null,"kind":"Elixir.HiddenCell","livebook_object":"smart_cell"} -->
+
+```elixir
+YouTube.new("https://www.youtube.com/watch?v=gI-qXk7XojA")
+```
+
+## Boolean Operators
+
+Using the **boolean operators** `and`, `or` and `not` we can compare and manipulate booleans.
+
+<!-- livebook:{"break_markdown":true} -->
+
+### `and`: Check If Two Booleans Are `true`.
+
+Returns `true` if left and right-hand side are true. Returns `false` if either the left side and/or right side of the operator are `false`.
+
+```mermaid
+  flowchart LR
+  A[true] --> C
+  B[true] --> C
+  C[and] --> D[true]
+```
+
+```elixir
+true and true
+```
+
+```elixir
+true and false
+```
+
+```elixir
+false and true
+```
+
+```elixir
+false and false
+```
+
+### `or`: Check If One Or More Booleans Are True.
+
+Returns `true` if either the left side or the right side of the operator are `true`.
+
+<!-- livebook:{"break_markdown":true} -->
+
+```mermaid
+  flowchart LR
+  A[false] --> C
+  B[true] --> C
+  C[or] --> D[true]
+```
+
+```elixir
+true or true
+```
+
+```elixir
+true or false
+```
+
+```elixir
+false or true
+```
+
+```elixir
+false or false
+```
+
+### `not`: Flip A Booleans Value
+
+Flips `false` -> `true` and `true` -> `false`.
+
+```elixir
+not true
+```
+
+```elixir
+not false
+```
+
+## Strict and Non-Strict Operators
+
+`and`, `or`, and `not` are strict boolean operators, meaning they should only be used with booleans, otherwise they will raise an error.
+
+```elixir
+1 and 1
+```
+
+Sometimes we want to make logical comparison using **truthy** and **falsy** values. `nil` and `false` are falsy values, and everything else is a truthy value.
+
+We can use non-strict boolean operators `&&` (and), `||` (or), and `!` (not) to work with truthy and falsy values.
+
+<!-- livebook:{"break_markdown":true} -->
+
+### `&&` Check If Two Values Are Truthy.
+
+Returns the right-hand side value if the left-hand side value is truthy.
+
+```elixir
+1 && 2
+```
+
+Returns the left-hand side value if it is falsy.
+
+```elixir
+nil && 2
+```
+
+```elixir
+false && 2
+```
+
+### `||` Checks If One Or More Values Are Truthy.
+
+Returns the first truthy value on either the left-hand side or the right-hand side.
+
+```elixir
+2 || nil
+```
+
+```elixir
+1 || 2
+```
+
+```elixir
+nil || 2
+```
+
+### `!`: Flips the Falsy Or Truthy Value to `true` Or `false`.
+
+<!-- livebook:{"break_markdown":true} -->
+
+Flips truthy -> `false` and falsy -> `true`.
+
+```elixir
+!1
+```
+
+```elixir
+!nil
+```
+
+## When Should You Use Strict Or Non-strict Operators?
+
+You might wonder why you shouldn't simply always use non-strict operators `&&`, `||`, and `!` since they also work with booleans.
+
+```elixir
+true && true
+```
+
+```elixir
+false || true
+```
+
+```elixir
+!true
+```
+
+The primary reason is communication. We want our code to communicate to other developers, so it's useful to use `and`, `or`, and `not` to communicate to other developers reading our code that we are working with boolean values.
+
+Generally, prefer `and`, `or`, and `not` with booleans, and use `&&`, `||`, and `!` with non-boolean values.
+
+## Control Flow
+
+By comparing booleans, you can create branching paths in your code depending on certain conditions.
+
+For example, let's say we're building a weather app. This app might send morning notifications to users
+to let them know that it's going to be a sunny day.
+
+You might check that the user **is subscribed**, that it **is morning**, and that it
+**is sunny**. If all of these things are true, then we want to send a notification.
+
+<!-- livebook:{"break_markdown":true} -->
+
+```mermaid
+flowchart LR
+  A[is subscribed] --> and
+  B[is morning] --> and
+  C[is sunny] --> and
+  and --> true
+  true --> D[send notification]
+  and --> false
+  false --> E[don't send notification]
+```
+
+<!-- livebook:{"break_markdown":true} -->
+
+We can cleverly use boolean operators to write this logic. Try changing any of the `true` values to `false` and you'll see we no longer simulate sending a notification.
+
+```elixir
+is_subscribed = true
+is_morning = true
+is_sunny = true
+
+is_subscribed and is_morning and is_sunny && "send notification!"
+```
+
+### `if`
+
+Rather than rely on boolean operators entirely, it's more common to use specific control flow structures. For example, we can replicate the code above using [if](https://elixir-lang.org/getting-started/case-cond-and-if.html#if-and-unless) statements.
+
+```elixir
+if is_subscribed and is_morning and is_sunny do
+  "send notification"
+end
+```
+
+### `else`
+
+`if` statements allow use to trigger some code when some condition is truthy. We often use `if` statements in combination with `else` statements to create two separate branching paths in our code.
+
+For example, let's say we're creating a coin flip game. The user provides a `guess` of `:heads` or `:tails`, and we have `coin` flip of `:heads` or `:tails`.
+
+<!-- livebook:{"break_markdown":true} -->
+
+```mermaid
+flowchart LR
+if/else --> c[coin == guess] --true--> w[You win!]
+c --false--> l[You lose!]
+```
+
+<!-- livebook:{"break_markdown":true} -->
+
+Here's how we could write this in code. Try changing `guess` to `:heads` to win the coin flip game.
+
+```elixir
+coin = :heads
+guess = :tails
+
+if coin == guess do
+  "You win!"
+else
+  "You lose!"
+end
+```
+
+## Further Reading
+
+Consider the following resource(s) to deepen your understanding of the topic.
+
+* [Elixir-lang: Booleans](https://elixir-lang.org/getting-started/basic-types.html#booleans)
+
+## Mark As Completed
+
+<!-- livebook:{"attrs":{"source":"file_name = Path.basename(Regex.replace(~r/#.+/, __ENV__.file, \"\"), \".livemd\")\n\nsave_name =\n  case Path.basename(__DIR__) do\n    \"reading\" -> \"booleans_reading\"\n    \"exercises\" -> \"booleans_exercise\"\n  end\n\nprogress_path = __DIR__ <> \"/../progress.json\"\nexisting_progress = File.read!(progress_path) |> Jason.decode!()\n\ndefault = Map.get(existing_progress, save_name, false)\n\nform =\n  Kino.Control.form(\n    [\n      completed: input = Kino.Input.checkbox(\"Mark As Completed\", default: default)\n    ],\n    report_changes: true\n  )\n\nTask.async(fn ->\n  for %{data: %{completed: completed}} <- Kino.Control.stream(form) do\n    File.write!(\n      progress_path,\n      Jason.encode!(Map.put(existing_progress, save_name, completed), pretty: true)\n    )\n  end\nend)\n\nform","title":"Track Your Progress"},"chunks":null,"kind":"Elixir.HiddenCell","livebook_object":"smart_cell"} -->
+
+```elixir
+file_name = Path.basename(Regex.replace(~r/#.+/, __ENV__.file, ""), ".livemd")
+
+save_name =
+  case Path.basename(__DIR__) do
+    "reading" -> "booleans_reading"
+    "exercises" -> "booleans_exercise"
+  end
+
+progress_path = __DIR__ <> "/../progress.json"
+existing_progress = File.read!(progress_path) |> Jason.decode!()
+
+default = Map.get(existing_progress, save_name, false)
+
+form =
+  Kino.Control.form(
+    [
+      completed: input = Kino.Input.checkbox("Mark As Completed", default: default)
+    ],
+    report_changes: true
+  )
+
+Task.async(fn ->
+  for %{data: %{completed: completed}} <- Kino.Control.stream(form) do
+    File.write!(
+      progress_path,
+      Jason.encode!(Map.put(existing_progress, save_name, completed), pretty: true)
+    )
+  end
+end)
+
+form
+```
+
+## Commit Your Progress
+
+Run the following in your command line from the curriculum folder to track and save your progress in a Git commit.
+Ensure that you do not already have undesired or unrelated changes by running `git status` or by checking the source control tab in Visual Studio Code.
+
+```
+$ git checkout -b booleans-reading
+$ git add .
+$ git commit -m "finish booleans reading"
+$ git push origin booleans-reading
+```
+
+Create a pull request from your `booleans-reading` branch to your `solutions` branch.
+Please do not create a pull request to the DockYard Academy repository as this will spam our PR tracker.
+
+**DockYard Academy Students Only:**
+
+Notify your instructor by including `@BrooklinJazz` in your PR description to get feedback.
+You (or your instructor) may merge your PR into your solutions branch after review.
+
+If you are interested in joining the next academy cohort, [sign up here](https://academy.dockyard.com/) to receive more news when it is available.
+
+## Up Next
+
+| Previous                   | Next                                                           |
+| -------------------------- | -------------------------------------------------------------: |
+| [IO](../reading/io.livemd) | [Comparison Operators](../reading/comparison_operators.livemd) |
+

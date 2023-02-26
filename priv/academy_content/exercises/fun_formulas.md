@@ -1,0 +1,224 @@
+%{
+  title: "Fun Formulas"
+}
+---
+# Fun Formulas
+
+```elixir
+Mix.install([
+  {:jason, "~> 1.4"},
+  {:kino, "~> 0.8.0", override: true},
+  {:youtube, github: "brooklinjazz/youtube"},
+  {:hidden_cell, github: "brooklinjazz/hidden_cell"}
+])
+```
+
+## Navigation
+
+[Return Home](../start.livemd)<span style="padding: 0 30px"></span>
+[Report An Issue](https://github.com/DockYard-Academy/beta_curriculum/issues/new?assignees=&labels=&template=issue.md&title=)
+
+## Setup
+
+Ensure you type the `ea` keyboard shortcut to evaluate all Elixir cells before starting. Alternatively you can evaluate the Elixir cells as you read.
+
+## Fun Formulas
+
+As developers, it's our job to translate business requirements into something that the computer understands.
+
+These exercises will have you convert a common formula into an Elixir program.
+
+## Loading Bar Percentage
+
+We often need to display loading bars to the user. Loading bars use the current **percentage** they have finished loading in order to display the loading progress.
+
+You can calculate the percentage with $\frac{actual\ value}{total\ value}\times100$
+
+For example if we complete `7` out of `10` items, we would be `70.0%` complete.
+
+<!-- livebook:{"force_markdown":true} -->
+
+```elixir
+7 / 10 # 70.0
+```
+
+Use arithmetic operators to determine the **percentage** given we have completed `12` out of `42` items.
+
+<details style="background-color: lightgreen; padding: 1rem; margin: 1rem 0;">
+<summary>Example solution</summary>
+
+```elixir
+actual = 12
+total = 42
+
+actual / total
+```
+
+</details>
+
+Enter your solution below.
+
+```elixir
+
+```
+
+## Rocket Ship
+
+We're building a rocket ship app to teach people about physics.
+
+Users can enter the `mass` and `acceleration` of a ship to visualize the `force` generated.
+
+Given that ${mass} * {acceleration} = force$, calculate the force when mass is `10` and acceleration is `50`.
+
+<details style="background-color: lightgreen; padding: 1rem; margin: 1rem 0;">
+<summary>Example solution</summary>
+
+```elixir
+mass = 10
+acceleration = 50
+
+mass * acceleration
+```
+
+</details>
+
+Enter your solution below.
+
+```elixir
+
+```
+
+## What Do You Tip?
+
+It's common in many cultures to leave a tip whenever you buy a meal. It's common to calculate the tip as a percentage of the meal.
+
+Given the initial cost of a meal is `20`, and you want to leave a `15%` tip, use arithmetic operators to determine the total cost of the meal.
+
+<details style="background-color: lightgreen; padding: 1rem; margin: 1rem 0;">
+<summary>Example solution</summary>
+
+```elixir
+initial_cost = 20
+tip_percent = 1.15
+
+initial_cost * tip_percent
+```
+
+</details>
+
+Enter your solution below.
+
+```elixir
+
+```
+
+## Pythagorean Theorum
+
+To calculate the longest side of a triangle we use $a^2 + b^2 = c^2$
+
+Given a triangle where side $a$ is `4`, and side $b$ is `10`, calculate $c^2$
+
+<details style="background-color: lightgreen; padding: 1rem; margin: 1rem 0;">
+<summary>Example solution</summary>
+
+```elixir
+a = 4
+b = 10
+
+a ** 2 + b ** 2
+```
+
+</details>
+
+Enter your solution below.
+
+```elixir
+
+```
+
+## Bonus: Square Root
+
+Earlier we calculated $c^2$ for pythagoream theorum. Given $c^2$ is `116` determine the square root of $c^2$ to calculate $c$.
+
+<details style="background-color: lightgreen; padding: 1rem; margin: 1rem 0;">
+<summary>Example solution</summary>
+
+```elixir
+c_squared = 116
+:math.sqrt(c_squared)
+```
+
+</details>
+
+Enter your solution below.
+
+```elixir
+
+```
+
+## Mark As Completed
+
+<!-- livebook:{"attrs":{"source":"file_name = Path.basename(Regex.replace(~r/#.+/, __ENV__.file, \"\"), \".livemd\")\n\nsave_name =\n  case Path.basename(__DIR__) do\n    \"reading\" -> \"fun_formulas_reading\"\n    \"exercises\" -> \"fun_formulas_exercise\"\n  end\n\nprogress_path = __DIR__ <> \"/../progress.json\"\nexisting_progress = File.read!(progress_path) |> Jason.decode!()\n\ndefault = Map.get(existing_progress, save_name, false)\n\nform =\n  Kino.Control.form(\n    [\n      completed: input = Kino.Input.checkbox(\"Mark As Completed\", default: default)\n    ],\n    report_changes: true\n  )\n\nTask.async(fn ->\n  for %{data: %{completed: completed}} <- Kino.Control.stream(form) do\n    File.write!(\n      progress_path,\n      Jason.encode!(Map.put(existing_progress, save_name, completed), pretty: true)\n    )\n  end\nend)\n\nform","title":"Track Your Progress"},"chunks":null,"kind":"Elixir.HiddenCell","livebook_object":"smart_cell"} -->
+
+```elixir
+file_name = Path.basename(Regex.replace(~r/#.+/, __ENV__.file, ""), ".livemd")
+
+save_name =
+  case Path.basename(__DIR__) do
+    "reading" -> "fun_formulas_reading"
+    "exercises" -> "fun_formulas_exercise"
+  end
+
+progress_path = __DIR__ <> "/../progress.json"
+existing_progress = File.read!(progress_path) |> Jason.decode!()
+
+default = Map.get(existing_progress, save_name, false)
+
+form =
+  Kino.Control.form(
+    [
+      completed: input = Kino.Input.checkbox("Mark As Completed", default: default)
+    ],
+    report_changes: true
+  )
+
+Task.async(fn ->
+  for %{data: %{completed: completed}} <- Kino.Control.stream(form) do
+    File.write!(
+      progress_path,
+      Jason.encode!(Map.put(existing_progress, save_name, completed), pretty: true)
+    )
+  end
+end)
+
+form
+```
+
+## Commit Your Progress
+
+Run the following in your command line from the curriculum folder to track and save your progress in a Git commit.
+Ensure that you do not already have undesired or unrelated changes by running `git status` or by checking the source control tab in Visual Studio Code.
+
+```
+$ git checkout -b fun-formulas-exercise
+$ git add .
+$ git commit -m "finish fun formulas exercise"
+$ git push origin fun-formulas-exercise
+```
+
+Create a pull request from your `fun-formulas-exercise` branch to your `solutions` branch.
+Please do not create a pull request to the DockYard Academy repository as this will spam our PR tracker.
+
+**DockYard Academy Students Only:**
+
+Notify your instructor by including `@BrooklinJazz` in your PR description to get feedback.
+You (or your instructor) may merge your PR into your solutions branch after review.
+
+If you are interested in joining the next academy cohort, [sign up here](https://academy.dockyard.com/) to receive more news when it is available.
+
+## Up Next
+
+| Previous                                           | Next                                               |
+| -------------------------------------------------- | -------------------------------------------------: |
+| [Match Operator](../reading/match_operator.livemd) | [Card Counting](../exercises/card_counting.livemd) |
+

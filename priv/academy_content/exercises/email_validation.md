@@ -1,0 +1,165 @@
+%{
+  title: "Email Validation"
+}
+---
+# Email Validation
+
+```elixir
+Mix.install([
+  {:jason, "~> 1.4"},
+  {:kino, "~> 0.8.0", override: true},
+  {:youtube, github: "brooklinjazz/youtube"},
+  {:hidden_cell, github: "brooklinjazz/hidden_cell"}
+])
+```
+
+## Navigation
+
+[Return Home](../start.livemd)<span style="padding: 0 30px"></span>
+[Report An Issue](https://github.com/DockYard-Academy/beta_curriculum/issues/new?assignees=&labels=&template=issue.md&title=)
+
+## Email Validation
+
+Most applications and websites with users have a sign up form with an email input.
+
+Generally, we validate this input to ensure that users enter a valid email.
+
+You are going to build an `Email.validate/1` function which checks if an email address is valid or not.
+
+<!-- livebook:{"force_markdown":true} -->
+
+```elixir
+Email.valid?("mail@mail.com")
+true
+
+Email.valid?("mail.com")
+false
+```
+
+For the sake of this exercise, an email is valid if it is in the format `string@string.string`. Be aware, this is not sufficient for true email validation where not all characters are allowed.
+
+<details style="background-color: burlywood; padding: 1rem; margin: 1rem 0;">
+<summary>Hint</summary>
+
+Consider using [Regex.match/2](https://hexdocs.pm/elixir/Regex.html#match/2).
+
+</details>
+
+<details style="background-color: lightgreen; padding: 1rem; margin: 1rem 0;">
+<summary>Example Solution</summary>
+
+```elixir
+defmodule Email do
+  def valid?(email) do
+    Regex.match?(~r/\w+\@\w+\.\w+/, email)
+  end
+end
+```
+
+</details>
+
+Implement the `Email` module as documented.
+
+```elixir
+defmodule Email do
+  @moduledoc """
+  Documentation for `Email`
+  """
+
+  @doc """
+  Checks if an email is valid.
+
+  ## Examples
+
+    iex> Email.valid?("mail@mail.com")
+    true
+
+    iex> Email.valid?("string@string.string")
+    true
+
+    iex> Email.valid?("string")
+    false
+
+    iex> Email.valid?(".string")
+    false
+
+    iex> Email.valid?("string.string")
+    false
+
+    iex> Email.valid?("string@string")
+    false
+
+    iex> Email.valid?("string@string.")
+    false
+  """
+  def valid?(email) do
+  end
+end
+```
+
+## Mark As Completed
+
+<!-- livebook:{"attrs":{"source":"file_name = Path.basename(Regex.replace(~r/#.+/, __ENV__.file, \"\"), \".livemd\")\n\nsave_name =\n  case Path.basename(__DIR__) do\n    \"reading\" -> \"email_validation_reading\"\n    \"exercises\" -> \"email_validation_exercise\"\n  end\n\nprogress_path = __DIR__ <> \"/../progress.json\"\nexisting_progress = File.read!(progress_path) |> Jason.decode!()\n\ndefault = Map.get(existing_progress, save_name, false)\n\nform =\n  Kino.Control.form(\n    [\n      completed: input = Kino.Input.checkbox(\"Mark As Completed\", default: default)\n    ],\n    report_changes: true\n  )\n\nTask.async(fn ->\n  for %{data: %{completed: completed}} <- Kino.Control.stream(form) do\n    File.write!(\n      progress_path,\n      Jason.encode!(Map.put(existing_progress, save_name, completed), pretty: true)\n    )\n  end\nend)\n\nform","title":"Track Your Progress"},"chunks":null,"kind":"Elixir.HiddenCell","livebook_object":"smart_cell"} -->
+
+```elixir
+file_name = Path.basename(Regex.replace(~r/#.+/, __ENV__.file, ""), ".livemd")
+
+save_name =
+  case Path.basename(__DIR__) do
+    "reading" -> "email_validation_reading"
+    "exercises" -> "email_validation_exercise"
+  end
+
+progress_path = __DIR__ <> "/../progress.json"
+existing_progress = File.read!(progress_path) |> Jason.decode!()
+
+default = Map.get(existing_progress, save_name, false)
+
+form =
+  Kino.Control.form(
+    [
+      completed: input = Kino.Input.checkbox("Mark As Completed", default: default)
+    ],
+    report_changes: true
+  )
+
+Task.async(fn ->
+  for %{data: %{completed: completed}} <- Kino.Control.stream(form) do
+    File.write!(
+      progress_path,
+      Jason.encode!(Map.put(existing_progress, save_name, completed), pretty: true)
+    )
+  end
+end)
+
+form
+```
+
+## Commit Your Progress
+
+Run the following in your command line from the curriculum folder to track and save your progress in a Git commit.
+Ensure that you do not already have undesired or unrelated changes by running `git status` or by checking the source control tab in Visual Studio Code.
+
+```
+$ git checkout -b email-validation-exercise
+$ git add .
+$ git commit -m "finish email validation exercise"
+$ git push origin email-validation-exercise
+```
+
+Create a pull request from your `email-validation-exercise` branch to your `solutions` branch.
+Please do not create a pull request to the DockYard Academy repository as this will spam our PR tracker.
+
+**DockYard Academy Students Only:**
+
+Notify your instructor by including `@BrooklinJazz` in your PR description to get feedback.
+You (or your instructor) may merge your PR into your solutions branch after review.
+
+If you are interested in joining the next academy cohort, [sign up here](https://academy.dockyard.com/) to receive more news when it is available.
+
+## Up Next
+
+| Previous                         | Next                                               |
+| -------------------------------- | -------------------------------------------------: |
+| [Regex](../reading/regex.livemd) | [Caesar Cypher](../exercises/caesar_cypher.livemd) |
+

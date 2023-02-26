@@ -1,0 +1,176 @@
+%{
+  title: "Rock Paper Scissors Lizard Spock"
+}
+---
+# Rock Paper Scissors Lizard Spock
+
+```elixir
+Mix.install([
+  {:jason, "~> 1.4"},
+  {:kino, "~> 0.8.0", override: true},
+  {:youtube, github: "brooklinjazz/youtube"},
+  {:hidden_cell, github: "brooklinjazz/hidden_cell"}
+])
+```
+
+## Navigation
+
+[Return Home](../start.livemd)<span style="padding: 0 30px"></span>
+[Report An Issue](https://github.com/DockYard-Academy/beta_curriculum/issues/new?assignees=&labels=&template=issue.md&title=)
+
+## Rock Paper Scissors Lizard Spock
+
+<!-- livebook:{"attrs":{"source":"YouTube.new(\"https://www.youtube.com/watch?v=_PUEoDYpUyQ\")","title":"Rock Paper Scissors Lizard Spock. A Brief Introduction."},"chunks":null,"kind":"Elixir.HiddenCell","livebook_object":"smart_cell"} -->
+
+```elixir
+YouTube.new("https://www.youtube.com/watch?v=_PUEoDYpUyQ")
+```
+
+You're going to create a Rock Paper Scissors Lizard Spock game. Rock Paper Scissors Lizard Spock is a more complex adaptation of Rock Paper Scissors.
+
+The rules start the same as normal rock paper scissors.
+
+* Rock beats Scissors.
+* Paper beats Rock.
+* Scissors beats Paper.
+
+Then we add the following extra rules
+
+* Rock beats Lizard.
+* Lizard beats Spock.
+* Spock beats Scissors.
+* Scissors beats Lizard.
+* Lizard beats Paper.
+* Paper beats Spock.
+* Spock beats Rock.
+
+We'll represent these choices as atoms `:rock, :paper, :scissors, :lizard, :spock`.
+
+1. Create a `beats?/2` function which determines if once choice beats another.
+
+<!-- livebook:{"force_markdown":true} -->
+
+```elixir
+RockPaperScissorsLizardSpock.beats?(:rock, :lizard) # true
+```
+
+1. Create a `play/2` function which determines if player 1 or player 2 won the game.
+
+<!-- livebook:{"force_markdown":true} -->
+
+```elixir
+RockPaperScissorsLizardSpock.play(:rock, :lizard) # "Player 1 Wins!"
+RockPaperScissorsLizardSpock.play(:lizard, :rock) # "Player 1 Wins!"
+RockPaperScissorsLizardSpock.play(:lizard, :lizard) # "Draw!"
+```
+
+Implement the `RockPaperScissorsLizardSpock` module as documented.
+
+```elixir
+defmodule RockPaperScissorsLizardSpock do
+  @moduledoc """
+  Rock Paper Scissors Lizard Spock Game
+  """
+
+  @doc """
+  Returns `true` if the first guess beats the second, and `false` otherwise.
+
+  ## Winning Examples
+
+    iex> RockPaperScissorsLizardSpock.beats?(:rock, :lizard)
+    true
+
+    iex> RockPaperScissorsLizardSpock.beats?(:lizard, :rock)
+    false
+
+    iex> RockPaperScissorsLizardSpock.beats?(:rock, :rock)
+    false
+  """
+  def beats?(guess1, guess2) do
+  end
+
+  @doc """
+  Return "Player 1 Wins!", "Player 2 Wins!", or "Draw" depending on which player guess won.
+
+  ## Examples
+
+    iex> RockPaperScissorsLizardSpock.play(:rock, :lizard)
+    "Player 1 Wins!"
+
+    iex> RockPaperScissorsLizardSpock.play(:lizard, :rock)
+    "Player 2 Wins!"
+
+    iex> RockPaperScissorsLizardSpock.play(:lizard, :lizard)
+    "Draw"
+  """
+  def play(player1, player2) do
+  end
+end
+```
+
+## Mark As Completed
+
+<!-- livebook:{"attrs":{"source":"file_name = Path.basename(Regex.replace(~r/#.+/, __ENV__.file, \"\"), \".livemd\")\n\nsave_name =\n  case Path.basename(__DIR__) do\n    \"reading\" -> \"rock_paper_scissors_lizard_spock_reading\"\n    \"exercises\" -> \"rock_paper_scissors_lizard_spock_exercise\"\n  end\n\nprogress_path = __DIR__ <> \"/../progress.json\"\nexisting_progress = File.read!(progress_path) |> Jason.decode!()\n\ndefault = Map.get(existing_progress, save_name, false)\n\nform =\n  Kino.Control.form(\n    [\n      completed: input = Kino.Input.checkbox(\"Mark As Completed\", default: default)\n    ],\n    report_changes: true\n  )\n\nTask.async(fn ->\n  for %{data: %{completed: completed}} <- Kino.Control.stream(form) do\n    File.write!(\n      progress_path,\n      Jason.encode!(Map.put(existing_progress, save_name, completed), pretty: true)\n    )\n  end\nend)\n\nform","title":"Track Your Progress"},"chunks":null,"kind":"Elixir.HiddenCell","livebook_object":"smart_cell"} -->
+
+```elixir
+file_name = Path.basename(Regex.replace(~r/#.+/, __ENV__.file, ""), ".livemd")
+
+save_name =
+  case Path.basename(__DIR__) do
+    "reading" -> "rock_paper_scissors_lizard_spock_reading"
+    "exercises" -> "rock_paper_scissors_lizard_spock_exercise"
+  end
+
+progress_path = __DIR__ <> "/../progress.json"
+existing_progress = File.read!(progress_path) |> Jason.decode!()
+
+default = Map.get(existing_progress, save_name, false)
+
+form =
+  Kino.Control.form(
+    [
+      completed: input = Kino.Input.checkbox("Mark As Completed", default: default)
+    ],
+    report_changes: true
+  )
+
+Task.async(fn ->
+  for %{data: %{completed: completed}} <- Kino.Control.stream(form) do
+    File.write!(
+      progress_path,
+      Jason.encode!(Map.put(existing_progress, save_name, completed), pretty: true)
+    )
+  end
+end)
+
+form
+```
+
+## Commit Your Progress
+
+Run the following in your command line from the curriculum folder to track and save your progress in a Git commit.
+Ensure that you do not already have undesired or unrelated changes by running `git status` or by checking the source control tab in Visual Studio Code.
+
+```
+$ git checkout -b rock-paper-scissors-lizard-spock-exercise
+$ git add .
+$ git commit -m "finish rock paper scissors lizard spock exercise"
+$ git push origin rock-paper-scissors-lizard-spock-exercise
+```
+
+Create a pull request from your `rock-paper-scissors-lizard-spock-exercise` branch to your `solutions` branch.
+Please do not create a pull request to the DockYard Academy repository as this will spam our PR tracker.
+
+**DockYard Academy Students Only:**
+
+Notify your instructor by including `@BrooklinJazz` in your PR description to get feedback.
+You (or your instructor) may merge your PR into your solutions branch after review.
+
+If you are interested in joining the next academy cohort, [sign up here](https://academy.dockyard.com/) to receive more news when it is available.
+
+## Up Next
+
+| Previous                             | Next                                             |
+| ------------------------------------ | -----------------------------------------------: |
+| [Structs](../reading/structs.livemd) | [RPG Dialogue](../exercises/rpg_dialogue.livemd) |
+

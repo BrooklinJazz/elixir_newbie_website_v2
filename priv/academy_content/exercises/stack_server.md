@@ -1,0 +1,258 @@
+%{
+  title: "Stack Server"
+}
+---
+# Stack Server
+
+```elixir
+Mix.install([
+  {:jason, "~> 1.4"},
+  {:kino, "~> 0.8.0", override: true},
+  {:youtube, github: "brooklinjazz/youtube"},
+  {:hidden_cell, github: "brooklinjazz/hidden_cell"}
+])
+```
+
+## Navigation
+
+[Return Home](../start.livemd)<span style="padding: 0 30px"></span>
+[Report An Issue](https://github.com/DockYard-Academy/beta_curriculum/issues/new?assignees=&labels=&template=issue.md&title=)
+
+## Stack
+
+A [stack](https://en.wikipedia.org/wiki/Stack_(abstract_data_type)) is a data structure which can push elements onto the top of the stack and pop them off of the top of the stack.
+We're going to create a `Stack` process which stores a stack as a list of elements in it's state. We should be able to send a `{:push, element}` message and a `:pop` message
+to add and remove elements from the beginning of the list.
+
+The `{:push, element}` message should add an element onto the stack, and return the current state.
+
+<!-- livebook:{"force_markdown":true} -->
+
+```elixir
+{:ok, stack_pid} = GenServer.start_link(Stack, [])
+
+GenServer.call(stack_pid, {:push, 1})
+[1]
+
+GenServer.call(stack_pid, {:push, 2})
+[2, 1]
+```
+
+The `:pop` message should remove an element from the stack and return the removed element.
+
+<!-- livebook:{"force_markdown":true} -->
+
+```elixir
+2 = GenServer.call(stack_pid, :pop)
+
+[1] = :sys.get_state(stack_pid)
+
+1 = GenServer.call(stack_pid, :pop)
+
+[] = :sys.get_state(stack_pid)
+```
+
+<details style="background-color: lightgreen; padding: 1rem; margin: 1rem 0;">
+<summary>Example Solution</summary>
+
+```elixir
+defmodule Stack do
+  use GenServer
+
+  def start_link(_opts) do
+    GenServer.start_link(__MODULE__, [])
+  end
+
+  def push(stack_pid, element) do
+    GenServer.call(stack_pid, {:push, element})
+  end
+
+  def pop(stack_pid) do
+    GenServer.call(stack_pid, :pop)
+  end
+
+  def init(_opts) do
+    {:ok, []}
+  end
+
+  def handle_call({:push, element}, _from, state) do
+    new_state = [element | state]
+    {:reply, new_state, new_state}
+  end
+
+  def handle_call(:pop, _from, state) do
+    [head | tail] = state
+    {:reply, head, tail}
+  end
+end
+```
+
+</details>
+
+Implement the `Stack` module below. You do not need to handle `:pop`-ing an element from an empty stack.
+
+Consider starting with the `handle_call/3` callback functions, then implement the client API functions `Stack.push/2` and `Stack.pop/1`.
+
+```elixir
+defmodule Stack do
+  use GenServer
+
+  @doc """
+  Start the `Stack` process.
+
+  ## Examples
+
+      iex> {:ok, pid} = Stack.start_link([])
+  """
+  def start_link(_opts) do
+  end
+
+  @doc """
+  Synchronously push an element onto the top of the `Stack`. Return the current stack.
+
+  ## Examples
+
+      iex> {:ok, pid} = Stack.start_link([])
+      iex> Stack.push(pid, 1)
+      [1]
+      iex> Stack.push(pid, 2)
+      [2, 1]
+      iex> Stack.push(pid, 3)
+      [3, 2, 1]
+  """
+  def push(stack_pid, element) do
+  end
+
+  @doc """
+  Pop an element from the top of the `Stack`.
+
+  ## Examples
+
+      iex> {:ok, pid} = Stack.start_link([])
+      iex> Stack.push(pid, 1)
+      iex> Stack.push(pid, 2)
+      iex> Stack.push(pid, 3)
+      iex> Stack.pop(pid)
+      3
+      iex> Stack.pop(pid)
+      2
+      iex> Stack.pop(pid)
+      1
+  """
+  def pop(stack_pid) do
+  end
+
+  @doc """
+  Necessary callback function to start the `Stack` process.
+
+  ## Examples
+
+      iex> {:ok, pid} = GenServer.start_link(Stack, []) 
+  """
+  def init(_opts) do
+  end
+
+  @doc """
+  Callback function to add an element onto the top of the `Stack`.
+
+  ## Examples
+
+      iex> {:ok, pid} = GenServer.start_link(Stack, [])
+      iex> GenServer.call(pid, {:push, 1})
+      [1]
+      iex> GenServer.call(pid, {:push, 2})
+      [2, 1]
+      iex> GenServer.call(pid, {:push, 3})
+      [3, 2, 1]
+  """
+  def handle_call({:push, element}, _from, state) do
+  end
+
+  @doc """
+  Callback function to pop an element off of the top of the `Stack`.
+  You do not need to handle popping when a stack is empty.
+
+  ## Examples
+
+      iex> {:ok, pid} = GenServer.start_link(Stack, [])
+      iex> GenServer.call(pid, {:push, 1})
+      iex> GenServer.call(pid, {:push, 2})
+      iex> GenServer.call(pid, {:push, 3})
+      iex> GenServer.call(pid, :pop)
+      3
+      iex> GenServer.call(pid, :pop)
+      2
+      iex> GenServer.call(pid, :pop)
+      1
+  """
+  def handle_call(:pop, _from, state) do
+  end
+end
+```
+
+## Mark As Completed
+
+<!-- livebook:{"attrs":{"source":"file_name = Path.basename(Regex.replace(~r/#.+/, __ENV__.file, \"\"), \".livemd\")\n\nsave_name =\n  case Path.basename(__DIR__) do\n    \"reading\" -> \"stack_server_reading\"\n    \"exercises\" -> \"stack_server_exercise\"\n  end\n\nprogress_path = __DIR__ <> \"/../progress.json\"\nexisting_progress = File.read!(progress_path) |> Jason.decode!()\n\ndefault = Map.get(existing_progress, save_name, false)\n\nform =\n  Kino.Control.form(\n    [\n      completed: input = Kino.Input.checkbox(\"Mark As Completed\", default: default)\n    ],\n    report_changes: true\n  )\n\nTask.async(fn ->\n  for %{data: %{completed: completed}} <- Kino.Control.stream(form) do\n    File.write!(\n      progress_path,\n      Jason.encode!(Map.put(existing_progress, save_name, completed), pretty: true)\n    )\n  end\nend)\n\nform","title":"Track Your Progress"},"chunks":null,"kind":"Elixir.HiddenCell","livebook_object":"smart_cell"} -->
+
+```elixir
+file_name = Path.basename(Regex.replace(~r/#.+/, __ENV__.file, ""), ".livemd")
+
+save_name =
+  case Path.basename(__DIR__) do
+    "reading" -> "stack_server_reading"
+    "exercises" -> "stack_server_exercise"
+  end
+
+progress_path = __DIR__ <> "/../progress.json"
+existing_progress = File.read!(progress_path) |> Jason.decode!()
+
+default = Map.get(existing_progress, save_name, false)
+
+form =
+  Kino.Control.form(
+    [
+      completed: input = Kino.Input.checkbox("Mark As Completed", default: default)
+    ],
+    report_changes: true
+  )
+
+Task.async(fn ->
+  for %{data: %{completed: completed}} <- Kino.Control.stream(form) do
+    File.write!(
+      progress_path,
+      Jason.encode!(Map.put(existing_progress, save_name, completed), pretty: true)
+    )
+  end
+end)
+
+form
+```
+
+## Commit Your Progress
+
+Run the following in your command line from the curriculum folder to track and save your progress in a Git commit.
+Ensure that you do not already have undesired or unrelated changes by running `git status` or by checking the source control tab in Visual Studio Code.
+
+```
+$ git checkout -b stack-server-exercise
+$ git add .
+$ git commit -m "finish stack server exercise"
+$ git push origin stack-server-exercise
+```
+
+Create a pull request from your `stack-server-exercise` branch to your `solutions` branch.
+Please do not create a pull request to the DockYard Academy repository as this will spam our PR tracker.
+
+**DockYard Academy Students Only:**
+
+Notify your instructor by including `@BrooklinJazz` in your PR description to get feedback.
+You (or your instructor) may merge your PR into your solutions branch after review.
+
+If you are interested in joining the next academy cohort, [sign up here](https://academy.dockyard.com/) to receive more news when it is available.
+
+## Up Next
+
+| Previous                                           | Next                                                             |
+| -------------------------------------------------- | ---------------------------------------------------------------: |
+| [Generic Server](../reading/generic_server.livemd) | [Traffic Light Server](../exercises/traffic_light_server.livemd) |
+

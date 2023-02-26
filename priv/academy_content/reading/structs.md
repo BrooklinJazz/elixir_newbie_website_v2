@@ -1,0 +1,377 @@
+%{
+  title: "Structs"
+}
+---
+# Structs
+
+```elixir
+Mix.install([
+  {:jason, "~> 1.4"},
+  {:kino, "~> 0.8.0", override: true},
+  {:youtube, github: "brooklinjazz/youtube"},
+  {:hidden_cell, github: "brooklinjazz/hidden_cell"}
+])
+```
+
+## Navigation
+
+[Return Home](../start.livemd)<span style="padding: 0 30px"></span>
+[Report An Issue](https://github.com/DockYard-Academy/beta_curriculum/issues/new?assignees=&labels=&template=issue.md&title=)
+
+## Setup
+
+Ensure you type the `ea` keyboard shortcut to evaluate all Elixir cells before starting. Alternatively you can evaluate the Elixir cells as you read.
+
+## Review Questions
+
+Upon completing this lesson, a student should be able to answer the following questions.
+
+* How do you use a struct to structure data?
+* Why might you use a struct vs a map?
+* How do you manipulate and access values in a struct?
+
+## Structs
+
+We've learned how to abstract behavior in our programs, but what about data?
+
+It's often useful to be able to create a custom data structure. That's what structs are for.
+**Struct** is simply a short word for structure. They are an extension on top of maps that enforce
+constraints on your data.
+
+<!-- livebook:{"break_markdown":true} -->
+
+### Defining A Struct
+
+We use the `defstruct` keyword to define the allowed keys in our struct. Instances of the struct will not be allowed to contain any data other than these keys.
+
+Here's an example struct called `StructName`. The name `StructName` could be any valid module name. We define `:key1`, `:key2`, and `:key3` keys for the struct. Keys in a struct should always be atoms, but they can be any valid atom.
+
+```elixir
+defmodule StructName do
+  defstruct [:key1, :key2, :key3]
+end
+```
+
+You'll notice that structs definitions are created inside of a module. We then use the module name to create an instance of the struct.
+
+Keep in mind, the **struct definition** in the module is like the blueprint to a house. It contains the plans, but it's not the actual physical building.
+
+Similarly, the **struct instance** is the actual instance of the struct. It's one instance of actual struct data as defined by the struct definition.
+
+We can create an instance of as struct using `%StructName{}` syntax. This looks similar to a map, because structs are actually implemented using maps under the hood.
+
+```elixir
+%StructName{}
+```
+
+You'll notice that the struct has a name key, but no value since we didn't provide anything.
+
+Here's how you can pass in a value for a given key.
+
+```elixir
+%StructName{key1: "value 1"}
+```
+
+We can pass in values for any or all of our keys.
+
+```elixir
+%StructName{key1: "value 1", key2: "value 2", key2: "value 2"}
+```
+
+If we provide an invalid value, our struct instance will raise a [KeyError](https://hexdocs.pm/elixir/KeyError.html).
+
+```elixir
+%StructName{invalid_key: "invalid key value"}
+```
+
+This enforcement of data shape is why we might want to use a struct instead of a map, which does not enforce which keys must be present.
+
+## Default Values
+
+By providing struct keys as a keyword list, we can define default values for the key.
+
+```elixir
+defmodule DefaultKeys do
+  defstruct key1: "default1", key2: "default2"
+end
+```
+
+The key will have the default value if we don't provide it to the instance of our struct.
+
+```elixir
+%DefaultKeys{}
+```
+
+Or we can override the default value like so.
+
+```elixir
+%DefaultKeys{key1: "OVERRIDE!"}
+```
+
+Structs can have keys with and without a default value.
+
+```elixir
+defmodule SomeDefaults do
+  defstruct [:key2, key1: "default"]
+end
+```
+
+```elixir
+%SomeDefaults{}
+```
+
+Default keys must come last in the list of struct keys otherwise Elixir will raise a [SyntaxError](https://hexdocs.pm/elixir/SyntaxError.html).
+
+```elixir
+defmodule BadDefaults do
+  defstruct [key1: "default", :key2]
+end
+```
+
+## Enforce Keys
+
+It's common to validate data in a struct. For example, you can use the `@enforce_keys`
+module attribute to enforce that certain keys are set.
+
+```elixir
+defmodule EnforcedNamePerson do
+  @enforce_keys [:name]
+  defstruct [:name]
+end
+```
+
+Creating an instance of `EnforcedNamePerson` without passing the enforced `:name` key a value will cause the struct instance to raise an error.
+
+```elixir
+%EnforcedNamePerson{}
+```
+
+To avoid repetition, we can use the `@enforce_keys` module attribute in the `defstruct` definition, and add any non-enforced keys using `++`.
+
+```elixir
+defmodule EnforcedNamePersonWithAge do
+  @enforce_keys [:name]
+  defstruct @enforce_keys ++ [:age]
+end
+```
+
+### Your Turn
+
+Define a `Coordinate` struct which must have `:x` and `:y` keys. Enforce these keys.
+
+<details style="background-color: lightgreen; padding: 1rem; margin: 1rem 0;">
+<summary>Example solution</summary>
+
+```elixir
+defmodule Coordinate do
+  @enforce_keys [:x, :y]
+  defstruct @enforce_keys
+end
+```
+
+</details>
+
+Enter your solution below.
+
+```elixir
+
+```
+
+## Module Functions
+
+A module that defines a struct can contain functions just like a normal module.
+
+```elixir
+defmodule Person do
+  defstruct [:name]
+
+  def greet(person) do
+    "Hello, #{person.name}."
+  end
+end
+```
+
+```elixir
+person = %Person{name: "Peter"}
+
+Person.greet(person)
+```
+
+### Your Turn
+
+* Define a new struct `Hero`.
+* A `Hero` will have a `:name` and `:secret_identity`.
+
+<!-- livebook:{"force_markdown":true} -->
+
+```elixir
+hero = %Hero{
+  name: "Spider-Man",
+  secret_identity: "Peter Parker"
+}
+```
+
+* Create a `Hero.greeting/1` function which uses the `hero` struct instance and return a greeting.
+
+<!-- livebook:{"force_markdown":true} -->
+
+```elixir
+Hero.greeting(hero) 
+"I am Spider-Man."
+```
+
+* Create a `Hero.reveal/1` function which accepts the `hero` struct instance and reveals the hero's secret identity.
+
+<!-- livebook:{"force_markdown":true} -->
+
+```elixir
+Hero.reveal(hero) 
+"I am Peter Parker."
+```
+
+<details style="background-color: lightgreen; padding: 1rem; margin: 1rem 0;">
+<summary>Example solution</summary>
+
+```elixir
+defmodule Hero do
+  defstruct [:name, :secret_identity]
+
+  def greeting(hero) do
+    "I am #{hero.name}."
+  end
+
+  def reveal(hero) do
+    "I am #{hero.secret_identity}."
+  end
+end
+```
+
+</details>
+
+Enter your solution below.
+
+```elixir
+
+```
+
+When finished create bind a variable `hero` to an instance of your `Hero` struct.
+
+```elixir
+
+```
+
+Use the `Hero.greeting/1` function on `hero` to ensure it works correctly.
+
+```elixir
+
+```
+
+Use the `Hero.reveal/1` function on `hero` to ensure it works correctly.
+
+```elixir
+
+```
+
+## Manipulating Structs
+
+Structs are an extension of maps under the hood, so you can use the same map update syntax.
+
+```elixir
+defmodule MyStruct do
+  defstruct [:key]
+end
+```
+
+```elixir
+initial = %MyStruct{key: "value"}
+updated = %{initial | key: "new value"}
+```
+
+You can also access values using dot notation.
+
+```elixir
+instance = %MyStruct{key: "value"}
+
+instance.key
+```
+
+However, we can't use square bracket notation. That makes sense, since a struct instance should always have the keys the struct definition defines.
+
+```elixir
+instance[:key]
+```
+
+## Further Reading
+
+Consider the following resource(s) to deepen your understanding of the topic.
+
+* [The Elixir Documentation: Structs](https://elixir-lang.org/getting-started/structs.html)
+* [Elixir School: Structs](https://elixirschool.com/en/lessons/basics/modules#structs-2)
+* [Exercism: Structs](https://exercism.org/tracks/elixir/concepts/structs)
+
+## Mark As Completed
+
+<!-- livebook:{"attrs":{"source":"file_name = Path.basename(Regex.replace(~r/#.+/, __ENV__.file, \"\"), \".livemd\")\n\nsave_name =\n  case Path.basename(__DIR__) do\n    \"reading\" -> \"structs_reading\"\n    \"exercises\" -> \"structs_exercise\"\n  end\n\nprogress_path = __DIR__ <> \"/../progress.json\"\nexisting_progress = File.read!(progress_path) |> Jason.decode!()\n\ndefault = Map.get(existing_progress, save_name, false)\n\nform =\n  Kino.Control.form(\n    [\n      completed: input = Kino.Input.checkbox(\"Mark As Completed\", default: default)\n    ],\n    report_changes: true\n  )\n\nTask.async(fn ->\n  for %{data: %{completed: completed}} <- Kino.Control.stream(form) do\n    File.write!(\n      progress_path,\n      Jason.encode!(Map.put(existing_progress, save_name, completed), pretty: true)\n    )\n  end\nend)\n\nform","title":"Track Your Progress"},"chunks":null,"kind":"Elixir.HiddenCell","livebook_object":"smart_cell"} -->
+
+```elixir
+file_name = Path.basename(Regex.replace(~r/#.+/, __ENV__.file, ""), ".livemd")
+
+save_name =
+  case Path.basename(__DIR__) do
+    "reading" -> "structs_reading"
+    "exercises" -> "structs_exercise"
+  end
+
+progress_path = __DIR__ <> "/../progress.json"
+existing_progress = File.read!(progress_path) |> Jason.decode!()
+
+default = Map.get(existing_progress, save_name, false)
+
+form =
+  Kino.Control.form(
+    [
+      completed: input = Kino.Input.checkbox("Mark As Completed", default: default)
+    ],
+    report_changes: true
+  )
+
+Task.async(fn ->
+  for %{data: %{completed: completed}} <- Kino.Control.stream(form) do
+    File.write!(
+      progress_path,
+      Jason.encode!(Map.put(existing_progress, save_name, completed), pretty: true)
+    )
+  end
+end)
+
+form
+```
+
+## Commit Your Progress
+
+Run the following in your command line from the curriculum folder to track and save your progress in a Git commit.
+Ensure that you do not already have undesired or unrelated changes by running `git status` or by checking the source control tab in Visual Studio Code.
+
+```
+$ git checkout -b structs-reading
+$ git add .
+$ git commit -m "finish structs reading"
+$ git push origin structs-reading
+```
+
+Create a pull request from your `structs-reading` branch to your `solutions` branch.
+Please do not create a pull request to the DockYard Academy repository as this will spam our PR tracker.
+
+**DockYard Academy Students Only:**
+
+Notify your instructor by including `@BrooklinJazz` in your PR description to get feedback.
+You (or your instructor) may merge your PR into your solutions branch after review.
+
+If you are interested in joining the next academy cohort, [sign up here](https://academy.dockyard.com/) to receive more news when it is available.
+
+## Up Next
+
+| Previous                             | Next                                                                                     |
+| ------------------------------------ | ---------------------------------------------------------------------------------------: |
+| [Modules](../reading/modules.livemd) | [Rock Paper Scissors Lizard Spock](../exercises/rock_paper_scissors_lizard_spock.livemd) |
+

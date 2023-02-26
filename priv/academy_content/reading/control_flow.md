@@ -1,0 +1,634 @@
+%{
+  title: "Control Flow"
+}
+---
+# Control Flow
+
+```elixir
+Mix.install([
+  {:jason, "~> 1.4"},
+  {:kino, "~> 0.8.0", override: true},
+  {:youtube, github: "brooklinjazz/youtube"},
+  {:hidden_cell, github: "brooklinjazz/hidden_cell"},
+  {:smart_animation, github: "brooklinjazz/smart_animation"}
+])
+```
+
+## Navigation
+
+[Return Home](../start.livemd)<span style="padding: 0 30px"></span>
+[Report An Issue](https://github.com/DockYard-Academy/beta_curriculum/issues/new?assignees=&labels=&template=issue.md&title=)
+
+## Setup
+
+Ensure you type the `ea` keyboard shortcut to evaluate all Elixir cells before starting. Alternatively you can evaluate the Elixir cells as you read.
+
+## Review Questions
+
+Upon completing this lesson, a student should be able to answer the following questions.
+
+* How do we execute code in our programs depending on some condition?
+* When might you use `case` vs `cond` vs `if`?
+* How can you use pattern matching inside of a `case` statement?
+
+## Overview
+
+Control flow. What does that mean?
+
+Well, so far you've learned mostly about how to give computers a single set of instructions.
+But sometimes, depending on certain conditions, you want to deliver a different set of instructions.
+
+```mermaid
+flowchart
+  Input --- Condition
+  Condition --- 1[Instruction]
+  Condition --- 2[Instruction]
+```
+
+The flow of our program through these branches, and how we control it is called **control flow**. We have a variety of tools to control the flow of our program including `if`, `cond`, and `case` statements.
+
+## If Statements
+
+We've already seen `if` statements, which are a useful when we have one or two branching paths in our code.
+
+For example, we might build a weather app that provides recommendations of what to wear.
+
+We'll have some condition like **if it is cold** then provide a recommendation to **wear a coat**. If it is not cold, then we'll provide a recommendation to wear a t-shirt.
+
+<!-- livebook:{"break_markdown":true} -->
+
+```mermaid
+flowchart LR
+weather --> hot --> t-shirt 
+weather --> cold --> coat
+```
+
+<!-- livebook:{"break_markdown":true} -->
+
+Here's how we can translate that into a program.
+
+```elixir
+weather = :cold
+
+if weather == :cold do
+  "coat"
+else
+  "t-shirt"
+end
+```
+
+`if` statements are only effective for up to two paths. We'll likely have to write overly verbose solutions that involve re-binding a variable if we try to use them for multiple conditions.
+
+This is not recommended. For example, let's expand our weather application to handle many conditions, instead of only hot and cold.
+
+<!-- livebook:{"break_markdown":true} -->
+
+```mermaid
+flowchart
+weather --> sunny --> r1[t-shirt]
+weather --> snowing --> r2[thick coat]
+weather --> rainy --> r3[rain coat]
+weather --> foggy --> r4[something bright]
+```
+
+```elixir
+# Change :sunny to :snowing, :raining, and :foggy to see a different result.
+weather = :sunny
+
+recommendation = "t-shirt"
+recommendation = if weather == :snowing, do: "thick coat", else: recommendation
+recommendation = if weather == :raining, do: "raincoat", else: recommendation
+recommendation = if weather == :foggy, do: "something bright", else: recommendation
+
+recommendation
+```
+
+### Your Turn
+
+Create a thermometer program that determines if the temperature is `:hot`, or `:cold`. Bind a variable `temperature` to a number between `0` and `20`. If the temperature is above `10`, then return `:hot`, otherwise return `:cold`.
+
+<details style="background-color: lightgreen; padding: 1rem; margin: 1rem 0;">
+<summary>Example solution</summary>
+
+```elixir
+temperature = 10
+
+if temperature > 10 do
+  :hot
+else
+  :cold
+end
+```
+
+</details>
+
+Enter your solution below.
+
+```elixir
+
+```
+
+## Clear Control Flow
+
+Control flow impacts the complexity of a program. The more branching paths we have in our program, the more complex it is.
+
+Some complexity is necessary, but overly complex programs are often the result of improper use of control flow.
+
+<!-- livebook:{"break_markdown":true} -->
+
+```mermaid
+flowchart
+  A[Input] --> B[Decision]
+  B --> B1[Decision]
+  B --> B2[Decision]
+  B --> B3[Decision]
+  B1 --> B11[Decision]
+  B1 --> B12[Decision]
+  B1 --> B13[Decision]
+  B2 --> B21[Decision]
+  B2 --> B22[Decision]
+  B2 --> B23[Decision]
+  B3 --> B31[Decision]
+  B3 --> B32[Decision]
+  B3 --> B33[Decision]
+```
+
+<!-- livebook:{"break_markdown":true} -->
+
+We can simplify our programs by reducing the number of branching decisions and leveraging different control flow structures.
+
+## Case
+
+`case` is a control flow structure that allows you to define a series of cases, and handle them separately.
+
+`case` is best used when you have many branching conditions, that all work well with pattern matching.
+
+We'll use this to improve our weather application that handles many different conditions.
+
+<!-- livebook:{"break_markdown":true} -->
+
+```mermaid
+flowchart
+weather --> sunny --> r1[t-shirt]
+weather --> snowing --> r2[thick coat]
+weather --> rainy --> r3[rain coat]
+weather --> foggy --> r4[something bright]
+```
+
+<!-- livebook:{"break_markdown":true} -->
+
+We can break this control flow down into several cases.
+
+* Case 1: It's sunny so wear a t-shirt.
+* Case 4: It's snowing so wear a thick coat.
+* Case 2: It's raining so wear a raincoat.
+* Case 3: It's foggy so wear a something bright.
+
+Here's how we translate that into code. This is significantly more straightforward than our solution using `if`.
+
+```elixir
+# Change :sunny to :snowing, :raining, and :foggy to see a different result.
+weather = :sunny
+
+case weather do
+  :sunny -> "t-shirt"
+  :snowing -> "thick coat"
+  :raining -> "raincoat"
+  :foggy -> "something bright"
+end
+```
+
+### Case Breakdown
+
+Let's break down the `case` statement above. To use a `case` statement, start with the `case` keyword.
+
+<!-- livebook:{"force_markdown":true} -->
+
+```elixir
+case
+```
+
+Then enter a value that will match one of the cases. This can be a variable, or any elixir term. We'll use "sunny" from above.
+
+<!-- livebook:{"force_markdown":true} -->
+
+```elixir
+case :sunny
+```
+
+Now write the `do` keyword to start defining the series of potential cases.
+
+<!-- livebook:{"force_markdown":true} -->
+
+```elixir
+case :sunny do
+```
+
+Defining the "sunny" case. We'll trigger the case that matches the value between `case` and `do`.
+
+<!-- livebook:{"force_markdown":true} -->
+
+```elixir
+case :sunny do
+  :sunny
+```
+
+We separate the pattern to match on with the code to run if it matches using the `->`.
+
+<!-- livebook:{"force_markdown":true} -->
+
+```elixir
+case :sunny do
+  :sunny ->
+```
+
+We then provide the code to run when the case hits. In this case, `"t-shirt"`.
+
+<!-- livebook:{"force_markdown":true} -->
+
+```elixir
+case :sunny do
+  :sunny -> "t-shirt"
+```
+
+Then we `end` the case statement.
+
+<!-- livebook:{"force_markdown":true} -->
+
+```elixir
+case :sunny do
+  :sunny -> "t-shirt"
+end
+```
+
+We can provide any number of cases. Cases use pattern matching to decide which result to run.
+
+<!-- livebook:{"break_markdown":true} -->
+
+### Your Turn
+
+Return each value from `1` to `5` by changing the `condition` variable below.
+
+```elixir
+condition = nil
+
+case condition do
+  :red -> 1
+  "blue" -> 2
+  %{key: "value"} -> 3
+  123 -> 4
+  [1, 2, 3] -> 5
+  _ -> "default"
+end
+```
+
+## Pattern Matching With Case
+
+`case` uses pattern matching to determine which case to run. If the left side of the `->` operator would match with the provided value, then the `case` statement returns the right side of the `->` operator.
+
+Exact values always match.
+
+```elixir
+case {:exactly, :equal} do
+  {:exactly, :equal} -> "I hit this case"
+end
+```
+
+Under the hood, Elixir checks if the condition, and the left side of the `->` symbol would match.
+
+```elixir
+{:exactly, :equal} = {:exactly, :equal}
+```
+
+If the values would throw a [MatchError](https://hexdocs.pm/elixir/MatchError.html) with the match operator `=`, then they do not match.
+
+```elixir
+{:not_exactly, :equal} = {:exactly, :equal}
+```
+
+That's why the following `case` statement does not trigger the `"non-matching case"`.
+
+```elixir
+case {:exactly, :equal} do
+  {:not_exactly, :equal} -> "non-matching case"
+  {:exactly, :equal} -> "matching case"
+end
+```
+
+We can use pattern matching the same way we already have with the match operator `=`.
+
+```elixir
+{_mostly, :equal} = {:exactly, :equal}
+```
+
+So now, by matching on `:exactly` using a variable, we can trigger the first case below.
+
+```elixir
+case {:exactly, :equal} do
+  {_mostly, :equal} -> "matching case"
+  {:exactly, :equal} -> "exactly equal case"
+end
+```
+
+`case` statements will raise a **CaseClauseError** if the value provided doesn't match any case.
+
+```elixir
+case "no match" do
+  :sunny -> "t-shirt"
+end
+```
+
+To provide a default case for the `case` statement, you can use a variable, which pattern matches with any Elixir value.
+
+```elixir
+case "no match" do
+  "sunnny" -> "wear a t-shirt"
+  anything -> "wear clothing"
+end
+```
+
+We're not using this variable, so we should preface it with an `_`.
+
+```elixir
+case "no match" do
+  "sunnny" -> "wear a t-shirt"
+  _anything -> "wear clothing"
+end
+```
+
+It's common to simply use an `_` rather than naming the variable.
+
+```elixir
+case "no match" do
+  "sunnny" -> "wear a t-shirt"
+  _ -> "wear clothing"
+end
+```
+
+### Your Turn
+
+Return each result from `1` to `5` by changing the `condition` variable below.
+
+```elixir
+condition = nil
+
+case condition do
+  [1, 2, 3] -> 1
+  [_head | _tail] -> 2
+  {_, _} -> 3
+  %{key1: _, key2: "value"} -> 4
+  {1, _, %{key: [1, _, _]}} -> 5
+  _ -> "default"
+end
+```
+
+## Cond
+
+`cond` stands for **condition**. `cond` is best used for control flow with many branching paths that does not work well with pattern matching.
+
+For example, if we expand our weather application to handle conditions that depend on a range of temperatures.
+
+* If the temperature is below `5` degrees: wear a thick coat.
+* If the temperature is `5-10` degrees: wear a coat.
+* If the temperature is `11-15` degrees: wear a light coat.
+* If the temperature is `16-20` degrees: wear a heavy shirt.
+* If the temperature is `21+` degrees: wear a t-shirt.
+
+<!-- livebook:{"break_markdown":true} -->
+
+```mermaid
+flowchart
+temperature --> t1[0<] --> r1[thick coat]
+temperature --> t2[5-10] --> r2[coat]
+temperature --> t3[11-15] --> r3[light coat]
+temperature --> t4[16-20] --> r4[heavy shirt]
+temperature --> t5[21+] --> r5[t-shirt]
+```
+
+<!-- livebook:{"break_markdown":true} -->
+
+Here's how we can translate this into a program using `cond`.
+
+```elixir
+# Change temperature to change the condition triggered.
+temperature = 6
+
+cond do
+  temperature >= 21 -> "t-shirt"
+  temperature >= 16 and temperature <= 20 -> "heavy shirt"
+  temperature >= 11 and temperature <= 15 -> "light coat"
+  temperature >= 6 and temperature <= 10 -> "coat"
+  temperature <= 5 -> "thick coat"
+end
+```
+
+`cond` accepts a truthy value on the left-hand side of the arrow `->` and returns the expression on the right-hand side of the arrow for whichever condition returns `true` first.
+
+This means that order does matter. Here, even though the integer is above `5`, it will never trigger the second condition, because the first condition is always true.
+
+```elixir
+value = 10
+
+cond do
+  is_integer(value) -> "value is an integer"
+  value > 5 -> "value is above 5"
+end
+```
+
+Generally, we want more specific conditions to be higher in priority than less specific conditions.
+
+```elixir
+value = 10
+
+cond do
+  value > 5 -> "value is above 5"
+  is_integer(value) -> "value is an integer"
+end
+```
+
+Like `case` statements, `cond` will raise an error if we don't trigger any condition.
+
+```elixir
+cond do
+  false -> ""
+end
+```
+
+We can provide a default condition using `true`.
+
+```elixir
+cond do
+  false -> ""
+  true -> "default condition"
+end
+```
+
+### Your Turn
+
+In the Elixir cell below:
+
+* Create a variable called `grade` which will be a number grade from 1 to 100.
+* Create a condition that returns `"A"`, `"B"`, `"C"`, or `"D"` depending on the value of `grade`.
+
+The conditions for `grade` should be:
+
+* 85-100 is an A
+* 70-84 is a B
+* 55-69 is a C
+* 1-54 is a D
+
+<details style="background-color: lightgreen; padding: 1rem; margin: 1rem 0;">
+<summary>Example solution</summary>
+
+We can solve this problem being very explicit about each condition.
+
+```elixir
+grade = 0
+
+cond do
+  85 <= grade and grade <= 100 -> "A"
+  70 <= grade and grade <= 84 -> "B"
+  55 <= grade and grade <= 59 -> "C"
+  1 <= grade and grade <= 54 -> "D"
+end
+```
+
+Or we can make use of order to make the code more concise.
+However, this wouldn't reveal if `grade` were an invalid value
+such as `-5`, `110`, or `"hello"`.
+
+```elixir
+cond do
+  grade >= 85 -> "A"
+  grade >= 70 -> "B"
+  grade >= 55 -> "C"
+  true -> "D"
+end
+```
+
+</details>
+
+```elixir
+
+```
+
+## Unless
+
+`unless` is `if` in reverse. It's helpful for times when you want to always do something unless
+some condition is true.
+
+For example:
+
+* Unless it rains on sunday lets go to the park.
+* Unless it is the weekend you work.
+* Unless it's high tide, lets go to the beach.
+
+```elixir
+unless false do
+  "Hello!"
+end
+```
+
+```elixir
+unless true do
+  "Hello!"
+end
+```
+
+```elixir
+is_raining = false
+
+unless is_raining do
+  "Let's go to the beach!"
+end
+```
+
+You can also use `else` with unless but it's not always the most clear to read and should probably
+be an `if` instead.
+
+```elixir
+condition = true
+
+unless condition do
+else
+  "Will I print?"
+end
+```
+
+### Your Turn
+
+In the Elixir cell below
+
+* Create a variable named `tired` which is `true` or `false`.
+* Create an `unless` statement. which returns `"awake"` unless `tired`.
+
+```elixir
+
+```
+
+## Mark As Completed
+
+<!-- livebook:{"attrs":{"source":"file_name = Path.basename(Regex.replace(~r/#.+/, __ENV__.file, \"\"), \".livemd\")\n\nsave_name =\n  case Path.basename(__DIR__) do\n    \"reading\" -> \"control_flow_reading\"\n    \"exercises\" -> \"control_flow_exercise\"\n  end\n\nprogress_path = __DIR__ <> \"/../progress.json\"\nexisting_progress = File.read!(progress_path) |> Jason.decode!()\n\ndefault = Map.get(existing_progress, save_name, false)\n\nform =\n  Kino.Control.form(\n    [\n      completed: input = Kino.Input.checkbox(\"Mark As Completed\", default: default)\n    ],\n    report_changes: true\n  )\n\nTask.async(fn ->\n  for %{data: %{completed: completed}} <- Kino.Control.stream(form) do\n    File.write!(\n      progress_path,\n      Jason.encode!(Map.put(existing_progress, save_name, completed), pretty: true)\n    )\n  end\nend)\n\nform","title":"Track Your Progress"},"chunks":null,"kind":"Elixir.HiddenCell","livebook_object":"smart_cell"} -->
+
+```elixir
+file_name = Path.basename(Regex.replace(~r/#.+/, __ENV__.file, ""), ".livemd")
+
+save_name =
+  case Path.basename(__DIR__) do
+    "reading" -> "control_flow_reading"
+    "exercises" -> "control_flow_exercise"
+  end
+
+progress_path = __DIR__ <> "/../progress.json"
+existing_progress = File.read!(progress_path) |> Jason.decode!()
+
+default = Map.get(existing_progress, save_name, false)
+
+form =
+  Kino.Control.form(
+    [
+      completed: input = Kino.Input.checkbox("Mark As Completed", default: default)
+    ],
+    report_changes: true
+  )
+
+Task.async(fn ->
+  for %{data: %{completed: completed}} <- Kino.Control.stream(form) do
+    File.write!(
+      progress_path,
+      Jason.encode!(Map.put(existing_progress, save_name, completed), pretty: true)
+    )
+  end
+end)
+
+form
+```
+
+## Commit Your Progress
+
+Run the following in your command line from the curriculum folder to track and save your progress in a Git commit.
+Ensure that you do not already have undesired or unrelated changes by running `git status` or by checking the source control tab in Visual Studio Code.
+
+```
+$ git checkout -b control-flow-reading
+$ git add .
+$ git commit -m "finish control flow reading"
+$ git push origin control-flow-reading
+```
+
+Create a pull request from your `control-flow-reading` branch to your `solutions` branch.
+Please do not create a pull request to the DockYard Academy repository as this will spam our PR tracker.
+
+**DockYard Academy Students Only:**
+
+Notify your instructor by including `@BrooklinJazz` in your PR description to get feedback.
+You (or your instructor) may merge your PR into your solutions branch after review.
+
+If you are interested in joining the next academy cohort, [sign up here](https://academy.dockyard.com/) to receive more news when it is available.
+
+## Up Next
+
+| Previous                                 | Next                                                 |
+| ---------------------------------------- | ---------------------------------------------------: |
+| [Functions](../reading/functions.livemd) | [Naming Numbers](../exercises/naming_numbers.livemd) |
+

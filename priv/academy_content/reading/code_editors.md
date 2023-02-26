@@ -1,0 +1,376 @@
+%{
+  title: "Code Editors"
+}
+---
+# Code Editors
+
+```elixir
+Mix.install([
+  {:jason, "~> 1.4"},
+  {:kino, "~> 0.8.0", override: true},
+  {:youtube, github: "brooklinjazz/youtube"},
+  {:hidden_cell, github: "brooklinjazz/hidden_cell"}
+])
+```
+
+## Navigation
+
+[Return Home](../start.livemd)<span style="padding: 0 30px"></span>
+[Report An Issue](https://github.com/DockYard-Academy/beta_curriculum/issues/new?assignees=&labels=&template=issue.md&title=)
+
+## Setup
+
+Ensure you type the `ea` keyboard shortcut to evaluate all Elixir cells before starting. Alternatively, you can evaluate the Elixir cells as you read.
+
+## Review Questions
+
+Upon completing this lesson, a student should be able to answer the following questions.
+
+* How do you open your Visual Studio Code Editor?
+* How do you manage version control from your Visual Studio Code Editor?
+* How do you start and join a LiveShare session to collaborate with other developers?
+
+## Overview
+
+### Code Editors
+
+Code editors are software applications designed for editing code.
+
+Some code editors are minimal and only edit code. Some
+come with development tools that allow you to write, run, and test code
+all from the same application. Generally, we call these integrated development environments or **IDEs**.
+
+There are various code editors and IDEs, each with its advantages.
+
+<!-- livebook:{"break_markdown":true} -->
+
+### Visual Studio Code
+
+Visual Studio Code (VS Code) is a code editor developed by Microsoft. It is a free, open-source, and cross-platform application that can be used to write and edit code for a variety of programming languages, including Elixir.
+
+VS Code provides a number of features that make it a powerful code editing tool, such as:
+
+* **IntelliSense**: which provides code completion and suggestions
+* **Syntax highlighting**: to make it easier to read and understand code
+* **Code debugging**: allows developers to step through code and find errors
+* **Git integration**: allows developers to easily manage code changes and collaborate with others
+* **Extensibility**: VS Code can be extended with plugins and extensions that add new features and functionality
+
+Visual Studio Code is the default recommended code editor for DockYard Academy. We've chosen this editor for a variety of reasons, including the Visual Studio Code LiveShare feature which allows multiple developers to collaborate on the same code simultaneously.
+
+See the [Visual Studio Code documentation](https://code.visualstudio.com/docs/getstarted/userinterface) for a full explanation of how to use Visual Studio Code effectively.
+
+## Download Visual Studio Code
+
+Please download and install [Visual Studio Code](https://code.visualstudio.com/).
+
+You may already have a preferred editor. While highly recommended, you don't need to use Visual Studio Code.
+However, even if it doesn't become your daily code editor, we still recommend that you install it so that you can join and share
+LiveShare sessions with your instructor and classmates.
+
+## Open Visual Studio Code
+
+You can either open Visual Studio Code manually or through the command line.
+It takes some setup, but it's handy to use the `code` command in your terminal to
+open Visual Studio Code with a specific project.
+
+Windows and Linux users should automatically have the `code` command available after installing Visual Studio Code.
+Mac users can follow [these instructions](https://code.visualstudio.com/docs/setup/mac#_launching-from-the-command-line) to set up the `code` command.
+
+Navigate to the curriculum folder using `cd` in your command line, and then run `code .` to open Visual Studio Code
+in the current folder.
+
+```
+$ cd path/to/curriculum
+$ code .
+```
+
+## Setup Recommended Extensions
+
+We have a list of recommended extensions for this curriculum.
+
+With the curriculum project open in visual studio code, open the Extensions tab and search for `@recommended` to see the Workspace Recommendations.
+
+<!-- livebook:{"break_markdown":true} -->
+
+![](images/recommended_extensions.png)
+
+<!-- livebook:{"break_markdown":true} -->
+
+We recommend you install them all.
+
+* **Phoenix Framework**: Syntax highlighting for Phoenix HEEx files.
+* **Elixir Test**: Useful commands for testing Elixir code.
+* **ElixirLS**: General Elixir support for autocomplete, syntax highlighting, and more
+* **Live Share**: Real-time collaborative development.
+* **Code Spell Checker**: Spell checking for source code. Useful for catching spelling errors.
+
+There are lots of useful extensions provided by the community. We've tried to be minimal, so consider researching for more useful extensions beyond this list. It's amazing how a great extension can make you more productive.
+
+## Explorer
+
+The Activity Bar contains the Explorer tab.
+
+![](images/explorer_tab.png)
+
+Open the Explorer tab to see all the files and folders in a project.
+You can create new files and folders from this tab.
+
+You can also open files to use them in your editor. Be careful not to edit any of the
+files for this course unless directed to.
+
+## Quick Open
+
+For large projects, it quickly becomes tedious to search through files and folders.
+Instead, you can use the **Quick Open** Command with <kbd>Ctrl</kbd>+<kbd>P</kbd> (Windows & Linux) or <kbd>CMD</kbd>+<kbd>P</kbd> (MacOS). Here
+you can search for the name of a file and press <kbd>Enter</kbd> to view it in the editor.
+
+<!-- livebook:{"break_markdown":true} -->
+
+![](images/quick_open_search.png)
+
+<!-- livebook:{"break_markdown":true} -->
+
+It's important to be proficient with your code editor. There are many ways to improve productivity with your chosen code editor. We include some advice on using the editor effectively,
+but you are the best judge of which strategies are most effective.
+
+With that said, we recommend you practice using Quick Open instead of the Explorer. Quick Open is a much faster solution
+when working at scale, and you'll want to be proficient with it.
+
+## Commands
+
+Visual Studio Code has many useful commands. In addition, many extensions add additional
+commands.
+
+Press <kbd>CTRL</kbd>+<kbd>Shift</kbd>+<kbd>P</kbd> (Windows & Linux) or <kbd>CMD</kbd>+<kbd>Shift</kbd>+<kbd>P</kbd> (MacOS) to show all commands. You'll notice that it simply
+uses Quick Open with a `>` symbol. You could also open Quick Open and then press `>`.
+
+<!-- livebook:{"break_markdown":true} -->
+
+![](images/show%20all%20commands.png)
+
+<!-- livebook:{"break_markdown":true} -->
+
+For example, you may wish to use the autosave command to save files automatically.
+
+![](images/auto-save.png)
+
+<!-- livebook:{"break_markdown":true} -->
+
+Many commands are bound to a shortcut. Search for the `Preferences: Open Keyboard Shortcuts` command
+to view and edit your shortcuts.
+
+Specific shortcuts are generally beyond the scope of this course, but you may wish to research more. You can also rebind any specific shortcut to customize your development experience.
+
+<!-- livebook:{"break_markdown":true} -->
+
+![](images/keyboard%20shortcuts.png)
+
+## Integrated Terminal
+
+Visual Studio Code comes with an integrated terminal so that you don't have to switch back
+and forth between your editor and your command line.
+
+To learn more about the Integrated Terminal, you can read the [Integrated Terminal Documentation](https://code.visualstudio.com/docs/editor/integrated-terminal)
+
+Open and close the integrated terminal with the `View: Toggle Terminal` command.
+
+<!-- livebook:{"break_markdown":true} -->
+
+![](images/view%20toggle%20terminal.png)
+
+<!-- livebook:{"break_markdown":true} -->
+
+Or you can use the <kbd>CTRL</kbd>+<kbd>\`</kbd> command.
+
+Backtick <kbd>\`</kbd> may feel unergonomic for a frequently used command. You may wish to rebind it
+to a more comfortable shortcut.
+
+<!-- livebook:{"break_markdown":true} -->
+
+### Multiple Terminals
+
+From the integrated terminal, you can manage multiple terminal windows.
+
+Multiple terminals are useful if one terminal is busy performing some constant task like running an application.
+
+For example, when running this curriculum using the integrated terminal that terminal will be busy running the `livebook server` command. Therefore, It's useful to open a second terminal window to access the command line without stopping and starting livebook.
+
+## Search
+
+You can use the Search tab to find content in files. Alternatively you can quickly open the
+search with the <kbd>CTRL</kbd>+<kbd>SHIFT</kbd>+<kbd>F</kbd> (Windows & Linux) or <kbd>CMD</kbd>+<kbd>SHIFT</kbd>+<kbd>F</kbd> (MacOS) shortcut.
+
+Enter text into the search input and press <kbd>Enter</kbd> to search for some text.
+
+The search tab is also useful for **search-and-replace**.
+
+<!-- livebook:{"break_markdown":true} -->
+
+![](images/search.png)
+
+## Source Control
+
+The Source Control tab allows you to manage git source control. Instead of with the command line, you can use the UI to stage and unstage changes.
+
+<!-- livebook:{"break_markdown":true} -->
+
+![](images/source_control_view.png)
+
+<!-- livebook:{"break_markdown":true} -->
+
+You can stage a file by hovering it and pressing the stage button <i class="ri-add-line"></i>.
+
+![](images/source_control_stage_file.png)
+
+Or stage all files by hovering over **Changes** and pressing the stage all button <i class="ri-add-line"></i>.
+![](images/source_control_stage_all_files.png)
+
+<!-- livebook:{"break_markdown":true} -->
+
+Similarly you can unstage changes or a single file pressing the unstage button <i class="ri-subtract-line"></i>.
+
+<!-- livebook:{"break_markdown":true} -->
+
+![](images/unstage_changes.png)
+
+## Live Share
+
+You can share and join collaborative development sessions with the LiveShare tab.
+
+![](images/live_share_tab.png)
+
+<!-- livebook:{"break_markdown":true} -->
+
+You can start a LiveShare session as the host, and then other developers join your session or vice versa.
+
+```mermaid
+flowchart
+  H[Host]
+  D1[Developer]
+  D2[Developer]
+  D3[Developer]
+  D4[Developer]
+  D5[Developer]
+  D1 --> H
+  D2 --> H
+  D3 --> H
+  D4 --> H
+  D5 --> H
+```
+
+To start a LiveShare session, press the **Share** button.
+
+![](images/initiate_liveshare.png)
+
+<!-- livebook:{"break_markdown":true} -->
+
+This creates a LiveShare session and automatically copies an invitation link that will look like this:
+`https://prod.liveshare.vsengsaas.visualstudio.com/join?20A7B9A2A82856BC29CE86120852C16E23EB`
+
+![](images/live_share_link_copied.png)
+
+<!-- livebook:{"break_markdown":true} -->
+
+Send this link to other developers for them to join the session. It's a common mistake to click the link.
+Instead, to join a LiveShare session, you need to click the **Join** button in the LiveShare tab
+and enter the URL.
+
+<!-- livebook:{"break_markdown":true} -->
+
+![](images/join_liveshare_url.png)
+
+<!-- livebook:{"break_markdown":true} -->
+
+Participants are displayed in the LiveShare tab.
+
+Participants can view your terminal but can't use it without permission.
+You can give participants access to the terminal with the **Make Read/Write** button
+by right-clicking on the terminal you want to share.
+
+<div style="color: white; font-weight: bold; padding: 0.5rem; background:lightcoral; margin-top: 0.5rem;">
+DANGER: GRANTING READ/WRITE ACCESS TO YOUR TERMINAL ALLOWS OTHER PARTICIPANTS DANGEROUS ACCESS TO YOUR COMPUTER.
+</div>
+
+<!-- livebook:{"break_markdown":true} -->
+
+![](images/live_share_session_running_tab.png)
+
+<!-- livebook:{"break_markdown":true} -->
+
+As a participant, to benefit from extensions and syntax highlighting, you may need to trust
+the Workspace that you join.
+
+The dialogue may look different than this, but you should see a similar notification appear when you
+join the session.
+
+<!-- livebook:{"break_markdown":true} -->
+
+![](images/workspace-trust-dialog.png)
+
+## Mark As Completed
+
+<!-- livebook:{"attrs":{"source":"file_name = Path.basename(Regex.replace(~r/#.+/, __ENV__.file, \"\"), \".livemd\")\n\nsave_name =\n  case Path.basename(__DIR__) do\n    \"reading\" -> \"code_editors_reading\"\n    \"exercises\" -> \"code_editors_exercise\"\n  end\n\nprogress_path = __DIR__ <> \"/../progress.json\"\nexisting_progress = File.read!(progress_path) |> Jason.decode!()\n\ndefault = Map.get(existing_progress, save_name, false)\n\nform =\n  Kino.Control.form(\n    [\n      completed: input = Kino.Input.checkbox(\"Mark As Completed\", default: default)\n    ],\n    report_changes: true\n  )\n\nTask.async(fn ->\n  for %{data: %{completed: completed}} <- Kino.Control.stream(form) do\n    File.write!(\n      progress_path,\n      Jason.encode!(Map.put(existing_progress, save_name, completed), pretty: true)\n    )\n  end\nend)\n\nform","title":"Track Your Progress"},"chunks":null,"kind":"Elixir.HiddenCell","livebook_object":"smart_cell"} -->
+
+```elixir
+file_name = Path.basename(Regex.replace(~r/#.+/, __ENV__.file, ""), ".livemd")
+
+save_name =
+  case Path.basename(__DIR__) do
+    "reading" -> "code_editors_reading"
+    "exercises" -> "code_editors_exercise"
+  end
+
+progress_path = __DIR__ <> "/../progress.json"
+existing_progress = File.read!(progress_path) |> Jason.decode!()
+
+default = Map.get(existing_progress, save_name, false)
+
+form =
+  Kino.Control.form(
+    [
+      completed: input = Kino.Input.checkbox("Mark As Completed", default: default)
+    ],
+    report_changes: true
+  )
+
+Task.async(fn ->
+  for %{data: %{completed: completed}} <- Kino.Control.stream(form) do
+    File.write!(
+      progress_path,
+      Jason.encode!(Map.put(existing_progress, save_name, completed), pretty: true)
+    )
+  end
+end)
+
+form
+```
+
+## Commit Your Progress
+
+Run the following in your command line from the curriculum folder to track and save your progress in a Git commit.
+Ensure that you do not already have undesired or unrelated changes by running `git status` or by checking the source control tab in Visual Studio Code.
+
+```
+$ git checkout -b code-editors-reading
+$ git add .
+$ git commit -m "finish code editors reading"
+$ git push origin code-editors-reading
+```
+
+Create a pull request from your `code-editors-reading` branch to your `solutions` branch.
+Please do not create a pull request to the DockYard Academy repository as this will spam our PR tracker.
+
+**DockYard Academy Students Only:**
+
+Notify your instructor by including `@BrooklinJazz` in your PR description to get feedback.
+You (or your instructor) may merge your PR into your solutions branch after review.
+
+If you are interested in joining the next academy cohort, [sign up here](https://academy.dockyard.com/) to receive more news when it is available.
+
+## Up Next
+
+| Previous                               | Next                         |
+| -------------------------------------- | ---------------------------: |
+| [Livebook](../reading/livebook.livemd) | [IEx](../reading/iex.livemd) |
+

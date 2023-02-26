@@ -1,0 +1,174 @@
+%{
+  title: "Treasure Matching"
+}
+---
+# Treasure Matching
+
+```elixir
+Mix.install([
+  {:jason, "~> 1.4"},
+  {:kino, "~> 0.8.0", override: true},
+  {:youtube, github: "brooklinjazz/youtube"},
+  {:hidden_cell, github: "brooklinjazz/hidden_cell"}
+])
+```
+
+## Navigation
+
+[Return Home](../start.livemd)<span style="padding: 0 30px"></span>
+[Report An Issue](https://github.com/DockYard-Academy/beta_curriculum/issues/new?assignees=&labels=&template=issue.md&title=)
+
+## Treasure Matching
+
+In this exercise, you're going to use **pattern matching** to extract the `"jewel"`
+string from the data provided and bind it to a `jewel` variable. The first exercise is complete for example.
+
+```elixir
+[_, _, _, jewel] = [1, 2, 3, "jewel"]
+jewel
+```
+
+Use pattern matching to bind a `jewel` variable to the `"jewel"` string.
+
+```elixir
+[1, 2, 3, "jewel"]
+```
+
+```elixir
+%{key1: "value", key2: "jewel"}
+```
+
+```elixir
+%{1 => "jewel"}
+```
+
+```elixir
+%{%{key: [1, 2, 3, 4, 5, {}]} => "jewel"}
+```
+
+```elixir
+%{north: %{south: %{west: %{east: "jewel"}}}}
+```
+
+```elixir
+[2, "jewel"]
+```
+
+```elixir
+["jewel", 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+```
+
+```elixir
+[1, "jewel", 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+```
+
+```elixir
+[1, 2, "jewel", 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+```
+
+```elixir
+[[], [1, [2, "jewel"]]]
+```
+
+```elixir
+"here is the jewel"
+```
+
+```elixir
+{"jewel"}
+```
+
+```elixir
+{"jewel", 1}
+```
+
+```elixir
+{1, 2, "jewel"}
+```
+
+```elixir
+["jewel"] ++ Enum.to_list(1..100)
+```
+
+```elixir
+[key: "jewel"]
+```
+
+```elixir
+[south: "jewel", east: {1, 2}]
+```
+
+```elixir
+Enum.map(1..4, fn each -> (each == 2 && "jewel") || each end)
+```
+
+```elixir
+Enum.map(1..4, &((&1 > 3 && "jewel") || &1))
+```
+
+## Mark As Completed
+
+<!-- livebook:{"attrs":{"source":"file_name = Path.basename(Regex.replace(~r/#.+/, __ENV__.file, \"\"), \".livemd\")\n\nsave_name =\n  case Path.basename(__DIR__) do\n    \"reading\" -> \"treasure_matching_reading\"\n    \"exercises\" -> \"treasure_matching_exercise\"\n  end\n\nprogress_path = __DIR__ <> \"/../progress.json\"\nexisting_progress = File.read!(progress_path) |> Jason.decode!()\n\ndefault = Map.get(existing_progress, save_name, false)\n\nform =\n  Kino.Control.form(\n    [\n      completed: input = Kino.Input.checkbox(\"Mark As Completed\", default: default)\n    ],\n    report_changes: true\n  )\n\nTask.async(fn ->\n  for %{data: %{completed: completed}} <- Kino.Control.stream(form) do\n    File.write!(\n      progress_path,\n      Jason.encode!(Map.put(existing_progress, save_name, completed), pretty: true)\n    )\n  end\nend)\n\nform","title":"Track Your Progress"},"chunks":null,"kind":"Elixir.HiddenCell","livebook_object":"smart_cell"} -->
+
+```elixir
+file_name = Path.basename(Regex.replace(~r/#.+/, __ENV__.file, ""), ".livemd")
+
+save_name =
+  case Path.basename(__DIR__) do
+    "reading" -> "treasure_matching_reading"
+    "exercises" -> "treasure_matching_exercise"
+  end
+
+progress_path = __DIR__ <> "/../progress.json"
+existing_progress = File.read!(progress_path) |> Jason.decode!()
+
+default = Map.get(existing_progress, save_name, false)
+
+form =
+  Kino.Control.form(
+    [
+      completed: input = Kino.Input.checkbox("Mark As Completed", default: default)
+    ],
+    report_changes: true
+  )
+
+Task.async(fn ->
+  for %{data: %{completed: completed}} <- Kino.Control.stream(form) do
+    File.write!(
+      progress_path,
+      Jason.encode!(Map.put(existing_progress, save_name, completed), pretty: true)
+    )
+  end
+end)
+
+form
+```
+
+## Commit Your Progress
+
+Run the following in your command line from the curriculum folder to track and save your progress in a Git commit.
+Ensure that you do not already have undesired or unrelated changes by running `git status` or by checking the source control tab in Visual Studio Code.
+
+```
+$ git checkout -b treasure-matching-exercise
+$ git add .
+$ git commit -m "finish treasure matching exercise"
+$ git push origin treasure-matching-exercise
+```
+
+Create a pull request from your `treasure-matching-exercise` branch to your `solutions` branch.
+Please do not create a pull request to the DockYard Academy repository as this will spam our PR tracker.
+
+**DockYard Academy Students Only:**
+
+Notify your instructor by including `@BrooklinJazz` in your PR description to get feedback.
+You (or your instructor) may merge your PR into your solutions branch after review.
+
+If you are interested in joining the next academy cohort, [sign up here](https://academy.dockyard.com/) to receive more news when it is available.
+
+## Up Next
+
+| Previous                                                                 | Next                                                                     |
+| ------------------------------------------------------------------------ | -----------------------------------------------------------------------: |
+| [Advanced Pattern Matching](../reading/advanced_pattern_matching.livemd) | [Replacing nils](../exercises/drill-patternmatching-replace-nils.livemd) |
+

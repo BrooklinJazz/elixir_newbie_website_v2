@@ -1,0 +1,191 @@
+%{
+  title: "Math Module Testing"
+}
+---
+# Math Module Testing
+
+```elixir
+Mix.install([
+  {:jason, "~> 1.4"},
+  {:kino, "~> 0.8.0", override: true},
+  {:youtube, github: "brooklinjazz/youtube"},
+  {:hidden_cell, github: "brooklinjazz/hidden_cell"}
+])
+```
+
+## Navigation
+
+[Return Home](../start.livemd)<span style="padding: 0 30px"></span>
+[Report An Issue](https://github.com/DockYard-Academy/beta_curriculum/issues/new?assignees=&labels=&template=issue.md&title=)
+
+## Setup
+
+Ensure you type the `ea` keyboard shortcut to evaluate all Elixir cells before starting. Alternatively you can evaluate the Elixir cells as you read.
+
+## Math Module Testing
+
+Generally, we can split up our test suite into test cases. Each test case may require many assertions.
+
+For this exercises, we're going to test a `Math` module that abstracts the operators for adding different data types together, like so.
+
+<!-- livebook:{"force_markdown":true} -->
+
+```elixir
+Math.add(4, 4) # 
+Math.add("a", "b") # "ab"
+Math.add([1], [2]) # [1, 2]
+```
+
+Our **Happy-path** test cases (where our code is used as expected) could be the following.
+
+`Math.add/2`
+
+* add two integers
+* add two strings
+* add two lists
+
+`Math.subtract/2`
+
+* subtract two integers
+* subtract two strings
+* subtract two lists
+
+We also want to consider **edge-case** test cases, also called **sad-path** or **unhappy path** when things go wrong, or the code is misused. For example, we might consider the following cases.
+
+`Math.add/2`
+
+* add a valid data type (integer, string, list) and an invalid data type.
+* add two invalid data types.
+* add two empty lists.
+* add two empty strings.
+* add a string by an empty string.
+* add a list by an empty list.
+
+`Math.subtract/2`
+
+* subtract a valid data type (integer, string, list) and an invalid data type.
+* subtract two invalid data types.
+* subtract two empty lists.
+* subtract two empty strings.
+* subtract a string by an empty string.
+* subtract a list by an empty list.
+
+There can be a deceptive number of edge cases to consider. For example, we could build a growing list of edge-case permutations for each data type we want the `Math` module to handle.
+
+Here, we've colored happy path tests green and edge-case tests yellow.
+
+![](images/test%20cases.png)
+
+By planning test cases, we can anticipate possible edge cases and ensure we understand the desired behavior of the feature.
+
+Test and implement a `Math` module. Include at least two assertions for each happy path test case (**strings**, **lists**, and **integers**.)
+
+```elixir
+defmodule Math do
+end
+
+ExUnit.start(auto_run: false)
+
+defmodule MathTest do
+  use ExUnit.Case
+
+  # Tests Go Here
+end
+
+ExUnit.run()
+```
+
+### Bonus: Edge Cases
+
+Decide how to handle calling the `Math.add/2` and `Math.subtract/2` functions with invalid data.
+For example, you might raise a [FunctionClauseError](https://hexdocs.pm/elixir/FunctionClauseError.html) using guards.
+
+Note that if you expect to raise an error, it's usually idiomatic to name our functions using a bang `!` symbol, so `Math.add/2` and `Math.subtract/2` should be renamed to `Math.add!/2` and `Math.subtract!/2`.
+
+<!-- livebook:{"force_markdown":true} -->
+
+```elixir
+Math.add!(1, 1)
+2
+
+Math.add!(%{}, %{})
+** (FunctionClauseError) no function clause matching in Math.add/2  
+```
+
+Alternatively or in addition, you might choose to change the return value to an `{:ok, value}` tuple or `{:error, error}` tuple.
+
+<!-- livebook:{"force_markdown":true} -->
+
+```elixir
+Math.add(%{}, %{})
+{:error, :invalid_data}
+```
+
+Test and implement these edge cases on your `Math` module above.
+
+## Mark As Completed
+
+<!-- livebook:{"attrs":{"source":"file_name = Path.basename(Regex.replace(~r/#.+/, __ENV__.file, \"\"), \".livemd\")\n\nsave_name =\n  case Path.basename(__DIR__) do\n    \"reading\" -> \"math_module_testing_reading\"\n    \"exercises\" -> \"math_module_testing_exercise\"\n  end\n\nprogress_path = __DIR__ <> \"/../progress.json\"\nexisting_progress = File.read!(progress_path) |> Jason.decode!()\n\ndefault = Map.get(existing_progress, save_name, false)\n\nform =\n  Kino.Control.form(\n    [\n      completed: input = Kino.Input.checkbox(\"Mark As Completed\", default: default)\n    ],\n    report_changes: true\n  )\n\nTask.async(fn ->\n  for %{data: %{completed: completed}} <- Kino.Control.stream(form) do\n    File.write!(\n      progress_path,\n      Jason.encode!(Map.put(existing_progress, save_name, completed), pretty: true)\n    )\n  end\nend)\n\nform","title":"Track Your Progress"},"chunks":null,"kind":"Elixir.HiddenCell","livebook_object":"smart_cell"} -->
+
+```elixir
+file_name = Path.basename(Regex.replace(~r/#.+/, __ENV__.file, ""), ".livemd")
+
+save_name =
+  case Path.basename(__DIR__) do
+    "reading" -> "math_module_testing_reading"
+    "exercises" -> "math_module_testing_exercise"
+  end
+
+progress_path = __DIR__ <> "/../progress.json"
+existing_progress = File.read!(progress_path) |> Jason.decode!()
+
+default = Map.get(existing_progress, save_name, false)
+
+form =
+  Kino.Control.form(
+    [
+      completed: input = Kino.Input.checkbox("Mark As Completed", default: default)
+    ],
+    report_changes: true
+  )
+
+Task.async(fn ->
+  for %{data: %{completed: completed}} <- Kino.Control.stream(form) do
+    File.write!(
+      progress_path,
+      Jason.encode!(Map.put(existing_progress, save_name, completed), pretty: true)
+    )
+  end
+end)
+
+form
+```
+
+## Commit Your Progress
+
+Run the following in your command line from the curriculum folder to track and save your progress in a Git commit.
+Ensure that you do not already have undesired or unrelated changes by running `git status` or by checking the source control tab in Visual Studio Code.
+
+```
+$ git checkout -b math-module-testing-exercise
+$ git add .
+$ git commit -m "finish math module testing exercise"
+$ git push origin math-module-testing-exercise
+```
+
+Create a pull request from your `math-module-testing-exercise` branch to your `solutions` branch.
+Please do not create a pull request to the DockYard Academy repository as this will spam our PR tracker.
+
+**DockYard Academy Students Only:**
+
+Notify your instructor by including `@BrooklinJazz` in your PR description to get feedback.
+You (or your instructor) may merge your PR into your solutions branch after review.
+
+If you are interested in joining the next academy cohort, [sign up here](https://academy.dockyard.com/) to receive more news when it is available.
+
+## Up Next
+
+| Previous                           | Next                                                   |
+| ---------------------------------- | -----------------------------------------------------: |
+| [ExUnit](../reading/exunit.livemd) | [Product Filters](../exercises/product_filters.livemd) |
+
