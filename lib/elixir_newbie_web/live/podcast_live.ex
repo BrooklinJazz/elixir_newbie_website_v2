@@ -52,17 +52,17 @@ defmodule ElixirNewbieWeb.PodcastLive do
       <section class="w-full text-white">
         <h1 class="mb-4 text-center text-2xl"><%= @current_episode.title %></h1>
         <article class="flex items-center justify-center sm:space-x-12">
-          <figure class="aspect-square lg:w-1/4 sm:w-1/3  hidden sm:block">
+          <figure class="aspect-square hidden sm:block sm:w-1/3 lg:w-1/4">
             <img class="rounded-full border-t-4 border-l-4 border-white" src="images/podcast_brooklin.webp" alt="Picture resembling Brooklin Myers as a Wizard"/>
           </figure>
-          <figure class="lg:w-1/4 sm:w-2/5 w-3/4">
+          <figure class="w-3/4 sm:w-2/5 lg:w-1/4">
             <p>Elixir Newbie is a podcast dedicated to helping and encouraging new and transitioning developers to adopt Elixir.</p>
             <hr class="my-4"/>
             <p>Brooklin Myers and Co-host Jon Valdivia speak with guests from the industry. You'll learn something new, and have fun too.</p>
           </figure>
         </article>
         <article class="m-6 flex justify-center">
-          <div id="player-progress" phx-hook="Progress" class="h-3 lg:w-1/2 w-3/4 bg-gray-100 rounded-xl hover:cursor-pointer">
+          <div id="player-progress" phx-hook="Progress" class="h-3 w-3/4 rounded-xl bg-gray-100 hover:cursor-pointer lg:w-1/2">
             <div style={"width: #{progress_percent(@playing, @player_time, @current_episode.seconds)}%"} class="h-full rounded-l-full bg-gray-400" />
           </div>
         </article>
@@ -107,7 +107,7 @@ defmodule ElixirNewbieWeb.PodcastLive do
           </.form>
         </article>
       </section>
-      <section class="podcast-description mt-12 text-white m-auto w-3/4 bg-purple-500/50 text-white p-6 rounded-xl">
+      <section class="podcast-description bg-purple-500/50 m-auto mt-12 w-3/4 rounded-xl p-6 text-white text-white">
         <%= raw @current_episode.description %>
       </section>
       <section class="mt-10 grid grid-cols-4 text-white">
@@ -116,7 +116,7 @@ defmodule ElixirNewbieWeb.PodcastLive do
         <.platform href={"https://open.spotify.com/show/2VNf2tvHIjSxTXMY15qtdV"} src="images/spotify_icon.webp" alt="Spotify"/>
         <.platform href={"https://feeds.buzzsprout.com/1840381.rss"} src="images/rss_icon.webp" alt="RSS"/>
       </section>
-      <section class="w-3/4 m-auto">
+      <section class="m-auto w-3/4">
         <h2 class="mt-12 text-3xl text-white">Want more? Here's the ancient archives.</h2>
         <%= for episode <- @episodes do %>
           <.link phx-hook="ScrollToTop" id={"podcast-episode-#{episode.episode_number}"} patch={~p"/podcast?episode=#{episode.episode_number}"}>
@@ -125,7 +125,7 @@ defmodule ElixirNewbieWeb.PodcastLive do
                 <p><%= episode.title %></p>
                 <p><%= episode.hh_mm_ss %></p>
               </figcaption>
-              <img class="rounded-3xl aspect-1/5" alt="Blog" src={"images/podcast_episode_background.webp"}/>
+              <img class="aspect-1/5 rounded-3xl" alt="Blog" src={"images/podcast_episode_background.webp"}/>
             </figure>
           </.link>
         <% end %>

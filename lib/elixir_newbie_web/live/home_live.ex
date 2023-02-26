@@ -14,7 +14,7 @@ defmodule ElixirNewbieWeb.HomeLive do
     ~H"""
     <section class="bg-[url('/images/background-smoke-transparent.webp')] flex-col h-screen min-h-screen bg-black bg-no-repeat bg-cover">
       <.navigation/>
-       <section class="flex bg-red-200 w-full flex-col gap-12 4k:gap-36 lg:flex-row xl:gap-24 mx-auto sm:w-full md:w-3/4 lg:w-full xl:w-3/4">
+       <section class="mx-auto flex w-full flex-col gap-12 4k:gap-36 sm:w-full md:w-3/4 lg:w-full lg:flex-row xl:w-3/4 xl:gap-24">
         <article class="grid h-fit w-full grid-cols-6 grid-rows-6">
           <article class="aspect-square relative col-start-1 col-end-6 row-start-1 row-end-6 rounded-full border-t-4 border-l-4 border-white">
             <img

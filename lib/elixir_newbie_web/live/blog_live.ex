@@ -12,7 +12,7 @@ defmodule ElixirNewbieWeb.BlogLive do
     ~H"""
     <section class="bg-[url('/images/background-smoke-transparent.webp')] min-h-screen bg-black bg-no-repeat bg-contain">
       <.navigation/>
-      <section class="flex h-fit w-full flex-col gap-12 4k:gap-36 lg:flex-row xl:gap-24 mx-auto sm:w-full md:w-3/4 lg:w-full xl:w-3/4">
+      <section class="mx-auto flex h-fit w-full flex-col gap-12 4k:gap-36 sm:w-full md:w-3/4 lg:w-full lg:flex-row xl:w-3/4 xl:gap-24">
         <div>
           <article class="animate-fade-in grid h-fit w-full grid-cols-5 grid-rows-6">
             <article class="aspect-square relative col-start-1 col-end-6 row-start-1 row-end-6 rounded-full border-4 border-white">
