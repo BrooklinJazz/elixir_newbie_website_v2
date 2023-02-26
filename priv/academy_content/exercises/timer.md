@@ -1,0 +1,243 @@
+%{
+  title: "Timer"
+}
+---
+# Timer
+
+```elixir
+Mix.install([
+  {:jason, "~> 1.4"},
+  {:kino, "~> 0.8.0", override: true},
+  {:youtube, github: "brooklinjazz/youtube"},
+  {:hidden_cell, github: "brooklinjazz/hidden_cell"}
+])
+```
+
+## Navigation
+
+[Return Home](../start.livemd)<span style="padding: 0 30px"></span>
+[Report An Issue](https://github.com/DockYard-Academy/beta_curriculum/issues/new?assignees=&labels=&template=issue.md&title=)
+
+## Timer
+
+You're going to create a `Timer` [GenServer](https://hexdocs.pm/elixir/GenServer.html) which when spawned, will send itself a message every second to increment an internal count.
+
+You should be able to retrieve the number of seconds that have passed since the `Timer` was spawned using a `Timer.seconds/1` function.
+
+<!-- livebook:{"force_markdown":true} -->
+
+```elixir
+{:ok, pid} = Timer.start_link([])
+Timer.seconds(pid)
+0
+Process.sleep(1000)
+Timer.seconds(pid)
+2
+```
+
+Keep in mind, we cannot guarantee perfect timing when sending messages on an interval, and that is not the purpose of this exercise.
+
+<details style="background-color: lightgreen; padding: 1rem; margin: 1rem 0;">
+<summary>Example Solution</summary>
+
+```elixir
+defmodule Timer do
+  use GenServer
+
+  def start_link(_opts) do
+    GenServer.start_link(__MODULE__, [])
+  end
+
+  def seconds(timer_pid) do
+    GenServer.call(timer_pid, :seconds)
+  end
+
+  @impl true
+  def init(_opts) do
+    schedule_timer()
+    {:ok, 0}
+  end
+
+  @impl true
+  def handle_info(:increment, state) do
+    schedule_timer()
+    {:noreply, state + 1}
+  end
+
+  @impl true
+  def handle_call(:seconds, _from, state) do
+    {:reply, state, state}
+  end
+
+  defp schedule_timer do
+    Process.send_after(self(), :increment, 1000)
+  end
+end
+```
+
+</details>
+
+Implement the `Timer` module as documented below. You will also have to implement the necessary [GenServer](https://hexdocs.pm/elixir/GenServer.html) callback functions such as [GenServer.init/1](https://hexdocs.pm/elixir/GenServer.html#init/1), [GenServer.handle_info/2](https://hexdocs.pm/elixir/GenServer.html#handle_info/2), and [GenServer.handle_call/3](https://hexdocs.pm/elixir/GenServer.html#handle_call/3).
+
+```elixir
+ defmodule Timer do
+   @moduledoc """
+   Documentation for `Timer`
+   """
+   use GenServer
+
+   @doc """
+   Start the `Timer` process.
+
+   ## Examples
+
+       iex> {:ok, pid} = Timer.start_link([])
+   """
+   def start_link(_opts) do
+   end
+
+   @doc """
+   Get the number of seconds that have elapsed since the `Timer` was started.
+
+   ## Examples
+
+     iex> {:ok, pid} = Timer.start_link([])
+     iex> Timer.seconds(pid)
+     0
+     iex> Process.sleep(1200)
+     iex> Timer.seconds(pid)
+     1
+   """
+   def seconds(timer_pid) do
+   end
+ end
+```
+
+## Bonus :timer
+
+Re-implement your `Timer` module using the erlang [:timer](https://www.erlang.org/doc/man/timer.html) library. If already wrote your solution using the [:timer](https://www.erlang.org/doc/man/timer.html) library, then re-implement it using [Process.send_after/4](https://hexdocs.pm/elixir/Process.html#send_after/4).
+
+<details style="background-color: lightgreen; padding: 1rem; margin: 1rem 0;">
+<summary>Example Solution</summary>
+
+```elixir
+defmodule AlternateTimer do
+  use GenServer
+
+  def start_link(_opts) do
+    GenServer.start_link(__MODULE__, [])
+  end
+
+  def seconds(timer_pid) do
+    GenServer.call(timer_pid, :seconds)
+  end
+
+  @impl true
+  def init(_opts) do
+    :timer.send_interval(1000, self(), :increment)
+    {:ok, 0}
+  end
+
+  @impl true
+  def handle_call(:seconds, _from, state) do
+    {:reply, state, state}
+  end
+
+  @impl true
+  def handle_info(:increment, state) do
+    {:noreply, state + 1}
+  end
+end
+```
+
+</details>
+
+```elixir
+defmodule AlternateTimer do
+  @moduledoc """
+  Documentation for `Timer`
+  """
+  use GenServer
+
+  @doc """
+  Start the `Timer` process.
+  """
+  def start_link(_opts) do
+    GenServer.start_link(__MODULE__, [])
+  end
+
+  @doc """
+  Get the number of seconds that have elapsed since the `Timer` was started.
+  """
+  def seconds(timer_pid) do
+    GenServer.call(timer_pid, :seconds)
+  end
+end
+```
+
+## Mark As Completed
+
+<!-- livebook:{"attrs":{"source":"file_name = Path.basename(Regex.replace(~r/#.+/, __ENV__.file, \"\"), \".livemd\")\n\nsave_name =\n  case Path.basename(__DIR__) do\n    \"reading\" -> \"timer_reading\"\n    \"exercises\" -> \"timer_exercise\"\n  end\n\nprogress_path = __DIR__ <> \"/../progress.json\"\nexisting_progress = File.read!(progress_path) |> Jason.decode!()\n\ndefault = Map.get(existing_progress, save_name, false)\n\nform =\n  Kino.Control.form(\n    [\n      completed: input = Kino.Input.checkbox(\"Mark As Completed\", default: default)\n    ],\n    report_changes: true\n  )\n\nTask.async(fn ->\n  for %{data: %{completed: completed}} <- Kino.Control.stream(form) do\n    File.write!(\n      progress_path,\n      Jason.encode!(Map.put(existing_progress, save_name, completed), pretty: true)\n    )\n  end\nend)\n\nform","title":"Track Your Progress"},"chunks":null,"kind":"Elixir.HiddenCell","livebook_object":"smart_cell"} -->
+
+```elixir
+file_name = Path.basename(Regex.replace(~r/#.+/, __ENV__.file, ""), ".livemd")
+
+save_name =
+  case Path.basename(__DIR__) do
+    "reading" -> "timer_reading"
+    "exercises" -> "timer_exercise"
+  end
+
+progress_path = __DIR__ <> "/../progress.json"
+existing_progress = File.read!(progress_path) |> Jason.decode!()
+
+default = Map.get(existing_progress, save_name, false)
+
+form =
+  Kino.Control.form(
+    [
+      completed: input = Kino.Input.checkbox("Mark As Completed", default: default)
+    ],
+    report_changes: true
+  )
+
+Task.async(fn ->
+  for %{data: %{completed: completed}} <- Kino.Control.stream(form) do
+    File.write!(
+      progress_path,
+      Jason.encode!(Map.put(existing_progress, save_name, completed), pretty: true)
+    )
+  end
+end)
+
+form
+```
+
+## Commit Your Progress
+
+Run the following in your command line from the curriculum folder to track and save your progress in a Git commit.
+Ensure that you do not already have undesired or unrelated changes by running `git status` or by checking the source control tab in Visual Studio Code.
+
+```
+$ git checkout -b timer-exercise
+$ git add .
+$ git commit -m "finish timer exercise"
+$ git push origin timer-exercise
+```
+
+Create a pull request from your `timer-exercise` branch to your `solutions` branch.
+Please do not create a pull request to the DockYard Academy repository as this will spam our PR tracker.
+
+**DockYard Academy Students Only:**
+
+Notify your instructor by including `@BrooklinJazz` in your PR description to get feedback.
+You (or your instructor) may merge your PR into your solutions branch after review.
+
+If you are interested in joining the next academy cohort, [sign up here](https://academy.dockyard.com/) to receive more news when it is available.
+
+## Up Next
+
+| Previous                                           | Next                                         |
+| -------------------------------------------------- | -------------------------------------------: |
+| [Score Tracker](../exercises/score_tracker.livemd) | [Supervisors](../reading/supervisors.livemd) |
+

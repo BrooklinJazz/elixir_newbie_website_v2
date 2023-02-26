@@ -1,0 +1,134 @@
+%{
+  title: "Itinerary"
+}
+---
+# Itinerary
+
+```elixir
+Mix.install([
+  {:jason, "~> 1.4"},
+  {:kino, "~> 0.8.0", override: true},
+  {:youtube, github: "brooklinjazz/youtube"},
+  {:hidden_cell, github: "brooklinjazz/hidden_cell"}
+])
+```
+
+## Navigation
+
+[Return Home](../start.livemd)<span style="padding: 0 30px"></span>
+[Report An Issue](https://github.com/DockYard-Academy/beta_curriculum/issues/new?assignees=&labels=&template=issue.md&title=)
+
+## Itinerary
+
+You are building a day planning application. Users will provide the time it takes to complete an activity in minutes and you will determine if there is enough time to fit the activity between two [DateTime](https://hexdocs.pm/elixir/DateTime.html)s.
+
+<details style="background-color: lightgreen; padding: 1rem; margin: 1rem 0;">
+<summary>Example Solution</summary>
+
+```elixir
+defmodule Itinerary do
+  def has_time?(start, finish, minutes) do
+    DateTime.diff(finish, start) >= minutes * 60
+  end
+end
+```
+
+</details>
+
+Implement the `Itinerary` module as documented.
+
+```elixir
+defmodule Itinerary do
+  @doc """
+  Given a number of minutes, determine if there is enough time 
+  between two `DateTimes` to fit an activity lasting a number of minutes.
+
+  ## Examples
+
+    iex> Itinerary.has_time?(~U[2020-01-01 12:00:00Z], ~U[2020-01-01 12:01:00Z], 1)
+    true
+    
+    iex> Itinerary.has_time?(~U[2020-01-01 12:00:00Z], ~U[2020-01-01 12:10:00Z], 10)
+    true
+
+    iex> Itinerary.has_time?(~U[2020-01-01 07:00:00Z], ~U[2020-01-01 08:00:00Z], 60)
+    true
+
+    iex> Itinerary.has_time?(~U[2020-01-01 12:00:00Z], ~U[2020-01-01 12:30:00Z], 31)
+    false
+
+    iex> Itinerary.has_time?(~U[2020-01-01 07:00:00Z], ~U[2020-01-01 08:00:00Z], 61)
+    false
+    
+  """
+  def has_time?(start, finish, minutes) do
+  end
+end
+```
+
+## Mark As Completed
+
+<!-- livebook:{"attrs":{"source":"file_name = Path.basename(Regex.replace(~r/#.+/, __ENV__.file, \"\"), \".livemd\")\n\nsave_name =\n  case Path.basename(__DIR__) do\n    \"reading\" -> \"itinerary_reading\"\n    \"exercises\" -> \"itinerary_exercise\"\n  end\n\nprogress_path = __DIR__ <> \"/../progress.json\"\nexisting_progress = File.read!(progress_path) |> Jason.decode!()\n\ndefault = Map.get(existing_progress, save_name, false)\n\nform =\n  Kino.Control.form(\n    [\n      completed: input = Kino.Input.checkbox(\"Mark As Completed\", default: default)\n    ],\n    report_changes: true\n  )\n\nTask.async(fn ->\n  for %{data: %{completed: completed}} <- Kino.Control.stream(form) do\n    File.write!(\n      progress_path,\n      Jason.encode!(Map.put(existing_progress, save_name, completed), pretty: true)\n    )\n  end\nend)\n\nform","title":"Track Your Progress"},"chunks":null,"kind":"Elixir.HiddenCell","livebook_object":"smart_cell"} -->
+
+```elixir
+file_name = Path.basename(Regex.replace(~r/#.+/, __ENV__.file, ""), ".livemd")
+
+save_name =
+  case Path.basename(__DIR__) do
+    "reading" -> "itinerary_reading"
+    "exercises" -> "itinerary_exercise"
+  end
+
+progress_path = __DIR__ <> "/../progress.json"
+existing_progress = File.read!(progress_path) |> Jason.decode!()
+
+default = Map.get(existing_progress, save_name, false)
+
+form =
+  Kino.Control.form(
+    [
+      completed: input = Kino.Input.checkbox("Mark As Completed", default: default)
+    ],
+    report_changes: true
+  )
+
+Task.async(fn ->
+  for %{data: %{completed: completed}} <- Kino.Control.stream(form) do
+    File.write!(
+      progress_path,
+      Jason.encode!(Map.put(existing_progress, save_name, completed), pretty: true)
+    )
+  end
+end)
+
+form
+```
+
+## Commit Your Progress
+
+Run the following in your command line from the curriculum folder to track and save your progress in a Git commit.
+Ensure that you do not already have undesired or unrelated changes by running `git status` or by checking the source control tab in Visual Studio Code.
+
+```
+$ git checkout -b itinerary-exercise
+$ git add .
+$ git commit -m "finish itinerary exercise"
+$ git push origin itinerary-exercise
+```
+
+Create a pull request from your `itinerary-exercise` branch to your `solutions` branch.
+Please do not create a pull request to the DockYard Academy repository as this will spam our PR tracker.
+
+**DockYard Academy Students Only:**
+
+Notify your instructor by including `@BrooklinJazz` in your PR description to get feedback.
+You (or your instructor) may merge your PR into your solutions branch after review.
+
+If you are interested in joining the next academy cohort, [sign up here](https://academy.dockyard.com/) to receive more news when it is available.
+
+## Up Next
+
+| Previous                                               | Next                                     |
+| ------------------------------------------------------ | ---------------------------------------: |
+| [Time Converting](../exercises/time_converting.livemd) | [Timeline](../exercises/timeline.livemd) |
+

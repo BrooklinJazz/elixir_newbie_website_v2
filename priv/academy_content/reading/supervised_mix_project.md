@@ -1,0 +1,441 @@
+%{
+  title: "Supervised Mix Project"
+}
+---
+# Supervised Mix Projects
+
+```elixir
+Mix.install([
+  {:jason, "~> 1.4"},
+  {:kino, "~> 0.8.0", override: true},
+  {:youtube, github: "brooklinjazz/youtube"},
+  {:hidden_cell, github: "brooklinjazz/hidden_cell"}
+])
+```
+
+## Navigation
+
+[Return Home](../start.livemd)<span style="padding: 0 30px"></span>
+[Report An Issue](https://github.com/DockYard-Academy/beta_curriculum/issues/new?assignees=&labels=&template=issue.md&title=)
+
+## Setup
+
+Ensure you type the `ea` keyboard shortcut to evaluate all Elixir cells before starting. Alternatively, you can evaluate the Elixir cells as you read.
+
+## Review Questions
+
+* What is the benefit of using a supervised mix project?
+* How do you configure a mix project with a supervisor?
+
+## Supervised Mix Projects
+
+We can start mix projects under a supervisor.
+
+Use the `--sup` flag to generate a supervised mix project.
+
+To demonstrate, we're going to create a supervised rock paper scissors application.
+
+```
+$ mix new rock_paper_scissors --sup
+```
+
+Which creates the following files.
+
+```
+* creating README.md
+* creating .formatter.exs
+* creating .gitignore
+* creating mix.exs
+* creating lib
+* creating lib/rock_paper_scissors.ex
+* creating lib/rock_paper_scissors/application.ex
+* creating test
+* creating test/test_helper.exs
+* creating test/rock_paper_scissors_test.exs
+
+Your Mix project was created successfully.
+You can use "mix" to compile it, test it, and more:
+
+    cd rock_paper_scissors
+    mix test
+
+Run "mix help" for more commands.
+```
+
+This creates a standard mix project, with two main differences.
+First, there is a `application.ex` file. This file defines a `start/2` function which starts a named supervisor `RockPaperScissors.Supervisor`.
+
+<!-- livebook:{"force_markdown":true} -->
+
+```elixir
+defmodule RockPaperScissors.Application do
+  # See https://hexdocs.pm/elixir/Application.html
+  # for more information on OTP Applications
+  @moduledoc false
+
+  use Application
+
+  @impl true
+  def start(_type, _args) do
+    children = [
+      # Starts a worker by calling: RockPaperScissors.Worker.start_link(arg)
+      # {RockPaperScissors.Worker, arg}
+    ]
+
+    # See https://hexdocs.pm/elixir/Supervisor.html
+    # for other strategies and supported options
+    opts = [strategy: :one_for_one, name: RockPaperScissors.Supervisor]
+    Supervisor.start_link(children, opts)
+  end
+end
+```
+
+Next, the `mix.exs` file's `application/0` function has changed to include a `:mod` value.
+This `:mod` key defines the args value when the `RockPaperScissors.Application.start/2` function is called.
+
+<!-- livebook:{"force_markdown":true} -->
+
+```elixir
+  def application do
+    [
+      extra_applications: [:logger],
+      mod: {RockPaperScissors.Application, []}
+    ]
+  end
+```
+
+## Starting Our Application
+
+The `RockPaperScissors.Application.start/2` function is called when we run the project, and
+the `:mod` value in `application/0` defines the `args` argument value.
+
+Let's prove that. Add an [IO.puts/2](https://hexdocs.pm/elixir/IO.html#puts/2) message in the `start/2` function. We'll also remove the comments
+for the sake of conciseness, but you can leave them in if you prefer.
+
+<!-- livebook:{"force_markdown":true} -->
+
+```elixir
+  def start(_type, args) do
+    IO.puts(args)
+
+    children = []
+
+    opts = [strategy: :one_for_one, name: RockPaperScissors.Supervisor]
+    Supervisor.start_link(children, opts)
+  end
+```
+
+We'll also modify `args` to prove the connection.
+
+<!-- livebook:{"force_markdown":true} -->
+
+```elixir
+  def application do
+    [
+      extra_applications: [:logger],
+      mod: {RockPaperScissors.Application, "Starting Application"}
+    ]
+  end
+```
+
+Now start the project in the [IEx](https://hexdocs.pm/iex/IEx.html) shell and you should see `"Starting Application"` in the logs.
+
+```
+$ iex -S mix
+Erlang/OTP 24 [erts-12.3] [source] [64-bit] [smp:8:8] [ds:8:8:10] [async-threads:1] [jit]
+
+Starting Application
+Interactive Elixir (1.13.3) - press Ctrl+C to exit (type h() ENTER for help)
+iex(1)>
+```
+
+Since the `RockPaperScissors.Application.start/2` function starts the `RockPaperScissors.Supervisor` it
+should be alive. We can use [Supervisor.count_children/1](https://hexdocs.pm/elixir/Supervisor.html#count_children/1) to see that the `RockPaperScissors.Supervisor` has
+started with no child workers.
+
+<!-- livebook:{"force_markdown":true} -->
+
+```elixir
+iex(1)> Supervisor.count_children(RockPaperScissors.Supervisor)
+%{active: 0, specs: 0, supervisors: 0, workers: 0}
+```
+
+## Starting Child Workers
+
+We're going to create a `RockPaperScissors` [GenServer](https://hexdocs.pm/elixir/GenServer.html) in the `lib/rock_paper_scissors.ex` file which handles the logic for playing our game.
+
+We'll create a very basic named [GenServer](https://hexdocs.pm/elixir/GenServer.html) for now and an [IO.puts/2](https://hexdocs.pm/elixir/IO.html#puts/2) message to ensure it starts correctly.
+
+<!-- livebook:{"force_markdown":true} -->
+
+```elixir
+defmodule RockPaperScissors do
+  use GenServer
+
+  def start_link(opts) do
+    IO.puts("RockPaperScissors started")
+    GenServer.start_link(__MODULE__, opts, name: __MODULE__)
+  end
+
+  def init(state) do
+    {:ok, state}
+  end
+end
+```
+
+We then have to put the `RockPaperScissors` as one of the `children` for our supervisor in `application.ex`.
+
+<!-- livebook:{"force_markdown":true} -->
+
+```elixir
+def start(_type, args) do
+  IO.puts(args)
+
+  children = [
+    {RockPaperScissors, []}
+  ]
+
+  # See https://hexdocs.pm/elixir/Supervisor.html
+  # for other strategies and supported options
+  opts = [strategy: :one_for_one, name: RockPaperScissors.Supervisor]
+  Supervisor.start_link(children, opts)
+end
+```
+
+Quit and restart the [IEx](https://hexdocs.pm/iex/IEx.html) shell. You should see the `Started RockPaperScissors` message in the output.
+
+```
+Erlang/OTP 24 [erts-12.3] [source] [64-bit] [smp:8:8] [ds:8:8:10] [async-threads:1] [jit]
+
+Compiling 1 file (.ex)
+Starting Application
+RockPaperScissors started
+Interactive Elixir (1.13.3) - press Ctrl+C to exit (type h() ENTER for help)
+```
+
+We can confirm the `RockPaperScissors` worker is being supervised by the `RockPaperScissors.Supervisor` using
+[Supervisor.which_children/1](https://hexdocs.pm/elixir/Supervisor.html#which_children/1).
+
+<!-- livebook:{"force_markdown":true} -->
+
+```elixir
+iex(1)> Supervisor.which_children(RockPaperScissors.Supervisor)
+[{RockPaperScissors, PID<0.163.0>, :worker, [RockPaperScissors]}]
+```
+
+<!-- livebook:{"break_markdown":true} -->
+
+### RockPaperScissors Game
+
+Now that we have the `RockPaperScissors` worker started and supervised, we can create the logic
+for the game.
+
+The RockPaperScissors game will prompt the player to enter either `rock`, `paper`, or `scissors` as a string.
+
+We want to repeatedly prompt the user to enter a choice for rock, paper, or scissors.
+So we'll send the `RockPaperScissors` module a `:prompt` message over and over again.
+
+<!-- livebook:{"force_markdown":true} -->
+
+```elixir
+defmodule RockPaperScissors do
+  use GenServer
+
+  def start_link(state) do
+    IO.puts("RockPaperScissors started")
+    GenServer.start_link(__MODULE__, state, name: __MODULE__)
+  end
+
+  def init(state) do
+    send(self(), :prompt)
+    {:ok, state}
+  end
+
+  def handle_info(:prompt, state) do
+    choice = "Please enter rock, paper, or scissors.\n" |> IO.gets() |> String.trim()
+    send(self(), :prompt)
+    {:noreply, state}
+  end
+end
+```
+
+Now, you'll notice that if we try to start the project in the [IEx](https://hexdocs.pm/iex/IEx.html) shell,
+we can't actually interact with the console to provide the player's choice.
+
+```
+$ iex -S mix
+Erlang/OTP 24 [erts-12.3] [source] [64-bit] [smp:8:8] [ds:8:8:10] [async-threads:1] [jit]
+
+Compiling 1 file (.ex)
+Starting Application
+RockPaperScissors started
+Please enter rock, paper, or scissors.Interactive Elixir (1.13.3) - press Ctrl+C to exit (type h() ENTER for help)
+iex(1)>
+```
+
+We can instead run a mix project with `mix run`. However, `mix run` will exit once the `RockPaperScissors.start/2` callback
+completes.
+
+```
+$ mix run
+mix run
+Starting Application
+RockPaperScissors started
+Please enter rock, paper, or scissors.
+$
+```
+
+We can use the `--no-halt` flag to avoid this issue.
+Now we can keep entering a choice over and over.
+
+```
+$ mix run --no-halt
+mix run
+Starting Application
+RockPaperScissors started
+Please enter rock, paper, or scissors.
+rock
+Please enter rock, paper, or scissors.
+paper
+Please enter rock, paper, or scissors.
+```
+
+Now we've got everything in place to implement the actual rock paper scissors game.
+
+```elixir
+defmodule RockPaperScissors do
+  use GenServer
+
+  def start_link(state) do
+    IO.puts("RockPaperScissors started")
+    GenServer.start_link(__MODULE__, state, name: __MODULE__)
+  end
+
+  def init(state) do
+    send(self(), :prompt)
+    {:ok, state}
+  end
+
+  def handle_info(:prompt, state) do
+    choice = "Please enter rock, paper, or scissors.\n" |> IO.gets() |> String.trim()
+    answer = Enum.random(["rock", "paper", "scissors"])
+
+    result =
+      case {choice, answer} do
+        {"rock", "scissors"} -> "You win!"
+        {"paper", "rock"} -> "You win!"
+        {"scissors", "paper"} -> "You win!"
+        {"rock", "paper"} -> "You Lose!"
+        {"paper", "scissors"} -> "You Lose!"
+        {"scissors", "rock"} -> "You Lose!"
+        {same, same} -> "Draw!"
+      end
+
+    IO.puts(result)
+
+    send(self(), :prompt)
+    {:noreply, state}
+  end
+end
+```
+
+Now we can play the game!
+
+```
+$ mix run --no-halt
+Starting Application
+RockPaperScissors started
+Please enter rock, paper, or scissors.
+rock
+You Win!
+Please enter rock, paper, or scissors.
+```
+
+However, to demonstrate the benefit of our supervisor, we've purposely left a bug in the code above. The `case` statement doesn't handle input
+other than `"rock"`, `"paper"`, or `"scissors"`. Even `"Rock"`, `"Paper"`, and `"Scissors"` are not valid answers.
+
+```
+$ mix run --no-halt
+Starting Application
+RockPaperScissors started
+Please enter rock, paper, or scissors.
+Rock
+19:34:09.995 [error] GenServer RockPaperScissors terminating
+** (CaseClauseError) no case clause matching: {"Rock", "scissors"}
+    (rock_paper_scissors 0.1.0) lib/rock_paper_scissors.ex:20: RockPaperScissors.handle_info/2
+    (stdlib 3.17.1) gen_server.erl:695: :gen_server.try_dispatch/4
+    (stdlib 3.17.1) gen_server.erl:771: :gen_server.handle_msg/6
+    (stdlib 3.17.1) proc_lib.erl:226: :proc_lib.init_p_do_apply/3
+Last message: :prompt
+State: []
+Please enter rock, paper, or scissors.
+```
+
+Notice that even though our game crashes, the supervisor restarts the `RockPaperScissors` process so we can keep playing. That's fault-tolerance in action!
+
+## Mark As Completed
+
+<!-- livebook:{"attrs":{"source":"file_name = Path.basename(Regex.replace(~r/#.+/, __ENV__.file, \"\"), \".livemd\")\n\nsave_name =\n  case Path.basename(__DIR__) do\n    \"reading\" -> \"supervised_mix_project_reading\"\n    \"exercises\" -> \"supervised_mix_project_exercise\"\n  end\n\nprogress_path = __DIR__ <> \"/../progress.json\"\nexisting_progress = File.read!(progress_path) |> Jason.decode!()\n\ndefault = Map.get(existing_progress, save_name, false)\n\nform =\n  Kino.Control.form(\n    [\n      completed: input = Kino.Input.checkbox(\"Mark As Completed\", default: default)\n    ],\n    report_changes: true\n  )\n\nTask.async(fn ->\n  for %{data: %{completed: completed}} <- Kino.Control.stream(form) do\n    File.write!(\n      progress_path,\n      Jason.encode!(Map.put(existing_progress, save_name, completed), pretty: true)\n    )\n  end\nend)\n\nform","title":"Track Your Progress"},"chunks":null,"kind":"Elixir.HiddenCell","livebook_object":"smart_cell"} -->
+
+```elixir
+file_name = Path.basename(Regex.replace(~r/#.+/, __ENV__.file, ""), ".livemd")
+
+save_name =
+  case Path.basename(__DIR__) do
+    "reading" -> "supervised_mix_project_reading"
+    "exercises" -> "supervised_mix_project_exercise"
+  end
+
+progress_path = __DIR__ <> "/../progress.json"
+existing_progress = File.read!(progress_path) |> Jason.decode!()
+
+default = Map.get(existing_progress, save_name, false)
+
+form =
+  Kino.Control.form(
+    [
+      completed: input = Kino.Input.checkbox("Mark As Completed", default: default)
+    ],
+    report_changes: true
+  )
+
+Task.async(fn ->
+  for %{data: %{completed: completed}} <- Kino.Control.stream(form) do
+    File.write!(
+      progress_path,
+      Jason.encode!(Map.put(existing_progress, save_name, completed), pretty: true)
+    )
+  end
+end)
+
+form
+```
+
+## Commit Your Progress
+
+Run the following in your command line from the curriculum folder to track and save your progress in a Git commit.
+Ensure that you do not already have undesired or unrelated changes by running `git status` or by checking the source control tab in Visual Studio Code.
+
+```
+$ git checkout -b supervised-mix-project-reading
+$ git add .
+$ git commit -m "finish supervised mix project reading"
+$ git push origin supervised-mix-project-reading
+```
+
+Create a pull request from your `supervised-mix-project-reading` branch to your `solutions` branch.
+Please do not create a pull request to the DockYard Academy repository as this will spam our PR tracker.
+
+**DockYard Academy Students Only:**
+
+Notify your instructor by including `@BrooklinJazz` in your PR description to get feedback.
+You (or your instructor) may merge your PR into your solutions branch after review.
+
+If you are interested in joining the next academy cohort, [sign up here](https://academy.dockyard.com/) to receive more news when it is available.
+
+## Up Next
+
+| Previous                                                   | Next                                                                              |
+| ---------------------------------------------------------- | --------------------------------------------------------------------------------: |
+| [Custom Assertions](../exercises/custom_assertions.livemd) | [Supervisors and GenServers](../exercises/supervisor_and_genserver_drills.livemd) |
+

@@ -1,0 +1,124 @@
+%{
+  title: "GitHub Engineering Journal"
+}
+---
+# Github Engineering Journal
+
+```elixir
+Mix.install([
+  {:jason, "~> 1.4"},
+  {:kino, "~> 0.8.0", override: true},
+  {:youtube, github: "brooklinjazz/youtube"},
+  {:hidden_cell, github: "brooklinjazz/hidden_cell"}
+])
+```
+
+## Navigation
+
+[Return Home](../start.livemd)<span style="padding: 0 30px"></span>
+[Report An Issue](https://github.com/DockYard-Academy/beta_curriculum/issues/new?assignees=&labels=&template=issue.md&title=)
+
+## Engineering Journal
+
+It's genuinely a great habit to keep an engineering journal.
+You can use your engineering journal to track how you solve problems and what your work on.
+It's also excellent practice with Git, GitHub, and markdown.
+
+You may use any method (such as GitHub Desktop, or the command line) to accomplish the following.
+
+In this exercise
+
+* create a local git project called `engineering_journal`.
+* create your first journal entry as a `.md` file. Name the file after a topic, or todays date. i.e. `2022-03-28.md`.
+* stage and commit the journal entry.
+* create a remote repository for `engineering_journal`.
+* push your changes to the remote repository.
+
+Once finished, we highly recommend you use this as an engineering journal to track things you learn about Elixir.
+
+<!-- livebook:{"break_markdown":true} -->
+
+### Bonus: Foam
+
+You may also be interested in the [Foam](https://foambubble.github.io/foam/) project for Visual Studio Code. Foam provides useful features such as hyperlinks and a graph visualization of all your notes.
+
+Follow the [Foam Getting Started Guide](https://foambubble.github.io/foam/#getting-started) and install the [Recommended Extensions](https://foambubble.github.io/foam/user/getting-started/recommended-extensions).
+
+Create a new foam note, and include a hyperlink. Run the `Foam: Show graph` command to see a graph of your notes that have hyperlinks to each other.
+
+<!-- livebook:{"break_markdown":true} -->
+
+![](images/graph.png)
+
+<!-- livebook:{"break_markdown":true} -->
+
+Foam makes for an even better engineering journal, because you can create notes for specific topics, and create hyperlinks between notes to store everything you learn about that topic.
+
+It's also excellent practice for learning Markdown.
+
+## Mark As Completed
+
+<!-- livebook:{"attrs":{"source":"file_name = Path.basename(Regex.replace(~r/#.+/, __ENV__.file, \"\"), \".livemd\")\n\nsave_name =\n  case Path.basename(__DIR__) do\n    \"reading\" -> \"github_engineering_journal_reading\"\n    \"exercises\" -> \"github_engineering_journal_exercise\"\n  end\n\nprogress_path = __DIR__ <> \"/../progress.json\"\nexisting_progress = File.read!(progress_path) |> Jason.decode!()\n\ndefault = Map.get(existing_progress, save_name, false)\n\nform =\n  Kino.Control.form(\n    [\n      completed: input = Kino.Input.checkbox(\"Mark As Completed\", default: default)\n    ],\n    report_changes: true\n  )\n\nTask.async(fn ->\n  for %{data: %{completed: completed}} <- Kino.Control.stream(form) do\n    File.write!(\n      progress_path,\n      Jason.encode!(Map.put(existing_progress, save_name, completed), pretty: true)\n    )\n  end\nend)\n\nform","title":"Track Your Progress"},"chunks":null,"kind":"Elixir.HiddenCell","livebook_object":"smart_cell"} -->
+
+```elixir
+file_name = Path.basename(Regex.replace(~r/#.+/, __ENV__.file, ""), ".livemd")
+
+save_name =
+  case Path.basename(__DIR__) do
+    "reading" -> "github_engineering_journal_reading"
+    "exercises" -> "github_engineering_journal_exercise"
+  end
+
+progress_path = __DIR__ <> "/../progress.json"
+existing_progress = File.read!(progress_path) |> Jason.decode!()
+
+default = Map.get(existing_progress, save_name, false)
+
+form =
+  Kino.Control.form(
+    [
+      completed: input = Kino.Input.checkbox("Mark As Completed", default: default)
+    ],
+    report_changes: true
+  )
+
+Task.async(fn ->
+  for %{data: %{completed: completed}} <- Kino.Control.stream(form) do
+    File.write!(
+      progress_path,
+      Jason.encode!(Map.put(existing_progress, save_name, completed), pretty: true)
+    )
+  end
+end)
+
+form
+```
+
+## Commit Your Progress
+
+Run the following in your command line from the curriculum folder to track and save your progress in a Git commit.
+Ensure that you do not already have undesired or unrelated changes by running `git status` or by checking the source control tab in Visual Studio Code.
+
+```
+$ git checkout -b github-engineering-journal-exercise
+$ git add .
+$ git commit -m "finish github engineering journal exercise"
+$ git push origin github-engineering-journal-exercise
+```
+
+Create a pull request from your `github-engineering-journal-exercise` branch to your `solutions` branch.
+Please do not create a pull request to the DockYard Academy repository as this will spam our PR tracker.
+
+**DockYard Academy Students Only:**
+
+Notify your instructor by including `@BrooklinJazz` in your PR description to get feedback.
+You (or your instructor) may merge your PR into your solutions branch after review.
+
+If you are interested in joining the next academy cohort, [sign up here](https://academy.dockyard.com/) to receive more news when it is available.
+
+## Up Next
+
+| Previous                                                                 | Next                                               |
+| ------------------------------------------------------------------------ | -------------------------------------------------: |
+| [Command Line Family Tree](../exercises/command_line_family_tree.livemd) | [GitHub Collab](../exercises/github_collab.livemd) |
+

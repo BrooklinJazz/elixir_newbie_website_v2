@@ -1,0 +1,221 @@
+%{
+  title: "Rollable Expressions"
+}
+---
+# Rollable Expressions
+
+```elixir
+Mix.install([
+  {:jason, "~> 1.4"},
+  {:kino, "~> 0.8.0", override: true},
+  {:youtube, github: "brooklinjazz/youtube"},
+  {:hidden_cell, github: "brooklinjazz/hidden_cell"}
+])
+```
+
+## Navigation
+
+[Return Home](../start.livemd)<span style="padding: 0 30px"></span>
+[Report An Issue](https://github.com/DockYard-Academy/beta_curriculum/issues/new?assignees=&labels=&template=issue.md&title=)
+
+## Rollable Expressions
+
+Many games such as Dungeons & Dragons require rolling dice to determine the effects of player actions.
+You will build a program which makes it easier for players to automatically roll dice online.
+
+Dice expressions are in the form `1d6` which means [roll one six-sided die](https://www.google.com/search?q=roll+1d6).
+
+There can be any **number of dice** on the left hand side of the `d` and any number of sides on the dice on the right hand side of the `d`.
+
+For example, `20d12` would roll twenty dice with twelve sides. [20d12](https://www.google.com/search?q=roll+20d12).
+
+Provided a text with a dice expression, replace the expression with a clickable link.
+
+In markdown, a clickable link is in the format `[link name](url)`.
+
+Google allows you to roll multi sided dice by searching `roll 1d6`.
+The url for this is https://www.google.com/search?q=roll+1d6.
+
+<!-- livebook:{"force_markdown":true} -->
+
+```elixir
+Rollable.replace("8d6")
+"[8d6](https://www.google.com/search?q=roll+8d6)"
+```
+
+Ensure you handle `4`, `6`, `8`, `12`, and `20` sided dice and
+handle rolling between `1` and `99` dice.
+
+<!-- livebook:{"force_markdown":true} -->
+
+```elixir
+Rollable.replace("Fireball: deal 8d6 fire damage.")
+"Fireball: deal [8d6](https://www.google.com/search?q=roll+8d6) fire damage."
+```
+
+### Bonus
+
+Implement a `Rollable.roll/1` function which finds rollable expressions and generates a random number based on the expression. For example, `1d6` would roll a single die returning a result from `1` to `6`. `2d12` would generate two random numbers between `1` and `12` and add them together.
+
+<!-- livebook:{"force_markdown":true} -->
+
+```elixir
+Rollable.roll("2d12")
+"20"
+
+Rollable.roll("2d12")
+"24"
+
+Rollable.roll("2d12")
+"5"
+
+Rollable.roll("Fireball: deal 8d6 fire damage.")
+"Fireball: deal 20 fire damage."
+```
+
+<details style="background-color: burlywood; padding: 1rem; margin: 1rem 0;">
+<summary>Hint</summary>
+
+You can use [Regex.replace/4](https://hexdocs.pm/elixir/Regex.html#replace/4) to replace expressions in a string, and `\d+` to match on one or more digits.
+
+</details>
+
+<details style="background-color: lightgreen; padding: 1rem; margin: 1rem 0;">
+<summary>Example Solution</summary>
+
+```elixir
+defmodule Rollable
+  def replace(string) do
+    Regex.replace(~r/(\d+)d(\d+)/, string, fn full, dice, sides ->
+      "[#{full}](https://www.google.com/search?q=roll+#{dice}d#{sides})"
+    end)
+  end
+
+  def roll(string) do
+    Regex.replace(~r/(\d+)d(\d)+/, string, fn full, dice, sides ->
+      dice_integer = String.to_integer(dice)
+      sides_integer = String.to_integer(sides)
+
+      value =
+        1..dice_integer
+        |> Enum.map(fn _ -> Enum.random(1..sides_integer) end)
+        |> Enum.sum()
+        |> Integer.to_string()
+    end)
+  end
+end
+```
+
+</details>
+
+Implement the `Rollable` module as documented below.
+
+```elixir
+defmodule Rollable do
+  @moduledoc """
+  Documentation for `Rollable`
+  """
+
+  @doc """
+  Replace dice expressions with clickable links.
+
+  ## Examples
+
+    iex> Rollable.replace("1d4")
+    "[1d4](https://www.google.com/search?q=roll+1d4)"
+
+    iex> Rollable.replace("1d6")
+    "[1d6](https://www.google.com/search?q=roll+1d6)"
+
+    iex> Rollable.replace("1d8")
+    "[1d8](https://www.google.com/search?q=roll+1d8)"
+
+    iex> Rollable.replace("1d12")
+    "[1d12](https://www.google.com/search?q=roll+1d12)"
+
+    iex> Rollable.replace("1d20")
+    "[1d20](https://www.google.com/search?q=roll+1d20)"
+
+    iex> Rollable.replace("8d6")
+    "[8d6](https://www.google.com/search?q=roll+8d6)"
+
+    iex> Rollable.replace("99d20")
+    "[99d20](https://www.google.com/search?q=roll+99d20)"
+    
+    iex> Rollable.replace("Ice Shard: deal 12d4 ice damage.")
+    "Ice Shard: deal [12d4](https://www.google.com/search?q=roll+12d4) ice damage."
+  """
+  def replace(string) do
+  end
+
+  def roll(string) do
+  end
+end
+```
+
+## Mark As Completed
+
+<!-- livebook:{"attrs":{"source":"file_name = Path.basename(Regex.replace(~r/#.+/, __ENV__.file, \"\"), \".livemd\")\n\nsave_name =\n  case Path.basename(__DIR__) do\n    \"reading\" -> \"rollable_expressions_reading\"\n    \"exercises\" -> \"rollable_expressions_exercise\"\n  end\n\nprogress_path = __DIR__ <> \"/../progress.json\"\nexisting_progress = File.read!(progress_path) |> Jason.decode!()\n\ndefault = Map.get(existing_progress, save_name, false)\n\nform =\n  Kino.Control.form(\n    [\n      completed: input = Kino.Input.checkbox(\"Mark As Completed\", default: default)\n    ],\n    report_changes: true\n  )\n\nTask.async(fn ->\n  for %{data: %{completed: completed}} <- Kino.Control.stream(form) do\n    File.write!(\n      progress_path,\n      Jason.encode!(Map.put(existing_progress, save_name, completed), pretty: true)\n    )\n  end\nend)\n\nform","title":"Track Your Progress"},"chunks":null,"kind":"Elixir.HiddenCell","livebook_object":"smart_cell"} -->
+
+```elixir
+file_name = Path.basename(Regex.replace(~r/#.+/, __ENV__.file, ""), ".livemd")
+
+save_name =
+  case Path.basename(__DIR__) do
+    "reading" -> "rollable_expressions_reading"
+    "exercises" -> "rollable_expressions_exercise"
+  end
+
+progress_path = __DIR__ <> "/../progress.json"
+existing_progress = File.read!(progress_path) |> Jason.decode!()
+
+default = Map.get(existing_progress, save_name, false)
+
+form =
+  Kino.Control.form(
+    [
+      completed: input = Kino.Input.checkbox("Mark As Completed", default: default)
+    ],
+    report_changes: true
+  )
+
+Task.async(fn ->
+  for %{data: %{completed: completed}} <- Kino.Control.stream(form) do
+    File.write!(
+      progress_path,
+      Jason.encode!(Map.put(existing_progress, save_name, completed), pretty: true)
+    )
+  end
+end)
+
+form
+```
+
+## Commit Your Progress
+
+Run the following in your command line from the curriculum folder to track and save your progress in a Git commit.
+Ensure that you do not already have undesired or unrelated changes by running `git status` or by checking the source control tab in Visual Studio Code.
+
+```
+$ git checkout -b rollable-expressions-exercise
+$ git add .
+$ git commit -m "finish rollable expressions exercise"
+$ git push origin rollable-expressions-exercise
+```
+
+Create a pull request from your `rollable-expressions-exercise` branch to your `solutions` branch.
+Please do not create a pull request to the DockYard Academy repository as this will spam our PR tracker.
+
+**DockYard Academy Students Only:**
+
+Notify your instructor by including `@BrooklinJazz` in your PR description to get feedback.
+You (or your instructor) may merge your PR into your solutions branch after review.
+
+If you are interested in joining the next academy cohort, [sign up here](https://academy.dockyard.com/) to receive more news when it is available.
+
+## Up Next
+
+| Previous                                           | Next                                                             |
+| -------------------------------------------------- | ---------------------------------------------------------------: |
+| [Caesar Cypher](../exercises/caesar_cypher.livemd) | [Phone Number Parsing](../exercises/phone_number_parsing.livemd) |
+

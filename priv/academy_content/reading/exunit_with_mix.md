@@ -1,0 +1,273 @@
+%{
+  title: "ExUnit With Mix"
+}
+---
+# ExUnit With Mix
+
+```elixir
+Mix.install([
+  {:jason, "~> 1.4"},
+  {:kino, "~> 0.8.0", override: true},
+  {:youtube, github: "brooklinjazz/youtube"},
+  {:hidden_cell, github: "brooklinjazz/hidden_cell"}
+])
+```
+
+## Navigation
+
+[Return Home](../start.livemd)<span style="padding: 0 30px"></span>
+[Report An Issue](https://github.com/DockYard-Academy/beta_curriculum/issues/new?assignees=&labels=&template=issue.md&title=)
+
+## Setup
+
+Ensure you type the `ea` keyboard shortcut to evaluate all Elixir cells before starting. Alternatively you can evaluate the Elixir cells as you read.
+
+## Review Questions
+
+Upon completing this lesson, a student should be able to answer the following questions.
+
+* How do we run tests by line number?
+* How do we use tags to include or exclude specific tests? Why might we want to do that?
+
+## ExUnit With Mix
+
+Mix projects provide some conveniences when working with [ExUnit](https://hexdocs.pm/ex_unit/ExUnit.html).
+
+Let's see how we would test a `Math` module if it were a Mix project.
+First, create a new mix project called `math`.
+
+```
+$ mix new math
+```
+
+You should see an output similar to the following.
+
+```
+* creating README.md
+* creating .formatter.exs
+* creating .gitignore
+* creating mix.exs
+* creating lib
+* creating lib/math.ex
+* creating test
+* creating test/test_helper.exs
+* creating test/math_test.exs
+
+Your Mix project was created successfully.
+You can use "mix" to compile it, test it, and more:
+
+    cd math
+    mix test
+
+Run "mix help" for more commands.
+```
+
+Tests in a mix project are in the `test/` folder. Generally there is an equivalent file in the `test/` folder
+for each tested file in the `lib` folder.
+
+ExUnit is started for us in the `test/test_helper.exs` file, and
+files in the `test/` folder automatically compile, evaluate, and execute when we run tests.
+
+<!-- livebook:{"break_markdown":true} -->
+
+### Run Tests
+
+We can execute all tests by running the following from the command line in the project folder.
+
+```
+$ mix test
+```
+
+<!-- livebook:{"break_markdown":true} -->
+
+### Run Tests in A File
+
+We can run a single test file by providing its path.
+
+```
+$ mix test path/to/test/file.exs
+```
+
+For example, we can run the `math_test.exs` file.
+
+```
+$ mix test test/math_test.exs
+```
+
+<!-- livebook:{"break_markdown":true} -->
+
+### Run Tests By Line Number
+
+We can execute a specific test or several tests under a `describe` block by providing the line number.
+
+```
+$ mix test test/math_test.exs:5
+```
+
+<!-- livebook:{"break_markdown":true} -->
+
+### Visual Studio Code Elixir Testing Extension
+
+We highly recommend using the [Elixir Test](https://marketplace.visualstudio.com/items?itemName=samuel-pordeus.elixir-test)
+extension if you are using Visual Studio Code.
+
+Elixir Test provides several commands which facilitate more straightforward test running.
+
+<!-- livebook:{"break_markdown":true} -->
+
+![](images/Elixir%20Test%20Commands.png)
+
+<!-- livebook:{"break_markdown":true} -->
+
+### Your Turn
+
+Move the `Math` module and test suite you created in [Math Module Testing](../exercises/math_module_testing.livemd) into the `math_test.exs` file. Then use the command line to experiment with running tests.
+
+Run all tests from the command line.
+
+```
+$ mix test
+```
+
+Run tests in the `math_test.exs` file.
+
+```
+$ mix test test/math_test.exs
+```
+
+Run tests in the the `Math.add/2` describe block. Replace `1` with the correct line number.
+
+```
+$ mix test test/math_test.exs:1
+```
+
+Run a single test. Replace `1` with the correct line number.
+
+```
+$ mix test test/math_test.exs:1
+```
+
+## Test Tags
+
+We can use `@moduletag`, `@describetag`, and `@tag` module attributes to tag our tests.
+Once tagged, we can configure ExUnit to exclude, include, or only run tests with specific tags using [ExUnit.configure/1](https://hexdocs.pm/ex_unit/ExUnit.html#configure/1).
+
+Notice below that the test suite passes because the failing test never runs.
+
+```elixir
+ExUnit.start(auto_run: false)
+# We can configure ExUnit to exclude, include, or only run certain tests.
+
+ExUnit.configure(exclude: :my_module_tag)
+
+defmodule TagTest do
+  use ExUnit.Case
+
+  @moduletag :my_module_tag
+  test "failing test" do
+    assert false
+  end
+end
+
+ExUnit.run()
+```
+
+### Mix Project Tags
+
+Once tagged, we can use the flags `--only`, `--exclude`, and `--include` to run specific tests.
+
+```
+$ mix test --exclude my_tag
+```
+
+Alternatively, we can place the [ExUnit.configure/1](https://hexdocs.pm/ex_unit/ExUnit.html#configure/1) function in `test_helpers.exs`.
+
+<!-- livebook:{"force_markdown":true} -->
+
+```elixir
+ExUnit.start()
+ExUnit.configure(exclude: :my_tag)
+```
+
+<!-- livebook:{"break_markdown":true} -->
+
+### Your Turn
+
+Use the `@moduletag`, `@describetag`, and `@tag` module attributes in the `math_test.exs` module. Then use the `--exclude`, `--include`, and `--only` flags for the `mix test` command to only run certain tests.
+
+Finally, configure the `test_helper.exs` file to exclude one of your tags and run all tests to verify that it has been excluded.
+
+## Further Reading
+
+For more on testing, consider using the following resources.
+
+* [Mix Test](https://hexdocs.pm/mix/Mix.Tasks.Test.html), for more on how you can use the `mix test` command.
+* [ExUnit](https://hexdocs.pm/ex_unit/ExUnit.html), for documentation on ExUnit.
+* [ElixirSchools: Documentation](https://elixirschool.com/en/lessons/basics/documentation), an lesson by Elixir schools on documentation and doc-testing.
+
+## Mark As Completed
+
+<!-- livebook:{"attrs":{"source":"file_name = Path.basename(Regex.replace(~r/#.+/, __ENV__.file, \"\"), \".livemd\")\n\nsave_name =\n  case Path.basename(__DIR__) do\n    \"reading\" -> \"exunit_with_mix_reading\"\n    \"exercises\" -> \"exunit_with_mix_exercise\"\n  end\n\nprogress_path = __DIR__ <> \"/../progress.json\"\nexisting_progress = File.read!(progress_path) |> Jason.decode!()\n\ndefault = Map.get(existing_progress, save_name, false)\n\nform =\n  Kino.Control.form(\n    [\n      completed: input = Kino.Input.checkbox(\"Mark As Completed\", default: default)\n    ],\n    report_changes: true\n  )\n\nTask.async(fn ->\n  for %{data: %{completed: completed}} <- Kino.Control.stream(form) do\n    File.write!(\n      progress_path,\n      Jason.encode!(Map.put(existing_progress, save_name, completed), pretty: true)\n    )\n  end\nend)\n\nform","title":"Track Your Progress"},"chunks":null,"kind":"Elixir.HiddenCell","livebook_object":"smart_cell"} -->
+
+```elixir
+file_name = Path.basename(Regex.replace(~r/#.+/, __ENV__.file, ""), ".livemd")
+
+save_name =
+  case Path.basename(__DIR__) do
+    "reading" -> "exunit_with_mix_reading"
+    "exercises" -> "exunit_with_mix_exercise"
+  end
+
+progress_path = __DIR__ <> "/../progress.json"
+existing_progress = File.read!(progress_path) |> Jason.decode!()
+
+default = Map.get(existing_progress, save_name, false)
+
+form =
+  Kino.Control.form(
+    [
+      completed: input = Kino.Input.checkbox("Mark As Completed", default: default)
+    ],
+    report_changes: true
+  )
+
+Task.async(fn ->
+  for %{data: %{completed: completed}} <- Kino.Control.stream(form) do
+    File.write!(
+      progress_path,
+      Jason.encode!(Map.put(existing_progress, save_name, completed), pretty: true)
+    )
+  end
+end)
+
+form
+```
+
+## Commit Your Progress
+
+Run the following in your command line from the curriculum folder to track and save your progress in a Git commit.
+Ensure that you do not already have undesired or unrelated changes by running `git status` or by checking the source control tab in Visual Studio Code.
+
+```
+$ git checkout -b exunit-with-mix-reading
+$ git add .
+$ git commit -m "finish exunit with mix reading"
+$ git push origin exunit-with-mix-reading
+```
+
+Create a pull request from your `exunit-with-mix-reading` branch to your `solutions` branch.
+Please do not create a pull request to the DockYard Academy repository as this will spam our PR tracker.
+
+**DockYard Academy Students Only:**
+
+Notify your instructor by including `@BrooklinJazz` in your PR description to get feedback.
+You (or your instructor) may merge your PR into your solutions branch after review.
+
+If you are interested in joining the next academy cohort, [sign up here](https://academy.dockyard.com/) to receive more news when it is available.
+
+## Up Next
+
+| Previous                                               | Next                                                          |
+| ------------------------------------------------------ | ------------------------------------------------------------: |
+| [Product Filters](../exercises/product_filters.livemd) | [Games: Wordle Application](../exercises/games_wordle.livemd) |
+
