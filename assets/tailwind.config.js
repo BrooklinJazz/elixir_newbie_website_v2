@@ -11,6 +11,9 @@ module.exports = {
   ],
   theme: {
     extend: {
+      aspectRatio: {
+        '8/1': '8 / 1',
+      },
       colors: {
         brand: "#FD4F00",
       },
