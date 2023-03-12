@@ -33,10 +33,10 @@ defmodule ElixirNewbieWeb.HomeLive do
         </article>
         <article class="flex w-full flex-col text-2xl text-white 4k:text-4xl lg:text-2xl">
           <h1>Greetings, traveler, My name is Brooklin. I am here to teach you Elixir. Where should we start?</h1>
-            <.rectangle_link navigate={~p"/blog"} src="images/blog_button_reduced.webp" alt="Magic Psychedelic Books">1. Read the Blog</.rectangle_link>
-            <.rectangle_link navigate={~p"/podcast"} src="images/podcast_button_reduced.webp" alt="Avatar-like half face">2. Listen to the Podcast</.rectangle_link>
-            <.rectangle_link navigate={~p"/resources"} src="images/resources_button_reduced.webp" alt="Fantasy Mushroom Forest">3. Explore Learning Resources</.rectangle_link>
-            <.rectangle_link navigate={~p"/community"} src="images/resources_button_reduced.webp"  alt="Fantasy Mushroom Forest">4. Join The Community</.rectangle_link>
+          <.rectangle_link navigate={~p"/blog"} src="images/blog_button_reduced.webp" alt="Magic Psychedelic Books">1. Read the Blog</.rectangle_link>
+          <.rectangle_link navigate={~p"/podcast"} src="images/podcast_button_reduced.webp" alt="Avatar-like half face">2. Listen to the Podcast</.rectangle_link>
+          <.rectangle_link navigate={~p"/resources"} src="images/resources_button_reduced.webp" alt="Fantasy Mushroom Forest">3. Explore Learning Resources</.rectangle_link>
+          <.rectangle_link navigate={~p"/community"} src="images/resources_button_reduced.webp"  alt="Fantasy Mushroom Forest">4. Join The Community</.rectangle_link>
         </article>
       </section>
     </section>

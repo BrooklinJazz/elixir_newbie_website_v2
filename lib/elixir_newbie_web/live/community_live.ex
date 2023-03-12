@@ -9,22 +9,25 @@ defmodule ElixirNewbieWeb.CommunityLive do
   @impl true
   def render(assigns) do
     ~H"""
-    <section class="bg-[url('/images/podcast_background.webp')] text-white bg-top min-h-screen bg-black bg-no-repeat bg-contain pb-96">
+    <section class="sm:bg-[url('/images/CommunityBackgroundImage5.png')] h-screen bg-none bg-cover min-h-screen text-white bg-top w-screen bg-black bg-no-repeat bg-contain pb-96">
       <.navigation/>
-      <h1 class="mb-4 text-center text-2xl">Let's Learn Together!</h1>
-      <h2 class="mb-3 text-center">Join the Elixir Newbie Discord. We run weekly group coding sessions. Join us to learn Elixir in a hands-on, practical environment.</h2>
-      <h2 class="mb-6 text-center">Our next meeting is at <strong> <%= next_saturday(Date.utc_today()) %> </strong> at 9:30am PT </h2>
-      <article class="flex items-center justify-center sm:space-x-12">
-          <figure class="aspect-square hidden sm:block sm:w-1/3 lg:w-1/4">
-            <img class="rounded-full border-t-4 border-l-4 border-white" src="images/hack-a-thing.jpg" alt="Picture resembling Brooklin Myers as a Wizard"/>
-          </figure>
-          <figure class="w-3/4 sm:w-2/5 lg:w-1/4">
-            <p>We call it the hack-a-thing: every Saturday we get together, think something up, and code it.</p>
-            <hr class="my-4"/>
-            <p>This is a great opportunity for learning (no matter your level) and for meeting other Elixir enthusiasts.</p>
-            <a href="https://discord.gg/XBAAmuZGXU" class="mt-6 block w-full rounded-lg bg-white p-2 text-center text-black">Join our Discord</a>
-          </figure>
-      </article>
+      <section class="p-8">
+        <h1 class="mb-4 text-center text-2xl 2xl:text-3xl 4k:text-6xl 4k:mb-16">Let's Learn Together!</h1>
+        <h2 class="mb-3 text-center text-xl 4k:text-3xl 4k:mb-20">Join the Elixir Newbie Discord. We run weekly group coding sessions.
+        <br/>Join us to learn Elixir in a hands-on, practical environment.</h2>
+        <h2 class="mb-6 text-center text-sm text-xl 4k:text-4xl 4k:mb-24">Our next meeting is at <strong> <%= next_saturday(Date.utc_today()) %> </strong> at 9:30am PT </h2>
+        <article class="flex items-center justify-center sm:space-x-12">
+            <figure class="aspect-square hidden sm:block sm:w-1/3 lg:w-1/4 4k:w-1/5">
+              <img class="rounded-full border-t-4 border-l-4 border-white" src="images/hack-a-thing.jpg" alt="Picture resembling Brooklin Myers as a Wizard"/>
+            </figure>
+            <figure class="rounded-lg bg-[#201D3E] bg-opacity-90 p-6 w-3/4 sm:w-2/5 lg:w-1/4 4k:w-1/5">
+              <p class="text-xl 4k:text-3xl">We call it the hack-a-thing: every Saturday we get together, think something up, and code it.</p>
+              <hr class="my-4"/>
+              <p class="text-xl 4k:text-3xl">This is a great opportunity for learning (no matter your level) and for meeting other Elixir enthusiasts.</p>
+              <a href="https://discord.gg/XBAAmuZGXU" class="mt-6 block w-full rounded-lg bg-white p-2 text-center text-black text-xl 4k:text-3xl">Join our Discord</a>
+            </figure>
+        </article>
+      </section>
     </section>
     """
   end

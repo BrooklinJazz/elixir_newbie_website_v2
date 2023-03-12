@@ -11,6 +11,9 @@ module.exports = {
   ],
   theme: {
     extend: {
+      screens: {
+        '4k': '3840px'
+      },
       aspectRatio: {
         '8/1': '8 / 1',
       },
