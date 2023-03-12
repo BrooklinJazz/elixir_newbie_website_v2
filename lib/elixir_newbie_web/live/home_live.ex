@@ -12,6 +12,7 @@ defmodule ElixirNewbieWeb.HomeLive do
 
   def render(assigns) do
     ~H"""
+    Some Text
     <section class="bg-[url('/images/background-smoke-transparent.webp')] min-h-screen bg-black bg-no-repeat bg-cover">
       <.navigation/>
       <section class="flex h-fit w-full flex-col gap-12 4k:gap-36 lg:flex-row xl:gap-24 mx-auto sm:w-full md:w-3/4 lg:w-full xl:w-3/4">
@@ -60,7 +61,7 @@ defmodule ElixirNewbieWeb.HomeLive do
             >
               <div class="transition duration-300 ease-in-out group-hover:scale-110">
                 <div class="animate-spin-slow absolute h-full w-full rounded-full border-l-2 border-black"/>
-                <img alt="DockYard Academy Icon Button" class="rounded-full border-2" src="images/dockyard_academy_icon_reduced.webp"/>
+                <img id="dockyard-academy-icon" alt="DockYard Academy Icon Button" class="rounded-full border-2" src="images/dockyard_academy_icon_reduced.webp"/>
               </div>
               <p class="absolute -bottom-12 w-full text-center text-sm text-white">DockYard Academy</p>
             </.link>
