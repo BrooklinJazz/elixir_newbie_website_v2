@@ -6,7 +6,7 @@ defmodule ElixirNewbieWeb.Components.BlogCard do
   def blog_card(assigns) do
     ~H"""
       <article>
-        <figure class="overflow-hidden h-90 rounded-3xl aspect-[2/1] transition duration-500 ease-in-out ring-2 ring-white hover:ring-offset-2">
+        <figure class="h-90 aspect-[2/1] overflow-hidden rounded-3xl ring-2 ring-white transition duration-500 ease-in-out hover:ring-offset-2">
           <img class="w-auto rounded-lg" src={static_url(ElixirNewbieWeb.Endpoint, "/images/posts/#{@blog.cover_image}")}/>
         </figure>
         <p class="mt-2 text-2xl text-white 4k:text-4xl lg:text-2xl"><%= @blog.title %></p>

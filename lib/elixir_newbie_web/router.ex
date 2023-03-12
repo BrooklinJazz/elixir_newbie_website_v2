@@ -16,12 +16,12 @@ defmodule ElixirNewbieWeb.Router do
 
   scope "/", ElixirNewbieWeb do
     pipe_through :browser
-
     # get "/", PageController, :home
     live "/", HomeLive, :home
     live "/blog", BlogLive, :blog
     live "/podcast", PodcastLive, :podcast
     live "/resources", ResourcesLive, :resources
+    live "/community", CommunityLive, :community
     live "/reading/:id", ContentLive, :reading
     live "/exercises/:id", ContentLive, :exercises
   end

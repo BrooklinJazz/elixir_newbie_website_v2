@@ -5,7 +5,7 @@ defmodule ElixirNewbieWeb.ContentLive do
     ~H"""
     <section class="bg-[url('/images/background-smoke-transparent.webp')] min-h-screen bg-black bg-no-repeat bg-contain text-white">
       <.navigation />
-      <section class="w-2/3 mx-auto">
+      <section class="mx-auto w-2/3">
         <a class="mb-10 block rounded-lg bg-gray-500 p-6 text-2xl hover:opacity-75" href={@badge_url}>Run in Livebook</a>
         <div class="markdown">
           <%= raw @lesson.body%>
