@@ -58,7 +58,7 @@ defmodule ElixirNewbieWeb.PodcastLive do
           <figure class="lg:w-1/4 sm:w-2/5 w-3/4">
             <p>Elixir Newbie is a podcast dedicated to helping and encouraging new and transitioning developers to adopt Elixir.</p>
             <hr class="my-4"/>
-            Brooklin Myers and Co-host Jon Valdivia speak with guests from the industry. You'll learn something new, and have fun too.
+            Brooklin Myers and co-host Jon Valdivia speak with guests from the industry. You'll learn something new, and have fun too.
           </figure>
         </article>
         <article class="m-6 flex justify-center">
