@@ -1,0 +1,182 @@
+%{
+  title: "Rock Paper Scissors Pattern Matching"
+}
+---
+# Rock Paper Scissors Pattern Matching
+
+```elixir
+Mix.install([
+  {:jason, "~> 1.4"},
+  {:kino, "~> 0.8.0", override: true},
+  {:youtube, github: "brooklinjazz/youtube"},
+  {:hidden_cell, github: "brooklinjazz/hidden_cell"}
+])
+```
+
+## Navigation
+
+[Return Home](../start.livemd)<span style="padding: 0 30px"></span>
+[Report An Issue](https://github.com/DockYard-Academy/beta_curriculum/issues/new?assignees=&labels=&template=issue.md&title=)
+
+## Rock Paper Scissors Using Pattern Matching
+
+You're going to recreate/refactor your rock paper scissors game using pattern matching.
+
+<!-- livebook:{"force_markdown":true} -->
+
+```elixir
+RockPaperScissors.play(:rock, :paper)
+"paper beats rock!"
+
+RockPaperScissors.play(:rock, :rock)
+"draw!"
+```
+
+<details style="background-color: lightgreen; padding: 1rem; margin: 1rem 0;">
+<summary>Example Solution</summary>
+
+Using multiple function clauses.
+
+```elixir
+defmodule RockPaperScissorsPatternMatching do
+  def play(:rock, :scissors), do: "rock beats scissors!"
+  def play(:paper, :rock), do: "paper beats rock!"
+  def play(:scissors, :paper), do: "scissors beats paper!"
+  def play(:rock, :paper), do: "paper beats rock!"
+  def play(:paper, :scissors), do: "scissors beats paper!"
+  def play(:scissors, :rock), do: "rock beats scissors!"
+  def play(_same, _same), do: "draw!"
+end
+```
+
+Here's how we might accomplish the same thing using `case`.
+
+```elixir
+defmodule RockPaperScissorsPatternMatching do
+  def play(guess1, guess2) do
+    case {guess1, guess2} do
+      {:rock, :scissors} -> "rock beats scissors!"
+      {:paper, :rock} -> "paper beats rock!"
+      {:scissors, :paper} -> "scissors beats paper!"
+      {:rock, :paper} -> "paper beats rock!"
+      {:paper, :scissors} -> "scissors beats paper!"
+      {:scissors, :rock} -> "rock beats scissors!"
+      {_same, _same} -> "draw!"
+    end
+  end
+end
+```
+
+</details>
+
+Implement the `RockPaperScissorsPatternMatching` module as documented below.
+
+```elixir
+defmodule RockPaperScissorsPatternMatching do
+  @moduledoc """
+  Documentation for `RockPaperScissorsPatternMatching`
+  """
+
+  @doc """
+  Play rock paper scissors. Returns a string to describe who won the game.
+
+  ## Examples
+
+    iex> RockPaperScissorsPatternMatching.play(:rock, :scissors)
+    "rock beats scissors!"
+
+    iex> RockPaperScissorsPatternMatching.play(:paper, :rock)
+    "paper beats rock!"
+
+    iex> RockPaperScissorsPatternMatching.play(:scissors, :paper)
+    "scissors beats paper!"
+
+    iex> RockPaperScissorsPatternMatching.play(:rock, :paper)
+    "paper beats rock!"
+
+    iex> RockPaperScissorsPatternMatching.play(:paper, :scissors)
+    "scissors beats paper!"
+
+    iex> RockPaperScissorsPatternMatching.play(:scissors, :rock)
+    "rock beats scissors!"
+
+    iex> RockPaperScissorsPatternMatching.play(:rock, :rock)
+    "draw!"
+
+    iex> RockPaperScissorsPatternMatching.play(:paper, :paper)
+    "draw!"
+
+    iex> RockPaperScissorsPatternMatching.play(:scissors, :scissors)
+    "draw!"
+  """
+  def play(guess1, guess2) do
+  end
+end
+```
+
+## Mark As Completed
+
+<!-- livebook:{"attrs":{"source":"file_name = Path.basename(Regex.replace(~r/#.+/, __ENV__.file, \"\"), \".livemd\")\n\nsave_name =\n  case Path.basename(__DIR__) do\n    \"reading\" -> \"rps_pattern_matching_reading\"\n    \"exercises\" -> \"rps_pattern_matching_exercise\"\n  end\n\nprogress_path = __DIR__ <> \"/../progress.json\"\nexisting_progress = File.read!(progress_path) |> Jason.decode!()\n\ndefault = Map.get(existing_progress, save_name, false)\n\nform =\n  Kino.Control.form(\n    [\n      completed: input = Kino.Input.checkbox(\"Mark As Completed\", default: default)\n    ],\n    report_changes: true\n  )\n\nTask.async(fn ->\n  for %{data: %{completed: completed}} <- Kino.Control.stream(form) do\n    File.write!(\n      progress_path,\n      Jason.encode!(Map.put(existing_progress, save_name, completed), pretty: true)\n    )\n  end\nend)\n\nform","title":"Track Your Progress"},"chunks":null,"kind":"Elixir.HiddenCell","livebook_object":"smart_cell"} -->
+
+```elixir
+file_name = Path.basename(Regex.replace(~r/#.+/, __ENV__.file, ""), ".livemd")
+
+save_name =
+  case Path.basename(__DIR__) do
+    "reading" -> "rps_pattern_matching_reading"
+    "exercises" -> "rps_pattern_matching_exercise"
+  end
+
+progress_path = __DIR__ <> "/../progress.json"
+existing_progress = File.read!(progress_path) |> Jason.decode!()
+
+default = Map.get(existing_progress, save_name, false)
+
+form =
+  Kino.Control.form(
+    [
+      completed: input = Kino.Input.checkbox("Mark As Completed", default: default)
+    ],
+    report_changes: true
+  )
+
+Task.async(fn ->
+  for %{data: %{completed: completed}} <- Kino.Control.stream(form) do
+    File.write!(
+      progress_path,
+      Jason.encode!(Map.put(existing_progress, save_name, completed), pretty: true)
+    )
+  end
+end)
+
+form
+```
+
+## Commit Your Progress
+
+Run the following in your command line from the curriculum folder to track and save your progress in a Git commit.
+Ensure that you do not already have undesired or unrelated changes by running `git status` or by checking the source control tab in Visual Studio Code.
+
+```
+$ git checkout -b rps-pattern-matching-exercise
+$ git add .
+$ git commit -m "finish rps pattern matching exercise"
+$ git push origin rps-pattern-matching-exercise
+```
+
+Create a pull request from your `rps-pattern-matching-exercise` branch to your `solutions` branch.
+Please do not create a pull request to the DockYard Academy repository as this will spam our PR tracker.
+
+**DockYard Academy Students Only:**
+
+Notify your instructor by including `@BrooklinJazz` in your PR description to get feedback.
+You (or your instructor) may merge your PR into your solutions branch after review.
+
+If you are interested in joining the next academy cohort, [sign up here](https://academy.dockyard.com/) to receive more news when it is available.
+
+## Up Next
+
+| Previous                                                                 | Next                                                       |
+| ------------------------------------------------------------------------ | ---------------------------------------------------------: |
+| [Replacing nils](../exercises/drill-patternmatching-replace-nils.livemd) | [Metric Conversion](../exercises/metric_conversion.livemd) |
+

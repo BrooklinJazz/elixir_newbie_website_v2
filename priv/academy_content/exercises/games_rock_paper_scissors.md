@@ -1,0 +1,126 @@
+%{
+  title: "Games: Rock Paper Scissors"
+}
+---
+# Games: Rock Paper Scissors
+
+```elixir
+Mix.install([
+  {:jason, "~> 1.4"},
+  {:kino, "~> 0.8.0", override: true},
+  {:youtube, github: "brooklinjazz/youtube"},
+  {:hidden_cell, github: "brooklinjazz/hidden_cell"}
+])
+```
+
+## Navigation
+
+[Return Home](../start.livemd)<span style="padding: 0 30px"></span>
+[Report An Issue](https://github.com/DockYard-Academy/beta_curriculum/issues/new?assignees=&labels=&template=issue.md&title=)
+
+## Games: Rock Paper Scissors
+
+In your existing [Games](./games_setup.livemd) project, you're going to create a rock paper scissors game where players will play against an AI which randomly chooses
+rock, paper, or scissors.
+
+You should be able to start your project by running the following from the `game` folder in
+the command line.
+
+```
+iex -S mix
+```
+
+Then you can start the rock paper scissors game with a `Games.RockPaperScissors` module.
+The game should prompt the user for a choice of `"rock"`, `"paper"`, or `"scissors"`.
+
+<!-- livebook:{"force_markdown":true} -->
+
+```elixir
+iex> Games.RockPaperScissors.play()
+(rock/paper/scissors): scissors
+```
+
+The game should generate a random AI choice of `"rock"` , `"paper"`, or `"scissors"`, then prompt the user with feedback if they win, lose, or draw.
+
+<!-- livebook:{"force_markdown":true} -->
+
+```elixir
+# randomly generated paper for the opponent
+(rock/paper/scissors): scissors
+"You win! scissors beats paper."
+
+# randomly generated scissors for the opponent
+(rock/paper/scissors): paper
+"You lose! scissors beats paper."
+
+# randomly generated rock for the opponent
+(rock/paper/scissors): rock
+"It's a tie!"
+```
+
+## Mark As Completed
+
+<!-- livebook:{"attrs":{"source":"file_name = Path.basename(Regex.replace(~r/#.+/, __ENV__.file, \"\"), \".livemd\")\n\nsave_name =\n  case Path.basename(__DIR__) do\n    \"reading\" -> \"games_rock_paper_scissors_reading\"\n    \"exercises\" -> \"games_rock_paper_scissors_exercise\"\n  end\n\nprogress_path = __DIR__ <> \"/../progress.json\"\nexisting_progress = File.read!(progress_path) |> Jason.decode!()\n\ndefault = Map.get(existing_progress, save_name, false)\n\nform =\n  Kino.Control.form(\n    [\n      completed: input = Kino.Input.checkbox(\"Mark As Completed\", default: default)\n    ],\n    report_changes: true\n  )\n\nTask.async(fn ->\n  for %{data: %{completed: completed}} <- Kino.Control.stream(form) do\n    File.write!(\n      progress_path,\n      Jason.encode!(Map.put(existing_progress, save_name, completed), pretty: true)\n    )\n  end\nend)\n\nform","title":"Track Your Progress"},"chunks":null,"kind":"Elixir.HiddenCell","livebook_object":"smart_cell"} -->
+
+```elixir
+file_name = Path.basename(Regex.replace(~r/#.+/, __ENV__.file, ""), ".livemd")
+
+save_name =
+  case Path.basename(__DIR__) do
+    "reading" -> "games_rock_paper_scissors_reading"
+    "exercises" -> "games_rock_paper_scissors_exercise"
+  end
+
+progress_path = __DIR__ <> "/../progress.json"
+existing_progress = File.read!(progress_path) |> Jason.decode!()
+
+default = Map.get(existing_progress, save_name, false)
+
+form =
+  Kino.Control.form(
+    [
+      completed: input = Kino.Input.checkbox("Mark As Completed", default: default)
+    ],
+    report_changes: true
+  )
+
+Task.async(fn ->
+  for %{data: %{completed: completed}} <- Kino.Control.stream(form) do
+    File.write!(
+      progress_path,
+      Jason.encode!(Map.put(existing_progress, save_name, completed), pretty: true)
+    )
+  end
+end)
+
+form
+```
+
+## Commit Your Progress
+
+Run the following in your command line from the curriculum folder to track and save your progress in a Git commit.
+Ensure that you do not already have undesired or unrelated changes by running `git status` or by checking the source control tab in Visual Studio Code.
+
+```
+$ git checkout -b games-rock-paper-scissors-exercise
+$ git add .
+$ git commit -m "finish games rock paper scissors exercise"
+$ git push origin games-rock-paper-scissors-exercise
+```
+
+Create a pull request from your `games-rock-paper-scissors-exercise` branch to your `solutions` branch.
+Please do not create a pull request to the DockYard Academy repository as this will spam our PR tracker.
+
+**DockYard Academy Students Only:**
+
+Notify your instructor by including `@BrooklinJazz` in your PR description to get feedback.
+You (or your instructor) may merge your PR into your solutions branch after review.
+
+If you are interested in joining the next academy cohort, [sign up here](https://academy.dockyard.com/) to receive more news when it is available.
+
+## Up Next
+
+| Previous                                                        | Next                               |
+| --------------------------------------------------------------- | ---------------------------------: |
+| [Games: Guessing Game](../exercises/games_guessing_game.livemd) | [ExUnit](../reading/exunit.livemd) |
+

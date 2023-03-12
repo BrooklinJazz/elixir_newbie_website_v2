@@ -1,0 +1,416 @@
+%{
+  title: "Maps"
+}
+---
+# Maps
+
+```elixir
+Mix.install([
+  {:jason, "~> 1.4"},
+  {:kino, "~> 0.8.0", override: true},
+  {:youtube, github: "brooklinjazz/youtube"},
+  {:hidden_cell, github: "brooklinjazz/hidden_cell"}
+])
+```
+
+## Navigation
+
+[Return Home](../start.livemd)<span style="padding: 0 30px"></span>
+[Report An Issue](https://github.com/DockYard-Academy/beta_curriculum/issues/new?assignees=&labels=&template=issue.md&title=)
+
+## Setup
+
+Ensure you type the `ea` keyboard shortcut to evaluate all Elixir cells before starting. Alternatively, you can evaluate the Elixir cells as you read.
+
+## Review Questions
+
+Upon completing this lesson, a student should be able to answer the following questions.
+
+* What is a map? How do they differ from keyword lists?
+* How do we create a map?
+* How do we use dot notation and square bracket notation to access values in a map?
+* How do we pattern match on maps?
+
+## Maps
+
+Maps are another type of associative data structure. You can create a map using `%{}`. Maps can use almost any elixir term as a key. However, most commonly we use strings and atoms for map keys.
+
+Maps have a key and a value separated by an arrow `=>`, which is an equals symbol `=` and a less than symbol `>`.
+
+```elixir
+# string keys
+%{"key" => "value"}
+
+# atom keys
+%{:key => "value"}
+```
+
+multiple key-value pairs are separated by a comma `,`.
+
+```elixir
+%{:key => "value", "key" => "value"}
+```
+
+Maps with only atoms as keys can use a special piece of syntax sugar that makes them more convenient to write and read. This is purely syntax sugar and does not change their behavior.
+
+```elixir
+%{key1: "value", key2: "value"}
+```
+
+Maps are the common go-to for a key-value data structure. They are more expensive in terms of performance to create than keyword lists, however they are incredibly fast to access values. Unlike keyword lists, keys in a map must be unique. Also unlike keyword lists, maps also do not guarantee key order.
+
+For these reasons, you'll most often use maps for large amounts of data or when you want keys to be unique and do not care about order.
+
+We often use maps to represent properties of something. For example, you might have a `user` map that represents information about a book.
+
+<!-- livebook:{"force_markdown":true} -->
+
+```elixir
+%{
+  title: "Name of the Wind",
+  author: "Patrick Rothfuss",
+  description: """
+  The Name of the Wind is a fantasy novel by Patrick Rothfuss. It is the first book in the
+  Kingkiller Chronicle series and tells the story of Kvothe, a young orphan who becomes a
+  legendarily talented musician and magician. The novel is known for its intricate
+  world-building, complex characters, and themes of power, love, and loss.
+  """  
+}
+```
+
+<!-- livebook:{"break_markdown":true} -->
+
+Elixir is very helpful and provides a warning to let us know we're overriding a duplicate key.
+
+```elixir
+%{duplicate_key: "value1", duplicate_key: "value2"}
+```
+
+As mentioned earlier, maps do not guarantee key order, which is why you'll notice the returned value of the map below does not have the same order as the map returned by the Elixir cell.
+
+```elixir
+%{one: "one", two: "two", three: "three"}
+```
+
+Maps can have any elixir term as a key, this makes them incredibly flexible.
+
+```elixir
+%{1 => "value"}
+
+%{[1, 2, 3] => "value"}
+```
+
+## Accessing Map Values
+
+Unlike the other data types, there aren't specific map operators. To manipulate maps we
+use a different tool called the [Map](https://hexdocs.pm/elixir/Map.html) module, which you will learn more about in a future lesson.
+
+For now, it's enough to know that you can access values in an atom-key map using a few different methods.
+
+You can retrieve values in a map using **map.key** notation like so. This only works for maps with
+atom keys.
+
+```elixir
+%{key: "value"}.key
+```
+
+Alternatively, you can access the map value using square bracket notation **map[key]**.
+
+```elixir
+%{key: "value"}[:key]
+```
+
+Bracket notation is especially useful for maps with non-atom keys.
+
+```elixir
+%{"key" => "value"}["key"]
+```
+
+```elixir
+%{1 => "value"}[1]
+```
+
+With **map.key** notation, your program will throw an error if your map doesn't have the expected value.
+
+```elixir
+%{}.key
+```
+
+Bracket notation will return `nil` if the key doesn't exist rather than throwing an error.
+
+```elixir
+%{}[:key]
+```
+
+We can access deeply nested values with both dot notation and bracket notation.
+
+```elixir
+%{key1: %{key2: %{key3: "value"}}}.key1.key2.key3
+```
+
+```elixir
+%{1 => %{2 => %{3 => "value"}}}[1][2][3]
+```
+
+Bracket notation is especially useful for accessing deeply nested values without causing a crash
+if the value doesn't exist.
+
+```elixir
+%{}[1][2][3]
+```
+
+You can accomplish all of the same behavior above by binding the map to a variable rather
+than accessing values from the map directly.
+
+```elixir
+map = %{key: "value"}
+map.key
+```
+
+```elixir
+map = %{key: "value"}
+map[:key]
+```
+
+### Your Turn
+
+In the Elixir cell below, access the `:hello` key in `map`. Retrieve the value using both **map[key]** and **map.key** notation.
+
+<details style="background-color: lightgreen; padding: 1rem; margin: 1rem 0;">
+<summary>Example solution</summary>
+
+**map.key** notation.
+
+```elixir
+map = %{hello: "world"}
+map.hello
+```
+
+**map[]** notation.
+
+```elixir
+map = %{hello: "world"}
+map[:hello]
+```
+
+</details>
+
+```elixir
+map = %{hello: "world"}
+```
+
+### Updating Maps
+
+You can update values in a map using `%{initial_map | updated_values}` syntax like so.
+
+```elixir
+initial = %{key: "value"}
+
+%{initial | key: "new value"}
+```
+
+Elixir does not allow you to mutate values. That means
+the variable `initial` is still `%{key: "value"}`
+
+```elixir
+initial
+```
+
+You can instead store a new variable for the updated map.
+
+```elixir
+updated = %{initial | key: "new value"}
+updated
+```
+
+Or rebind the existing `initial` variable.
+
+```elixir
+initial = %{initial | key: "new value"}
+initial
+```
+
+You can only update existing atom key values in a map, otherwise it will cause an error.
+
+```elixir
+initial = %{}
+%{initial | new_key: "value"}
+```
+
+### Your Turn
+
+Use a map to represent a todo item The todo map should have `:title` and `:completed` keys.
+
+* title: "finish maps exercises", completed: false
+
+Bind your map to a `todo` variable, and update the value so `completed` is `true`.
+
+<details style="background-color: lightgreen; padding: 1rem; margin: 1rem 0;">
+<summary>Example solution</summary>
+
+```elixir
+todo = %{title: "finish maps exercise", completed: false}
+
+%{todo | completed: true}
+```
+
+</details>
+
+```elixir
+
+```
+
+## Pattern Matching
+
+We can pattern match on values inside the map.
+
+```elixir
+%{hello: my_variable} = %{hello: "world"}
+my_variable
+```
+
+Unlike with keyword lists, we don't have to match on every key/value pair when pattern matching with maps.
+
+```elixir
+%{one: one} = %{one: 1, two: 2}
+one
+```
+
+This also works with non-atom key maps.
+
+```elixir
+%{"hello" => world} = %{"hello" => "world"}
+```
+
+We can only pattern match on the value in the map, not the key. Keys in maps must be **literals** such as atoms, strings, tuples, etc.
+
+```elixir
+%{hello => world} = %{"hello" => "world"}
+```
+
+### Pin Operator
+
+You'll notice that we can rebind variables using pattern matching.
+
+```elixir
+name = "Jon"
+
+%{name: name} = %{name: "Bill"}
+
+name
+```
+
+If instead of re-binding the variable, we want to use the literal value of the variable, we can use the pin operator `^`.
+
+```elixir
+name = "Jon"
+
+%{name: ^name} = %{name: "Bill"}
+
+name
+```
+
+The above causes a [MatchError](https://hexdocs.pm/elixir/MatchError.html) because the left side and right side do not match. It's the same as if we had written the following.
+
+```elixir
+%{name: "Jon"} = %{name: "Bill"}
+```
+
+We might use this to confirm our map matches some shape.
+
+<!-- livebook:{"break_markdown":true} -->
+
+### Your Turn
+
+Bind `2` and `4` in the following map to variables `two` and `four`.
+
+<details style="background-color: lightgreen; padding: 1rem; margin: 1rem 0;">
+<summary>Example solution</summary>
+
+```elixir
+%{two: two, four: four} = %{one: 1, two: 2, three: 3, four: 4}
+```
+
+</details>
+
+Enter your solution below.
+
+```elixir
+%{one: 1, two: 2, three: 3, four: 4}
+```
+
+## Further Reading
+
+Consider the following resource(s) to deepen your understanding of the topic.
+
+* [Elixir Schools: Maps](https://elixirschool.com/en/lessons/basics/collections#maps-6)
+* [Exercism: Maps](https://exercism.org/tracks/elixir/concepts/maps)
+* [Elixir Lang: Pattern Matching](https://elixir-lang.org/getting-started/pattern-matching.html)
+* [Elixir Lang: Maps](https://elixir-lang.org/getting-started/keywords-and-maps.html#maps)
+
+## Mark As Completed
+
+<!-- livebook:{"attrs":{"source":"file_name = Path.basename(Regex.replace(~r/#.+/, __ENV__.file, \"\"), \".livemd\")\n\nsave_name =\n  case Path.basename(__DIR__) do\n    \"reading\" -> \"maps_reading\"\n    \"exercises\" -> \"maps_exercise\"\n  end\n\nprogress_path = __DIR__ <> \"/../progress.json\"\nexisting_progress = File.read!(progress_path) |> Jason.decode!()\n\ndefault = Map.get(existing_progress, save_name, false)\n\nform =\n  Kino.Control.form(\n    [\n      completed: input = Kino.Input.checkbox(\"Mark As Completed\", default: default)\n    ],\n    report_changes: true\n  )\n\nTask.async(fn ->\n  for %{data: %{completed: completed}} <- Kino.Control.stream(form) do\n    File.write!(\n      progress_path,\n      Jason.encode!(Map.put(existing_progress, save_name, completed), pretty: true)\n    )\n  end\nend)\n\nform","title":"Track Your Progress"},"chunks":null,"kind":"Elixir.HiddenCell","livebook_object":"smart_cell"} -->
+
+```elixir
+file_name = Path.basename(Regex.replace(~r/#.+/, __ENV__.file, ""), ".livemd")
+
+save_name =
+  case Path.basename(__DIR__) do
+    "reading" -> "maps_reading"
+    "exercises" -> "maps_exercise"
+  end
+
+progress_path = __DIR__ <> "/../progress.json"
+existing_progress = File.read!(progress_path) |> Jason.decode!()
+
+default = Map.get(existing_progress, save_name, false)
+
+form =
+  Kino.Control.form(
+    [
+      completed: input = Kino.Input.checkbox("Mark As Completed", default: default)
+    ],
+    report_changes: true
+  )
+
+Task.async(fn ->
+  for %{data: %{completed: completed}} <- Kino.Control.stream(form) do
+    File.write!(
+      progress_path,
+      Jason.encode!(Map.put(existing_progress, save_name, completed), pretty: true)
+    )
+  end
+end)
+
+form
+```
+
+## Commit Your Progress
+
+Run the following in your command line from the curriculum folder to track and save your progress in a Git commit.
+Ensure that you do not already have undesired or unrelated changes by running `git status` or by checking the source control tab in Visual Studio Code.
+
+```
+$ git checkout -b maps-reading
+$ git add .
+$ git commit -m "finish maps reading"
+$ git push origin maps-reading
+```
+
+Create a pull request from your `maps-reading` branch to your `solutions` branch.
+Please do not create a pull request to the DockYard Academy repository as this will spam our PR tracker.
+
+**DockYard Academy Students Only:**
+
+Notify your instructor by including `@BrooklinJazz` in your PR description to get feedback.
+You (or your instructor) may merge your PR into your solutions branch after review.
+
+If you are interested in joining the next academy cohort, [sign up here](https://academy.dockyard.com/) to receive more news when it is available.
+
+## Up Next
+
+| Previous                                         | Next                                               |
+| ------------------------------------------------ | -------------------------------------------------: |
+| [Keyword Lists](../reading/keyword_lists.livemd) | [Shopping List](../exercises/shopping_list.livemd) |
+

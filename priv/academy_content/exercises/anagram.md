@@ -1,0 +1,189 @@
+%{
+  title: "Anagram"
+}
+---
+# Anagram
+
+```elixir
+Mix.install([
+  {:jason, "~> 1.4"},
+  {:kino, "~> 0.8.0", override: true},
+  {:youtube, github: "brooklinjazz/youtube"},
+  {:hidden_cell, github: "brooklinjazz/hidden_cell"}
+])
+```
+
+## Navigation
+
+[Return Home](../start.livemd)<span style="padding: 0 30px"></span>
+[Report An Issue](https://github.com/DockYard-Academy/beta_curriculum/issues/new?assignees=&labels=&template=issue.md&title=)
+
+## Anagram
+
+Two words that contain all the same letters are anagrams.
+For example **bored** and **robed** are anagrams.
+
+* Create a function `anagram?/2` which determines if two strings are anagrams.
+* Create a function `filter_anagrams/2` which filters a list based on if they are anagrams of a provided string.
+
+<details style="background-color: lightgreen; padding: 12px">
+<summary>Solution Example</summary>
+
+```elixir
+defmodule Anagram do
+  def anagram?(string1, string2) do
+    sort_string(word) == sort_string(possible_anagram)
+  end
+
+  def filter_anagrams(words, string) do
+    Enum.filter(words, fn word -> anagram?(word, string) end)
+  end
+
+  defp sort_string(string) do
+    String.split(string, "", trim: true) |> Enum.sort() |> Enum.join()
+  end
+end
+```
+
+</details>
+
+```elixir
+defmodule Anagram do
+  @moduledoc """
+  Documentation for `Anagram`.
+  """
+
+  @doc """
+  Determine if two strings are anagrams.
+
+  ## Examples
+
+    iex> Anagram.anagram?("abc", "bac")
+    true
+
+    iex> Anagram.anagram?("sit", "its")
+    true
+
+    iex> Anagram.anagram?("cats", "dogs")
+    false
+
+    iex> Anagram.anagram?("robed", "bored")
+    true
+  """
+  def anagram?(string1, string2) do
+  end
+
+  @doc """
+  Filter anagrams.
+
+  ## Examples
+
+    iex> Anagram.filter_anagrams(["abc", "bca", "abcd", "cat"], "bac")
+    ["abc", "bca"]
+
+    iex> Anagram.filter_anagrams(["rams", "mars", "arms", "alarms"], "arms")
+    ["rams", "mars", "arms"]
+
+    iex> Anagram.filter_anagrams(["stop"], "go")
+    []
+  """
+  def filter_anagrams(word_list, anagram) do
+  end
+end
+```
+
+## Bonus: Anagram Solver
+
+Given a string, return all possible permutations of the string to return a list of potential anagrams.
+
+<div style="background-color: lightcoral; font-weight: bold; padding: 1rem; margin: 1rem 0;">
+This is a HARD challenge. Move on to regular exercises before attempting this.
+</div>
+
+```elixir
+defmodule AnagramSolver do
+  @doc """
+  Return a list of all string permutations to solve for all anagrams.
+
+  ## Examples
+
+    iex> AnagramSolver.solve("a")
+    ["a"]
+
+    iex> AnagramSolver.solve("ab")
+    ["ab", "ba"]
+
+    iex> AnagramSolver.solve("abc")
+    ["abc", "acb", "bac", "bca", "cab", "cba"]
+  """
+  def solve(string) do
+  end
+end
+```
+
+## Mark As Completed
+
+<!-- livebook:{"attrs":{"source":"file_name = Path.basename(Regex.replace(~r/#.+/, __ENV__.file, \"\"), \".livemd\")\n\nsave_name =\n  case Path.basename(__DIR__) do\n    \"reading\" -> \"anagram_reading\"\n    \"exercises\" -> \"anagram_exercise\"\n  end\n\nprogress_path = __DIR__ <> \"/../progress.json\"\nexisting_progress = File.read!(progress_path) |> Jason.decode!()\n\ndefault = Map.get(existing_progress, save_name, false)\n\nform =\n  Kino.Control.form(\n    [\n      completed: input = Kino.Input.checkbox(\"Mark As Completed\", default: default)\n    ],\n    report_changes: true\n  )\n\nTask.async(fn ->\n  for %{data: %{completed: completed}} <- Kino.Control.stream(form) do\n    File.write!(\n      progress_path,\n      Jason.encode!(Map.put(existing_progress, save_name, completed), pretty: true)\n    )\n  end\nend)\n\nform","title":"Track Your Progress"},"chunks":null,"kind":"Elixir.HiddenCell","livebook_object":"smart_cell"} -->
+
+```elixir
+file_name = Path.basename(Regex.replace(~r/#.+/, __ENV__.file, ""), ".livemd")
+
+save_name =
+  case Path.basename(__DIR__) do
+    "reading" -> "anagram_reading"
+    "exercises" -> "anagram_exercise"
+  end
+
+progress_path = __DIR__ <> "/../progress.json"
+existing_progress = File.read!(progress_path) |> Jason.decode!()
+
+default = Map.get(existing_progress, save_name, false)
+
+form =
+  Kino.Control.form(
+    [
+      completed: input = Kino.Input.checkbox("Mark As Completed", default: default)
+    ],
+    report_changes: true
+  )
+
+Task.async(fn ->
+  for %{data: %{completed: completed}} <- Kino.Control.stream(form) do
+    File.write!(
+      progress_path,
+      Jason.encode!(Map.put(existing_progress, save_name, completed), pretty: true)
+    )
+  end
+end)
+
+form
+```
+
+## Commit Your Progress
+
+Run the following in your command line from the curriculum folder to track and save your progress in a Git commit.
+Ensure that you do not already have undesired or unrelated changes by running `git status` or by checking the source control tab in Visual Studio Code.
+
+```
+$ git checkout -b anagram-exercise
+$ git add .
+$ git commit -m "finish anagram exercise"
+$ git push origin anagram-exercise
+```
+
+Create a pull request from your `anagram-exercise` branch to your `solutions` branch.
+Please do not create a pull request to the DockYard Academy repository as this will spam our PR tracker.
+
+**DockYard Academy Students Only:**
+
+Notify your instructor by including `@BrooklinJazz` in your PR description to get feedback.
+You (or your instructor) may merge your PR into your solutions branch after review.
+
+If you are interested in joining the next academy cohort, [sign up here](https://academy.dockyard.com/) to receive more news when it is available.
+
+## Up Next
+
+| Previous                                     | Next                                                     |
+| -------------------------------------------- | -------------------------------------------------------: |
+| [Palindrome](../exercises/palindrome.livemd) | [Animal Generator](../exercises/animal_generator.livemd) |
+

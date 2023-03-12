@@ -1,0 +1,508 @@
+%{
+  title: "Command Line"
+}
+---
+# Command Line
+
+```elixir
+Mix.install([
+  {:jason, "~> 1.4"},
+  {:kino, "~> 0.8.0", override: true},
+  {:youtube, github: "brooklinjazz/youtube"},
+  {:hidden_cell, github: "brooklinjazz/hidden_cell"}
+])
+```
+
+## Navigation
+
+[Return Home](../start.livemd)<span style="padding: 0 30px"></span>
+[Report An Issue](https://github.com/DockYard-Academy/beta_curriculum/issues/new?assignees=&labels=&template=issue.md&title=)
+
+## Setup
+
+Ensure you type the `ea` keyboard shortcut to evaluate all Elixir cells before starting. Alternatively, you can evaluate the Elixir cells as you read.
+
+## Review Questions
+
+Upon completing this lesson, a student should be able to answer the following questions.
+
+* How do you use your command line to navigate the file system?
+* How do you use your command line to manipulate (create and remove) folders and files?
+
+## Overview
+
+We use the command line to interact with our computer through a text interface rather than through a Graphical User Interface (GUI).
+
+Many programs only run through the command line. Generally, we call these **Command-Line Applications**, **CLI Applications** (for Command Line Interface), or just **CLIs**.
+
+The command line will differ depending on your operating system (Windows, macOS, GNU/Linux). Thus, we will include the commands
+specific instructions for each operating system.
+
+Each operating system uses a different program for its command line. Follow the instructions for your operating system to open your command line.
+
+* **Windows**: Open the start menu with the <kbd>Win <i class="ri-windows-fill"></i></kbd> key. Search for Command Prompt. Ensure you run in administrator mode to avoid permission issues.
+* **macOS or GNU/Linux**: Open the Terminal App <kbd>Ctrl+Alt+T</kbd>
+* **macOS** Click the Launchpad icon in the Dock or open the Launchpad with <kbd>Command + Space</kbd>. Type Terminal in the search field, then click the Terminal program.
+
+For an overview of the Command-Line Interface, we recommend this excellent video by Crash Course Computer Science.
+
+<!-- livebook:{"attrs":{"source":"YouTube.new(\"https://www.youtube.com/watch?v=4RPtJ9UyHS0\")","title":"Command Line Interfaces"},"chunks":null,"kind":"Elixir.HiddenCell","livebook_object":"smart_cell"} -->
+
+```elixir
+YouTube.new("https://www.youtube.com/watch?v=4RPtJ9UyHS0")
+```
+
+### Current Working Directory
+
+Your command line should display the **current working directory**. You'll often see `$` represent
+the current working directory in tutorials. Omit the `$` when entering text into your command line.
+
+For example, on Windows 11, mine is:
+
+```sh
+C:\Users\brook>
+```
+
+### Your Turn
+
+Open the command line on your computer and enter the `whoami` command to see your current user.
+
+You should see a similar output.
+
+```sh
+$ whoami
+your_user_name
+```
+
+## Running Elixir Files
+
+With [Elixir installed](https://elixir-lang.org/install.html) we can use the command line to execute an Elixir file ending in `.ex` or `.exs`.
+
+Elixir treats both file extensions similarly. However, we generally use `.exs` files for scripts.
+
+Let's create an Elixir script. First, create a `script.exs` file with the following content. This prints a `"Hello, world!"` message in your console.
+
+<!-- livebook:{"force_markdown":true} -->
+
+```elixir
+IO.puts("Hello, world!")
+```
+
+Then execute the file from the command line. Any Elixir code inside of the file will execute.
+
+```
+$ elixir script.ex
+Hello, world!
+```
+
+## Permissions (sudo)
+
+Some commands require permissions to enter. You should see an error in the command line
+if the command requires permissions.
+
+In **Windows** you often need to run the Command Prompt
+or Powershell in administrator mode.
+
+For **macOS & GNU/Linux** you can preface commands with **sudo**. You'll be prompted for your computer's
+password. You'll notice that `whoami` returns a different value (probably `root`).
+
+Root is the superuser account in macOS and GNU/Linux.
+
+```sh
+$ sudo whoami
+root
+```
+
+## List Files & Folders
+
+Our computer stores **files** and **folders**. The terms **folder** and **directory** are interchangeable.
+
+We use the following commands to list files and folders.
+
+* **Windows**: `dir`
+* **macOS or GNU/Linux**: `ls`
+
+macOS and GNU/Linux hide specific files. For example, files
+starting with `.` are automatically hidden.
+
+You can see hidden files with `ls -a`.
+
+```sh
+$ ls -a
+```
+
+On **Windows**, all files and folders should display by default.
+
+```sh
+C:\> dir
+```
+
+### Your Turn
+
+Use the command line the files and folders in the current working directory. If you are
+on macOS or GNU/Linux, use both `ls` and `ls -a` to see the difference.
+
+## Create Files
+
+You can create a file using the following commands
+
+* **macOS & GNU/Linux**: `touch`
+* **Windows**: `echo`
+
+**macOS & GNU/Linux** Allow you to enter `touch` with the name of a file.
+
+```sh
+$ touch ./example_file.txt
+```
+
+**Windows** requires you to enter the content into (`>`) the file.
+
+```sh
+C:\> echo example content > ./example_file.txt
+```
+
+On **Windows**, you can use `type nul` to create an empty file.
+
+```sh
+C:\> echo type nul > ./example_file.txt
+```
+
+`./` represents the current working directory. You can generally omit it.
+
+Here are the same commands without the `./`.
+
+```sh
+$ touch example_file.txt
+$ echo example content > example_file.txt
+```
+
+### Your Turn
+
+Using the command line, create a file called `test.txt`.
+
+On **macOS & GNU/Linux** run:
+
+```sh
+$ touch test.txt
+```
+
+On **Windows** run:
+
+```sh
+C:\> type nul > text.txt
+```
+
+## Create Folders
+
+You can create a folder with `mkdir` on every operating system. It's short for **make directory**.
+
+### Your Turn
+
+Using the command line, create an `example` folder using `mkdir`.
+
+```sh
+$ mkdir example
+```
+
+Then use the command line
+to create a file called `in_example.txt` inside of the `example` folder.
+
+On **macOS or GNU/Linux**, enter:
+
+```sh
+$ touch example/in_example.txt
+```
+
+On **Windows** enter:
+
+```sh
+C:\> echo type nul > example/in_example.txt
+```
+
+## Navigating the File System
+
+You can navigate the file system with `cd` on every operating system.
+
+You navigate through files and folders the same way you would click through the file explorer.
+
+Enter `cd` with the path of the folder to navigate to it. The folder must exist.
+
+```sh
+$ cd example_folder
+$ cd first_folder/second_folder/third_folder
+```
+
+You can navigate up folders using `../`. You can go up any number of folders by repeating `../`.
+
+```sh
+$ cd ../
+$ cd ../../../
+```
+
+Let's walk through an example with several nested folders like so.
+
+```sh
+/top
+  /folder_a
+    /folder_b
+      /folder_c
+  /folder_1
+    /folder_2
+      /folder_3
+```
+
+<!-- livebook:{"break_markdown":true} -->
+
+We use `cd` to navigate between these folders and set the current working directory.
+
+<!-- livebook:{"break_markdown":true} -->
+
+```mermaid
+flowchart LR
+top --> folder_1 --> folder_2 --> folder_3
+top --> folder_a --> folder_b --> folder_c
+style top fill:lightgreen
+```
+
+For example, we can `cd folder_1/folder_2/` to set the current working directory to `folder_2`.
+
+<!-- livebook:{"break_markdown":true} -->
+
+```mermaid
+flowchart LR
+top_level_folder --> folder_1 --> folder_2 --> folder_3
+top_level_folder --> folder_a --> folder_b --> folder_c
+style folder_2 fill:lightgreen
+```
+
+<!-- livebook:{"break_markdown":true} -->
+
+And use `cd ../../folder_a/folder_b/folder_c` to set the current working directory to `folder_c`.
+
+<!-- livebook:{"break_markdown":true} -->
+
+```mermaid
+flowchart LR
+top_level_folder --> folder_1 --> folder_2 --> folder_3
+top_level_folder --> folder_a --> folder_b --> folder_c
+style folder_c fill:lightgreen
+```
+
+<!-- livebook:{"break_markdown":true} -->
+
+### Your Turn
+
+Using the command line, go into the `example` folder you created earlier. List all of the files in the folder using `ls` or `dir`. You should
+see the `in_example.txt` file from the previous exercise.
+
+```sh
+$ cd example
+```
+
+## Remove Files
+
+You can remove files using the following commands.
+
+* **macOS & GNU/Linux**: `rm`
+* **Windows**: `del`
+
+<!-- livebook:{"break_markdown":true} -->
+
+### Your Turn
+
+Using the command line, delete the `in_example.txt` file from the previous exercise.
+
+On **macOS & GNU/Linux** run:
+
+```sh
+$ rm example/in_example.txt
+```
+
+On **Windows** run:
+
+```sh
+C:\> del example/in_example.txt
+```
+
+## Remove Folders
+
+You can remove folders using the following commands.
+
+* **macOS & GNU/Linux**: `rm -rf`
+* **Windows**: `rmdir`
+
+### Your Turn
+
+Remove the `example` folder from the previous exercise.
+
+On **macOS & GNU/Linux** run:
+
+```sh
+$ rm -rf example
+```
+
+On **Windows** run:
+
+```sh
+C:\> rmdir example
+```
+
+## Reading Files
+
+You can read file contents with the following commands.
+
+* **macOS & GNU/Linux**: `cat`
+* **Windows**: `type`.
+
+### Your Turn
+
+Create a new file `read_example.txt` with some text content.
+You can use `echo` on every operating system to create a file with some content. However,
+`type nul` only works on **Windows**.
+
+run:
+
+```sh
+$ echo content > read_example.txt
+```
+
+Then read the content.
+
+On **macOS & GNU/Linux** run:
+
+```sh
+$ cat read_example.txt
+```
+
+On **Windows** run:
+
+```sh
+C:\> type read_example.txt
+```
+
+## Tab Completion
+
+To save time, you can generally use the <kbd>Tab</kbd> button to autocomplete a command or filename.
+
+### Your Turn
+
+Using the command line, create a new folder called `tab_to_folder`.
+
+```sh
+$ mkdir tab_to_folder
+```
+
+Navigate to the folder using autocompletion. Start typing `tab` then use the <kbd>Tab</kbd> key to autocomplete the folder name.
+
+```sh
+$ cd tab_to_folder
+```
+
+## With Great Power
+
+The command line is powerful. Therefore the command line is
+also dangerous. For example, a simple command can delete every file on your computer.
+
+Open the dropdown below to see the command. You should **never** run it.
+
+<details style="background-color: lightcoral; color: white; padding: 1rem;">
+<summary>DANGER DO NOT RUN</summary>
+rm -rf *
+</details>
+
+So be careful about running commands on your command line.
+
+## Summary
+
+This lesson is a brief primer on the command line. Here's a quick summary of the key takeaways.
+
+<!-- livebook:{"break_markdown":true} -->
+
+**macOS & GNU/Linux**
+
+* list files and folders: `ls` and `ls -a`.
+* create files: `touch`.
+* create folders: `mkdir`.
+* navigate: `cd`.
+* remove files: `rm`.
+* remove folders: `rm -rf`.
+* read file contents: `cat`.
+
+**Windows**
+
+* list files and folders: `dir`.
+* create files: `echo`.
+* create folders: `mkdir`.
+* navigate: `cd`.
+* remove files: `del`.
+* remove folders: `rmdir`.
+* read file contents: `type`.
+
+You can now handle everyday command-line tasks! Expect to learn more about the command line as you encounter more programming challenges.
+
+## Mark As Completed
+
+<!-- livebook:{"attrs":{"source":"file_name = Path.basename(Regex.replace(~r/#.+/, __ENV__.file, \"\"), \".livemd\")\n\nsave_name =\n  case Path.basename(__DIR__) do\n    \"reading\" -> \"command_line_reading\"\n    \"exercises\" -> \"command_line_exercise\"\n  end\n\nprogress_path = __DIR__ <> \"/../progress.json\"\nexisting_progress = File.read!(progress_path) |> Jason.decode!()\n\ndefault = Map.get(existing_progress, save_name, false)\n\nform =\n  Kino.Control.form(\n    [\n      completed: input = Kino.Input.checkbox(\"Mark As Completed\", default: default)\n    ],\n    report_changes: true\n  )\n\nTask.async(fn ->\n  for %{data: %{completed: completed}} <- Kino.Control.stream(form) do\n    File.write!(\n      progress_path,\n      Jason.encode!(Map.put(existing_progress, save_name, completed), pretty: true)\n    )\n  end\nend)\n\nform","title":"Track Your Progress"},"chunks":null,"kind":"Elixir.HiddenCell","livebook_object":"smart_cell"} -->
+
+```elixir
+file_name = Path.basename(Regex.replace(~r/#.+/, __ENV__.file, ""), ".livemd")
+
+save_name =
+  case Path.basename(__DIR__) do
+    "reading" -> "command_line_reading"
+    "exercises" -> "command_line_exercise"
+  end
+
+progress_path = __DIR__ <> "/../progress.json"
+existing_progress = File.read!(progress_path) |> Jason.decode!()
+
+default = Map.get(existing_progress, save_name, false)
+
+form =
+  Kino.Control.form(
+    [
+      completed: input = Kino.Input.checkbox("Mark As Completed", default: default)
+    ],
+    report_changes: true
+  )
+
+Task.async(fn ->
+  for %{data: %{completed: completed}} <- Kino.Control.stream(form) do
+    File.write!(
+      progress_path,
+      Jason.encode!(Map.put(existing_progress, save_name, completed), pretty: true)
+    )
+  end
+end)
+
+form
+```
+
+## Commit Your Progress
+
+Run the following in your command line from the curriculum folder to track and save your progress in a Git commit.
+Ensure that you do not already have undesired or unrelated changes by running `git status` or by checking the source control tab in Visual Studio Code.
+
+```
+$ git checkout -b command-line-reading
+$ git add .
+$ git commit -m "finish command line reading"
+$ git push origin command-line-reading
+```
+
+Create a pull request from your `command-line-reading` branch to your `solutions` branch.
+Please do not create a pull request to the DockYard Academy repository as this will spam our PR tracker.
+
+**DockYard Academy Students Only:**
+
+Notify your instructor by including `@BrooklinJazz` in your PR description to get feedback.
+You (or your instructor) may merge your PR into your solutions branch after review.
+
+If you are interested in joining the next academy cohort, [sign up here](https://academy.dockyard.com/) to receive more news when it is available.
+
+## Up Next
+
+| Previous                                   | Next                         |
+| ------------------------------------------ | ---------------------------: |
+| [Start Here](../reading/start_here.livemd) | [Git](../reading/git.livemd) |
+

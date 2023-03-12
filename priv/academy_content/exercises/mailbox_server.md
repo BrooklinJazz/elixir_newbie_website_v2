@@ -1,0 +1,261 @@
+%{
+  title: "Mailbox Server"
+}
+---
+# Mailbox Server
+
+```elixir
+Mix.install([
+  {:jason, "~> 1.4"},
+  {:kino, "~> 0.8.0", override: true},
+  {:youtube, github: "brooklinjazz/youtube"},
+  {:hidden_cell, github: "brooklinjazz/hidden_cell"}
+])
+```
+
+## Navigation
+
+[Return Home](../start.livemd)<span style="padding: 0 30px"></span>
+[Report An Issue](https://github.com/DockYard-Academy/beta_curriculum/issues/new?assignees=&labels=&template=issue.md&title=)
+
+## Mailbox Server
+
+Earlier you created a [Process Mailbox](./process_mailbox.livemd) using purely processes.
+Now you're going to create a similar mailbox using [GenServer](https://hexdocs.pm/elixir/GenServer.html).
+
+To test your solution, you can use [:sys.get_state/1](https://www.erlang.org/doc/man/sys.html#get_state-1) to get the current state of your mailbox. This should **only** be used for debugging purposes, not for retrieving values from state in a real-world application.
+
+<!-- livebook:{"force_markdown":true} -->
+
+```elixir
+{:ok, mailbox_pid} = GenServer.start_link(Mailbox, [])
+
+GenServer.cast(mailbox_pid, {:mail, %{title: "Title 1", content: "Content 1"}})
+GenServer.cast(mailbox_pid, {:mail, %{title: "Title 2", content: "Content 2"}})
+
+:sys.get_state(mailbox_pid)
+[%{title: "Title 2", content: "Content 2"}, %{title: "Title 1", content: "Content 1"}]
+```
+
+<details style="background-color: lightgreen; padding: 1rem; margin: 1rem 0;">
+<summary>Example Solution</summary>
+
+```elixir
+defmodule Mailbox do
+  use GenServer
+
+  def start_link(state \\ []) do
+    GenServer.start_link(__MODULE__, state)
+  end
+
+  def send(mailbox_pid, mail) do
+    GenServer.cast(mailbox_pid, {:mail, mail})
+  end
+
+  def all_messages(mailbox_pid) do
+    GenServer.call(mailbox_pid, :all_messages)
+  end
+
+  @impl true
+  def init(state) do
+    {:ok, state}
+  end
+
+  @impl true
+  def handle_call(:all_messages, _from, state) do
+    {:noreply, state, state}
+  end
+
+  @impl true
+  def handle_cast({:mail, mail}, state) do
+    {:noreply, [mail | state]}
+  end
+
+  def handle_info({:mail, mail}, state) do
+    {:noreply, [mail | state]}
+  end
+end
+```
+
+</details>
+
+Implement the `Mailbox` [GenServer](https://hexdocs.pm/elixir/GenServer.html) as documented below.
+
+```elixir
+defmodule Mailbox do
+  use GenServer
+
+  @doc """
+  Start a mailbox server.
+
+  ## Examples
+
+      iex> {:ok, pid} = Mailbox.start_link([])
+      iex> :sys.get_state(pid)
+      []
+
+      Allow the mailbox to start with a default list of messages.
+
+      iex> {:ok, pid} = Mailbox.start_link(["Welcome to your mailbox!"])
+      iex> :sys.get_state(pid)
+      ["Welcome to your mailbox!"]
+  """
+  def start_link(_opts) do
+  end
+
+  @doc """
+  Asynchronously Send a message to a mailbox server.
+
+  ## Examples
+
+      iex> {:ok, pid} = Mailbox.start_link([])
+      iex> Mailbox.send(pid, "Message 1")
+      iex> Mailbox.send(pid, "Message 2")
+      iex> :sys.get_state(pid)
+      ["Message 2", "Message 1"]
+  """
+  def send(mailbox_pid, message) do
+  end
+
+  @doc """
+  Synchonously retrieve all messages in a mailbox server.
+
+  ## Examples
+
+      iex> {:ok, pid} = Mailbox.start_link([])
+      iex> Mailbox.all_messages(pid)
+      []
+  """
+  def all_messages(mailbox_pid) do
+  end
+
+  @doc """
+  Required callback to start a GenServer.
+
+  ## Examples
+
+      iex> {:ok, _pid} = GenServer.start_link(Mailbox, [])
+  """
+  @impl true
+  def init(state) do
+  end
+
+  @doc """
+  Callback to synchronously retrieve a `Mailbox`'s state.
+
+  ## Examples
+
+      iex> {:ok, pid} = GenServer.start_link(Mailbox, ["Welcome"])
+      iex> GenServer.call(pid, :all_messages)
+      ["Welcome"]
+  """
+  @impl true
+  def handle_call(:all_messages, _from, state) do
+  end
+
+  @doc """
+  Callback for receiving a `cast` message and storing it in the `Mailbox`'s state.
+
+  ## Examples
+
+      iex> {:ok, pid} = GenServer.start_link(Mailbox, [])
+      iex> GenServer.cast(pid, {:mail, "Message 1"})
+      iex> GenServer.cast(pid, {:mail, "Message 2"})
+      iex> :sys.get_state(pid)
+      ["Message 2", "Message 1"]
+  """
+  @impl true
+  def handle_cast({:mail, mail}, state) do
+  end
+
+  @doc """
+  Callback for receiving "regular" messages and storing them in the `Mailbox`'s state.
+
+  ## Examples
+
+      iex> {:ok, pid} = GenServer.start_link(Mailbox, [])
+      iex> Process.send(pid, {:mail, "Message 1"}, [])
+      iex> Process.send(pid, {:mail, "Message 2"}, [])
+      iex> :sys.get_state(pid)
+      ["Message 2", "Message 1"]
+  """
+  @impl true
+  def handle_info({:mail, mail}, state) do
+  end
+end
+```
+
+## `handle_info` Vs `handle_cast`/`handle_call`
+
+The main difference between these functions is how you call them.
+
+You call `handle_cast` with `GenServer.cast` and `handle_call` with `GenServer.call`. `handle_info` is called with `Process.send`.
+
+It is useful for situations where you don't have access to `GenServer.call` or when you need to send a message to many different [GenServer](https://hexdocs.pm/elixir/GenServer.html)s without calling a bunch of different functions to do it.
+
+## Mark As Completed
+
+<!-- livebook:{"attrs":{"source":"file_name = Path.basename(Regex.replace(~r/#.+/, __ENV__.file, \"\"), \".livemd\")\n\nsave_name =\n  case Path.basename(__DIR__) do\n    \"reading\" -> \"mailbox_server_reading\"\n    \"exercises\" -> \"mailbox_server_exercise\"\n  end\n\nprogress_path = __DIR__ <> \"/../progress.json\"\nexisting_progress = File.read!(progress_path) |> Jason.decode!()\n\ndefault = Map.get(existing_progress, save_name, false)\n\nform =\n  Kino.Control.form(\n    [\n      completed: input = Kino.Input.checkbox(\"Mark As Completed\", default: default)\n    ],\n    report_changes: true\n  )\n\nTask.async(fn ->\n  for %{data: %{completed: completed}} <- Kino.Control.stream(form) do\n    File.write!(\n      progress_path,\n      Jason.encode!(Map.put(existing_progress, save_name, completed), pretty: true)\n    )\n  end\nend)\n\nform","title":"Track Your Progress"},"chunks":null,"kind":"Elixir.HiddenCell","livebook_object":"smart_cell"} -->
+
+```elixir
+file_name = Path.basename(Regex.replace(~r/#.+/, __ENV__.file, ""), ".livemd")
+
+save_name =
+  case Path.basename(__DIR__) do
+    "reading" -> "mailbox_server_reading"
+    "exercises" -> "mailbox_server_exercise"
+  end
+
+progress_path = __DIR__ <> "/../progress.json"
+existing_progress = File.read!(progress_path) |> Jason.decode!()
+
+default = Map.get(existing_progress, save_name, false)
+
+form =
+  Kino.Control.form(
+    [
+      completed: input = Kino.Input.checkbox("Mark As Completed", default: default)
+    ],
+    report_changes: true
+  )
+
+Task.async(fn ->
+  for %{data: %{completed: completed}} <- Kino.Control.stream(form) do
+    File.write!(
+      progress_path,
+      Jason.encode!(Map.put(existing_progress, save_name, completed), pretty: true)
+    )
+  end
+end)
+
+form
+```
+
+## Commit Your Progress
+
+Run the following in your command line from the curriculum folder to track and save your progress in a Git commit.
+Ensure that you do not already have undesired or unrelated changes by running `git status` or by checking the source control tab in Visual Studio Code.
+
+```
+$ git checkout -b mailbox-server-exercise
+$ git add .
+$ git commit -m "finish mailbox server exercise"
+$ git push origin mailbox-server-exercise
+```
+
+Create a pull request from your `mailbox-server-exercise` branch to your `solutions` branch.
+Please do not create a pull request to the DockYard Academy repository as this will spam our PR tracker.
+
+**DockYard Academy Students Only:**
+
+Notify your instructor by including `@BrooklinJazz` in your PR description to get feedback.
+You (or your instructor) may merge your PR into your solutions branch after review.
+
+If you are interested in joining the next academy cohort, [sign up here](https://academy.dockyard.com/) to receive more news when it is available.
+
+## Up Next
+
+| Previous                                                  | Next                                               |
+| --------------------------------------------------------- | -------------------------------------------------: |
+| [Asynchronous Messages](../reading/async_messages.livemd) | [Score Tracker](../exercises/score_tracker.livemd) |
+

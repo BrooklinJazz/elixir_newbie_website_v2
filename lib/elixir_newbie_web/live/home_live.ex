@@ -25,46 +25,11 @@ defmodule ElixirNewbieWeb.HomeLive do
             />
           </article>
           <%= if @ready_for_animations do %>
-            <.link
-              href="https://twitter.com/BrooklinJMyers"
-              class={"row-start-3 col-start-5 relative left-1/2 bottom-1/3 group animate-fade-in"}
-            >
-              <div class="transition duration-300 ease-in-out group-hover:scale-110">
-                <div class="animate-spin-slow absolute h-full w-full rounded-full border-l-2 border-cyan-600"/>
-                <img alt="Twitter Icon Button" class="rounded-full border-2" src="images/twitter_icon_reduced.webp"/>
-              </div>
-              <p class="absolute -bottom-6 w-full text-center text-sm text-white">Twitter</p>
-            </.link>
-            <.link
-              href="https://github.com/BrooklinJazz"
-              class="relative col-start-5 relative left-1/3 sm:left-1/4 row-start-4 group animate-fade-in"
-            >
-              <div class="transition duration-300 ease-in-out group-hover:scale-110">
-                <div class="animate-spin-slow absolute h-full w-full rounded-full border-l-2 border-green-600"/>
-                <img alt="GitHub Icon Button" class="rounded-full border-2" src="images/github_icon_reduced.webp"/>
-              </div>
-              <p class="absolute -bottom-6 w-full text-center text-sm text-white">GitHub</p>
-            </.link>
-            <.link
-              href="https://www.linkedin.com/in/brooklinmyers/"
-              class="row-start-5 col-start-4 relative left-1/2 group animate-fade-in"
-            >
-              <div class="transition duration-300 ease-in-out group-hover:scale-110">
-                <div class="animate-spin-slow absolute h-full w-full rounded-full border-l-2 border-blue-600"/>
-                <img alt="Linkedin Icon Button" class="rounded-full border-2" src="images/linkedin_icon_reduced.webp"/>
-              </div>
-              <p class="absolute -bottom-6 w-full text-center text-sm text-white">Linkedin</p>
-            </.link>
-            <.link
-              href="https://github.com/DockYard-Academy/beta_curriculum"
-              class="row-start-5 col-start-3 relative left-1/4 top-1/2 group animate-fade-in"
-            >
-              <div class="transition duration-300 ease-in-out group-hover:scale-110">
-                <div class="animate-spin-slow absolute h-full w-full rounded-full border-l-2 border-black"/>
-                <img id="dockyard-academy-icon" alt="DockYard Academy Icon Button" class="rounded-full border-2" src="images/dockyard_academy_icon_reduced.webp"/>
-              </div>
-              <p class="absolute -bottom-12 w-full text-center text-sm text-white">DockYard Academy</p>
-            </.link>
+            <.round_link link={"https://discord.gg/XBAAmuZGXU"} position={"row-start-5 col-start-2 relative right-2 top-1/3"} logo={"images/discord_icon.png"}>Join our Discord</.round_link>
+            <.round_link link={"https://twitter.com/BrooklinJMyers"} position={"row-start-3 col-start-5 relative left-1/2 bottom-1/3"} logo={"images/twitter_icon_reduced.webp"}>Twitter</.round_link>
+            <.round_link link={"https://github.com/BrooklinJazz"} position={"relative col-start-5 relative left-1/3 sm:left-1/4 row-start-4"} logo={"images/github_icon_reduced.webp"}>GitHub</.round_link>
+            <.round_link link={"https://www.linkedin.com/in/brooklinmyers/"} position={"row-start-5 col-start-4 relative left-1/2"} logo={"images/linkedin_icon_reduced.webp"}>Linkedin</.round_link>
+            <.round_link link={"https://github.com/DockYard-Academy/beta_curriculum"} position={"row-start-5 col-start-3 relative left-1/4 top-1/2"} logo={"images/dockyard_academy_icon_reduced.webp"}>Dockyard Academy</.round_link>
           <% end %>
         </article>
         <article class="flex w-full flex-col text-2xl text-white 4k:text-4xl lg:text-2xl">
@@ -89,6 +54,21 @@ defmodule ElixirNewbieWeb.HomeLive do
     >
       <h2 class={"absolute flex h-full w-full items-center pl-16"} ><%= render_slot(@inner_block) %></h2>
       <img alt="Blog" src={@src} class="rounded-3xl"/>
+    </.link>
+    """
+  end
+
+  def round_link(assigns) do
+    ~H"""
+    <.link
+      href={@link}
+      class={"#{@position} group animate-fade-in"}
+      >
+      <div class="transition duration-300 ease-in-out group-hover:scale-110">
+        <div class="animate-spin-slow absolute h-full w-full rounded-full border-l-2 border-cyan-600"/>
+        <img alt={render_slot(@inner_block)} class="rounded-full border-2" src={@logo}/>
+        <p class="absolute mt-1 w-full text-center text-sm text-white transition duration-300 ease-in-out group-hover:opacity-100"><%= render_slot(@inner_block) %></p>
+        </div>
     </.link>
     """
   end
