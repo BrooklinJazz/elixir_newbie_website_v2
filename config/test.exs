@@ -31,3 +31,10 @@ config :logger, level: :warning
 
 # Initialize plugs at runtime for faster test compilation
 config :phoenix, :plug_init_mode, :runtime
+
+# Configure Wallaby Chrome driver
+config :wallaby, driver: Wallaby.Chrome
+# config :wallaby, driver: Wallaby.Selenium
+config :wallaby, otp_app: :elixir_newbie
+
+config :elixir_newbie, ElixirNewbieWeb.Endpoint, server: true

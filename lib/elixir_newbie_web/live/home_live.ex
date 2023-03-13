@@ -12,6 +12,7 @@ defmodule ElixirNewbieWeb.HomeLive do
 
   def render(assigns) do
     ~H"""
+    Some Text
     <section class="bg-[url('/images/background-smoke-transparent.webp')] min-h-screen bg-black bg-no-repeat bg-cover">
       <.navigation/>
       <section class="flex h-fit w-full flex-col gap-12 4k:gap-36 lg:flex-row xl:gap-24 mx-auto sm:w-full md:w-3/4 lg:w-full xl:w-3/4">
