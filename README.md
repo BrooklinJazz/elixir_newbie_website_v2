@@ -17,3 +17,15 @@ Ready to run in production? Please [check our deployment guides](https://hexdocs
   * Docs: https://hexdocs.pm/phoenix
   * Forum: https://elixirforum.com/c/phoenix-forum
   * Source: https://github.com/phoenixframework/phoenix
+
+## Wallaby
+
+We use [Wallaby](https://github.com/elixir-wallaby/wallaby) for end-to-end testing. If you want to run Wallaby you'll have to follow their instructions and install the ChromeDriver.
+
+To execute wallaby tests run:
+
+```elixir
+mix test --only wallaby
+```
+
+For example, we have a `/screenshots` folder with screenshots of every page at different screen sizes in order to ensure consistent responsive styles across devices.

@@ -59,7 +59,8 @@ defmodule ElixirNewbie.MixProject do
       {:elixir_feed_parser, "~> 2.1"},
       {:httpoison, "~> 1.8"},
       {:dialyxir, "~> 1.2", only: [:dev], runtime: false},
-      {:credo, "~> 1.6", only: [:dev, :test], runtime: false}
+      {:credo, "~> 1.6", only: [:dev, :test], runtime: false},
+      {:wallaby, "~> 0.30.0", runtime: false, only: :test}
     ]
   end
 
@@ -74,7 +75,8 @@ defmodule ElixirNewbie.MixProject do
       setup: ["deps.get", "ecto.setup"],
       "ecto.setup": ["ecto.create", "ecto.migrate", "run priv/repo/seeds.exs"],
       "ecto.reset": ["ecto.drop", "ecto.setup"],
-      test: ["ecto.create --quiet", "ecto.migrate --quiet", "test"],
+      # added esbuild default to avoid CSS or JS recompiling issues with Wallaby
+      test: ["esbuild default", "ecto.create --quiet", "ecto.migrate --quiet", "test"],
       "assets.deploy": ["tailwind default --minify", "esbuild default --minify", "phx.digest"]
     ]
   end
