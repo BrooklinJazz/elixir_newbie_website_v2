@@ -50,11 +50,11 @@ defmodule ElixirNewbieWeb.HomeLive do
         "transition duration-500 ease-in-out ring ring-white hover:ring-offset-2 overflow-hidden"
       ]}
     >
+      <h2 class={"absolute flex h-full w-full items-center pl-16"} ><%= render_slot(@inner_block) %></h2>
       <img alt={@alt} src={@src} class="rounded-3xl object-cover w-full"/>
     </.link>
     """
   end
-  # <h2 class={"absolute flex h-full w-full items-center pl-16"} ><%= render_slot(@inner_block) %></h2>
 
   def round_link(assigns) do
     ~H"""
