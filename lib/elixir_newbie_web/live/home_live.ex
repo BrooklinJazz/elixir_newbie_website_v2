@@ -14,15 +14,13 @@ defmodule ElixirNewbieWeb.HomeLive do
     ~H"""
     <section class="bg-[url('/images/background-smoke-transparent.webp')] flex-col h-screen min-h-screen bg-black bg-no-repeat bg-cover">
       <.navigation/>
-       <section class="mx-auto flex w-full flex-col gap-12 4k:gap-36 sm:w-full md:w-3/4 lg:w-full lg:flex-row xl:w-3/4 xl:gap-24">
+       <section class="4k:mt-36 mx-auto flex w-full flex-col gap-12 4k:gap-36 sm:w-full md:w-3/4 lg:w-full lg:flex-row xl:w-3/4 4k:w-1/2 xl:gap-24">
         <article class="grid h-fit w-full grid-cols-6 grid-rows-6">
-          <article class="aspect-square relative col-start-1 col-end-6 row-start-1 row-end-6 rounded-full border-t-4 border-l-4 border-white">
-            <img
-              class="rounded-full"
-              alt="home page icon of a wizard"
-              src="images/home_page_icon_reduced.webp"
-            />
-          </article>
+          <img
+            class="rounded-full border-t-4 border-l-4 border-white aspect-square relative col-start-1 col-end-6 row-start-1 row-end-6"
+            alt="home page icon of a wizard"
+            src="images/home_page_icon_reduced.webp"
+          />
           <%= if @ready_for_animations do %>
             <.round_link link={"https://discord.gg/XBAAmuZGXU"} position={"row-start-5 col-start-2 relative right-2 top-1/3"} logo={"images/discord_icon.png"}>Join our Discord</.round_link>
             <.round_link link={"https://twitter.com/BrooklinJMyers"} position={"row-start-3 col-start-5 relative left-1/2 bottom-1/3"} logo={"images/twitter_icon_reduced.webp"}>Twitter</.round_link>
@@ -36,7 +34,7 @@ defmodule ElixirNewbieWeb.HomeLive do
           <.rectangle_link navigate={~p"/blog"} src="images/blog_button_reduced.webp" alt="Magic Psychedelic Books">1. Read the Blog</.rectangle_link>
           <.rectangle_link navigate={~p"/podcast"} src="images/podcast_button_reduced.webp" alt="Avatar-like half face">2. Listen to the Podcast</.rectangle_link>
           <.rectangle_link navigate={~p"/resources"} src="images/resources_button_reduced.webp" alt="Fantasy Mushroom Forest">3. Explore Learning Resources</.rectangle_link>
-          <.rectangle_link navigate={~p"/community"} src="images/resources_button_reduced.webp"  alt="Fantasy Mushroom Forest">4. Join The Community</.rectangle_link>
+          <.rectangle_link navigate={~p"/community"} src="images/resources_button_community.png"  alt="Fantasy Mushroom Forest">4. Join The Community</.rectangle_link>
         </article>
       </section>
     </section>
@@ -52,11 +50,11 @@ defmodule ElixirNewbieWeb.HomeLive do
         "transition duration-500 ease-in-out ring ring-white hover:ring-offset-2 overflow-hidden"
       ]}
     >
-      <h2 class={"absolute flex h-full w-full items-center pl-16"} ><%= render_slot(@inner_block) %></h2>
-       <img alt={@alt} src={@src} class="rounded-3xl object-cover"/>
+      <img alt={@alt} src={@src} class="rounded-3xl object-cover w-full"/>
     </.link>
     """
   end
+  # <h2 class={"absolute flex h-full w-full items-center pl-16"} ><%= render_slot(@inner_block) %></h2>
 
   def round_link(assigns) do
     ~H"""
