@@ -35,6 +35,7 @@ defmodule ElixirNewbieWeb.CoreComponents do
         </div>
         <div class="flex w-full justify-between text-2xl sm:w-fit sm:gap-12">
           <.link class="opacity-80 hover:opacity-100 sm:hidden" navigate={"/"}>Home</.link>
+          <.link class="link-underline opacity-80 hover:opacity-100" navigate={"/blog"}>Blog</.link>
           <.link class="link-underline opacity-80 hover:opacity-100" navigate={"/podcast"}>
             Podcast
           </.link>
@@ -46,7 +47,6 @@ defmodule ElixirNewbieWeb.CoreComponents do
           </.link>
         </div>
       </div>
-      <hr class="animate-gradient-x h-1 w-full border-0 bg-gradient-to-r from-transparent via-orange-500 to-transparent opacity-70" />
     </header>
     """
   end
