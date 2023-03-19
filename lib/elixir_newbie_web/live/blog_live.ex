@@ -24,7 +24,7 @@ defmodule ElixirNewbieWeb.BlogLive do
             </article>
           </article>
           <div class="grid grid-cols-5 gap-4 px-2">
-            <.form id="search" for={:filter} phx-change="filter" phx-submit="scroll" phx-hook="ScrollOnSubmit" phx-data-value="all_blogs" class="col-span-4 grid h-fit w-full" autocomplete="off">
+            <.form id="search" phx-change="filter" phx-submit="scroll" phx-hook="ScrollOnSubmit" phx-data-value="all_blogs" class="col-span-4 grid h-fit w-full" autocomplete="off" for={%{}}>
                 <div class="flex items-center rounded-xl rounded-full px-8 text-center text-sm font-semibold ring-2 ring-white transition duration-500 ease-in-out hover:ring-offset-2">
                   <Heroicons.magnifying_glass mini class="h-6 w-6 text-white"/>
                   <input name="search" id="search-blogs" errors={[]} class="h-8 w-0 flex-grow bg-transparent p-4 py-8 text-white placeholder-gray-400 outline-none focus-within:text-secondary" value={@search}/>

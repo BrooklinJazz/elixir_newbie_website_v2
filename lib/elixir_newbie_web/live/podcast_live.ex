@@ -89,7 +89,7 @@ defmodule ElixirNewbieWeb.PodcastLive do
             <p class="whitespace-nowrap">Ep. <%= @next %></p>
           </.link>
           <button id="player-playback-rate" phx-click="toggle-speed" class="col-start-9 hidden text-center text-xl lg:block"><%= @play_speed %>x</button>
-          <.form class="col-span-2 col-start-11 hidden items-center justify-center space-x-2 md:flex lg:col-start-10" phx-change="set-volume" for={:volume}>
+          <.form class="col-span-2 col-start-11 hidden items-center justify-center space-x-2 md:flex lg:col-start-10" phx-change="set-volume" for={%{}}>
             <Heroicons.speaker_x_mark id="player-speaker-x-mark" :if={@volume == 0} class="h-6 w-6" />
             <Heroicons.speaker_wave id="player-speaker-wave" :if={@volume > 0} class="h-6 w-6" />
             <input
