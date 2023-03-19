@@ -19,7 +19,7 @@ defmodule ElixirNewbieWeb.CoreComponents do
   """
   def navigation(assigns) do
     ~H"""
-    <header class="mb-6 px-4 text-white sm:px-6 lg:px-8 bg-gradient-to-r from-black to-transparent">
+    <header class="mb-6 bg-gradient-to-r from-black to-transparent px-4 text-white sm:px-6 lg:px-8">
       <div class="flex items-center justify-between py-3">
         <div class={[
           "flex items-center gap-4 hidden sm:block",
