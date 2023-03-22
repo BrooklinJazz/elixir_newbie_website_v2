@@ -5,9 +5,17 @@ defmodule ElixirNewbie.AcademyContent.Lesson do
   def build(file_name, attrs, body) do
     type = Regex.run(~r/reading|exercises/, file_name) |> hd() |> String.to_atom()
 
+    body = remove_livemd_extension(body)
+
     struct!(
       __MODULE__,
       [id: Path.basename(file_name, ".md"), body: body, type: type] ++ Map.to_list(attrs)
     )
+  end
+
+  # Remove .livemd from local links. E.g. ../whatever.livemd -> ../whatever
+  # External links are kept. E.g. https://github.com/a/b/whatever.livemd is not replaced
+  defp remove_livemd_extension(text) do
+    String.replace(text, ~r/(\.\..+)\.livemd/, "\\g{1}", global: true)
   end
 end

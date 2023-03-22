@@ -42,6 +42,9 @@
     @apply text-base lg:text-lg xl:text-xl;
 }
 
+.markdown details {
+    @apply bg-blue-800 !important
+}
 
 
 
