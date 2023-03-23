@@ -14,10 +14,10 @@ defmodule ElixirNewbieWeb.HomeLive do
     ~H"""
     <section class="bg-[url('/images/background-smoke-transparent.webp')] flex-col h-screen min-h-screen bg-black bg-no-repeat bg-cover">
       <.navigation/>
-       <section class="4k:mt-36 mx-auto flex w-full flex-col gap-12 4k:gap-36 sm:w-full md:w-3/4 lg:w-full lg:flex-row xl:w-3/4 4k:w-1/2 xl:gap-24">
+       <section class="mx-auto flex w-full flex-col gap-12 4k:mt-36 4k:w-1/2 4k:gap-36 sm:w-full md:w-3/4 lg:w-full lg:flex-row xl:w-3/4 xl:gap-24">
         <article class="grid h-fit w-full grid-cols-6 grid-rows-6">
           <img
-            class="rounded-full border-t-4 border-l-4 border-white aspect-square relative col-start-1 col-end-6 row-start-1 row-end-6"
+            class="aspect-square relative col-start-1 col-end-6 row-start-1 row-end-6 rounded-full border-t-4 border-l-4 border-white"
             alt="home page icon of a wizard"
             src="images/home_page_icon_reduced.webp"
           />
@@ -51,7 +51,7 @@ defmodule ElixirNewbieWeb.HomeLive do
       ]}
     >
       <h2 class={"absolute flex h-full w-full items-center pl-16"} ><%= render_slot(@inner_block) %></h2>
-      <img alt={@alt} src={@src} class="rounded-3xl object-cover w-full"/>
+      <img alt={@alt} src={@src} class="w-full rounded-3xl object-cover"/>
     </.link>
     """
   end
