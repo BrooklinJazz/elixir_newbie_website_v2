@@ -5,7 +5,7 @@ defmodule ElixirNewbie.AcademyContent.Lesson do
   def build(file_name, attrs, body) do
     type = Regex.run(~r/reading|exercises/, file_name) |> hd() |> String.to_atom()
 
-    body = remove_livemd_extension(body) |> code_blocks_inside_details()
+    formatted_body = body |> remove_livemd_extension() |> code_blocks_inside_details()
 
     struct!(
       __MODULE__,
@@ -21,7 +21,7 @@ defmodule ElixirNewbie.AcademyContent.Lesson do
 
   defp code_blocks_inside_details(text) do
     Regex.replace(~r/```elixir\n((.|\n)*)```/U, text, fn _full, code ->
-    Makeup.highlight(code)
+      Makeup.highlight(code)
     end)
   end
 end
