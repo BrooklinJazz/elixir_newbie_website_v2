@@ -1,4 +1,7 @@
 defmodule ElixirNewbie.AcademyContent do
+  @moduledoc """
+  NimblePublisher DockYard Academy Content Module
+  """
   alias ElixirNewbie.AcademyContent.Lesson
 
   use NimblePublisher,

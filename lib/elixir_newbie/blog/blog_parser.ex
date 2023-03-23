@@ -1,4 +1,7 @@
 defmodule ElixirNewbie.Blog.BlogParser do
+  @moduledoc """
+  NimblePublisher Blog Module
+  """
   alias ElixirNewbie.Blog.Post
 
   use NimblePublisher,

@@ -1,4 +1,7 @@
 defmodule ElixirNewbie.CourseOutline.Outline do
+  @moduledoc """
+  NimberPublisher Outline Struct
+  """
   @enforce_keys [:body]
   defstruct [:body]
 

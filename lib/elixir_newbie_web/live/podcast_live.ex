@@ -171,11 +171,7 @@ defmodule ElixirNewbieWeb.PodcastLive do
 
   @impl true
   def handle_event("set-volume", %{"volume" => volume}, socket) do
-    volume =
-      case Float.parse(volume) do
-        {:error, _} -> 0
-        {volume, _} -> volume
-      end
+    {volume, _} = Float.parse(volume)
 
     {:noreply, socket |> assign(:volume, volume) |> push_event("set-volume", %{volume: volume})}
   end

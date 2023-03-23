@@ -3,8 +3,8 @@ defmodule ElixirNewbie.Podcast do
   Podcast Context
   """
 
-  alias ElixirNewbie.Podcast.PodcastEpisode
   alias ElixirNewbie.Podcast.PodcastAPI
+  alias ElixirNewbie.Podcast.PodcastEpisode
   alias ElixirNewbie.Podcast.Formatter
 
   @doc """

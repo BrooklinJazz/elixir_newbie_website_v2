@@ -1,4 +1,7 @@
 defmodule ElixirNewbieWeb.Components.ResponsiveLayout do
+  @moduledoc """
+  Creates a consistent responsive layout
+  """
   use ElixirNewbieWeb, :html
 
   attr(:class, :string)

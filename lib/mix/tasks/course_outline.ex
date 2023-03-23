@@ -1,8 +1,10 @@
 defmodule Mix.Tasks.CourseOutline do
   @moduledoc "The hello mix task: `mix help hello`"
+  @shortdoc @moduledoc
+  
   use Mix.Task
 
-  # @shortdoc "Simply calls the Hello.say/0 function."
+  @impl true
   def run(_) do
     IO.puts("running: Course Outline")
     Mix.Task.run("app.start")

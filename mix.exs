@@ -9,7 +9,9 @@ defmodule ElixirNewbie.MixProject do
       elixirc_paths: elixirc_paths(Mix.env()),
       start_permanent: Mix.env() == :prod,
       aliases: aliases(),
-      deps: deps()
+      deps: deps(),
+      # fixes dialyzer warning in mix tasks
+      dialyzer: [plt_add_apps: [:mix]]
     ]
   end
 
