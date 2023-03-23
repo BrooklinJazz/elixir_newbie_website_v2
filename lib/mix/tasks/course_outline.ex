@@ -1,7 +1,7 @@
 defmodule Mix.Tasks.CourseOutline do
   @moduledoc "The hello mix task: `mix help hello`"
   @shortdoc @moduledoc
-  
+
   use Mix.Task
 
   @impl true
