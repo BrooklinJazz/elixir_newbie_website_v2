@@ -359,4 +359,15 @@
     color: #f8f8f2;
 }
 
-/* :name_variable_magic */
+.your_turn {
+    display: block;
+    color: #f8f8f2;
+    background-color: #431446;
+    border-radius: 0.5rem;
+    padding: 1rem;
+    text-decoration: none !important; /* This was being overrwritten by our .markdown css for anchor tags*/
+}
+
+.your_turn:hover {
+    opacity: 50%;
+}
