@@ -9,7 +9,7 @@ defmodule ElixirNewbie.AcademyContent.Lesson do
 
     struct!(
       __MODULE__,
-      [id: Path.basename(file_name, ".md"), body: body, type: type] ++ Map.to_list(attrs)
+      [id: Path.basename(file_name, ".md"), body: formatted_body, type: type] ++ Map.to_list(attrs)
     )
   end
 
