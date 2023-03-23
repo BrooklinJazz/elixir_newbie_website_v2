@@ -12,7 +12,7 @@ defmodule ElixirNewbieWeb.BlogLive do
     ~H"""
     <section class="bg-[url('/images/background-smoke-transparent.webp')] min-h-screen bg-black bg-no-repeat bg-contain">
       <.navigation/>
-      <section class="flex h-fit w-full flex-col gap-12 4k:gap-36 lg:flex-row xl:gap-24 mx-auto sm:w-full md:w-3/4 lg:w-full xl:w-3/4">
+      <section class="mx-auto flex h-fit w-full flex-col gap-12 4k:gap-36 sm:w-full md:w-3/4 lg:w-full lg:flex-row xl:w-3/4 xl:gap-24">
         <div>
           <article class="animate-fade-in grid h-fit w-full grid-cols-5 grid-rows-6">
             <article class="aspect-square relative col-start-1 col-end-6 row-start-1 row-end-6 rounded-full border-4 border-white">
@@ -24,7 +24,7 @@ defmodule ElixirNewbieWeb.BlogLive do
             </article>
           </article>
           <div class="grid grid-cols-5 gap-4 px-2">
-            <.form id="search" for={:filter} phx-change="filter" phx-submit="scroll" phx-hook="ScrollOnSubmit" phx-data-value="all_blogs" class="col-span-4 grid h-fit w-full" autocomplete="off">
+            <.form id="search" phx-change="filter" phx-submit="scroll" phx-hook="ScrollOnSubmit" phx-data-value="all_blogs" class="col-span-4 grid h-fit w-full" autocomplete="off" for={%{}}>
                 <div class="flex items-center rounded-xl rounded-full px-8 text-center text-sm font-semibold ring-2 ring-white transition duration-500 ease-in-out hover:ring-offset-2">
                   <Heroicons.magnifying_glass mini class="h-6 w-6 text-white"/>
                   <input name="search" id="search-blogs" errors={[]} class="h-8 w-0 flex-grow bg-transparent p-4 py-8 text-white placeholder-gray-400 outline-none focus-within:text-secondary" value={@search}/>

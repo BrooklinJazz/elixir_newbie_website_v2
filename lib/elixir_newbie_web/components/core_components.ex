@@ -19,7 +19,7 @@ defmodule ElixirNewbieWeb.CoreComponents do
   """
   def navigation(assigns) do
     ~H"""
-    <header class="mb-6 px-4 text-white sm:px-6 lg:px-8">
+    <header class="mb-6 bg-gradient-to-r from-black to-transparent px-4 text-white sm:px-6 lg:px-8">
       <div class="flex items-center justify-between py-3">
         <div class={[
           "flex items-center gap-4 hidden sm:block",
@@ -35,11 +35,15 @@ defmodule ElixirNewbieWeb.CoreComponents do
         </div>
         <div class="flex w-full justify-between text-2xl sm:w-fit sm:gap-12">
           <.link class="opacity-80 hover:opacity-100 sm:hidden" navigate={"/"}>Home</.link>
+          <.link class="link-underline opacity-80 hover:opacity-100" navigate={"/blog"}>Blog</.link>
           <.link class="link-underline opacity-80 hover:opacity-100" navigate={"/podcast"}>
             Podcast
           </.link>
           <.link class="link-underline opacity-80 hover:opacity-100" navigate={"/resources"}>
             Resources
+          </.link>
+          <.link class="link-underline opacity-80 hover:opacity-100" navigate={"/community"}>
+            Community
           </.link>
         </div>
       </div>
@@ -82,7 +86,7 @@ defmodule ElixirNewbieWeb.CoreComponents do
   def modal(assigns) do
     ~H"""
     <div id={@id} phx-mounted={@show && show_modal(@id)} class="relative z-50 hidden">
-      <div id={"#{@id}-bg"} class="fixed inset-0 bg-zinc-50/90 transition-opacity" aria-hidden="true" />
+      <div id={"#{@id}-bg"} class="bg-zinc-50/90 fixed inset-0 transition-opacity" aria-hidden="true" />
       <div
         class="fixed inset-0 overflow-y-auto"
         aria-labelledby={"#{@id}-title"}
@@ -99,7 +103,7 @@ defmodule ElixirNewbieWeb.CoreComponents do
               phx-window-keydown={hide_modal(@on_cancel, @id)}
               phx-key="escape"
               phx-click-away={hide_modal(@on_cancel, @id)}
-              class="hidden relative rounded-2xl bg-white p-14 shadow-lg shadow-zinc-700/10 ring-1 ring-zinc-700/10 transition"
+              class="shadow-zinc-700/10 ring-zinc-700/10 relative hidden rounded-2xl bg-white p-14 shadow-lg ring-1 transition"
             >
               <div class="absolute top-6 right-5">
                 <button
@@ -181,12 +185,12 @@ defmodule ElixirNewbieWeb.CoreComponents do
       ]}
       {@rest}
     >
-      <p :if={@title} class="flex items-center gap-1.5 text-[0.8125rem] font-semibold leading-6">
+      <p :if={@title} class="text-[0.8125rem] flex items-center gap-1.5 font-semibold leading-6">
         <Heroicons.information_circle :if={@kind == :info} mini class="h-4 w-4" />
         <Heroicons.exclamation_circle :if={@kind == :error} mini class="h-4 w-4" />
         <%= @title %>
       </p>
-      <p class="mt-2 text-[0.8125rem] leading-5"><%= msg %></p>
+      <p class="text-[0.8125rem] mt-2 leading-5"><%= msg %></p>
       <button
         :if={@close}
         type="button"
@@ -478,7 +482,7 @@ defmodule ElixirNewbieWeb.CoreComponents do
     ~H"""
     <div id={@id} class="overflow-y-auto px-4 sm:overflow-visible sm:px-0">
       <table class="w-[40rem] mt-11 sm:w-full">
-        <thead class="text-left text-[0.8125rem] leading-6 text-zinc-500">
+        <thead class="text-[0.8125rem] text-left leading-6 text-zinc-500">
           <tr>
             <th :for={col <- @col} class="p-0 pr-6 pb-4 font-normal"><%= col[:label] %></th>
             <th class="relative p-0 pb-4"><span class="sr-only"><%= gettext("Actions") %></span></th>
@@ -541,7 +545,7 @@ defmodule ElixirNewbieWeb.CoreComponents do
     <div class="mt-14">
       <dl class="-my-4 divide-y divide-zinc-100">
         <div :for={item <- @item} class="flex gap-4 py-4 sm:gap-8">
-          <dt class="w-1/4 flex-none text-[0.8125rem] leading-6 text-zinc-500"><%= item.title %></dt>
+          <dt class="text-[0.8125rem] w-1/4 flex-none leading-6 text-zinc-500"><%= item.title %></dt>
           <dd class="text-sm leading-6 text-zinc-700"><%= render_slot(item) %></dd>
         </div>
       </dl>

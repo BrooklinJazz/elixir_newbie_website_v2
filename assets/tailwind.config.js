@@ -11,6 +11,12 @@ module.exports = {
   ],
   theme: {
     extend: {
+      screens: {
+        '4k': '2250px'
+      },
+      aspectRatio: {
+        '8/1': '8 / 1',
+      },
       colors: {
         brand: "#FD4F00",
       },
