@@ -8,6 +8,7 @@ defmodule ElixirNewbie.AcademyContent.Lesson do
     formatted_body =
       body
       |> remove_livemd_extension()
+      |> latex_expressions()
       |> your_turn_sections(file_name)
       |> detail_sections()
 
@@ -22,6 +23,16 @@ defmodule ElixirNewbie.AcademyContent.Lesson do
   # External links are kept. E.g. https://github.com/a/b/whatever.livemd is not replaced
   defp remove_livemd_extension(text) do
     String.replace(text, ~r/(\.\..+)\.livemd/, "\\g{1}", global: true)
+  end
+
+  defp latex_expressions(text) do
+    Regex.replace(~r/\$(.|\n)*\$/U, text, fn full ->
+      """
+      <latex-js>
+        #{full}
+      </latex-js>
+      """
+    end)
   end
 
   defp your_turn_sections(text, file_name) do

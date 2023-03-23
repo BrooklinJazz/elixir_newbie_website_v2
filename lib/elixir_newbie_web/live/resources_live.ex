@@ -20,7 +20,7 @@ defmodule ElixirNewbieWeb.ResourcesLive do
           <!-- Jumbotron -->
       </section>
       <section class="mx-auto w-2/3">
-        <div class="markdown">
+        <div class="curriculum_outline markdown">
           <%= raw @outline.body %>
         </div>
       </section>

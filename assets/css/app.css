@@ -6,6 +6,10 @@
 @import "./makeup.css";
 @import "./global.css";
 
+.curriculum_outline a {
+    text-decoration: underline;
+}
+
 /* This file is for your main application CSS */
 html {
     background: url(images/background-smoke_reduced.webp) no-repeat center center fixed;
