@@ -1,3 +1,5 @@
+
+
 .markdown h1 {
     @apply mb-3 text-4xl;
 }
@@ -8,6 +10,27 @@
 
 .markdown h3 {
     @apply mb-3 mt-8 text-2xl;
+}
+
+.markdown p {
+ line-height: 1.8rem;
+ margin-top: 1rem;
+}
+
+latex-js {
+    display: inline-block;
+    text-indent: 0;
+    /* overwriting the libraries default */
+    --parindent: 0;
+    transform: scale(1.1);
+    margin: 0 0.5rem;
+}
+
+latex-js, .markdown code.inline {
+    padding: 2px 10px;
+    border-radius: 10px;
+    background-color: rgb(31, 41, 55);
+    color: white;
 }
 
 .markdown pre {
@@ -23,12 +46,8 @@
     @apply p-4 w-full;
 }
 
-.markdown code.inline {
-    @apply bg-gray-800 rounded-lg px-2;
-}
 
 .markdown a {
-    @apply underline;
     @apply mt-6;
 }
 
@@ -44,4 +63,12 @@
 
 .markdown details {
     @apply text-black
+}
+
+.markdown table {
+    width: 100%;
+}
+
+.markdown td a {
+    text-decoration: underline;
 }
