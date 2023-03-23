@@ -55,6 +55,7 @@ defmodule ElixirNewbie.MixProject do
       # Project Deps
       {:tailwind_formatter, "~> 0.3.1", only: :dev, runtime: false},
       {:nimble_publisher, "~> 0.1.3"},
+      {:makeup, "1.1.0"},
       {:makeup_elixir, ">= 0.16.0"},
       {:elixir_feed_parser, "~> 2.1"},
       {:httpoison, "~> 1.8"},

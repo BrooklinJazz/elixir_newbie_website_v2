@@ -42,21 +42,6 @@
     @apply text-base lg:text-lg xl:text-xl;
 }
 
-
-
-
-/* 
-Inter - 600×
-Family
-Inter, system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
-Style
-normal
-Weight
-600
-Size
-30px
-Line Height
-36px
-Color
-#1c2a3a
-*/
+.markdown details {
+    @apply text-black
+}

@@ -1,13 +1,16 @@
-/* The Makeup theme settings */
-.makeup .hll {
+/* The highlight theme settings */
+.highlight .hll {
     background-color: #49483e
 }
 
-.makeup {
+.highlight {
     color: #f8f8f2;
+    background-color: #282c34;
+    border-radius: 0.5rem;
+    padding: 1rem;
 }
 
-.makeup .unselectable {
+.highlight .unselectable {
     -webkit-touch-callout: none;
     -webkit-user-select: none;
     -khtml-user-select: none;
@@ -16,343 +19,343 @@
     user-select: none;
 }
 
-.makeup .bp {
+.highlight .bp {
     color: #f8f8f2;
 }
 
 /* :name_builtin_pseudo */
-.makeup .c {
+.highlight .c {
     color: #75715e;
 }
 
 /* :comment */
-.makeup .c1 {
+.highlight .c1 {
     color: #75715e;
 }
 
 /* :comment_single */
-.makeup .ch {
+.highlight .ch {
     color: #75715e;
 }
 
 /* :comment_hashbang */
-.makeup .cm {
+.highlight .cm {
     color: #75715e;
 }
 
 /* :comment_multiline */
-.makeup .cp {
+.highlight .cp {
     color: #75715e;
 }
 
 /* :comment_preproc */
-.makeup .cpf {
+.highlight .cpf {
     color: #75715e;
 }
 
 /* :comment_preproc_file */
-.makeup .cs {
+.highlight .cs {
     color: #75715e;
 }
 
 /* :comment_special */
-.makeup .dl {
+.highlight .dl {
     color: #e6db74;
 }
 
 /* :string_delimiter */
-.makeup .err {
+.highlight .err {
     color: #960050;
     background-color: #1e0010;
 }
 
 /* :error */
-.makeup .fm {
+.highlight .fm {
     color: #a6e22e;
 }
 
 /* :name_function_magic */
-.makeup .gd {
+.highlight .gd {
     color: #f92672;
 }
 
 /* :generic_deleted */
-.makeup .ge {
+.highlight .ge {
     font-style: italic;
 }
 
 /* :generic_emph */
-.makeup .gi {
+.highlight .gi {
     color: #a6e22e;
 }
 
 /* :generic_inserted */
-.makeup .gs {
+.highlight .gs {
     font-weight: bold;
 }
 
 /* :generic_strong */
-.makeup .gu {
+.highlight .gu {
     color: #75715e;
 }
 
 /* :generic_subheading */
-.makeup .il {
+.highlight .il {
     color: #ae81ff;
 }
 
 /* :number_integer_long */
-.makeup .k {
+.highlight .k {
     color: #66d9ef;
 }
 
 /* :keyword */
-.makeup .kc {
+.highlight .kc {
     color: #66d9ef;
 }
 
 /* :keyword_constant */
-.makeup .kd {
+.highlight .kd {
     color: #66d9ef;
 }
 
 /* :keyword_declaration */
-.makeup .kn {
+.highlight .kn {
     color: #f92672;
 }
 
 /* :keyword_namespace */
-.makeup .kp {
+.highlight .kp {
     color: #66d9ef;
 }
 
 /* :keyword_pseudo */
-.makeup .kr {
+.highlight .kr {
     color: #66d9ef;
 }
 
 /* :keyword_reserved */
-.makeup .kt {
+.highlight .kt {
     color: #66d9ef;
 }
 
 /* :keyword_type */
-.makeup .l {
+.highlight .l {
     color: #ae81ff;
 }
 
 /* :literal */
-.makeup .ld {
+.highlight .ld {
     color: #ae81ff;
 }
 
 /* :literal_date */
-.makeup .m {
+.highlight .m {
     color: #ae81ff;
 }
 
 /* :number */
-.makeup .mb {
+.highlight .mb {
     color: #ae81ff;
 }
 
 /* :number_bin */
-.makeup .mf {
+.highlight .mf {
     color: #ae81ff;
 }
 
 /* :number_float */
-.makeup .mh {
+.highlight .mh {
     color: #ae81ff;
 }
 
 /* :number_hex */
-.makeup .mi {
+.highlight .mi {
     color: #ae81ff;
 }
 
 /* :number_integer */
-.makeup .mo {
+.highlight .mo {
     color: #ae81ff;
 }
 
 /* :number_oct */
-.makeup .n {
+.highlight .n {
     color: #f8f8f2;
 }
 
 /* :name */
-.makeup .na {
+.highlight .na {
     color: #a6e22e;
 }
 
 /* :name_attribute */
-.makeup .nb {
+.highlight .nb {
     color: #f8f8f2;
 }
 
 /* :name_builtin */
-.makeup .nc {
+.highlight .nc {
     color: #a6e22e;
 }
 
 /* :name_class */
-.makeup .nd {
+.highlight .nd {
     color: #a6e22e;
 }
 
 /* :name_decorator */
-.makeup .ne {
+.highlight .ne {
     color: #a6e22e;
 }
 
 /* :name_exception */
-.makeup .nf {
+.highlight .nf {
     color: #a6e22e;
 }
 
 /* :name_function */
-.makeup .ni {
+.highlight .ni {
     color: #f8f8f2;
 }
 
 /* :name_entity */
-.makeup .nl {
+.highlight .nl {
     color: #f8f8f2;
 }
 
 /* :name_label */
-.makeup .nn {
+.highlight .nn {
     color: #f8f8f2;
 }
 
 /* :name_namespace */
-.makeup .no {
+.highlight .no {
     color: #66d9ef;
 }
 
 /* :name_constant */
-.makeup .nt {
+.highlight .nt {
     color: #f92672;
 }
 
 /* :name_tag */
-.makeup .nv {
+.highlight .nv {
     color: #f8f8f2;
 }
 
 /* :name_variable */
-.makeup .nx {
+.highlight .nx {
     color: #a6e22e;
 }
 
 /* :name_other */
-.makeup .o {
+.highlight .o {
     color: #f92672;
 }
 
 /* :operator */
-.makeup .ow {
+.highlight .ow {
     color: #f92672;
 }
 
 /* :operator_word */
-.makeup .p {
+.highlight .p {
     color: #f8f8f2;
 }
 
 /* :punctuation */
-.makeup .py {
+.highlight .py {
     color: #f8f8f2;
 }
 
 /* :name_property */
-.makeup .s {
+.highlight .s {
     color: #e6db74;
 }
 
 /* :string */
-.makeup .s1 {
+.highlight .s1 {
     color: #e6db74;
 }
 
 /* :string_single */
-.makeup .s2 {
+.highlight .s2 {
     color: #e6db74;
 }
 
 /* :string_double */
-.makeup .sa {
+.highlight .sa {
     color: #e6db74;
 }
 
 /* :string_affix */
-.makeup .sb {
+.highlight .sb {
     color: #e6db74;
 }
 
 /* :string_backtick */
-.makeup .sc {
+.highlight .sc {
     color: #e6db74;
 }
 
 /* :string_char */
-.makeup .sd {
+.highlight .sd {
     color: #e6db74;
 }
 
 /* :string_doc */
-.makeup .se {
+.highlight .se {
     color: #ae81ff;
 }
 
 /* :string_escape */
-.makeup .sh {
+.highlight .sh {
     color: #e6db74;
 }
 
 /* :string_heredoc */
-.makeup .si {
+.highlight .si {
     color: #e6db74;
 }
 
 /* :string_interpol */
-.makeup .sr {
+.highlight .sr {
     color: #e6db74;
 }
 
 /* :string_regex */
-.makeup .ss {
+.highlight .ss {
     color: #e6db74;
 }
 
 /* :string_symbol */
-.makeup .sx {
+.highlight .sx {
     color: #e6db74;
 }
 
 /* :string_other */
-.makeup .sx {
+.highlight .sx {
     color: #e6db74;
 }
 
 /* :string_sigil */
-.makeup .vc {
+.highlight .vc {
     color: #f8f8f2;
 }
 
 /* :name_variable_class */
-.makeup .vg {
+.highlight .vg {
     color: #f8f8f2;
 }
 
 /* :name_variable_global */
-.makeup .vi {
+.highlight .vi {
     color: #f8f8f2;
 }
 
 /* :name_variable_instance */
-.makeup .vm {
+.highlight .vm {
     color: #f8f8f2;
 }
 
