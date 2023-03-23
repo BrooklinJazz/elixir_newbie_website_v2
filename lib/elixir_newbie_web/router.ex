@@ -23,7 +23,7 @@ defmodule ElixirNewbieWeb.Router do
     live "/resources", ResourcesLive, :resources
     live "/community", CommunityLive, :community
     live "/reading/:id", ContentLive, :reading
-    live "/exercises/:id", ContentLive, :exercises
+    live "/exercises/:id", ContentLive, :exercise
   end
 
   # Other scopes may use custom stacks.
