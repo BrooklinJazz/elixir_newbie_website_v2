@@ -15,7 +15,7 @@ defmodule ElixirNewbie.MixProject do
     ]
   end
 
-    defp dialyzer do
+  defp dialyzer do
     [
       plt_add_apps: [:mix],
       plt_core_path: "priv/plts",
