@@ -1,4 +1,7 @@
 defmodule ElixirNewbie.CourseOutline do
+  @moduledoc """
+  NimberPublisher Course Outline Module
+  """
   alias ElixirNewbie.CourseOutline.Outline
 
   use NimblePublisher,

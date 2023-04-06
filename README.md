@@ -29,3 +29,17 @@ mix test --only wallaby
 ```
 
 For example, we have a `/screenshots` folder with screenshots of every page at different screen sizes in order to ensure consistent responsive styles across devices.
+
+## Webp Conversion
+
+We use .webp images for performance optimization. We can convert an image to .web using the webp library
+
+```
+$ sudo apt install webp 
+```
+
+Then simply convert the image.
+
+```elixir
+$ cwebp -q 60 my_image.png -o my_image.webp
+```

@@ -1,4 +1,7 @@
 defmodule ElixirNewbie.AcademyContent.Lesson do
+  @moduledoc """
+  NimberPublisher Lesson Struct
+  """
   @enforce_keys [:id, :title, :body, :type]
   defstruct [:id, :title, :body, :type]
 

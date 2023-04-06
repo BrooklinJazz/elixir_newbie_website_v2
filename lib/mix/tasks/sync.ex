@@ -1,9 +1,11 @@
 defmodule Mix.Tasks.Sync do
-  @moduledoc "Sync DockYard Academy Content With Nimble Publisher"
-  use Mix.Task
+  @moduledoc "Sync DockYard Academy Content With NimberPublisher"
+  @shortdoc @moduledoc
   @requirements ["course_outline"]
 
-  @shortdoc @moduledoc
+  use Mix.Task
+
+  @impl true
   def run(_) do
     IO.puts("running: Sync")
     Mix.Task.run("app.start")

@@ -1,4 +1,7 @@
 defmodule ElixirNewbieWeb.Components.Tag do
+  @moduledoc """
+  Tag Component
+  """
   use ElixirNewbieWeb, :html
 
   attr(:text, :string, required: true)

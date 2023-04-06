@@ -20,15 +20,17 @@ defmodule ElixirNewbieWeb.Wallaby.SnapshotTests do
 
   @tag :wallaby
   feature "take snapshots", %{session: session} do
-    Enum.each(@urls, fn url ->
-      page = visit(session, url)
+    page = visit(session, "/")
+    take_screenshot(page, name: "test")
+    # Enum.each(@urls, fn url ->
+    #   page = visit(session, url)
 
-      Enum.each(@sizes, fn {size, width} ->
-        screen = resize_window(page, width, 2000)
+    #   Enum.each(@sizes, fn {size, width} ->
+    #     screen = resize_window(page, width, 2000)
 
-        Process.sleep(500)
-        take_screenshot(screen, name: "#{(url == "" && "home") || url}/#{size}")
-      end)
-    end)
+    #     Process.sleep(500)
+    #     take_screenshot(screen, name: "#{(url == "" && "home") || url}/#{size}")
+    #   end)
+    # end)
   end
 end

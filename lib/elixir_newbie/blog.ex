@@ -1,4 +1,7 @@
 defmodule ElixirNewbie.Blog do
+  @moduledoc """
+  Blog Context
+  """
   alias ElixirNewbie.Blog.BlogParser
 
   defmodule NotFoundError do

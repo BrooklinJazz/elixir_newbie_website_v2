@@ -1,4 +1,7 @@
 defmodule ElixirNewbie.Blog.Post do
+  @moduledoc """
+  NimberPublisher Blog Post Struct
+  """
   @enforce_keys [:id, :title, :cover_image, :body, :description, :tags, :date]
   defstruct @enforce_keys ++
               [

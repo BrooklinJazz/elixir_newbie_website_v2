@@ -1,4 +1,5 @@
 defmodule ElixirNewbieWeb.ErrorHTML do
+  @moduledoc false
   use ElixirNewbieWeb, :html
 
   # If you want to customize your error pages,

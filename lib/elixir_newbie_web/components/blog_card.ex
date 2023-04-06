@@ -1,4 +1,7 @@
 defmodule ElixirNewbieWeb.Components.BlogCard do
+  @moduledoc """
+  BlogCard Component
+  """
   use ElixirNewbieWeb, :html
 
   attr(:blog, :map, required: true)

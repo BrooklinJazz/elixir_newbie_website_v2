@@ -1,4 +1,7 @@
 defmodule ElixirNewbie.Podcast.Formatter do
+  @moduledoc """
+  Format Podcast Information
+  """
   @one_minute 60
   @one_hour 3600
   def to_hh_mm_ss(seconds) when seconds >= @one_hour do
