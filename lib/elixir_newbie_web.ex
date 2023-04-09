@@ -88,6 +88,9 @@ defmodule ElixirNewbieWeb do
       import ElixirNewbieWeb.CoreComponents
       import ElixirNewbieWeb.Gettext
 
+      # ElixirNewbie UI components
+      import ElixirNewbieWeb.ElixirNewbieComponents
+
       # Shortcut for generating JS commands
       alias Phoenix.LiveView.JS
 

@@ -20,8 +20,8 @@ defmodule ElixirNewbieWeb.Router do
     live "/", HomeLive, :home
     live "/blog", BlogLive, :blog
     live "/podcast", PodcastLive, :podcast
-    live "/resources", ResourcesLive, :resources
-    live "/community", CommunityLive, :community
+    live "/dockyard_academy", DockYardAcademyLive, :dockyard_academy
+    live "/discord", DiscordLive, :discord
     live "/reading/:id", ContentLive, :reading
     live "/exercises/:id", ContentLive, :exercise
   end
