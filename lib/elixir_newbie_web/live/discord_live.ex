@@ -9,7 +9,7 @@ defmodule ElixirNewbieWeb.DiscordLive do
   @impl true
   def render(assigns) do
     ~H"""
-    <section class="sm:bg-[url('/images/DiscordBackground.png')] h-screen bg-cover min-h-screen text-white w-screen bg-no-repeat pb-96">
+    <section class="sm:bg-[url('/images/DiscordBackground.png')] h-screen bg-cover min-h-screen text-white w-screen bg-no-repeat">
     <div class="bg-gradient-to-t from-black/90 to-black/25 w-full h-screen">
       <.navigation/>
       <section class="p-8">
