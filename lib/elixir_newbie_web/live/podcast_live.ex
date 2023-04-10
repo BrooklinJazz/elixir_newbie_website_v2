@@ -54,7 +54,7 @@ defmodule ElixirNewbieWeb.PodcastLive do
   def render(assigns) do
     ~H"""
     <section class="bg-[url('/images/PodcastBackground.webp')] bg-top min-h-screen bg-repeat">
-      <div class="w-full h-full bg-black/50">
+      <div class="bg-black/50 h-full w-full">
         <.navigation/>
         <section class={[@content_width, "text-white"]}>
           <h1 class="mb-4 text-center text-2xl"><%= @current_episode.title %></h1>
@@ -62,7 +62,7 @@ defmodule ElixirNewbieWeb.PodcastLive do
             <figure class="aspect-square hidden sm:block sm:w-1/3 lg:w-1/4">
               <img class="rounded-full border-t-4 border-l-4 border-white" src="images/podcast_brooklin.webp" alt="Picture resembling Brooklin Myers as a Wizard"/>
             </figure>
-            <figure class="w-full p-2 sm:w-1/2 lg:w-2/5 text-xl">
+            <figure class="w-full p-2 text-xl sm:w-1/2 lg:w-2/5">
               <p>Elixir Newbie is a podcast dedicated to helping and encouraging new and transitioning developers to adopt Elixir.</p>
               <hr class="my-4"/>
               <p>Brooklin Myers and Co-host Jon Valdivia speak with guests from the industry. You'll learn something new, and have fun too.</p>
@@ -92,18 +92,18 @@ defmodule ElixirNewbieWeb.PodcastLive do
 
   def audio_player(assigns) do
     ~H"""
-    <article class="m-6 flex gap-x-4 justify-center items-center">
+    <article class="m-6 flex items-center justify-center gap-x-4">
       <p id="player-current-time">0:00</p>
-      <div id="player-progress" phx-hook="Progress" class="h-3 rounded-xl overflow-hidden bg-gray-100 hover:cursor-pointer w-2/3 lg:w-2/3">
-        <div id="player-progress-fill" class="h-full rounded-l-full bg-gray-400 w-0" />
+      <div id="player-progress" phx-hook="Progress" class="h-3 w-2/3 overflow-hidden rounded-xl bg-gray-100 hover:cursor-pointer lg:w-2/3">
+        <div id="player-progress-fill" class="h-full w-0 rounded-l-full bg-gray-400" />
       </div>
       <p id="player-total-time"><%= @current_episode.hh_mm_ss %></p>
     </article>
-    <article class="flex sm:gap-x-2 md:gap-x-4 justify-center xl:justify-between">
+    <article class="flex justify-center sm:gap-x-2 md:gap-x-4 xl:justify-between">
       <audio class="hidden" src={@current_episode.audio_url} id="player" phx-hook="AudioPlayer" controls>
         Your browser does not support the audio element.
       </audio>
-      <section class="flex w-1/3 justify-center items-center hidden xl:flex">
+      <section class="flex hidden w-1/3 items-center justify-center xl:flex">
         <a
           href={@current_episode.audio_url}
           target="_blank"
@@ -114,7 +114,7 @@ defmodule ElixirNewbieWeb.PodcastLive do
           <Heroicons.arrow_down_tray class="h-6 w-6"/>
         </a>
       </section>
-      <section class="flex w-full sm:w-1/3 justify-between sm:justify-around sm:gap-x-8">
+      <section class="flex w-full justify-between sm:w-1/3 sm:justify-around sm:gap-x-8">
         <.link aria-label="previous episode" class={[
           "flex items-center justify-center gap-x-2 sm:gap-x-6",
           @button_hover
@@ -139,7 +139,7 @@ defmodule ElixirNewbieWeb.PodcastLive do
           <Heroicons.arrow_right_circle class="h-6" />
         </.link>
       </section>
-      <section class="ml-auto hidden xl:flex gap-x-8 justify-center items-center">
+      <section class="ml-auto hidden items-center justify-center gap-x-8 xl:flex">
         <button
           id="player-playback-rate"
           phx-click="toggle-speed"
@@ -170,7 +170,7 @@ defmodule ElixirNewbieWeb.PodcastLive do
 
   def episode_button(assigns) do
     ~H"""
-    <.link class="h-max min-h-[8rem] gap-x-6 bg-black/80 mt-6 rounded-3xl ring ring-white transition duration-500 ease-in-out hover:ring-offset-2 block flex h-full w-full items-center justify-between p-2 sm:px-16 sm:py-8 text-2xl text-white" phx-hook="ScrollToTop" id={"podcast-episode-#{@episode.episode_number}"} patch={~p"/podcast?episode=#{@episode.episode_number}"}>
+    <.link class="min-h-[8rem] bg-black/80 mt-6 block flex h-full h-max w-full items-center justify-between gap-x-6 rounded-3xl p-2 text-2xl text-white ring ring-white transition duration-500 ease-in-out hover:ring-offset-2 sm:px-16 sm:py-8" phx-hook="ScrollToTop" id={"podcast-episode-#{@episode.episode_number}"} patch={~p"/podcast?episode=#{@episode.episode_number}"}>
       <p><%= @episode.title %></p>
       <p class="hidden sm:block"><%= @episode.hh_mm_ss %></p>
     </.link>
@@ -184,7 +184,7 @@ defmodule ElixirNewbieWeb.PodcastLive do
         target="_blank"
         class="group flex flex-col items-center justify-center hover:cursor-pointer"
       >
-        <img class="rounded-full w-24 h-24 transition duration-300 ease-in-out group-hover:scale-110" src={@src} alt={@alt}>
+        <img class="h-24 w-24 rounded-full transition duration-300 ease-in-out group-hover:scale-110" src={@src} alt={@alt}>
         <figcaption class="text-center"><%= @alt %></figcaption>
       </.link>
     """

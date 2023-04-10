@@ -84,7 +84,7 @@ defmodule ElixirNewbieWeb.HomeLive do
       >
         <%= render_slot(@inner_block) %>
       </p>
-      <img alt={render_slot(@inner_block)} class="rounded-full scale-95" src={@logo}/>
+      <img alt={render_slot(@inner_block)} class="scale-95 rounded-full" src={@logo}/>
     </.link>
     """
   end
