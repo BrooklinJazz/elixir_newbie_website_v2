@@ -17,19 +17,19 @@ defmodule ElixirNewbieWeb.HomeLive do
       <.navigation/>
        <section class="mx-auto flex w-full flex-col gap-12 4k:mt-36 4k:w-1/2 4k:gap-36 sm:w-full md:w-3/4 lg:w-full lg:flex-row xl:w-3/4 xl:gap-24">
         <article class="animate-fade-in grid h-fit w-full grid-cols-6 grid-rows-6">
-          <.link target="_blank" navigate="https://dockyard.com/blog/2022/07/26/what-to-expect-from-the-dockyard-academy-q-a-with-instructor-brooklin-myers" class={"aspect-square relative col-start-1 col-end-6 row-start-1 row-end-6 overflow-hidden rounded-full border-t-4 border-l-4 border-white"}>
+          <figure class={"aspect-square relative col-start-1 col-end-6 row-start-1 row-end-6 overflow-hidden rounded-full border-t-4 border-l-4 border-white"}>
             <p class={[
               "text-center flex items-center justify-center absolute h-full w-full text-white text-2xl",
               "transition ease-in-out duration-300 opacity-0 hover:cursor-pointer hover:bg-black/50 hover:opacity-100"
               ]}>
-              Brooklin Myers
+              Casting Spells: Coming Soon
             </p>
             <img
               class="h-full w-full"
               alt="home page icon of a wizard"
               src="images/HomeWizard.webp"
             />
-          </.link>
+          </figure>
           <%= if @ready_for_animations do %>
             <.round_link link={"https://discord.gg/XBAAmuZGXU"} position={"row-start-5 col-start-2 relative right-2 top-1/3"} logo={"images/DiscordIcon.webp"}>Elixir Newbie Discord</.round_link>
             <.round_link link={"https://twitter.com/BrooklinJMyers"} position={"row-start-3 col-start-5 relative left-1/2 bottom-1/3"} logo={"images/TwitterIcon.webp"}>Twitter</.round_link>
