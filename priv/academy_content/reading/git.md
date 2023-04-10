@@ -7,7 +7,7 @@
 ```elixir
 Mix.install([
   {:jason, "~> 1.4"},
-  {:kino, "~> 0.8.0", override: true},
+  {:kino, "~> 0.9", override: true},
   {:youtube, github: "brooklinjazz/youtube"},
   {:hidden_cell, github: "brooklinjazz/hidden_cell"}
 ])
@@ -15,13 +15,24 @@ Mix.install([
 
 ## Navigation
 
-[Return Home](../start.livemd)<span style="padding: 0 30px"></span>
-[Report An Issue](https://github.com/DockYard-Academy/beta_curriculum/issues/new?assignees=&labels=&template=issue.md&title=)
-
-## Setup
-
-Ensure you type the `ea` keyboard shortcut to evaluate all Elixir cells before starting. Alternatively,
-you can evaluate the Elixir cells as you read.
+<div style="display: flex; align-items: center; width: 100%; justify-content: space-between; font-size: 1rem; color: #61758a; background-color: #f0f5f9; height: 4rem; padding: 0 1rem; border-radius: 1rem;">
+<div style="display: flex;">
+<i class="ri-home-fill"></i>
+<a style="display: flex; color: #61758a; margin-left: 1rem;" href="../start.livemd">Home</a>
+</div>
+<div style="display: flex;">
+<i class="ri-bug-fill"></i>
+<a style="display: flex; color: #61758a; margin-left: 1rem;" href="https://github.com/DockYard-Academy/curriculum/issues/new?assignees=&labels=&template=issue.md&title=Git">Report An Issue</a>
+</div>
+<div style="display: flex;">
+<i class="ri-arrow-left-fill"></i>
+<a style="display: flex; color: #61758a; margin-left: 1rem;" href="../reading/command_line.livemd">Command Line</a>
+</div>
+<div style="display: flex;">
+<a style="display: flex; color: #61758a; margin-right: 1rem;" href="../reading/livebook.livemd">Livebook</a>
+<i class="ri-arrow-right-fill"></i>
+</div>
+</div>
 
 ## Overview
 
@@ -41,7 +52,7 @@ It's widely used for open-source and closed-source projects, and it's the defaul
 
 <!-- livebook:{"break_markdown":true} -->
 
-### Local and Remote
+### Local And Remote
 
 With Git, developers can work on their own copies of the code, known as "local repositories", and then "commit" their changes to a "remote repository" which can be shared among the team members. It also allows for easy branching, which allows developers to work on new features or bug fixes without affecting the main codebase.
 
@@ -57,7 +68,7 @@ GitHub provides several key features for developers, including:
 * **Collaboration**: Developers can easily collaborate on code by "forking" a repository, making changes, and then submitting those changes back to the original repository through a "pull request".
 * **Issues**: Developers can track and manage bugs, feature requests, and other tasks by creating "issues" within a repository.
 * **Pull requests (PRs)**: Developers can submit changes to a repository by creating a "pull request", which can be reviewed and approved by other members of the development team.
-  Branching: Developers can create and work on multiple branches of a repository, allowing them to work on different features or bug fixes without affecting the main codebase.
+* **Branching**: Developers can create and work on multiple branches of a repository, allowing them to work on different features or bug fixes without affecting the main codebase.
 * **Wiki**: Developers can create a wiki for their repository to provide documentation and other information about the codebase.
 
 ## Install Git
@@ -82,12 +93,12 @@ You'll also use GitHub to collaborate on projects with others students, and rece
 
 Since you already have this course running, you likely already have a GitHub Account. If not, you can [Create a GitHub Account](https://docs.github.com/en/get-started/signing-up-for-github/signing-up-for-a-new-github-account). Remember that your GitHub is your public face in the code community. You'll want to ensure you represent yourself well, as it may be seen by future employers and co-workers.
 
-Out of the box, GitHub may ask you to enter your user credentials when running common commands. This can become tedius, and if you experience this, we recommend you [Setup SSH](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent) or use an alternative method to avoid tediously r-entering your credentials.
+Out of the box, GitHub may ask you to enter your user credentials when running common commands. This can become tedious, and if you experience this, we recommend you [Setup SSH](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent) or use an alternative method to avoid tediously re-entering your credentials.
 
 ## Raising An Issue
 
-Anyone can raise an issue on a public GitHub project. For example, you can [raise an issue](https://github.com/DockYard-Academy/beta_curriculum/issues) by going to
-the issues tab on the [GitHub Page](https://github.com/DockYard-Academy/beta_curriculum) of this curriculum and clicking **New Issue**.
+Anyone can raise an issue on a public GitHub project. For example, you can [raise an issue](https://github.com/DockYard-Academy/curriculum/issues) by going to
+the issues tab on the [GitHub Page](https://github.com/DockYard-Academy/curriculum) of this curriculum and clicking **New Issue**.
 
 Please raise an issue or speak with your instructor if you encounter a problem with the curriculum.
 
@@ -145,7 +156,7 @@ You'll use some common commands for saving changes in Git.
 * `git commit`: Save staged changes into a commit.
 
 We can use `git add` from the command line to stage changes. We can stage a single file
-with `git add <filename>`  or all of the files and folders in the current working directory
+with `git add <filename>` or all of the files and folders in the current working directory
 with `git add .`.
 
 Then we can use `git commit` from the command line to commit all staged changes.
@@ -281,7 +292,7 @@ There are many methods for cloning a remote repository onto your computer.
 
 <!-- livebook:{"break_markdown":true} -->
 
-### Cloning With the Command Line
+### Cloning With The Command Line
 
 Many developers prefer using the command line using either HTTP, SSH, or the GitHub CLI.
 
@@ -607,69 +618,42 @@ Consider the following resource(s) to deepen your understanding of the topic.
 * [Git Documentation and Guides](https://git-scm.com/)
 * [GitHub Documentation and Guides](https://docs.github.com/en)
 
-## Mark As Completed
-
-<!-- livebook:{"attrs":{"source":"file_name = Path.basename(Regex.replace(~r/#.+/, __ENV__.file, \"\"), \".livemd\")\n\nsave_name =\n  case Path.basename(__DIR__) do\n    \"reading\" -> \"git_reading\"\n    \"exercises\" -> \"git_exercise\"\n  end\n\nprogress_path = __DIR__ <> \"/../progress.json\"\nexisting_progress = File.read!(progress_path) |> Jason.decode!()\n\ndefault = Map.get(existing_progress, save_name, false)\n\nform =\n  Kino.Control.form(\n    [\n      completed: input = Kino.Input.checkbox(\"Mark As Completed\", default: default)\n    ],\n    report_changes: true\n  )\n\nTask.async(fn ->\n  for %{data: %{completed: completed}} <- Kino.Control.stream(form) do\n    File.write!(\n      progress_path,\n      Jason.encode!(Map.put(existing_progress, save_name, completed), pretty: true)\n    )\n  end\nend)\n\nform","title":"Track Your Progress"},"chunks":null,"kind":"Elixir.HiddenCell","livebook_object":"smart_cell"} -->
-
-```elixir
-file_name = Path.basename(Regex.replace(~r/#.+/, __ENV__.file, ""), ".livemd")
-
-save_name =
-  case Path.basename(__DIR__) do
-    "reading" -> "git_reading"
-    "exercises" -> "git_exercise"
-  end
-
-progress_path = __DIR__ <> "/../progress.json"
-existing_progress = File.read!(progress_path) |> Jason.decode!()
-
-default = Map.get(existing_progress, save_name, false)
-
-form =
-  Kino.Control.form(
-    [
-      completed: input = Kino.Input.checkbox("Mark As Completed", default: default)
-    ],
-    report_changes: true
-  )
-
-Task.async(fn ->
-  for %{data: %{completed: completed}} <- Kino.Control.stream(form) do
-    File.write!(
-      progress_path,
-      Jason.encode!(Map.put(existing_progress, save_name, completed), pretty: true)
-    )
-  end
-end)
-
-form
-```
-
 ## Commit Your Progress
 
-Run the following in your command line from the curriculum folder to track and save your progress in a Git commit.
-Ensure that you do not already have undesired or unrelated changes by running `git status` or by checking the source control tab in Visual Studio Code.
+DockYard Academy now recommends you use the latest [Release](https://github.com/DockYard-Academy/curriculum/releases) rather than forking or cloning our repository.
+
+Run `git status` to ensure there are no undesirable changes.
+Then run the following in your command line from the `curriculum` folder to commit your progress.
 
 ```
-$ git checkout -b git-reading
 $ git add .
-$ git commit -m "finish git reading"
-$ git push origin git-reading
+$ git commit -m "finish Git reading"
+$ git push
 ```
 
-Create a pull request from your `git-reading` branch to your `solutions` branch.
-Please do not create a pull request to the DockYard Academy repository as this will spam our PR tracker.
+We're proud to offer our open-source curriculum free of charge for anyone to learn from at their own pace.
 
-**DockYard Academy Students Only:**
+We also offer a paid course where you can learn from an instructor alongside a cohort of your peers.
+We will accept applications for the June-August 2023 cohort soon.
 
-Notify your instructor by including `@BrooklinJazz` in your PR description to get feedback.
-You (or your instructor) may merge your PR into your solutions branch after review.
+## Navigation
 
-If you are interested in joining the next academy cohort, [sign up here](https://academy.dockyard.com/) to receive more news when it is available.
-
-## Up Next
-
-| Previous                                       | Next                                   |
-| ---------------------------------------------- | -------------------------------------: |
-| [Command Line](../reading/command_line.livemd) | [Livebook](../reading/livebook.livemd) |
+<div style="display: flex; align-items: center; width: 100%; justify-content: space-between; font-size: 1rem; color: #61758a; background-color: #f0f5f9; height: 4rem; padding: 0 1rem; border-radius: 1rem;">
+<div style="display: flex;">
+<i class="ri-home-fill"></i>
+<a style="display: flex; color: #61758a; margin-left: 1rem;" href="../start.livemd">Home</a>
+</div>
+<div style="display: flex;">
+<i class="ri-bug-fill"></i>
+<a style="display: flex; color: #61758a; margin-left: 1rem;" href="https://github.com/DockYard-Academy/curriculum/issues/new?assignees=&labels=&template=issue.md&title=Git">Report An Issue</a>
+</div>
+<div style="display: flex;">
+<i class="ri-arrow-left-fill"></i>
+<a style="display: flex; color: #61758a; margin-left: 1rem;" href="../reading/command_line.livemd">Command Line</a>
+</div>
+<div style="display: flex;">
+<a style="display: flex; color: #61758a; margin-right: 1rem;" href="../reading/livebook.livemd">Livebook</a>
+<i class="ri-arrow-right-fill"></i>
+</div>
+</div>
 

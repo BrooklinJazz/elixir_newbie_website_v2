@@ -7,7 +7,7 @@
 ```elixir
 Mix.install([
   {:jason, "~> 1.4"},
-  {:kino, "~> 0.8.0", override: true},
+  {:kino, "~> 0.9", override: true},
   {:youtube, github: "brooklinjazz/youtube"},
   {:hidden_cell, github: "brooklinjazz/hidden_cell"},
   {:smart_animation, github: "brooklinjazz/smart_animation"},
@@ -17,12 +17,24 @@ Mix.install([
 
 ## Navigation
 
-[Return Home](../start.livemd)<span style="padding: 0 30px"></span>
-[Report An Issue](https://github.com/DockYard-Academy/beta_curriculum/issues/new?assignees=&labels=&template=issue.md&title=)
-
-## Setup
-
-Ensure you type the `ea` keyboard shortcut to evaluate all Elixir cells before starting. Alternatively you can evaluate the Elixir cells as you read.
+<div style="display: flex; align-items: center; width: 100%; justify-content: space-between; font-size: 1rem; color: #61758a; background-color: #f0f5f9; height: 4rem; padding: 0 1rem; border-radius: 1rem;">
+<div style="display: flex;">
+<i class="ri-home-fill"></i>
+<a style="display: flex; color: #61758a; margin-left: 1rem;" href="../start.livemd">Home</a>
+</div>
+<div style="display: flex;">
+<i class="ri-bug-fill"></i>
+<a style="display: flex; color: #61758a; margin-left: 1rem;" href="https://github.com/DockYard-Academy/curriculum/issues/new?assignees=&labels=&template=issue.md&title=Enum">Report An Issue</a>
+</div>
+<div style="display: flex;">
+<i class="ri-arrow-left-fill"></i>
+<a style="display: flex; color: #61758a; margin-left: 1rem;" href="../reading/ranges.livemd">Ranges</a>
+</div>
+<div style="display: flex;">
+<a style="display: flex; color: #61758a; margin-right: 1rem;" href="../exercises/fizzbuzz.livemd">FizzBuzz</a>
+<i class="ri-arrow-right-fill"></i>
+</div>
+</div>
 
 ## Review Questions
 
@@ -85,7 +97,7 @@ Many collections are enumerable, but not all of them. For example, a tuple is no
 
 <!-- livebook:{"break_markdown":true} -->
 
-### Map, Filter, and Reduce
+### Map, Filter, And Reduce
 
 [Enum.map/2](https://hexdocs.pm/elixir/Enum.html#map/2), [Enum.filter/2](https://hexdocs.pm/elixir/Enum.html#filter/2), and [Enum.reduce/2](https://hexdocs.pm/elixir/Enum.html#reduce/2) are the most common functions for enumeration. By understanding these functions and when to use them, you'll be able to solve most enumeration problems.
 
@@ -264,7 +276,7 @@ Enum.filter(1..10, fn element -> rem(element, 2) == 0 end)
 When complete, it returns the result of the last function call, which is typically the accumulated value
 
 ```elixir
-# 0 is the initial accumulator value
+# 0 Is The Initial Accumulator Value
 Enum.reduce(1..3, 0, fn element, accumulator ->
   element + accumulator
 end)
@@ -367,9 +379,10 @@ Use [Enum.map/2](https://hexdocs.pm/elixir/1.12/Enum.html#map/2) to convert a li
 <details style="background-color: lightgreen; padding: 1rem; margin: 1rem 0;">
   <summary>Example Solution</summary>
 
-  ```elixir
-  Enum.map(1..10, fn integer -> "#{integer}" end)
-  ```
+```elixir
+Enum.map(1..10, fn integer -> "#{integer}" end)
+```
+
 </details>
 
 Enter your solution below.
@@ -378,7 +391,7 @@ Enter your solution below.
 
 ```
 
-## Enum.reduce/2 and Enum.reduce/3
+## Enum.reduce/2 And Enum.reduce/3
 
 [Enum.reduce/2](https://hexdocs.pm/elixir/Enum.html#reduce/2) allows you to enumerate over a collection and build up an accumulated value with each enumeration.
 
@@ -482,15 +495,16 @@ Use [Enum.reduce/3](https://hexdocs.pm/elixir/Enum.html#reduce/3) or [Enum.reduc
 <details style="background-color: lightgreen; padding: 1rem; margin: 1rem 0;">
   <summary>Example solution</summary>
 
-  ```elixir
-  Enum.reduce(1..10, 0, fn int, acc -> 
-    if rem(int, 2) == 0 do
-      acc + int
-      else
-      acc
-    end
-  end)
-  ```
+```elixir
+Enum.reduce(1..10, 0, fn int, acc ->
+  if rem(int, 2) == 0 do
+    acc + int
+    else
+    acc
+  end
+end)
+```
+
 </details>
 
 Enter your solution below.
@@ -568,8 +582,6 @@ For performance reasons, [Enum.all/2](https://hexdocs.pm/elixir/Enum.html#all/2)
 Notice the code below should finish very quickly because the very first element fails the condition.
 
 ```elixir
-to_find = 0
-
 Enum.all?(1..10_000_000, fn integer -> is_bitstring(integer) end)
 ```
 
@@ -578,8 +590,6 @@ If [Enum.all/2](https://hexdocs.pm/elixir/Enum.html#all/2) must traverse the ent
 Notice the code below should take awhile to finish running because every element passes the condition.
 
 ```elixir
-to_find = 0
-
 Enum.all?(1..10_000_000, fn integer -> is_integer(integer) end)
 ```
 
@@ -591,9 +601,9 @@ Use [Enum.all/2](https://hexdocs.pm/elixir/Enum.html#all/2) to determine if all 
 colors = [:green, :green, :red]
 ```
 
-## Enum.any/2
+## Enum.any?/2
 
-[Enum.any/2](https://hexdocs.pm/elixir/Enum.html#any/2) checks if any elements in a collection pass some condition. If a single element returns a truthy value when called with the callback function, then [Enum.any/2](https://hexdocs.pm/elixir/Enum.html#any/2) returns `true`.
+[Enum.any?/2](https://hexdocs.pm/elixir/Enum.html#any/2) checks if any elements in a collection pass some condition. If a single element returns a truthy value when called with the callback function, then [Enum.any?/2](https://hexdocs.pm/elixir/Enum.html#any/2) returns `true`.
 
 <!-- livebook:{"break_markdown":true} -->
 
@@ -609,30 +619,26 @@ E --> Boolean
 Enum.any?([1, "2", "3"], fn element -> is_integer(element) end)
 ```
 
-[Enum.any/2](https://hexdocs.pm/elixir/Enum.html#any/2) returns as soon as an element in the collection returns a truthy value.
+[Enum.any?/2](https://hexdocs.pm/elixir/Enum.html#any/2) returns as soon as an element in the collection returns a truthy value.
 
 Notice the code below finishes very quickly, because the first element in the collection passes the condition.
 
 ```elixir
-to_find = 0
-
 Enum.any?(1..10_000_000, fn integer -> is_integer(integer) end)
 ```
 
 However, the following takes awhile to run because all elements in the collection fail the condition.
 
 ```elixir
-to_find = 0
-
 Enum.any?(1..10_000_000, fn integer -> is_bitstring(integer) end)
 ```
 
 ### Your Turn
 
-Use [Enum.any/2](https://hexdocs.pm/elixir/Enum.html#any/2) to determine if any of the animals in the `animals` list are `:dogs`. You may change the `animals` list to experiment with [Enum.any/2](https://hexdocs.pm/elixir/Enum.html#any/2).
+Use [Enum.any?/2](https://hexdocs.pm/elixir/Enum.html#any/2) to determine if any of the animals in the `animals` list are `:dogs`. You may change the `animals` list to experiment with [Enum.any?/2](https://hexdocs.pm/elixir/Enum.html#any/2).
 
 ```elixir
-[:cats, :dogs, :bears, :lions, :penguins]
+animals = [:cats, :dogs, :bears, :lions, :penguins]
 ```
 
 ## Enum.count/1
@@ -717,7 +723,7 @@ Enter your solution below.
 
 ```
 
-## Capture Operator and Module Functions
+## Capture Operator And Module Functions
 
 When we provide a function to any of the [Enum](https://hexdocs.pm/elixir/Enum.html) we're passing an anonymous function, which will be called under the hood.
 
@@ -764,69 +770,42 @@ For more information, you may also wish to read:
 
 We have several exercises dedicated to the [Enum](https://hexdocs.pm/elixir/Enum.html) module as part of this curriculum. However, if you wish for more practice [Exercism.io](https://exercism.org/tracks/elixir/concepts/enum) has a number of excellent exercises.
 
-## Mark As Completed
-
-<!-- livebook:{"attrs":{"source":"file_name = Path.basename(Regex.replace(~r/#.+/, __ENV__.file, \"\"), \".livemd\")\n\nsave_name =\n  case Path.basename(__DIR__) do\n    \"reading\" -> \"enum_reading\"\n    \"exercises\" -> \"enum_exercise\"\n  end\n\nprogress_path = __DIR__ <> \"/../progress.json\"\nexisting_progress = File.read!(progress_path) |> Jason.decode!()\n\ndefault = Map.get(existing_progress, save_name, false)\n\nform =\n  Kino.Control.form(\n    [\n      completed: input = Kino.Input.checkbox(\"Mark As Completed\", default: default)\n    ],\n    report_changes: true\n  )\n\nTask.async(fn ->\n  for %{data: %{completed: completed}} <- Kino.Control.stream(form) do\n    File.write!(\n      progress_path,\n      Jason.encode!(Map.put(existing_progress, save_name, completed), pretty: true)\n    )\n  end\nend)\n\nform","title":"Track Your Progress"},"chunks":null,"kind":"Elixir.HiddenCell","livebook_object":"smart_cell"} -->
-
-```elixir
-file_name = Path.basename(Regex.replace(~r/#.+/, __ENV__.file, ""), ".livemd")
-
-save_name =
-  case Path.basename(__DIR__) do
-    "reading" -> "enum_reading"
-    "exercises" -> "enum_exercise"
-  end
-
-progress_path = __DIR__ <> "/../progress.json"
-existing_progress = File.read!(progress_path) |> Jason.decode!()
-
-default = Map.get(existing_progress, save_name, false)
-
-form =
-  Kino.Control.form(
-    [
-      completed: input = Kino.Input.checkbox("Mark As Completed", default: default)
-    ],
-    report_changes: true
-  )
-
-Task.async(fn ->
-  for %{data: %{completed: completed}} <- Kino.Control.stream(form) do
-    File.write!(
-      progress_path,
-      Jason.encode!(Map.put(existing_progress, save_name, completed), pretty: true)
-    )
-  end
-end)
-
-form
-```
-
 ## Commit Your Progress
 
-Run the following in your command line from the curriculum folder to track and save your progress in a Git commit.
-Ensure that you do not already have undesired or unrelated changes by running `git status` or by checking the source control tab in Visual Studio Code.
+DockYard Academy now recommends you use the latest [Release](https://github.com/DockYard-Academy/curriculum/releases) rather than forking or cloning our repository.
+
+Run `git status` to ensure there are no undesirable changes.
+Then run the following in your command line from the `curriculum` folder to commit your progress.
 
 ```
-$ git checkout -b enum-reading
 $ git add .
-$ git commit -m "finish enum reading"
-$ git push origin enum-reading
+$ git commit -m "finish Enum reading"
+$ git push
 ```
 
-Create a pull request from your `enum-reading` branch to your `solutions` branch.
-Please do not create a pull request to the DockYard Academy repository as this will spam our PR tracker.
+We're proud to offer our open-source curriculum free of charge for anyone to learn from at their own pace.
 
-**DockYard Academy Students Only:**
+We also offer a paid course where you can learn from an instructor alongside a cohort of your peers.
+We will accept applications for the June-August 2023 cohort soon.
 
-Notify your instructor by including `@BrooklinJazz` in your PR description to get feedback.
-You (or your instructor) may merge your PR into your solutions branch after review.
+## Navigation
 
-If you are interested in joining the next academy cohort, [sign up here](https://academy.dockyard.com/) to receive more news when it is available.
-
-## Up Next
-
-| Previous                           | Next                                     |
-| ---------------------------------- | ---------------------------------------: |
-| [Ranges](../reading/ranges.livemd) | [FizzBuzz](../exercises/fizzbuzz.livemd) |
+<div style="display: flex; align-items: center; width: 100%; justify-content: space-between; font-size: 1rem; color: #61758a; background-color: #f0f5f9; height: 4rem; padding: 0 1rem; border-radius: 1rem;">
+<div style="display: flex;">
+<i class="ri-home-fill"></i>
+<a style="display: flex; color: #61758a; margin-left: 1rem;" href="../start.livemd">Home</a>
+</div>
+<div style="display: flex;">
+<i class="ri-bug-fill"></i>
+<a style="display: flex; color: #61758a; margin-left: 1rem;" href="https://github.com/DockYard-Academy/curriculum/issues/new?assignees=&labels=&template=issue.md&title=Enum">Report An Issue</a>
+</div>
+<div style="display: flex;">
+<i class="ri-arrow-left-fill"></i>
+<a style="display: flex; color: #61758a; margin-left: 1rem;" href="../reading/ranges.livemd">Ranges</a>
+</div>
+<div style="display: flex;">
+<a style="display: flex; color: #61758a; margin-right: 1rem;" href="../exercises/fizzbuzz.livemd">FizzBuzz</a>
+<i class="ri-arrow-right-fill"></i>
+</div>
+</div>
 

@@ -7,7 +7,7 @@
 ```elixir
 Mix.install([
   {:jason, "~> 1.4"},
-  {:kino, "~> 0.8.0", override: true},
+  {:kino, "~> 0.9", override: true},
   {:youtube, github: "brooklinjazz/youtube"},
   {:hidden_cell, github: "brooklinjazz/hidden_cell"}
 ])
@@ -15,12 +15,24 @@ Mix.install([
 
 ## Navigation
 
-[Return Home](../start.livemd)<span style="padding: 0 30px"></span>
-[Report An Issue](https://github.com/DockYard-Academy/beta_curriculum/issues/new)
-
-## Setup
-
-Ensure you type the `ea` keyboard shortcut to evaluate all Elixir cells before starting. Alternatively, you can evaluate the Elixir cells as you read.
+<div style="display: flex; align-items: center; width: 100%; justify-content: space-between; font-size: 1rem; color: #61758a; background-color: #f0f5f9; height: 4rem; padding: 0 1rem; border-radius: 1rem;">
+<div style="display: flex;">
+<i class="ri-home-fill"></i>
+<a style="display: flex; color: #61758a; margin-left: 1rem;" href="../start.livemd">Home</a>
+</div>
+<div style="display: flex;">
+<i class="ri-bug-fill"></i>
+<a style="display: flex; color: #61758a; margin-left: 1rem;" href="https://github.com/DockYard-Academy/curriculum/issues/new?assignees=&labels=&template=issue.md&title=BookSearch: Authors">Report An Issue</a>
+</div>
+<div style="display: flex;">
+<i class="ri-arrow-left-fill"></i>
+<a style="display: flex; color: #61758a; margin-left: 1rem;" href="../exercises/blog_posts.livemd">Blog: Posts</a>
+</div>
+<div style="display: flex;">
+<a style="display: flex; color: #61758a; margin-right: 1rem;" href="../exercises/blog_search.livemd">Blog: Search</a>
+<i class="ri-arrow-right-fill"></i>
+</div>
+</div>
 
 ## Review Questions
 
@@ -249,7 +261,7 @@ Phoenix applications generate a `ConnCase` test module that simulates building t
 <!-- livebook:{"force_markdown":true} -->
 
 ```elixir
-# test/support/conn_case.ex
+# Test/support/conn_case.ex
 
 defmodule BookSearchWeb.ConnCase do
   @moduledoc """
@@ -374,7 +386,7 @@ For example, let's look at the `"index"` test in `test/book_search/controllers/a
 <!-- livebook:{"force_markdown":true} -->
 
 ```elixir
-# test/book_search_web/controllers/author_controller.ex
+# Test/book_search_web/controllers/author_controller.ex
 
 describe "index" do
   test "lists all authors", %{conn: conn} do
@@ -396,14 +408,14 @@ The [get/3](https://hexdocs.pm/phoenix/Phoenix.ConnTest.html#get/3) function acc
 
 <!-- livebook:{"break_markdown":true} -->
 
-### Modifying Assertions and Behavior
+### Modifying Assertions And Behavior
 
 Under the hood, `get(conn, Routes.author_path(conn, :index))` triggers the `AuthorsController.index/2` action.
 
 <!-- livebook:{"force_markdown":true} -->
 
 ```elixir
-# lib/book_search_web/controllers/author_controller.ex
+# Lib/book_search_web/controllers/author_controller.ex
 
 def index(conn, _params) do
   authors = Authors.list_authors()
@@ -416,7 +428,7 @@ The `AuthorController` renders the template file.
 <!-- livebook:{"force_markdown":true} -->
 
 ```elixir
-# lib/book_search_web/templates/authors/index.html.heex
+# Lib/book_search_web/templates/authors/index.html.heex
 
 <h1>Listing Authors</h1>
 
@@ -451,7 +463,7 @@ The `AuthorController` renders the template file.
 <!-- livebook:{"force_markdown":true} -->
 
 ```elixir
-# lib/book_search_web/templates/authors/index.html.heex
+# Lib/book_search_web/templates/authors/index.html.heex
 
 <h1>Search Authors</h1>
 ```
@@ -530,7 +542,7 @@ To fix this test, we need to change our assertion to find `"Search Authors"` on 
 <!-- livebook:{"force_markdown":true} -->
 
 ```elixir
-# test/book_search_web/controllers/author_controller_test.exs
+# Test/book_search_web/controllers/author_controller_test.exs
 
 describe "index" do
   test "lists all authors", %{conn: conn} do
@@ -553,7 +565,7 @@ Replace `AuthorController.index/2` with the following and run `mix test`.
 <!-- livebook:{"force_markdown":true} -->
 
 ```elixir
-# lib/book_search_web/controllers/author_controller.ex
+# Lib/book_search_web/controllers/author_controller.ex
 
 def index(conn, _params) do
   # authors = Authors.list_authors()
@@ -568,7 +580,7 @@ Replace the `"index"` test with the following.
 <!-- livebook:{"force_markdown":true} -->
 
 ```elixir
-# test/book_search_web/controllers/author_controller_test.ex
+# Test/book_search_web/controllers/author_controller_test.ex
 
 describe "index" do
   setup [:create_author]
@@ -589,7 +601,7 @@ The `setup [:create_author]` function calls the `create_author/1` function to bi
 <!-- livebook:{"force_markdown":true} -->
 
 ```elixir
-# test/book_search_web/controllers/author_controller_test.ex
+# Test/book_search_web/controllers/author_controller_test.ex
 
 defp create_author(_) do
   author = author_fixture()
@@ -602,7 +614,7 @@ The `create_author/1` function calls the `author_fixture/1` function imported fr
 <!-- livebook:{"force_markdown":true} -->
 
 ```elixir
-# test/book_search_web/controllers/author_controller_test.ex
+# Test/book_search_web/controllers/author_controller_test.ex
 
 defmodule BookSearchWeb.AuthorControllerTest do
   use BookSearchWeb.ConnCase
@@ -619,7 +631,7 @@ The `author_fixture/1` function creates an author with some default arguments us
 <!-- livebook:{"force_markdown":true} -->
 
 ```elixir
-# test/support/fixtures/authors_fixture.ex
+# Test/support/fixtures/authors_fixture.ex
 
 def author_fixture(attrs \\ %{}) do
   {:ok, author} =
@@ -654,7 +666,7 @@ This fixture function is merely an abstraction around calling `BookSearch.Author
 <!-- livebook:{"force_markdown":true} -->
 
 ```elixir
-# test/book_search_web/controllers/author_controller_test.ex
+# Test/book_search_web/controllers/author_controller_test.ex
 
 describe "index" do
   test "lists all authors", %{conn: conn} do
@@ -672,7 +684,7 @@ Revert the `"index"` test to use the test fixture.
 <!-- livebook:{"force_markdown":true} -->
 
 ```elixir
-# test/book_search_web/controllers/author_controller_test.ex
+# Test/book_search_web/controllers/author_controller_test.ex
 
 describe "index" do
   setup [:create_author]
@@ -689,7 +701,7 @@ Revert `AuthorController` to what it was before we broke it, and the test should
 <!-- livebook:{"force_markdown":true} -->
 
 ```elixir
-# lib/book_search_web/controllers/author_controller.ex
+# Lib/book_search_web/controllers/author_controller.ex
 
 def index(conn, _params) do
   authors = Authors.list_authors()
@@ -704,7 +716,7 @@ The `"create author"` tests handle both the successful creation of an author and
 <!-- livebook:{"force_markdown":true} -->
 
 ```elixir
-# test/book_search_web/controllers/author_controller_test.exs
+# Test/book_search_web/controllers/author_controller_test.exs
 
 describe "create author" do
   test "redirects to show when data is valid", %{conn: conn} do
@@ -731,7 +743,7 @@ The `"redirects to show when data is valid"` test checks that when the client se
 <!-- livebook:{"force_markdown":true} -->
 
 ```elixir
-# test/book_search_web/controllers/author_controller_test.exs
+# Test/book_search_web/controllers/author_controller_test.exs
 
 test "redirects to show when data is valid", %{conn: conn} do
   conn = post(conn, Routes.author_path(conn, :create), author: @create_attrs)
@@ -787,7 +799,7 @@ end
 <!-- livebook:{"force_markdown":true} -->
 
 ```elixir
-# lib/book_search_web/templates/authors/new.html.heex
+# Lib/book_search_web/templates/authors/new.html.heex
 
 <h1>New Author</h1>
 
@@ -836,7 +848,7 @@ To display the message, we call the [get_flash/2](https://hexdocs.pm/phoenix/Pho
 <!-- livebook:{"force_markdown":true} -->
 
 ```elixir
-# lib/book_search_web/layout/app.html.heex
+# Lib/book_search_web/layout/app.html.heex
 
 <main class="container">
   <p class="alert alert-info" role="alert"><%= get_flash(@conn, :info) %></p>
@@ -1000,7 +1012,7 @@ We'll need a new `"index"` test specifically for query params as we still want t
 <!-- livebook:{"force_markdown":true} -->
 
 ```elixir
-# test/book_search_web/controllers/author_controller_test.exs
+# Test/book_search_web/controllers/author_controller_test.exs
 
 describe "index" do
   setup [:create_author]
@@ -1022,7 +1034,7 @@ Let's refactor the `"lists all authors"` test to use the `author_fixture/1` func
 <!-- livebook:{"force_markdown":true} -->
 
 ```elixir
-# test/book_search_web/controllers/author_controller_test.exs
+# Test/book_search_web/controllers/author_controller_test.exs
 
 describe "index" do
   test "lists all authors", %{conn: conn} do
@@ -1042,7 +1054,7 @@ We can trigger a request to http://localhost:4000/authors?name=Patrick+Rothfus b
 <!-- livebook:{"force_markdown":true} -->
 
 ```elixir
-# test/book_search_web/controllers/author_controller_test.exs
+# Test/book_search_web/controllers/author_controller_test.exs
 
 test "lists all authors _ matching search query", %{conn: conn} do
   author = author_fixture(name: "Patrick Rothfus")
@@ -1064,7 +1076,7 @@ Unfortunately, that's because we're not filtering at all! We'll have to write an
 <!-- livebook:{"force_markdown":true} -->
 
 ```elixir
-# test/book_search_web/controllers/author_controller_test.exs
+# Test/book_search_web/controllers/author_controller_test.exs
 
 test "lists all authors _ not matching search query", %{conn: conn} do
   author = author_fixture(name: "Patrick Rothfus")
@@ -1082,7 +1094,7 @@ We can pass the name to the `Authors.list_authors/1` function, which will handle
 <!-- livebook:{"force_markdown":true} -->
 
 ```elixir
-# lib/book_search_web/controllers/author_controller.ex
+# Lib/book_search_web/controllers/author_controller.ex
 
 def index(conn, %{"name" => name}) do
   authors = Authors.list_authors(name)
@@ -1106,11 +1118,11 @@ We could implement this function right away. However, this is a great time to wr
 <!-- livebook:{"force_markdown":true} -->
 
 ```elixir
-# test/book_search/authors_test.exs
+# Test/book_search/authors_test.exs
 
 describe "authors" do
 ...
-# Add the list_authors/1 tests inside the "authors" describe block.
+# Add The List_authors/1 Tests Inside The "authors" Describe Block.
 
 test "list_authors/1 _ matching name" do
   author = author_fixture(name: "Andrew Rowe")
@@ -1131,7 +1143,7 @@ Now we need to implement the `Authors.list_authors/1` function. We'll create ano
 <!-- livebook:{"force_markdown":true} -->
 
 ```elixir
-# lib/book_search/authors.ex
+# Lib/book_search/authors.ex
 
 def list_authors do
   Repo.all(Author)
@@ -1191,7 +1203,7 @@ For example, let's add the following test where we search by a partial name.
 <!-- livebook:{"force_markdown":true} -->
 
 ```elixir
-# test/book_search/authors_test.exs
+# Test/book_search/authors_test.exs
 
 test "list_authors/1 _ partially matching name" do
   author = author_fixture(name: "Dennis E Taylor")
@@ -1204,7 +1216,7 @@ This test fails because the `list_authors/1` function checks for an exact match.
 <!-- livebook:{"force_markdown":true} -->
 
 ```elixir
-# lib/book_search/authors.ex
+# Lib/book_search/authors.ex
 
 def list_authors(name) do
   Author
@@ -1218,7 +1230,7 @@ We can use [like/2](https://hexdocs.pm/ecto/Ecto.Query.API.html#like/2) from `Ec
 <!-- livebook:{"force_markdown":true} -->
 
 ```elixir
-# lib/book_search/authors.ex
+# Lib/book_search/authors.ex
 
 def list_authors(name) do
   search = "#{name}%"
@@ -1235,7 +1247,7 @@ Let's expand the test to check. We'll check that we can find authors by a partia
 <!-- livebook:{"force_markdown":true} -->
 
 ```elixir
-# test/book_search/authors_test.exs
+# Test/book_search/authors_test.exs
 
 test "list_authors/1 _ partially matching name" do
   author = author_fixture(name: "Dennis E Taylor")
@@ -1250,7 +1262,7 @@ To make this pass, we need to use the `%` character at the start and end of the 
 <!-- livebook:{"force_markdown":true} -->
 
 ```elixir
-# lib/book_search/authors.ex
+# Lib/book_search/authors.ex
 
 def list_authors(name) do
   search = "%#{name}%"
@@ -1277,7 +1289,7 @@ To make this test pass, we can use [ilike/2](https://hexdocs.pm/ecto/Ecto.Query.
 <!-- livebook:{"force_markdown":true} -->
 
 ```elixir
-# lib/book_search/authors.ex
+# Lib/book_search/authors.ex
 
 def list_authors(name) do
   search = "%#{name}%"
@@ -1313,69 +1325,42 @@ Consider the following resources to deepen your understanding of the topic.
 * [Elixir Schools: Querying](https://elixirschool.com/en/lessons/ecto/querying_basics)
 * [HexDocs: Ecto.Query](https://hexdocs.pm/ecto/Ecto.Query.html)
 
-## Mark As Completed
-
-<!-- livebook:{"attrs":{"source":"file_name = Path.basename(Regex.replace(~r/#.+/, __ENV__.file, \"\"), \".livemd\")\n\nsave_name =\n  case Path.basename(__DIR__) do\n    \"reading\" -> \"book_search_authors_reading\"\n    \"exercises\" -> \"book_search_authors_exercise\"\n  end\n\nprogress_path = __DIR__ <> \"/../progress.json\"\nexisting_progress = File.read!(progress_path) |> Jason.decode!()\n\ndefault = Map.get(existing_progress, save_name, false)\n\nform =\n  Kino.Control.form(\n    [\n      completed: input = Kino.Input.checkbox(\"Mark As Completed\", default: default)\n    ],\n    report_changes: true\n  )\n\nTask.async(fn ->\n  for %{data: %{completed: completed}} <- Kino.Control.stream(form) do\n    File.write!(\n      progress_path,\n      Jason.encode!(Map.put(existing_progress, save_name, completed), pretty: true)\n    )\n  end\nend)\n\nform","title":"Track Your Progress"},"chunks":null,"kind":"Elixir.HiddenCell","livebook_object":"smart_cell"} -->
-
-```elixir
-file_name = Path.basename(Regex.replace(~r/#.+/, __ENV__.file, ""), ".livemd")
-
-save_name =
-  case Path.basename(__DIR__) do
-    "reading" -> "book_search_authors_reading"
-    "exercises" -> "book_search_authors_exercise"
-  end
-
-progress_path = __DIR__ <> "/../progress.json"
-existing_progress = File.read!(progress_path) |> Jason.decode!()
-
-default = Map.get(existing_progress, save_name, false)
-
-form =
-  Kino.Control.form(
-    [
-      completed: input = Kino.Input.checkbox("Mark As Completed", default: default)
-    ],
-    report_changes: true
-  )
-
-Task.async(fn ->
-  for %{data: %{completed: completed}} <- Kino.Control.stream(form) do
-    File.write!(
-      progress_path,
-      Jason.encode!(Map.put(existing_progress, save_name, completed), pretty: true)
-    )
-  end
-end)
-
-form
-```
-
 ## Commit Your Progress
 
-Run the following in your command line from the curriculum folder to track and save your progress in a Git commit.
-Ensure that you do not already have undesired or unrelated changes by running `git status` or by checking the source control tab in Visual Studio Code.
+DockYard Academy now recommends you use the latest [Release](https://github.com/DockYard-Academy/curriculum/releases) rather than forking or cloning our repository.
+
+Run `git status` to ensure there are no undesirable changes.
+Then run the following in your command line from the `curriculum` folder to commit your progress.
 
 ```
-$ git checkout -b book-search-authors-reading
 $ git add .
-$ git commit -m "finish book search authors reading"
-$ git push origin book-search-authors-reading
+$ git commit -m "finish BookSearch: Authors reading"
+$ git push
 ```
 
-Create a pull request from your `book-search-authors-reading` branch to your `solutions` branch.
-Please do not create a pull request to the DockYard Academy repository as this will spam our PR tracker.
+We're proud to offer our open-source curriculum free of charge for anyone to learn from at their own pace.
 
-**DockYard Academy Students Only:**
+We also offer a paid course where you can learn from an instructor alongside a cohort of your peers.
+We will accept applications for the June-August 2023 cohort soon.
 
-Notify your instructor by including `@BrooklinJazz` in your PR description to get feedback.
-You (or your instructor) may merge your PR into your solutions branch after review.
+## Navigation
 
-If you are interested in joining the next academy cohort, [sign up here](https://academy.dockyard.com/) to receive more news when it is available.
-
-## Up Next
-
-| Previous                                      | Next                                            |
-| --------------------------------------------- | ----------------------------------------------: |
-| [Blog: Posts](../exercises/blog_posts.livemd) | [Blog: Search](../exercises/blog_search.livemd) |
+<div style="display: flex; align-items: center; width: 100%; justify-content: space-between; font-size: 1rem; color: #61758a; background-color: #f0f5f9; height: 4rem; padding: 0 1rem; border-radius: 1rem;">
+<div style="display: flex;">
+<i class="ri-home-fill"></i>
+<a style="display: flex; color: #61758a; margin-left: 1rem;" href="../start.livemd">Home</a>
+</div>
+<div style="display: flex;">
+<i class="ri-bug-fill"></i>
+<a style="display: flex; color: #61758a; margin-left: 1rem;" href="https://github.com/DockYard-Academy/curriculum/issues/new?assignees=&labels=&template=issue.md&title=BookSearch: Authors">Report An Issue</a>
+</div>
+<div style="display: flex;">
+<i class="ri-arrow-left-fill"></i>
+<a style="display: flex; color: #61758a; margin-left: 1rem;" href="../exercises/blog_posts.livemd">Blog: Posts</a>
+</div>
+<div style="display: flex;">
+<a style="display: flex; color: #61758a; margin-right: 1rem;" href="../exercises/blog_search.livemd">Blog: Search</a>
+<i class="ri-arrow-right-fill"></i>
+</div>
+</div>
 

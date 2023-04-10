@@ -7,7 +7,7 @@
 ```elixir
 Mix.install([
   {:jason, "~> 1.4"},
-  {:kino, "~> 0.8.0", override: true},
+  {:kino, "~> 0.9", override: true},
   {:youtube, github: "brooklinjazz/youtube"},
   {:hidden_cell, github: "brooklinjazz/hidden_cell"}
 ])
@@ -15,19 +15,31 @@ Mix.install([
 
 ## Navigation
 
-[Return Home](../start.livemd)<span style="padding: 0 30px"></span>
-[Report An Issue](https://github.com/DockYard-Academy/beta_curriculum/issues/new?assignees=&labels=&template=issue.md&title=)
-
-## Setup
-
-Ensure you type the `ea` keyboard shortcut to evaluate all Elixir cells before starting. Alternatively you can evaluate the Elixir cells as you read.
+<div style="display: flex; align-items: center; width: 100%; justify-content: space-between; font-size: 1rem; color: #61758a; background-color: #f0f5f9; height: 4rem; padding: 0 1rem; border-radius: 1rem;">
+<div style="display: flex;">
+<i class="ri-home-fill"></i>
+<a style="display: flex; color: #61758a; margin-left: 1rem;" href="../start.livemd">Home</a>
+</div>
+<div style="display: flex;">
+<i class="ri-bug-fill"></i>
+<a style="display: flex; color: #61758a; margin-left: 1rem;" href="https://github.com/DockYard-Academy/curriculum/issues/new?assignees=&labels=&template=issue.md&title=Advanced Pattern Matching">Report An Issue</a>
+</div>
+<div style="display: flex;">
+<i class="ri-arrow-left-fill"></i>
+<a style="display: flex; color: #61758a; margin-left: 1rem;" href="../exercises/games_menu.livemd">Games: Menu</a>
+</div>
+<div style="display: flex;">
+<a style="display: flex; color: #61758a; margin-right: 1rem;" href="../exercises/treasure_matching.livemd">Treasure Matching</a>
+<i class="ri-arrow-right-fill"></i>
+</div>
+</div>
 
 ## Review Questions
 
 Upon completing this lesson, a student should understand:
 
 * How to achieve polymorphism with multiple function heads and case statements.
-* How to simpify our program's control-flow using polymorphism.
+* How to simplify our program's control-flow using polymorphism.
 * How to use pattern matching with enumeration.
 
 ## Overview
@@ -79,7 +91,7 @@ See the previous reading material if you need a refresher on how to pattern matc
 * [Keyword Lists](./keyword_lists.livemd)
 * [Maps](./maps.livemd)
 
-## Pattern Matching With the Match Operator
+## Pattern Matching With The Match Operator
 
 We can pattern match using the match operator.
 
@@ -133,7 +145,7 @@ case [1, 2, 3] do
 end
 ```
 
-We can use the match operator anytime we have a value bound to a parameter or variable that we want to match on. Pattern matching can also be used with control flow to trigger application behavior based if the pattern matches.
+We can use the match operator anytime we have a value bound to a parameter or variable that we want to match on. Pattern matching can also be used with control flow to trigger application behavior based on if the pattern matches.
 
 <!-- livebook:{"break_markdown":true} -->
 
@@ -184,7 +196,7 @@ defmodule Check do
 end
 ```
 
-## Pattern Matching in A Function Clause
+## Pattern Matching In A Function Clause
 
 We can omit the `=` when pattern matching in a function.
 
@@ -201,7 +213,7 @@ Coords.inspect({1, 2})
 
 ### Multi-Clause Functions
 
-We can use with pattern matching with multi-clause functions. This essentially using multi-clause functions to replicate the same behavior as a single function with a case statement.
+We can use pattern matching with multi-clause functions. This essentially uses multi-clause functions to replicate the same behavior as a single function with a case statement.
 
 ```elixir
 defmodule SingleCaseExample do
@@ -226,11 +238,11 @@ defmodule MultiClauseExample do
   end
 
   def run([_]) do
-    "1"
+    "2"
   end
 
   def run([_, _]) do
-    "1"
+    "3"
   end
 end
 
@@ -288,7 +300,7 @@ defmodule Greeter do
 end
 ```
 
-## Pattern Matching in Enumeration
+## Pattern Matching In Enumeration
 
 We can combine pattern matching in a function with enumeration to achieve polymorphic behavior with an enumerable data structure.
 
@@ -325,12 +337,24 @@ end)
 
 ### Your Turn
 
-Create a `Converter` module which uses pattern matching with enumeration and multiple function clauses in an anonymous function to convert the a list of integers into their named string representation.
+Create a `Converter` module which uses pattern matching with enumeration and multiple function clauses in an anonymous function to convert a list of integers into their named string representation.
 
 ```elixir
 defmodule Converter do
-  @doc """
+  @moduledoc """
+  Converter
+  """
 
+  @doc """
+  Convert a list of integers into their named string representation.
+
+  ## Examples
+
+      iex> Converter.to_named_strings([1, 3, 8, 0, 9, 4])
+      ["one", "three", "eight", "zero", "nine", "four"]
+
+      iex> Converter.to_named_strings([2, 3, 2, 7, 6, 5, 8, 2])
+      ["two", "three", "two", "seven", "six", "five", "eight", "two"]
   """
   def to_named_strings(integers) do
   end
@@ -403,7 +427,7 @@ end
 MessageNestedIfExample.send(%{is_admin: true}, "")
 ```
 
-Nested `if` statements are generally a cue that we should consider an alternative implementation.
+Nested `if` statements are generally a clue that we should consider an alternative implementation.
 
 Let's see how we could solve this problem with pattern matching.
 
@@ -500,7 +524,7 @@ If we don't pin the value, the bound variable will be treated as though we were 
 ```elixir
 pinned_value = 1
 
-# despite being 2, not 1, clause 1 is triggered because we didn't pin the value.
+# Despite Being 2, Not 1, Clause 1 Is Triggered Because We Didn't Pin The Value.
 case {:ok, 2} do
   {:ok, pinned_value} -> "clause 1"
   {:ok, generic_value} -> "clause 2"
@@ -541,69 +565,42 @@ Consider the following resource(s) to deepen your understanding of the topic.
 * [elixir-lang.org: Pattern Matching](https://elixir-lang.org/getting-started/pattern-matching.html)
 * [HexDocs: Patterns and Guards](https://hexdocs.pm/elixir/master/patterns-and-guards.html)
 
-## Mark As Completed
-
-<!-- livebook:{"attrs":{"source":"file_name = Path.basename(Regex.replace(~r/#.+/, __ENV__.file, \"\"), \".livemd\")\n\nsave_name =\n  case Path.basename(__DIR__) do\n    \"reading\" -> \"advanced_pattern_matching_reading\"\n    \"exercises\" -> \"advanced_pattern_matching_exercise\"\n  end\n\nprogress_path = __DIR__ <> \"/../progress.json\"\nexisting_progress = File.read!(progress_path) |> Jason.decode!()\n\ndefault = Map.get(existing_progress, save_name, false)\n\nform =\n  Kino.Control.form(\n    [\n      completed: input = Kino.Input.checkbox(\"Mark As Completed\", default: default)\n    ],\n    report_changes: true\n  )\n\nTask.async(fn ->\n  for %{data: %{completed: completed}} <- Kino.Control.stream(form) do\n    File.write!(\n      progress_path,\n      Jason.encode!(Map.put(existing_progress, save_name, completed), pretty: true)\n    )\n  end\nend)\n\nform","title":"Track Your Progress"},"chunks":null,"kind":"Elixir.HiddenCell","livebook_object":"smart_cell"} -->
-
-```elixir
-file_name = Path.basename(Regex.replace(~r/#.+/, __ENV__.file, ""), ".livemd")
-
-save_name =
-  case Path.basename(__DIR__) do
-    "reading" -> "advanced_pattern_matching_reading"
-    "exercises" -> "advanced_pattern_matching_exercise"
-  end
-
-progress_path = __DIR__ <> "/../progress.json"
-existing_progress = File.read!(progress_path) |> Jason.decode!()
-
-default = Map.get(existing_progress, save_name, false)
-
-form =
-  Kino.Control.form(
-    [
-      completed: input = Kino.Input.checkbox("Mark As Completed", default: default)
-    ],
-    report_changes: true
-  )
-
-Task.async(fn ->
-  for %{data: %{completed: completed}} <- Kino.Control.stream(form) do
-    File.write!(
-      progress_path,
-      Jason.encode!(Map.put(existing_progress, save_name, completed), pretty: true)
-    )
-  end
-end)
-
-form
-```
-
 ## Commit Your Progress
 
-Run the following in your command line from the curriculum folder to track and save your progress in a Git commit.
-Ensure that you do not already have undesired or unrelated changes by running `git status` or by checking the source control tab in Visual Studio Code.
+DockYard Academy now recommends you use the latest [Release](https://github.com/DockYard-Academy/curriculum/releases) rather than forking or cloning our repository.
+
+Run `git status` to ensure there are no undesirable changes.
+Then run the following in your command line from the `curriculum` folder to commit your progress.
 
 ```
-$ git checkout -b advanced-pattern-matching-reading
 $ git add .
-$ git commit -m "finish advanced pattern matching reading"
-$ git push origin advanced-pattern-matching-reading
+$ git commit -m "finish Advanced Pattern Matching reading"
+$ git push
 ```
 
-Create a pull request from your `advanced-pattern-matching-reading` branch to your `solutions` branch.
-Please do not create a pull request to the DockYard Academy repository as this will spam our PR tracker.
+We're proud to offer our open-source curriculum free of charge for anyone to learn from at their own pace.
 
-**DockYard Academy Students Only:**
+We also offer a paid course where you can learn from an instructor alongside a cohort of your peers.
+We will accept applications for the June-August 2023 cohort soon.
 
-Notify your instructor by including `@BrooklinJazz` in your PR description to get feedback.
-You (or your instructor) may merge your PR into your solutions branch after review.
+## Navigation
 
-If you are interested in joining the next academy cohort, [sign up here](https://academy.dockyard.com/) to receive more news when it is available.
-
-## Up Next
-
-| Previous                                      | Next                                                       |
-| --------------------------------------------- | ---------------------------------------------------------: |
-| [Games: Menu](../exercises/games_menu.livemd) | [Treasure Matching](../exercises/treasure_matching.livemd) |
+<div style="display: flex; align-items: center; width: 100%; justify-content: space-between; font-size: 1rem; color: #61758a; background-color: #f0f5f9; height: 4rem; padding: 0 1rem; border-radius: 1rem;">
+<div style="display: flex;">
+<i class="ri-home-fill"></i>
+<a style="display: flex; color: #61758a; margin-left: 1rem;" href="../start.livemd">Home</a>
+</div>
+<div style="display: flex;">
+<i class="ri-bug-fill"></i>
+<a style="display: flex; color: #61758a; margin-left: 1rem;" href="https://github.com/DockYard-Academy/curriculum/issues/new?assignees=&labels=&template=issue.md&title=Advanced Pattern Matching">Report An Issue</a>
+</div>
+<div style="display: flex;">
+<i class="ri-arrow-left-fill"></i>
+<a style="display: flex; color: #61758a; margin-left: 1rem;" href="../exercises/games_menu.livemd">Games: Menu</a>
+</div>
+<div style="display: flex;">
+<a style="display: flex; color: #61758a; margin-right: 1rem;" href="../exercises/treasure_matching.livemd">Treasure Matching</a>
+<i class="ri-arrow-right-fill"></i>
+</div>
+</div>
 

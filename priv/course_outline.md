@@ -8,20 +8,7 @@
 
 Use the following index to find reading material and exercises for this course.
 
-Some students experience issues displaying mermaid.js diagrams. Here's a sample diagram, which depicts the word "Welcome!" inside a box:
-
-```mermaid
-flowchart
-Welcome!
-```
-
-If you do not see the box above, or if you encounter any issues with this course, please ensure you have correctly followed the [Student Setup Guide](https://github.com/DockYard-Academy/beta_curriculum/wiki/Student-Setup-Guide) or [Report An Issue](https://github.com/DockYard-Academy/beta_curriculum/issues/new?assignees=&labels=&template=issue.md&title=) to receive help.
-
-<!-- livebook:{"break_markdown":true} -->
-
-### Welcome
-
-* [Start Here](reading/start_here)
+For new students, we recommend that you [start here](reading/start_here)
 
 ## Core Syntax
 
@@ -59,7 +46,7 @@ If you do not see the box above, or if you encounter any issues with this course
 
 <!-- livebook:{"break_markdown":true} -->
 
-### Data Structures and Intro to Pattern Matching
+### Data Structures And Intro To Pattern Matching
 
 * Reading
   * [Atoms](reading/atoms)
@@ -74,7 +61,7 @@ If you do not see the box above, or if you encounter any issues with this course
 
 <!-- livebook:{"break_markdown":true} -->
 
-### Control Flow and Abstraction
+### Control Flow And Abstraction
 
 * Reading
   * [Functions](reading/functions)
@@ -85,7 +72,7 @@ If you do not see the box above, or if you encounter any issues with this course
 
 <!-- livebook:{"break_markdown":true} -->
 
-### Modules and Structs
+### Modules And Structs
 
 * Reading
   * [Modules](reading/modules)
@@ -111,7 +98,7 @@ If you do not see the box above, or if you encounter any issues with this course
 
 <!-- livebook:{"break_markdown":true} -->
 
-### Comprehensions and Non-Enumerable Data Types
+### Comprehensions And Non-Enumerable Data Types
 
 * Reading
   * [Enumerating on Non-Enumerables](reading/non_enumerables)
@@ -141,18 +128,18 @@ If you do not see the box above, or if you encounter any issues with this course
 * Exercises
   * [Number Finder](exercises/number_finder)
   * [Weighted Voting](exercises/weighted_voting)
-  * [Custom Enum With Reduce](exercises/custom_enum_with_reduce)
+  * Bonus: [Custom Enum With Reduce](exercises/custom_enum_with_reduce)
 
 <!-- livebook:{"break_markdown":true} -->
 
-### Dates and Time
+### Dates And Time
 
 * Reading
   * [Dates and Times](reading/datetime)
 * Exercises
   * [Time Converting](exercises/time_converting)
   * [Itinerary](exercises/itinerary)
-  * [Timeline](exercises/timeline)
+  * Bonus: [Timeline](exercises/timeline)
 
 <!-- livebook:{"break_markdown":true} -->
 
@@ -164,7 +151,7 @@ If you do not see the box above, or if you encounter any issues with this course
 * Exercises
   * [Email Validation](exercises/email_validation)
   * [Caesar Cypher](exercises/caesar_cypher)
-  * [Rollable Expressions](exercises/rollable_expressions)
+  * Bonus: [Rollable Expressions](exercises/rollable_expressions)
   * Bonus: [Phone Number Parsing](exercises/phone_number_parsing)
 
 ## Mix Projects
@@ -186,7 +173,7 @@ If you do not see the box above, or if you encounter any issues with this course
   * [ExUnit](reading/exunit)
 * Exercises
   * [Math Module Testing](exercises/math_module_testing)
-  * [Product Filters](exercises/product_filters)
+  * Bonus: [Product Filters](exercises/product_filters)
 
 <!-- livebook:{"break_markdown":true} -->
 
@@ -201,7 +188,7 @@ If you do not see the box above, or if you encounter any issues with this course
 
 <!-- livebook:{"break_markdown":true} -->
 
-### Documentation and Static Analysis
+### Documentation And Static Analysis
 
 * Reading
   * [Doctests](reading/doctests)
@@ -221,7 +208,7 @@ If you do not see the box above, or if you encounter any issues with this course
 * Exercises
   * [Games: Menu](exercises/games_menu)
 
-## OTP and Advanced Syntax
+## OTP And Advanced Syntax
 
 ### Advanced Pattern Matching
 
@@ -266,46 +253,12 @@ If you do not see the box above, or if you encounter any issues with this course
 * Exercises
   * [Fibonacci](exercises/fibonacci)
   * [Lucas Numbers](exercises/lucas_numbers)
-  * [Factorial](exercises/factorial)
+  * Bonus: [Factorial](exercises/factorial)
   * Bonus: [Pascals Triangle](exercises/pascals_triangle)
 
 <!-- livebook:{"break_markdown":true} -->
 
-### Benchmarking and Performance
-
-* Reading
-  * [Computer Hardware](reading/computer_hardware)
-  * [Big O Notation](reading/big_o_notation)
-  * [Benchmarking](reading/benchmarking)
-* Exercises
-  * [Games: Benchmarking](exercises/games_benchmarking)
-  * [Custom Enum](exercises/custom_enum_with_recursion)
-
-<!-- livebook:{"break_markdown":true} -->
-
-### Streams
-
-* Reading
-  * [Streams](reading/streams)
-* Exercises
-  * Drills: [Streams](exercises/stream_drills)
-  * [Lazy Product Filters](exercises/lazy_product_filters)
-
-<!-- livebook:{"break_markdown":true} -->
-
-### Performance Optimization
-
-* Reading
-  * [Lists and Tuples](reading/lists_vs_tuples)
-  * [Maps, MapSets, and Keyword Lists](reading/maps_mapsets_keyword_lists)
-* Exercises
-  * [Drills: MapSets](exercises/mapset_drills)
-  * [MapSet Product Filters](exercises/mapset_product_filters)
-  * [Fibonacci Challenge](exercises/fibonacci_challenge)
-
-<!-- livebook:{"break_markdown":true} -->
-
-### Persistence Using the File System
+### Persistence Using The File System
 
 * Reading
   * [File](reading/file)
@@ -333,11 +286,13 @@ If you do not see the box above, or if you encounter any issues with this course
 
 * Reading
   * [Generic Server](reading/generic_server)
-  * [Hexdocs: GenServer](https://hexdocs.pm/elixir/GenServer.html)
+  * [Testing GenServers](reading/testing_genservers)
 * Exercises
   * [Stack Server](exercises/stack_server)
+  * [Stack GenServer Testing](exercises/stack)
   * [Traffic Light Server](exercises/traffic_light_server)
   * Bonus: [Pokemon Server](exercises/pokemon_server)
+  * Bonus: [Games: Score Tracker](exercises/games_score_tracker)
 
 <!-- livebook:{"break_markdown":true} -->
 
@@ -348,49 +303,29 @@ If you do not see the box above, or if you encounter any issues with this course
 * Exercises
   * [Mailbox Server](exercises/mailbox_server)
   * [Score Tracker](exercises/score_tracker)
-  * [Timer](exercises/timer)
+  * Bonus: [Timer](exercises/timer)
 
 <!-- livebook:{"break_markdown":true} -->
 
-### Supervisor Basics and Fault Tolerance
+### Supervisor Basics And Fault Tolerance
 
 * Reading
   * [Supervisors](reading/supervisors)
 * Exercises
   * [Supervised Stack](exercises/supervised_stack)
   * [Dominoes](exercises/dominoes)
-  * [Monster Spawner](exercises/monster_spawner)
+  * Bonus: [Monster Spawner](exercises/monster_spawner)
 
 <!-- livebook:{"break_markdown":true} -->
 
-### Testing GenServers
-
-* Reading
-  * [Testing GenServers](reading/testing_genservers)
-* Exercises
-  * [Stack GenServer Testing](exercises/stack)
-  * [Games: Score Tracker](exercises/games_score_tracker)
-
-<!-- livebook:{"break_markdown":true} -->
-
-### Metaprogramming
-
-* Reading
-  * [Metaprogramming](reading/metaprogramming)
-* Exercises
-  * [Meta Math](exercises/meta_math)
-  * [Custom Assertions](exercises/custom_assertions)
-
-<!-- livebook:{"break_markdown":true} -->
-
-### Mix Projects and Processes
+### Mix Projects And Processes
 
 * Reading
   * [Supervised Mix Project](reading/supervised_mix_project)
 * Exercises
   * Drills: [Supervisors and GenServers](exercises/supervisor_and_genserver_drills)
-  * [Games: Supervisor Setup](exercises/games_supervisor_setup)
-  * [Games: Supervised Score Tracker](exercises/games_supervised_score_tracker)
+  * Bonus: [Games: Supervisor Setup](exercises/games_supervisor_setup)
+  * Bonus: [Games: Supervised Score Tracker](exercises/games_supervised_score_tracker)
 
 <!-- livebook:{"break_markdown":true} -->
 
@@ -403,32 +338,15 @@ If you do not see the box above, or if you encounter any issues with this course
   * Drills: [Tasks](exercises/task_drills)
   * [Concurrent Word Count](exercises/concurrent_word_count)
 
-<!-- livebook:{"break_markdown":true} -->
-
-### State Management With Agents and ETS
-
-* Reading
-  * [State: Agent and ETS](reading/agents_and_ets)
-* Exercises
-  * [Agent Journal](exercises/agent_journal)
-  * [ETS Warehouse](exercises/inventory_management)
-  * Mastery: [Advanced Score Tracker](exercises/advanced_score_tracker)
-
-<!-- livebook:{"break_markdown":true} -->
-
-### Rubix Cube Project
-
-* [Rubix Cube](exercises/rubix_cube)
-
 ## Capstone Project Preparation
 
 ### Capstone Project
 
-* [Captone Project Guide](reading/capstone_project_guide)
+* [Capstone Project Guide](reading/capstone_project_guide)
 
-## Web Servers and Phoenix
+## Web Servers And Phoenix
 
-### HTML and CSS
+### HTML And CSS
 
 * Reading
   * [HTML + CSS](reading/html_css)
@@ -440,26 +358,13 @@ If you do not see the box above, or if you encounter any issues with this course
 
 <!-- livebook:{"break_markdown":true} -->
 
-### APIs and Parsing JSON
+### APIs And Parsing JSON
 
 * Reading
   * [APIs](reading/apis)
 * Exercises
   * [Spoonacular Recipe API](exercises/spoonacular_recipe_api)
   * Mastery: [Pokemon API](exercises/pokemon_api)
-
-<!-- livebook:{"break_markdown":true} -->
-
-### Phoenix
-
-* Reading
-  * [Web Servers](reading/web_servers)
-  * [HexDocs: Phoenix Up and Running](https://hexdocs.pm/phoenix/up_and_running.html)
-  * [Phoenix 1.6](reading/phoenix_1.6)
-  * Bonus: [Phoenix 1.7](reading/phoenix_1.7)
-* Exercises
-  * Drills: [Phoenix](exercises/phoenix_drills)
-  * [In-Memory TodoList](exercises/in-memory_todo_list)
 
 <!-- livebook:{"break_markdown":true} -->
 
@@ -473,13 +378,14 @@ If you do not see the box above, or if you encounter any issues with this course
 
 <!-- livebook:{"break_markdown":true} -->
 
-### Ecto Changesets
+### Phoenix
 
 * Reading
-  * [Ecto Changeset](reading/ecto_changeset)
+  * Deprecated: [Phoenix 1.6](reading/phoenix_1.6)
+  * [Phoenix 1.7](reading/phoenix_1.7)
+  * Bonus: [Web Servers](reading/web_servers)
 * Exercises
-  * [Sign Up Form](exercises/sign_up_form)
-  * Bonus: [Book Changeset](exercises/book_changeset)
+  * Drills: [Phoenix](exercises/phoenix_drills)
 
 <!-- livebook:{"break_markdown":true} -->
 
@@ -489,7 +395,7 @@ If you do not see the box above, or if you encounter any issues with this course
 
 <!-- livebook:{"break_markdown":true} -->
 
-### Phoenix and Ecto
+### Phoenix And Ecto
 
 * Reading
   * [Relational Database Management Systems](reading/rdbms)
@@ -510,7 +416,7 @@ If you do not see the box above, or if you encounter any issues with this course
 
 <!-- livebook:{"break_markdown":true} -->
 
-### Schemas and Migrations
+### Schemas And Migrations
 
 * Reading
   * [Schemas and Migrations](reading/schemas_and_migrations)
@@ -519,7 +425,7 @@ If you do not see the box above, or if you encounter any issues with this course
 
 <!-- livebook:{"break_markdown":true} -->
 
-### Phoenix and Ecto One-to-Many Associations
+### Phoenix And Ecto One-to-Many Associations
 
 * Reading
   * [BookSearch: Books](reading/book_search_books)
@@ -555,7 +461,7 @@ If you do not see the box above, or if you encounter any issues with this course
 
 <!-- livebook:{"break_markdown":true} -->
 
-### Phoenix and Ecto Many-to-Many Relationships
+### Phoenix And Ecto Many-to-Many Relationships
 
 * Reading
   * [BookSearch: Tags](reading/book_search_tags)
@@ -564,7 +470,7 @@ If you do not see the box above, or if you encounter any issues with this course
 
 <!-- livebook:{"break_markdown":true} -->
 
-### Phoenix and Ecto One-to-One Relationships
+### Phoenix And Ecto One-to-One Relationships
 
 * Reading
   * [BookSearch: Book Content](reading/book_search_book_content)
@@ -580,7 +486,7 @@ If you do not see the box above, or if you encounter any issues with this course
 * Exercise
   * [Project Deployment](exercises/deployment)
 
-## Group Project Presentation
+### Group Project Presentation
 
 * [Group Project: Presentation](exercises/group_project_blog_presentation)
 
@@ -595,7 +501,7 @@ If you do not see the box above, or if you encounter any issues with this course
 
 <!-- livebook:{"break_markdown":true} -->
 
-### LiveView and Ecto
+### LiveView And Ecto
 
 * Instruction
   * [PicChat: Messages](reading/pic_chat_messages)
@@ -616,15 +522,103 @@ If you do not see the box above, or if you encounter any issues with this course
 
 <!-- livebook:{"break_markdown":true} -->
 
-### LiveView JS Interoperability and Pagination
+### LiveView JS Interoperability And Pagination
 
 * Instruction
   * [PicChat: Infinite Scroll](reading/pic_chat_infinite_scroll)
 
-## External Libraries
+<!-- livebook:{"break_markdown":true} -->
 
-### Emailing, Swoosh, and Oban
+### Emailing, Swoosh, And Oban
 
 * Instruction
   * [Newsletter](reading/newsletter)
+
+## Bonus Topics
+
+The following topics are not part of the DockYard Academy core curriculum, but serve as a bonus section for those interested in delving deeper into programming and Elixir.
+
+<!-- livebook:{"break_markdown":true} -->
+
+### Performance Optimization
+
+* Reading
+  * [Lists and Tuples](reading/lists_vs_tuples)
+  * [Maps, MapSets, and Keyword Lists](reading/maps_mapsets_keyword_lists)
+* Exercises
+  * [Drills: MapSets](exercises/mapset_drills)
+  * [MapSet Product Filters](exercises/mapset_product_filters)
+  * [Fibonacci Challenge](exercises/fibonacci_challenge)
+
+<!-- livebook:{"break_markdown":true} -->
+
+### Benchmarking And Performance
+
+* Reading
+  * [Computer Hardware](reading/computer_hardware)
+  * [Big O Notation](reading/big_o_notation)
+  * [Benchmarking](reading/benchmarking)
+* Exercises
+  * [Games: Benchmarking](exercises/games_benchmarking)
+  * [Custom Enum](exercises/custom_enum_with_recursion)
+
+<!-- livebook:{"break_markdown":true} -->
+
+### Ecto Changesets
+
+* Reading
+  * [Ecto Changeset](reading/ecto_changeset)
+* Exercises
+  * [Sign Up Form](exercises/sign_up_form)
+  * Bonus: [Book Changeset](exercises/book_changeset)
+
+<!-- livebook:{"break_markdown":true} -->
+
+### Streams
+
+* Reading
+  * [Streams](reading/streams)
+* Exercises
+  * Drills: [Streams](exercises/stream_drills)
+  * [Lazy Product Filters](exercises/lazy_product_filters)
+
+<!-- livebook:{"break_markdown":true} -->
+
+### State Management With Agents And ETS
+
+* Reading
+  * [State: Agent and ETS](reading/agents_and_ets)
+* Exercises
+  * [Agent Journal](exercises/agent_journal)
+  * [ETS Warehouse](exercises/inventory_management)
+  * Mastery: [Advanced Score Tracker](exercises/advanced_score_tracker)
+
+<!-- livebook:{"break_markdown":true} -->
+
+### Metaprogramming
+
+* Reading
+  * [Metaprogramming](reading/metaprogramming)
+* Exercises
+  * [Meta Math](exercises/meta_math)
+  * [Custom Assertions](exercises/custom_assertions)
+
+<!-- livebook:{"break_markdown":true} -->
+
+### Queues
+
+* Reading
+  * [Queues](reading/queues)
+
+<!-- livebook:{"break_markdown":true} -->
+
+### Worker Pools
+
+* [Worker Pools](reading/worker_pools)
+
+<!-- livebook:{"break_markdown":true} -->
+
+### Rubix Cube Project
+
+* [Rubix Cube](exercises/rubix_cube)
 

@@ -7,7 +7,7 @@
 ```elixir
 Mix.install([
   {:jason, "~> 1.4"},
-  {:kino, "~> 0.8.0", override: true},
+  {:kino, "~> 0.9", override: true},
   {:youtube, github: "brooklinjazz/youtube"},
   {:hidden_cell, github: "brooklinjazz/hidden_cell"}
 ])
@@ -15,8 +15,24 @@ Mix.install([
 
 ## Navigation
 
-[Return Home](../start.livemd)<span style="padding: 0 30px"></span>
-[Report An Issue](https://github.com/DockYard-Academy/beta_curriculum/issues/new?assignees=&labels=&template=issue.md&title=)
+<div style="display: flex; align-items: center; width: 100%; justify-content: space-between; font-size: 1rem; color: #61758a; background-color: #f0f5f9; height: 4rem; padding: 0 1rem; border-radius: 1rem;">
+<div style="display: flex;">
+<i class="ri-home-fill"></i>
+<a style="display: flex; color: #61758a; margin-left: 1rem;" href="../start.livemd">Home</a>
+</div>
+<div style="display: flex;">
+<i class="ri-bug-fill"></i>
+<a style="display: flex; color: #61758a; margin-left: 1rem;" href="https://github.com/DockYard-Academy/curriculum/issues/new?assignees=&labels=&template=issue.md&title=Rock Paper Scissors Lizard Spock">Report An Issue</a>
+</div>
+<div style="display: flex;">
+<i class="ri-arrow-left-fill"></i>
+<a style="display: flex; color: #61758a; margin-left: 1rem;" href="../reading/structs.livemd">Structs</a>
+</div>
+<div style="display: flex;">
+<a style="display: flex; color: #61758a; margin-right: 1rem;" href="../exercises/rpg_dialogue.livemd">RPG Dialogue</a>
+<i class="ri-arrow-right-fill"></i>
+</div>
+</div>
 
 ## Rock Paper Scissors Lizard Spock
 
@@ -64,6 +80,37 @@ RockPaperScissorsLizardSpock.play(:lizard, :rock) # "Player 1 Wins!"
 RockPaperScissorsLizardSpock.play(:lizard, :lizard) # "Draw!"
 ```
 
+<details style="background-color: lightgreen; padding: 1rem; margin: 1rem 0;">
+<summary>Example Solution</summary>
+
+```elixir
+  def beats?(guess1, guess2) do
+    case {guess1, guess2} do
+      {:paper, :rock} -> true
+      {:scissors, :paper} -> true
+      {:rock, :scissors} -> true
+      {:rock, :lizard} -> true
+      {:lizard, :spock} -> true
+      {:spock, :scissors} -> true
+      {:scissors, :lizard} -> true
+      {:lizard, :paper} -> true
+      {:paper, :spock} -> true
+      {:spock, :rock} -> true
+      _answer -> false
+    end
+  end
+
+  def play(player1, player2) do
+    cond do
+      player1 == player2 -> "Draw"
+      beats?(player1, player2) -> "Player 1 Wins!"
+      beats?(player2, player1) -> "Player 2 Wins!"
+    end
+  end
+```
+
+</details>
+
 Implement the `RockPaperScissorsLizardSpock` module as documented.
 
 ```elixir
@@ -108,69 +155,42 @@ defmodule RockPaperScissorsLizardSpock do
 end
 ```
 
-## Mark As Completed
-
-<!-- livebook:{"attrs":{"source":"file_name = Path.basename(Regex.replace(~r/#.+/, __ENV__.file, \"\"), \".livemd\")\n\nsave_name =\n  case Path.basename(__DIR__) do\n    \"reading\" -> \"rock_paper_scissors_lizard_spock_reading\"\n    \"exercises\" -> \"rock_paper_scissors_lizard_spock_exercise\"\n  end\n\nprogress_path = __DIR__ <> \"/../progress.json\"\nexisting_progress = File.read!(progress_path) |> Jason.decode!()\n\ndefault = Map.get(existing_progress, save_name, false)\n\nform =\n  Kino.Control.form(\n    [\n      completed: input = Kino.Input.checkbox(\"Mark As Completed\", default: default)\n    ],\n    report_changes: true\n  )\n\nTask.async(fn ->\n  for %{data: %{completed: completed}} <- Kino.Control.stream(form) do\n    File.write!(\n      progress_path,\n      Jason.encode!(Map.put(existing_progress, save_name, completed), pretty: true)\n    )\n  end\nend)\n\nform","title":"Track Your Progress"},"chunks":null,"kind":"Elixir.HiddenCell","livebook_object":"smart_cell"} -->
-
-```elixir
-file_name = Path.basename(Regex.replace(~r/#.+/, __ENV__.file, ""), ".livemd")
-
-save_name =
-  case Path.basename(__DIR__) do
-    "reading" -> "rock_paper_scissors_lizard_spock_reading"
-    "exercises" -> "rock_paper_scissors_lizard_spock_exercise"
-  end
-
-progress_path = __DIR__ <> "/../progress.json"
-existing_progress = File.read!(progress_path) |> Jason.decode!()
-
-default = Map.get(existing_progress, save_name, false)
-
-form =
-  Kino.Control.form(
-    [
-      completed: input = Kino.Input.checkbox("Mark As Completed", default: default)
-    ],
-    report_changes: true
-  )
-
-Task.async(fn ->
-  for %{data: %{completed: completed}} <- Kino.Control.stream(form) do
-    File.write!(
-      progress_path,
-      Jason.encode!(Map.put(existing_progress, save_name, completed), pretty: true)
-    )
-  end
-end)
-
-form
-```
-
 ## Commit Your Progress
 
-Run the following in your command line from the curriculum folder to track and save your progress in a Git commit.
-Ensure that you do not already have undesired or unrelated changes by running `git status` or by checking the source control tab in Visual Studio Code.
+DockYard Academy now recommends you use the latest [Release](https://github.com/DockYard-Academy/curriculum/releases) rather than forking or cloning our repository.
+
+Run `git status` to ensure there are no undesirable changes.
+Then run the following in your command line from the `curriculum` folder to commit your progress.
 
 ```
-$ git checkout -b rock-paper-scissors-lizard-spock-exercise
 $ git add .
-$ git commit -m "finish rock paper scissors lizard spock exercise"
-$ git push origin rock-paper-scissors-lizard-spock-exercise
+$ git commit -m "finish Rock Paper Scissors Lizard Spock exercise"
+$ git push
 ```
 
-Create a pull request from your `rock-paper-scissors-lizard-spock-exercise` branch to your `solutions` branch.
-Please do not create a pull request to the DockYard Academy repository as this will spam our PR tracker.
+We're proud to offer our open-source curriculum free of charge for anyone to learn from at their own pace.
 
-**DockYard Academy Students Only:**
+We also offer a paid course where you can learn from an instructor alongside a cohort of your peers.
+We will accept applications for the June-August 2023 cohort soon.
 
-Notify your instructor by including `@BrooklinJazz` in your PR description to get feedback.
-You (or your instructor) may merge your PR into your solutions branch after review.
+## Navigation
 
-If you are interested in joining the next academy cohort, [sign up here](https://academy.dockyard.com/) to receive more news when it is available.
-
-## Up Next
-
-| Previous                             | Next                                             |
-| ------------------------------------ | -----------------------------------------------: |
-| [Structs](../reading/structs.livemd) | [RPG Dialogue](../exercises/rpg_dialogue.livemd) |
+<div style="display: flex; align-items: center; width: 100%; justify-content: space-between; font-size: 1rem; color: #61758a; background-color: #f0f5f9; height: 4rem; padding: 0 1rem; border-radius: 1rem;">
+<div style="display: flex;">
+<i class="ri-home-fill"></i>
+<a style="display: flex; color: #61758a; margin-left: 1rem;" href="../start.livemd">Home</a>
+</div>
+<div style="display: flex;">
+<i class="ri-bug-fill"></i>
+<a style="display: flex; color: #61758a; margin-left: 1rem;" href="https://github.com/DockYard-Academy/curriculum/issues/new?assignees=&labels=&template=issue.md&title=Rock Paper Scissors Lizard Spock">Report An Issue</a>
+</div>
+<div style="display: flex;">
+<i class="ri-arrow-left-fill"></i>
+<a style="display: flex; color: #61758a; margin-left: 1rem;" href="../reading/structs.livemd">Structs</a>
+</div>
+<div style="display: flex;">
+<a style="display: flex; color: #61758a; margin-right: 1rem;" href="../exercises/rpg_dialogue.livemd">RPG Dialogue</a>
+<i class="ri-arrow-right-fill"></i>
+</div>
+</div>
 

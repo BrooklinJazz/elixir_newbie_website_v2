@@ -7,7 +7,7 @@
 ```elixir
 Mix.install([
   {:jason, "~> 1.4"},
-  {:kino, "~> 0.8.0", override: true},
+  {:kino, "~> 0.9", override: true},
   {:youtube, github: "brooklinjazz/youtube"},
   {:hidden_cell, github: "brooklinjazz/hidden_cell"}
 ])
@@ -15,12 +15,24 @@ Mix.install([
 
 ## Navigation
 
-[Return Home](../start.livemd)<span style="padding: 0 30px"></span>
-[Report An Issue](https://github.com/DockYard-Academy/beta_curriculum/issues/new?assignees=&labels=&template=issue.md&title=)
-
-## Setup
-
-Ensure you type the `ea` keyboard shortcut to evaluate all Elixir cells before starting. Alternatively you can evaluate the Elixir cells as you read.
+<div style="display: flex; align-items: center; width: 100%; justify-content: space-between; font-size: 1rem; color: #61758a; background-color: #f0f5f9; height: 4rem; padding: 0 1rem; border-radius: 1rem;">
+<div style="display: flex;">
+<i class="ri-home-fill"></i>
+<a style="display: flex; color: #61758a; margin-left: 1rem;" href="../start.livemd">Home</a>
+</div>
+<div style="display: flex;">
+<i class="ri-bug-fill"></i>
+<a style="display: flex; color: #61758a; margin-left: 1rem;" href="https://github.com/DockYard-Academy/curriculum/issues/new?assignees=&labels=&template=issue.md&title=PicChat: Infinite Scroll">Report An Issue</a>
+</div>
+<div style="display: flex;">
+<i class="ri-arrow-left-fill"></i>
+<a style="display: flex; color: #61758a; margin-left: 1rem;" href="../reading/pic_chat_pub_sub.livemd">PicChat: PubSub</a>
+</div>
+<div style="display: flex;">
+<a style="display: flex; color: #61758a; margin-right: 1rem;" href="../reading/newsletter.livemd">Newsletter</a>
+<i class="ri-arrow-right-fill"></i>
+</div>
+</div>
 
 ## Review Questions
 
@@ -201,7 +213,7 @@ For example, if we have a chat application with thousands of messages, we might 
 
 ```elixir
 def paginate(query, page, per_page) do
-  offset_by = page * per_page
+  offset_by = (page -1) * per_page
   
   query
   |> limit(^per_page)
@@ -288,7 +300,7 @@ Modify `index.ex` to paginate the data in the `mount/3` callback function.
 <!-- livebook:{"force_markdown":true} -->
 
 ```elixir
-# define a per_page module attribute
+# Define A Per_page Module Attribute
 @per_page 20
 
 
@@ -536,7 +548,7 @@ Finally, we'll demonstrate how to push events from the server to the client, by 
 
 <!-- livebook:{"break_markdown":true} -->
 
-### push_event/3
+### Push_event/3
 
 Modify the `handle_info/2` for the `"create_message"` event to send an event to the client with `push_event/3`.
 
@@ -614,9 +626,42 @@ Consider the following resource(s) to deepen your understanding of the topic.
 * [HexDocs: Handling server-pushed events](https://hexdocs.pm/phoenix_live_view/js-interop.html#handling-server-pushed-events)
 * [MDN: CSS Animations](https://developer.mozilla.org/pt-BR/docs/Web/CSS/CSS_Animations)
 
-## Up Next
+## Commit Your Progress
 
-| Previous                                              | Next                                       |
-| ----------------------------------------------------- | -----------------------------------------: |
-| [PicChat: PubSub](../reading/pic_chat_pub_sub.livemd) | [Newsletter](../reading/newsletter.livemd) |
+DockYard Academy now recommends you use the latest [Release](https://github.com/DockYard-Academy/curriculum/releases) rather than forking or cloning our repository.
+
+Run `git status` to ensure there are no undesirable changes.
+Then run the following in your command line from the `curriculum` folder to commit your progress.
+
+```
+$ git add .
+$ git commit -m "finish PicChat: Infinite Scroll reading"
+$ git push
+```
+
+We're proud to offer our open-source curriculum free of charge for anyone to learn from at their own pace.
+
+We also offer a paid course where you can learn from an instructor alongside a cohort of your peers.
+We will accept applications for the June-August 2023 cohort soon.
+
+## Navigation
+
+<div style="display: flex; align-items: center; width: 100%; justify-content: space-between; font-size: 1rem; color: #61758a; background-color: #f0f5f9; height: 4rem; padding: 0 1rem; border-radius: 1rem;">
+<div style="display: flex;">
+<i class="ri-home-fill"></i>
+<a style="display: flex; color: #61758a; margin-left: 1rem;" href="../start.livemd">Home</a>
+</div>
+<div style="display: flex;">
+<i class="ri-bug-fill"></i>
+<a style="display: flex; color: #61758a; margin-left: 1rem;" href="https://github.com/DockYard-Academy/curriculum/issues/new?assignees=&labels=&template=issue.md&title=PicChat: Infinite Scroll">Report An Issue</a>
+</div>
+<div style="display: flex;">
+<i class="ri-arrow-left-fill"></i>
+<a style="display: flex; color: #61758a; margin-left: 1rem;" href="../reading/pic_chat_pub_sub.livemd">PicChat: PubSub</a>
+</div>
+<div style="display: flex;">
+<a style="display: flex; color: #61758a; margin-right: 1rem;" href="../reading/newsletter.livemd">Newsletter</a>
+<i class="ri-arrow-right-fill"></i>
+</div>
+</div>
 
