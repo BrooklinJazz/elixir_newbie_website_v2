@@ -7,7 +7,7 @@
 ```elixir
 Mix.install([
   {:jason, "~> 1.4"},
-  {:kino, "~> 0.8.0", override: true},
+  {:kino, "~> 0.9", override: true},
   {:youtube, github: "brooklinjazz/youtube"},
   {:hidden_cell, github: "brooklinjazz/hidden_cell"}
 ])
@@ -15,12 +15,24 @@ Mix.install([
 
 ## Navigation
 
-[Return Home](../start.livemd)<span style="padding: 0 30px"></span>
-[Report An Issue](https://github.com/DockYard-Academy/beta_curriculum/issues/new?assignees=&labels=&template=issue.md&title=)
-
-## Setup
-
-Ensure you type the `ea` keyboard shortcut to evaluate all Elixir cells before starting. Alternatively you can evaluate the Elixir cells as you read.
+<div style="display: flex; align-items: center; width: 100%; justify-content: space-between; font-size: 1rem; color: #61758a; background-color: #f0f5f9; height: 4rem; padding: 0 1rem; border-radius: 1rem;">
+<div style="display: flex;">
+<i class="ri-home-fill"></i>
+<a style="display: flex; color: #61758a; margin-left: 1rem;" href="../start.livemd">Home</a>
+</div>
+<div style="display: flex;">
+<i class="ri-bug-fill"></i>
+<a style="display: flex; color: #61758a; margin-left: 1rem;" href="https://github.com/DockYard-Academy/curriculum/issues/new?assignees=&labels=&template=issue.md&title=PicChat: Messages">Report An Issue</a>
+</div>
+<div style="display: flex;">
+<i class="ri-arrow-left-fill"></i>
+<a style="display: flex; color: #61758a; margin-left: 1rem;" href="../exercises/math_game.livemd">Math Game</a>
+</div>
+<div style="display: flex;">
+<a style="display: flex; color: #61758a; margin-right: 1rem;" href="../reading/pic_chat_image_upload.livemd">PicChat: Image Upload</a>
+<i class="ri-arrow-right-fill"></i>
+</div>
+</div>
 
 ## Review Questions
 
@@ -176,13 +188,13 @@ We can mount a LiveView in a test using the [live/2](https://hexdocs.pm/phoenix_
 <!-- livebook:{"force_markdown":true} -->
 
 ```elixir
-# Make a request with `live/2` to mount the LiveView and get the resulting html
+# Make A Request With `live/2` To Mount The LiveView And Get The Resulting Html
 {:ok, view, html} = live(conn, "/hello")
 
-# Assert that the module of `view` is `MyLiveViewModule`.
+# Assert That The Module Of `view` Is `MyLiveViewModule`.
 assert view.module == MyLiveViewModule
 
-# Assert that "Hello, World!" is contained in the html.
+# Assert That "Hello, World!" Is Contained In The Html.
 assert html =~ "Hello, World!"
 ```
 
@@ -193,14 +205,14 @@ We can then use [render/1](https://hexdocs.pm/phoenix_live_view/Phoenix.LiveView
 <!-- livebook:{"force_markdown":true} -->
 
 ```elixir
-# Make a request with `live/2` to mount the LiveView and get the resulting html
+# Make A Request With `live/2` To Mount The LiveView And Get The Resulting Html
 {:ok, view, html} = live(conn, "/count")
 
-# The rendered view should start at count `0`.
+# The Rendered View Should Start At Count `0`.
 assert view
        |> render() =~ "0"
 
-# The rendered view should incremement the count to `1` after clicking the increment button
+# The Rendered View Should Incremement The Count To `1` After Clicking The Increment Button
 assert view
        |> element("button", "increment")
        |> render_click() =~ "1"
@@ -211,20 +223,20 @@ There's also [form/3](https://hexdocs.pm/phoenix_live_view/Phoenix.LiveViewTest.
 <!-- livebook:{"force_markdown":true} -->
 
 ```elixir
-# Make a request with `live/2`.
+# Make A Request With `live/2`.
 {:ok, view, _html} = live(conn, Routes.message_index_path(conn, :index))
 
-# select the form, submit the form, and follow the redirect to "/". Bind the resulting html.
+# Select The Form, Submit The Form, And Follow The Redirect To "/". Bind The Resulting Html.
 {:ok, _, html} =
   view
   |> form("#message-form", message: %{content: "some content", from: "some user"})
   |> render_submit()
   |> follow_redirect(conn, "/")
 
-# Assert that "Message created successfully" is contained in `html`.
+# Assert That "Message Created Successfully" Is Contained In `html`.
 assert html =~ "Message created successfully"
 
-# Assert that "some content" is contained in `html`.
+# Assert That "some Content" Is Contained In `html`.
 assert html =~ "some content"
 ```
 
@@ -241,7 +253,7 @@ You can see the completed [PicChat](https://github.com/DockYard-Academy/pic_chat
 
 In this lesson, we're going to create the initial feed of messages without images. Follow along with each step of the instruction to build your own `PicChat` application.
 
-## Create the Phoenix Project
+## Create The Phoenix Project
 
 Create the Phoenix project
 
@@ -255,7 +267,7 @@ Make sure to create the Ecto database.
 $ mix ecto.create
 ```
 
-## Create the Chat Context.
+## Create The Chat Context.
 
 We're going to create a `Chat` context with a `Message` resource in a `messages` table.
 Messages will have a `:content` and `:from` field.
@@ -333,21 +345,21 @@ def handle_params(params, _url, socket) do
   {:noreply, apply_action(socket, socket.assigns.live_action, params)}
 end
 
-# Assigns values to the socket for the `:edit` action.
+# Assigns Values To The Socket For The `:edit` Action.
 defp apply_action(socket, :edit, %{"id" => id}) do
   socket
   |> assign(:page_title, "Edit Message")
   |> assign(:message, Chat.get_message!(id))
 end
 
-# Assigns values to the socket for the `:new` action.
+# Assigns Values To The Socket For The `:new` Action.
 defp apply_action(socket, :new, _params) do
   socket
   |> assign(:page_title, "New Message")
   |> assign(:message, %Message{})
 end
 
-# Assigns values to the socket for the `:index` action.
+# Assigns Values To The Socket For The `:index` Action.
 defp apply_action(socket, :index, _params) do
   socket
   |> assign(:page_title, "Listing Messages")
@@ -776,9 +788,42 @@ A student who wants to do further research beyond this material may consider the
 * What are slots?
 * How do you create a stateless function component?
 
-## Up Next
+## Commit Your Progress
 
-| Previous                                   | Next                                                             |
-| ------------------------------------------ | ---------------------------------------------------------------: |
-| [Math Game](../exercises/math_game.livemd) | [PicChat: Image Upload](../reading/pic_chat_image_upload.livemd) |
+DockYard Academy now recommends you use the latest [Release](https://github.com/DockYard-Academy/curriculum/releases) rather than forking or cloning our repository.
+
+Run `git status` to ensure there are no undesirable changes.
+Then run the following in your command line from the `curriculum` folder to commit your progress.
+
+```
+$ git add .
+$ git commit -m "finish PicChat: Messages reading"
+$ git push
+```
+
+We're proud to offer our open-source curriculum free of charge for anyone to learn from at their own pace.
+
+We also offer a paid course where you can learn from an instructor alongside a cohort of your peers.
+We will accept applications for the June-August 2023 cohort soon.
+
+## Navigation
+
+<div style="display: flex; align-items: center; width: 100%; justify-content: space-between; font-size: 1rem; color: #61758a; background-color: #f0f5f9; height: 4rem; padding: 0 1rem; border-radius: 1rem;">
+<div style="display: flex;">
+<i class="ri-home-fill"></i>
+<a style="display: flex; color: #61758a; margin-left: 1rem;" href="../start.livemd">Home</a>
+</div>
+<div style="display: flex;">
+<i class="ri-bug-fill"></i>
+<a style="display: flex; color: #61758a; margin-left: 1rem;" href="https://github.com/DockYard-Academy/curriculum/issues/new?assignees=&labels=&template=issue.md&title=PicChat: Messages">Report An Issue</a>
+</div>
+<div style="display: flex;">
+<i class="ri-arrow-left-fill"></i>
+<a style="display: flex; color: #61758a; margin-left: 1rem;" href="../exercises/math_game.livemd">Math Game</a>
+</div>
+<div style="display: flex;">
+<a style="display: flex; color: #61758a; margin-right: 1rem;" href="../reading/pic_chat_image_upload.livemd">PicChat: Image Upload</a>
+<i class="ri-arrow-right-fill"></i>
+</div>
+</div>
 

@@ -7,7 +7,7 @@
 ```elixir
 Mix.install([
   {:jason, "~> 1.4"},
-  {:kino, "~> 0.8.0", override: true},
+  {:kino, "~> 0.9", override: true},
   {:youtube, github: "brooklinjazz/youtube"},
   {:hidden_cell, github: "brooklinjazz/hidden_cell"}
 ])
@@ -15,12 +15,24 @@ Mix.install([
 
 ## Navigation
 
-[Return Home](../start.livemd)<span style="padding: 0 30px"></span>
-[Report An Issue](https://github.com/DockYard-Academy/beta_curriculum/issues/new?assignees=&labels=&template=issue.md&title=)
-
-## Setup
-
-Ensure you type the `ea` keyboard shortcut to evaluate all Elixir cells before starting. Alternatively, you can evaluate the Elixir cells as you read.
+<div style="display: flex; align-items: center; width: 100%; justify-content: space-between; font-size: 1rem; color: #61758a; background-color: #f0f5f9; height: 4rem; padding: 0 1rem; border-radius: 1rem;">
+<div style="display: flex;">
+<i class="ri-home-fill"></i>
+<a style="display: flex; color: #61758a; margin-left: 1rem;" href="../start.livemd">Home</a>
+</div>
+<div style="display: flex;">
+<i class="ri-bug-fill"></i>
+<a style="display: flex; color: #61758a; margin-left: 1rem;" href="https://github.com/DockYard-Academy/curriculum/issues/new?assignees=&labels=&template=issue.md&title=HTML & CSS">Report An Issue</a>
+</div>
+<div style="display: flex;">
+<i class="ri-arrow-left-fill"></i>
+<a style="display: flex; color: #61758a; margin-left: 1rem;" href="../reading/capstone_project_guide.livemd">Capstone Project Guide</a>
+</div>
+<div style="display: flex;">
+<a style="display: flex; color: #61758a; margin-right: 1rem;" href="../exercises/common_components.livemd">Common Components</a>
+<i class="ri-arrow-right-fill"></i>
+</div>
+</div>
 
 ## Review Questions
 
@@ -392,7 +404,7 @@ HTML and CSS are deep topics, and as an Elixir-focused course, we aim to cover t
 
 <!-- livebook:{"break_markdown":true} -->
 
-### Headings and Paragraphs
+### Headings And Paragraphs
 
 Heading elements represent six levels of section headings. Often, you will use headings
 in descending order to create headings and subheadings.
@@ -777,7 +789,7 @@ We generally use `px` (pixels) or percent `%` for CSS measurements. For a full l
 
 <!-- livebook:{"break_markdown":true} -->
 
-### Padding and Margin
+### Padding And Margin
 
 We can set the size of the padding and margin properties. A single unit sets the top, right, bottom, and left margin values.
 
@@ -847,7 +859,7 @@ See the [MDN Border](https://developer.mozilla.org/en-US/docs/Web/CSS/border) do
 
 <!-- livebook:{"break_markdown":true} -->
 
-### Height and Width
+### Height And Width
 
 We can set the content `height` and `width` properties.
 
@@ -1017,7 +1029,7 @@ We can use `margin: auto;` to center a block element horizontally inside its con
 
 <!-- livebook:{"break_markdown":true} -->
 
-### Right and Left Align Element
+### Right And Left Align Element
 
 We can use `position: absolute;` to right align or left align an element to its parent container.
 
@@ -1219,7 +1231,7 @@ For example, we could use the [League Gothic](https://fonts.google.com/specimen/
 
 Install and use a custom font from [Google Fonts](https://fonts.google.com/) in your `hello.html` file. You may choose any freely available font you wish.
 
-## Flex and Grid
+## Flex And Grid
 
 Flex and Grid are two very powerful ways to create responsive layouts with CSS. As we are focused on Elixir development they are beyond the scope of this course. However, they will be very important if you want to create layouts that work on multiple device sizes.
 
@@ -1248,69 +1260,42 @@ Consider the following resources as you continue your HTML and CSS learning jour
 
 For experimenting with HTML and CSS, we recommend sites such as [CodePen](https://codepen.io/) that make it easy to prototype HTML and CSS designs rapidly.
 
-## Mark As Completed
-
-<!-- livebook:{"attrs":{"source":"file_name = Path.basename(Regex.replace(~r/#.+/, __ENV__.file, \"\"), \".livemd\")\n\nsave_name =\n  case Path.basename(__DIR__) do\n    \"reading\" -> \"html_css_reading\"\n    \"exercises\" -> \"html_css_exercise\"\n  end\n\nprogress_path = __DIR__ <> \"/../progress.json\"\nexisting_progress = File.read!(progress_path) |> Jason.decode!()\n\ndefault = Map.get(existing_progress, save_name, false)\n\nform =\n  Kino.Control.form(\n    [\n      completed: input = Kino.Input.checkbox(\"Mark As Completed\", default: default)\n    ],\n    report_changes: true\n  )\n\nTask.async(fn ->\n  for %{data: %{completed: completed}} <- Kino.Control.stream(form) do\n    File.write!(\n      progress_path,\n      Jason.encode!(Map.put(existing_progress, save_name, completed), pretty: true)\n    )\n  end\nend)\n\nform","title":"Track Your Progress"},"chunks":null,"kind":"Elixir.HiddenCell","livebook_object":"smart_cell"} -->
-
-```elixir
-file_name = Path.basename(Regex.replace(~r/#.+/, __ENV__.file, ""), ".livemd")
-
-save_name =
-  case Path.basename(__DIR__) do
-    "reading" -> "html_css_reading"
-    "exercises" -> "html_css_exercise"
-  end
-
-progress_path = __DIR__ <> "/../progress.json"
-existing_progress = File.read!(progress_path) |> Jason.decode!()
-
-default = Map.get(existing_progress, save_name, false)
-
-form =
-  Kino.Control.form(
-    [
-      completed: input = Kino.Input.checkbox("Mark As Completed", default: default)
-    ],
-    report_changes: true
-  )
-
-Task.async(fn ->
-  for %{data: %{completed: completed}} <- Kino.Control.stream(form) do
-    File.write!(
-      progress_path,
-      Jason.encode!(Map.put(existing_progress, save_name, completed), pretty: true)
-    )
-  end
-end)
-
-form
-```
-
 ## Commit Your Progress
 
-Run the following in your command line from the curriculum folder to track and save your progress in a Git commit.
-Ensure that you do not already have undesired or unrelated changes by running `git status` or by checking the source control tab in Visual Studio Code.
+DockYard Academy now recommends you use the latest [Release](https://github.com/DockYard-Academy/curriculum/releases) rather than forking or cloning our repository.
+
+Run `git status` to ensure there are no undesirable changes.
+Then run the following in your command line from the `curriculum` folder to commit your progress.
 
 ```
-$ git checkout -b html-css-reading
 $ git add .
-$ git commit -m "finish html css reading"
-$ git push origin html-css-reading
+$ git commit -m "finish HTML & CSS reading"
+$ git push
 ```
 
-Create a pull request from your `html-css-reading` branch to your `solutions` branch.
-Please do not create a pull request to the DockYard Academy repository as this will spam our PR tracker.
+We're proud to offer our open-source curriculum free of charge for anyone to learn from at their own pace.
 
-**DockYard Academy Students Only:**
+We also offer a paid course where you can learn from an instructor alongside a cohort of your peers.
+We will accept applications for the June-August 2023 cohort soon.
 
-Notify your instructor by including `@BrooklinJazz` in your PR description to get feedback.
-You (or your instructor) may merge your PR into your solutions branch after review.
+## Navigation
 
-If you are interested in joining the next academy cohort, [sign up here](https://academy.dockyard.com/) to receive more news when it is available.
-
-## Up Next
-
-| Previous                                                          | Next                                                       |
-| ----------------------------------------------------------------- | ---------------------------------------------------------: |
-| [Captone Project Guide](../reading/capstone_project_guide.livemd) | [Common Components](../exercises/common_components.livemd) |
+<div style="display: flex; align-items: center; width: 100%; justify-content: space-between; font-size: 1rem; color: #61758a; background-color: #f0f5f9; height: 4rem; padding: 0 1rem; border-radius: 1rem;">
+<div style="display: flex;">
+<i class="ri-home-fill"></i>
+<a style="display: flex; color: #61758a; margin-left: 1rem;" href="../start.livemd">Home</a>
+</div>
+<div style="display: flex;">
+<i class="ri-bug-fill"></i>
+<a style="display: flex; color: #61758a; margin-left: 1rem;" href="https://github.com/DockYard-Academy/curriculum/issues/new?assignees=&labels=&template=issue.md&title=HTML & CSS">Report An Issue</a>
+</div>
+<div style="display: flex;">
+<i class="ri-arrow-left-fill"></i>
+<a style="display: flex; color: #61758a; margin-left: 1rem;" href="../reading/capstone_project_guide.livemd">Capstone Project Guide</a>
+</div>
+<div style="display: flex;">
+<a style="display: flex; color: #61758a; margin-right: 1rem;" href="../exercises/common_components.livemd">Common Components</a>
+<i class="ri-arrow-right-fill"></i>
+</div>
+</div>
 

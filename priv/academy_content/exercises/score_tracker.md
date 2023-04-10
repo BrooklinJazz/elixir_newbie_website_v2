@@ -7,7 +7,7 @@
 ```elixir
 Mix.install([
   {:jason, "~> 1.4"},
-  {:kino, "~> 0.8.0", override: true},
+  {:kino, "~> 0.9", override: true},
   {:youtube, github: "brooklinjazz/youtube"},
   {:hidden_cell, github: "brooklinjazz/hidden_cell"}
 ])
@@ -15,12 +15,28 @@ Mix.install([
 
 ## Navigation
 
-[Return Home](../start.livemd)<span style="padding: 0 30px"></span>
-[Report An Issue](https://github.com/DockYard-Academy/beta_curriculum/issues/new?assignees=&labels=&template=issue.md&title=)
+<div style="display: flex; align-items: center; width: 100%; justify-content: space-between; font-size: 1rem; color: #61758a; background-color: #f0f5f9; height: 4rem; padding: 0 1rem; border-radius: 1rem;">
+<div style="display: flex;">
+<i class="ri-home-fill"></i>
+<a style="display: flex; color: #61758a; margin-left: 1rem;" href="../start.livemd">Home</a>
+</div>
+<div style="display: flex;">
+<i class="ri-bug-fill"></i>
+<a style="display: flex; color: #61758a; margin-left: 1rem;" href="https://github.com/DockYard-Academy/curriculum/issues/new?assignees=&labels=&template=issue.md&title=Score Tracker">Report An Issue</a>
+</div>
+<div style="display: flex;">
+<i class="ri-arrow-left-fill"></i>
+<a style="display: flex; color: #61758a; margin-left: 1rem;" href="../exercises/mailbox_server.livemd">Mailbox Server</a>
+</div>
+<div style="display: flex;">
+<a style="display: flex; color: #61758a; margin-right: 1rem;" href="../exercises/timer.livemd">Timer</a>
+<i class="ri-arrow-right-fill"></i>
+</div>
+</div>
 
 ## Score Tracker
 
-You're going to create a `ScoreTracker` [GenServer](https://hexdocs.pm/elixir/GenServer.html) which will will be a generic score tracker that could be used in any game system. When spawned, the `ScoreTracker` should store a score starting at `0` in it's state.
+You're going to create a `ScoreTracker` [GenServer](https://hexdocs.pm/elixir/GenServer.html) which will be a generic score tracker that could be used in any game system. When spawned, the `ScoreTracker` should store a score starting at `0` in it's state.
 
 The `ScoreTracker` module should **asynchronously** receive `{:score, amount}` messages where `amount` is an integer which
 increase the `ScoreTracker`'s state by the provided `amount`.
@@ -181,11 +197,11 @@ defmodule MultiplayerScoreTracker do
   use GenServer
 
   @doc """
-  Start the `MultyplayerScoreTracker` process.
+  Start the `MultiplayerScoreTracker` process.
 
   ## Examples
 
-      iex> {:ok, pid} = MultiplayerScoreTracker.start_link([])
+      iex> {:ok, _pid} = MultiplayerScoreTracker.start_link([])
   """
   def start_link(_opts) do
   end
@@ -218,7 +234,7 @@ defmodule MultiplayerScoreTracker do
       %{}
 
       Single Player Score.
-      
+
       iex> {:ok, pid} = MultiplayerScoreTracker.start_link([])
       iex> MultiplayerScoreTracker.score(pid, :player1, 10)
       iex> MultiplayerScoreTracker.score(pid, :player1, 10)
@@ -242,7 +258,7 @@ defmodule MultiplayerScoreTracker do
   ## Examples
 
     Player does not exist.
-    
+
     iex> {:ok, pid} = MultiplayerScoreTracker.start_link([])
     iex> MultiplayerScoreTracker.get_score(pid, :player1)
     nil
@@ -259,69 +275,42 @@ defmodule MultiplayerScoreTracker do
 end
 ```
 
-## Mark As Completed
-
-<!-- livebook:{"attrs":{"source":"file_name = Path.basename(Regex.replace(~r/#.+/, __ENV__.file, \"\"), \".livemd\")\n\nsave_name =\n  case Path.basename(__DIR__) do\n    \"reading\" -> \"score_tracker_reading\"\n    \"exercises\" -> \"score_tracker_exercise\"\n  end\n\nprogress_path = __DIR__ <> \"/../progress.json\"\nexisting_progress = File.read!(progress_path) |> Jason.decode!()\n\ndefault = Map.get(existing_progress, save_name, false)\n\nform =\n  Kino.Control.form(\n    [\n      completed: input = Kino.Input.checkbox(\"Mark As Completed\", default: default)\n    ],\n    report_changes: true\n  )\n\nTask.async(fn ->\n  for %{data: %{completed: completed}} <- Kino.Control.stream(form) do\n    File.write!(\n      progress_path,\n      Jason.encode!(Map.put(existing_progress, save_name, completed), pretty: true)\n    )\n  end\nend)\n\nform","title":"Track Your Progress"},"chunks":null,"kind":"Elixir.HiddenCell","livebook_object":"smart_cell"} -->
-
-```elixir
-file_name = Path.basename(Regex.replace(~r/#.+/, __ENV__.file, ""), ".livemd")
-
-save_name =
-  case Path.basename(__DIR__) do
-    "reading" -> "score_tracker_reading"
-    "exercises" -> "score_tracker_exercise"
-  end
-
-progress_path = __DIR__ <> "/../progress.json"
-existing_progress = File.read!(progress_path) |> Jason.decode!()
-
-default = Map.get(existing_progress, save_name, false)
-
-form =
-  Kino.Control.form(
-    [
-      completed: input = Kino.Input.checkbox("Mark As Completed", default: default)
-    ],
-    report_changes: true
-  )
-
-Task.async(fn ->
-  for %{data: %{completed: completed}} <- Kino.Control.stream(form) do
-    File.write!(
-      progress_path,
-      Jason.encode!(Map.put(existing_progress, save_name, completed), pretty: true)
-    )
-  end
-end)
-
-form
-```
-
 ## Commit Your Progress
 
-Run the following in your command line from the curriculum folder to track and save your progress in a Git commit.
-Ensure that you do not already have undesired or unrelated changes by running `git status` or by checking the source control tab in Visual Studio Code.
+DockYard Academy now recommends you use the latest [Release](https://github.com/DockYard-Academy/curriculum/releases) rather than forking or cloning our repository.
+
+Run `git status` to ensure there are no undesirable changes.
+Then run the following in your command line from the `curriculum` folder to commit your progress.
 
 ```
-$ git checkout -b score-tracker-exercise
 $ git add .
-$ git commit -m "finish score tracker exercise"
-$ git push origin score-tracker-exercise
+$ git commit -m "finish Score Tracker exercise"
+$ git push
 ```
 
-Create a pull request from your `score-tracker-exercise` branch to your `solutions` branch.
-Please do not create a pull request to the DockYard Academy repository as this will spam our PR tracker.
+We're proud to offer our open-source curriculum free of charge for anyone to learn from at their own pace.
 
-**DockYard Academy Students Only:**
+We also offer a paid course where you can learn from an instructor alongside a cohort of your peers.
+We will accept applications for the June-August 2023 cohort soon.
 
-Notify your instructor by including `@BrooklinJazz` in your PR description to get feedback.
-You (or your instructor) may merge your PR into your solutions branch after review.
+## Navigation
 
-If you are interested in joining the next academy cohort, [sign up here](https://academy.dockyard.com/) to receive more news when it is available.
-
-## Up Next
-
-| Previous                                             | Next                               |
-| ---------------------------------------------------- | ---------------------------------: |
-| [Mailbox Server](../exercises/mailbox_server.livemd) | [Timer](../exercises/timer.livemd) |
+<div style="display: flex; align-items: center; width: 100%; justify-content: space-between; font-size: 1rem; color: #61758a; background-color: #f0f5f9; height: 4rem; padding: 0 1rem; border-radius: 1rem;">
+<div style="display: flex;">
+<i class="ri-home-fill"></i>
+<a style="display: flex; color: #61758a; margin-left: 1rem;" href="../start.livemd">Home</a>
+</div>
+<div style="display: flex;">
+<i class="ri-bug-fill"></i>
+<a style="display: flex; color: #61758a; margin-left: 1rem;" href="https://github.com/DockYard-Academy/curriculum/issues/new?assignees=&labels=&template=issue.md&title=Score Tracker">Report An Issue</a>
+</div>
+<div style="display: flex;">
+<i class="ri-arrow-left-fill"></i>
+<a style="display: flex; color: #61758a; margin-left: 1rem;" href="../exercises/mailbox_server.livemd">Mailbox Server</a>
+</div>
+<div style="display: flex;">
+<a style="display: flex; color: #61758a; margin-right: 1rem;" href="../exercises/timer.livemd">Timer</a>
+<i class="ri-arrow-right-fill"></i>
+</div>
+</div>
 

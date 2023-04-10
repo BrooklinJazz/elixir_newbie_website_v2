@@ -10,7 +10,7 @@ defmodule ElixirNewbieWeb.BlogLive do
   def render(assigns) do
     ~H"""
     <section class="bg-[url('/images/BlogBackground.webp')] min-h-screen bg-repeat">
-      <div class="bg-gradient-to-t from-black to-black/40">
+      <div class="to-black/40 bg-gradient-to-t from-black">
         <.navigation/>
         <section class="mx-auto flex h-fit w-full flex-col gap-12 4k:gap-36 sm:w-full md:w-3/4 lg:w-full lg:flex-row xl:w-3/4 xl:gap-24">
           <div>

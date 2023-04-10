@@ -37,7 +37,7 @@ defmodule ElixirNewbie.AcademyContent.Lesson do
   end
 
   defp latex_expressions(text) do
-    Regex.replace(~r/\$(.|\n)*\$/U, text, fn full ->
+    Regex.replace(~r/\$.*\$/U, text, fn full ->
       """
       <latex-js>
         #{full}

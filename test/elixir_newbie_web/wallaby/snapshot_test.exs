@@ -15,7 +15,7 @@ defmodule ElixirNewbieWeb.Wallaby.SnapshotTests do
     "blog",
     "resources",
     "podcast",
-    "community"
+    "discord"
   ]
 
   @tag :wallaby
