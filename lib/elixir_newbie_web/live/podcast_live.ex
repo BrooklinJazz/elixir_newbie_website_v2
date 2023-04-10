@@ -2,7 +2,6 @@ defmodule ElixirNewbieWeb.PodcastLive do
   use ElixirNewbieWeb, :live_view
   use Phoenix.Component
   alias ElixirNewbie.Podcast
-  alias ElixirNewbie.Podcast.Formatter
 
   @content_width "w-full p-2 sm:w-11/12 md:w-4/5 m-auto"
   @button_hover "transition duration-300 hover:text-purple-500"
@@ -235,10 +234,5 @@ defmodule ElixirNewbieWeb.PodcastLive do
       end
 
     {:noreply, socket |> assign(:play_speed, speed) |> push_event("set-speed", %{value: speed})}
-  end
-
-  defp progress_percent(playing, player_time, total_time) do
-    minimum = if playing, do: 2, else: 0
-    max(round(player_time / total_time * 100), minimum)
   end
 end

@@ -3,7 +3,6 @@ defmodule ElixirNewbieWeb.ElixirNewbieComponents do
   Provides Reusable Elixir Newbie UI components.
   """
   use Phoenix.Component
-  import ElixirNewbieWeb.CoreComponents
 
   @doc """
   Renders page navigation
