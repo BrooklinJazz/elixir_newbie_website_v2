@@ -3,9 +3,9 @@ defmodule ElixirNewbie.Podcast do
   Podcast Context
   """
 
+  alias ElixirNewbie.Podcast.Formatter
   alias ElixirNewbie.Podcast.PodcastAPI
   alias ElixirNewbie.Podcast.PodcastEpisode
-  alias ElixirNewbie.Podcast.Formatter
 
   @doc """
   List all podcast episodes as PodcastEpisode structs.

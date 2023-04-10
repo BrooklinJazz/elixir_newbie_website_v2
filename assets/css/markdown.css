@@ -46,9 +46,8 @@ latex-js, .markdown code.inline {
     @apply p-4 w-full;
 }
 
-
-.markdown a {
-    @apply mt-6;
+.markdown pre code {
+    @apply bg-gray-800 block w-full p-4 my-10 rounded-lg
 }
 
 .markdown li {
@@ -72,3 +71,4 @@ latex-js, .markdown code.inline {
 .markdown td a {
     text-decoration: underline;
 }
+
