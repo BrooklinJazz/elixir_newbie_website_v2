@@ -149,8 +149,8 @@ defmodule ElixirNewbieWeb.PodcastLive do
           <%= @play_speed %>x
         </button>
         <.form class="hidden items-center justify-center md:flex" phx-change="set-volume" for={%{}}>
-          <Heroicons.speaker_x_mark id="player-speaker-x-mark" phx-click="toggle_mute" :if={@muted} class="h-6 w-6 cursor-pointer" />
-          <Heroicons.speaker_wave id="player-speaker-wave" phx-click="toggle_mute" :if={not @muted} class="h-6 w-6 cursor-pointer" />
+          <Heroicons.speaker_x_mark id="player-speaker-x-mark" phx-click="toggle_mute" :if={@muted or @volume == 0.0} class="h-6 w-6 cursor-pointer" />
+          <Heroicons.speaker_wave id="player-speaker-wave" phx-click="toggle_mute" :if={not @muted and @volume != 0.0} class="h-6 w-6 cursor-pointer" />
           <input
             id="player-volume"
             phx-change="set-volume"

@@ -40,11 +40,11 @@ defmodule ElixirNewbieWeb.PodcastLiveTest do
     assert assert_push_event(view, "backward", %{})
   end
 
-  test "time-update", %{conn: conn} do
+  test "initial player time", %{conn: conn} do
     assert {:ok, view, _html} = live(conn, ~p"/podcast")
-    assert view |> element("#player-time") |> render() =~ "0:00"
-    assert render_hook(view, "time-update", %{seconds: 15})
-    assert view |> element("#player-time") |> render() =~ "0:15"
+    episode = Podcast.latest_episode()
+    assert view |> element("#player-current-time") |> render() =~ "0:00"
+    assert view |> element("#player-total-time") |> render() =~ episode.hh_mm_ss
   end
 
   test "set-volume", %{conn: conn} do
