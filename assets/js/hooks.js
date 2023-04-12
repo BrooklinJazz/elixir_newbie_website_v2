@@ -9,8 +9,6 @@ let Hooks = {
             }
         },
         mounted() {
-            this.seconds = 0
-
             this.el.addEventListener("timeupdate", (event) => {
                 const player_time = document.getElementById("player-current-time")
                 const seconds = Math.floor(this.el.currentTime)
@@ -33,9 +31,9 @@ let Hooks = {
     },
     Progress: {
         setProgress(e) {
-            let bcr = this.el.getBoundingClientRect();
-            let percent = (e.clientX - bcr.left) / bcr.width
-            let seconds = player.duration * percent
+            const bcr = this.el.getBoundingClientRect();
+            const percent = (e.clientX - bcr.left) / bcr.width
+            const seconds = player.duration * percent
             player = document.getElementById("player")
             player.currentTime = seconds
         },

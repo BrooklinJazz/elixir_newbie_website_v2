@@ -15,7 +15,7 @@ defmodule ElixirNewbieWeb.ElixirNewbieComponents do
           "flex items-center gap-4 hidden sm:block",
           "transition duration-300 ease-in-out hover:scale-110"
         ]}>
-          <.link navigate={"/"}>
+          <.link navigate="/">
             <img
               alt="Elixir Newbie Home Button"
               class="h-12"
@@ -24,15 +24,15 @@ defmodule ElixirNewbieWeb.ElixirNewbieComponents do
           </.link>
         </div>
         <div class="flex w-full justify-between text-2xl sm:w-fit sm:gap-12">
-          <.link class="opacity-80 hover:opacity-100 sm:hidden" navigate={"/"}>Home</.link>
-          <.link class="link-underline opacity-80 hover:opacity-100" navigate={"/blog"}>Blog</.link>
-          <.link class="link-underline opacity-80 hover:opacity-100" navigate={"/podcast"}>
+          <.link class="opacity-80 hover:opacity-100 sm:hidden" navigate="/">Home</.link>
+          <.link class="link-underline opacity-80 hover:opacity-100" navigate="/blog">Blog</.link>
+          <.link class="link-underline opacity-80 hover:opacity-100" navigate="/podcast">
             Podcast
           </.link>
-          <.link class="link-underline opacity-80 hover:opacity-100" navigate={"/dockyard_academy"}>
+          <.link class="link-underline opacity-80 hover:opacity-100" navigate="/dockyard_academy">
             DockYard Academy
           </.link>
-          <.link class="link-underline opacity-80 hover:opacity-100" navigate={"/discord"}>
+          <.link class="link-underline opacity-80 hover:opacity-100" navigate="/discord">
             Discord
           </.link>
         </div>

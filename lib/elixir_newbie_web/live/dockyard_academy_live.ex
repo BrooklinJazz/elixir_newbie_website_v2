@@ -9,12 +9,18 @@ defmodule ElixirNewbieWeb.DockYardAcademyLive do
         <article class="bg-purple-900/30 mx-auto mb-8 w-4/5 rounded-lg p-6 text-center text-white">
           <h2 class="mb-5 text-3xl font-semibold">DockYard Academy</h2>
           <h3 class="text-2xl">An open-source Elixir curriculum built with Livebook</h3>
-          <p class="xl mt-2">This is a web-version preview of the curriculum. See our <a href="https://github.com/DockYard-Academy/curriculum" class="text-cyan-500 underline">GitHub</a> to get started with the LiveBook version.</p>
+          <p class="xl mt-2">
+            This is a web-version preview of the curriculum. See our
+            <a href="https://github.com/DockYard-Academy/curriculum" class="text-cyan-500 underline">
+              GitHub
+            </a>
+            to get started with the LiveBook version.
+          </p>
         </article>
       </section>
       <section class="mx-auto w-2/3">
         <div class="curriculum_outline markdown">
-          <%= raw @outline.body %>
+          <%= raw(@outline.body) %>
         </div>
       </section>
     </section>
