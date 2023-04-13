@@ -18,7 +18,7 @@ defmodule ElixirNewbie.AcademyContent.Lesson do
   def get_type(file_name) do
     case Regex.run(~r/reading|exercises/, file_name) do
       ["reading"] -> :reading
-      ["exercises"] -> :exercise
+      ["exercises"] -> :exercises
     end
   end
 

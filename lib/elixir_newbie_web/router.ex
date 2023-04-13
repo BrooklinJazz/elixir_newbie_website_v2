@@ -23,7 +23,7 @@ defmodule ElixirNewbieWeb.Router do
     live "/dockyard_academy", DockYardAcademyLive, :dockyard_academy
     live "/discord", DiscordLive, :discord
     live "/reading/:id", ContentLive, :reading
-    live "/exercises/:id", ContentLive, :exercise
+    live "/exercises/:id", ContentLive, :exercises
   end
 
   # Other scopes may use custom stacks.
