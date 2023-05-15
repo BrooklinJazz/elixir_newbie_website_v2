@@ -4,17 +4,13 @@ defmodule ElixirNewbieWeb.Components.BlogCard do
   """
   use ElixirNewbieWeb, :html
 
-
-
   alias ElixirNewbieWeb.BlogShow
   alias ElixirNewbieWeb.Router.Helpers, as: Routes
   attr(:blog, :map, required: true)
 
-  ## BigSpaces fumbles in the dark: is this proper? <a href={static_url(ElixirNewbieWeb.Endpoint, "/reading/#{@blog.id}")}>
-
   def blog_card(assigns) do
     ~H"""
-      <a href={static_url(ElixirNewbieWeb.Endpoint, "/blog/#{@blog.id}")}>
+      <.link navigate={"/blog/#{@blog.id}"}>
       <article>
         <figure class="h-90 aspect-[2/1] overflow-hidden rounded-3xl ring-2 ring-white transition duration-500 ease-in-out hover:ring-offset-2">
           <img class="w-auto rounded-lg" src={static_url(ElixirNewbieWeb.Endpoint, "/images/posts/#{@blog.cover_image}")}/>
@@ -26,7 +22,7 @@ defmodule ElixirNewbieWeb.Components.BlogCard do
           <span class="float-right"><%= @blog.author_name %></span>
         </p>
       </article>
-      </a>
+      </.link>
     """
   end
 end

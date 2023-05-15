@@ -19,7 +19,7 @@ defmodule ElixirNewbieWeb.Router do
     # get "/", PageController, :home
     live "/", HomeLive, :home
     live "/blog", BlogLive, :blog
-    live "/blog/:id", BlogShow
+    live "/blog/:id", BlogShow #, :blog #WIP BigSpaces - Troubleshooting
     live "/podcast", PodcastLive, :podcast
     live "/dockyard_academy", DockYardAcademyLive, :dockyard_academy
     live "/discord", DiscordLive, :discord
