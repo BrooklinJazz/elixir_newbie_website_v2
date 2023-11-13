@@ -33,13 +33,13 @@ defmodule ElixirNewbie.MixProject do
   defp deps do
     [
       # Phoenix Deps
-      {:phoenix, "~> 1.7.0-rc.0", override: true},
+      {:phoenix, "~> 1.7"},
       {:phoenix_ecto, "~> 4.4"},
       {:ecto_sql, "~> 3.6"},
       {:postgrex, ">= 0.0.0"},
       {:phoenix_html, "~> 3.0"},
       {:phoenix_live_reload, "~> 1.2", only: :dev},
-      {:phoenix_live_view, "~> 0.18.3"},
+      {:phoenix_live_view, "~> 0.18"},
       {:heroicons, "~> 0.5"},
       {:floki, ">= 0.30.0", only: :test},
       {:phoenix_live_dashboard, "~> 0.7.2"},
@@ -61,7 +61,9 @@ defmodule ElixirNewbie.MixProject do
       {:httpoison, "~> 1.8"},
       {:dialyxir, "~> 1.2", only: [:dev], runtime: false},
       {:credo, "~> 1.6", only: [:dev, :test], runtime: false},
-      {:wallaby, "~> 0.30.0", runtime: false, only: :test}
+      {:wallaby, "~> 0.30.0", runtime: false, only: :test},
+      {:live_view_native, "~> 0.1"},
+      {:live_view_native_swift_ui, "~> 0.1"}
     ]
   end
 
