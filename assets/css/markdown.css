@@ -1,11 +1,11 @@
 
 
 .markdown h1 {
-    @apply mb-3 text-4xl;
+    @apply mb-5 mt-10 text-4xl;
 }
 
 .markdown h2 {
-    @apply mb-3 mt-10 text-3xl;
+    @apply mb-5 mt-10 text-3xl;
 }
 
 .markdown h3 {
